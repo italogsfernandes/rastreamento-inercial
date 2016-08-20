@@ -17,6 +17,23 @@
 //-------------------writeBits
 //-------------------delay
 //********************************************///
+//************FUNÇÕES Utilizadas no arduino *************//
+//  - mpu.initialize(); -Feito(Verificar)
+//  - mpu.testConnection(); -Feito(Verificar)
+//  - mpu.dmpInitialize(); -Pedir ajudar
+//  - mpu.set*Offset(int); -TODO
+//  - mpu.setDMPEnabled(bool); - Fazendo
+//  - mpu.getIntStatus(); -TODO
+//  - mpu.dmpGetFIFOPacketSize(); -TODO
+//  - mpu.getIntStatus() -TODO
+//  - mpu.getFIFOCount(); -TODO
+//  - mpu.resetFIFO(); -TODO
+//  - mpu.getFIFOCount(); -TODO
+//  - mpu.getFIFOBytes(fifoBuffer, packetSize); -TODO
+//  - mpu.dmpGetQuaternion(&q, fifoBuffer); -TODO
+//  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); -TODO
+//**********************************************************//
+
 
 void initialize(){
   //setClockSource(MPU6050_CLOCK_PLL_XGYRO);
@@ -99,6 +116,7 @@ void dmpInitialize(){
                     devAddr, regAddr,Bit, value
     delay(30);
   */
+  //TODO: Parei por aqui ontem
   writeBit(MPU_endereco, 0x6B, 7, true);
   delay(30); //TODO: implementar função de delay
 
@@ -111,7 +129,10 @@ void dmpInitialize(){
 //setOffsets
 
 void setDMPEnabled(bool enable){
-
+    //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
+    //I2Cdev::writeBit(devAddr, 0x6A, 7, true);
+    //                 devAddr, regAddr,Bit, value
+    writeBit(devAddr, 0x6A, 7, true);
 }
 
 //getIntStatus()
