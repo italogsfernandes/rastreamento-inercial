@@ -170,21 +170,22 @@ void loop() {
 
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
   } else if (mpuIntStatus & 0x02) {
-  
-    //Pequena(realmente pequena) espera pelo tamanho correto dos dados disponiveis. 
+
+    //Pequena(realmente pequena) espera pelo tamanho correto dos dados disponiveis.
     while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-    
+
     //Le um pacote da FIFO
     mpu.getFIFOBytes(fifoBuffer, packetSize);
 
     // Verifica a FIFO count no caso que haja > 1 pacotes disponiveis
     // (isso permite que se leira mais imediatamente, sem esperar por uma interrupção
     fifoCount -= packetSize;
-    
+
     /*******REALIZA LEITURAS*********/
     //Realiza leitura do Quaternion
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     //Realiza leitura do HMC5883L
+    //TODO: tem algo errado nisso?
     mag.getHeading(&mx, &my, &mz);
     //Realiza leitura do MPU6050
     mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
