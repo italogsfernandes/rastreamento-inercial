@@ -37,7 +37,7 @@
 //  - mpu.dmpGetFIFOPacketSize(); - FIXME: Ué?
 //  - mpu.getFIFOCount(); - NOTE: Feito(Verificar)
 //  - mpu.resetFIFO(); - NOTE: Feito(Verificar)
-//  - mpu.getFIFOBytes(fifoBuffer, packetSize); - A fazer
+//  - mpu.getFIFOBytes(fifoBuffer, packetSize); - NOTE: Feito(Verificar), FIXME: Implementar variaveis globais
 //  - mpu.dmpGetQuaternion(&q, fifoBuffer); - A fazer
 //  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - A fazer
 //**********************************************************//
@@ -180,4 +180,12 @@ void resetFIFO() {
     //I2Cdev::writeBit(devAddr, 0x6A, 2, true);
     //                  devAddr, regAddr, bit, value
     writeBit(devAddr, 0x6A, 2, true);
+}
+
+void getFIFOBytes(uint8_t *data, uint8_t length) {
+    if(length > 0){
+        readBytes(devAddr, 0x74, length, data);
+    } else {
+    	*data = 0;
+    }
 }
