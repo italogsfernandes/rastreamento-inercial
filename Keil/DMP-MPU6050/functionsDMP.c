@@ -20,12 +20,13 @@
 //-------------------readBytes
 //********************************************///
 /*
-    NOTE: Description of how the code works (when it isn't self evident).
-    XXX: Warning about possible pitfalls, can be used as NOTE:XXX:.
-    HACK: Not very well written or malformed code to circumvent a problem/bug. Should be used as HACK:FIXME:.
-    FIXME: This works, sort of, but it could be done better. (usually code written in a hurry that needs rewriting).
-    BUG: There is a problem here.
-    TODO: No problem, but addtional code needs to be written, usually when you are skipping something.
+TODO: Informal tasks/features that are pending completion.
+FIXME (XXX) Areas of problematic or ugly code needing refactoring or cleanup.
+BUG: Reported defects tracked in bug database.
+IDEA: Possible RFE(Requests For Enhancement: Roadmap items not yet implemented.) candidates, but less formal than RFE.
+HACK: Temporary code to force inflexible functionality, or simply a test change, or workaround a known problem.
+NOTE: Sections where a code reviewer found something that needs discussion or further investigation.
+REVIEW: File-level indicator that review was conducted.
 */
 //************FUNÇÕES Utilizadas no arduino *************//
 //  - mpu.initialize(); - Feito(Verificar)
@@ -41,15 +42,6 @@
 //  - mpu.dmpGetQuaternion(&q, fifoBuffer); - Feito(Verificar)
 //  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - Feito(Verificar)
 //**********************************************************//
-/*
-TODO: Informal tasks/features that are pending completion.
-FIXME (XXX) Areas of problematic or ugly code needing refactoring or cleanup.
-BUG: Reported defects tracked in bug database.
-IDEA: Possible RFE(Requests For Enhancement: Roadmap items not yet implemented.) candidates, but less formal than RFE.
-HACK: Temporary code to force inflexible functionality, or simply a test change, or workaround a known problem.
-NOTE: Sections where a code reviewer found something that needs discussion or further investigation.
-REVIEW: File-level indicator that review was conducted.
-*/
 
 //TODO: Melhorar implementação e uso de variaveis globais
 uint8_t buffer[14]; //usado em testConnection e getIntStatus
