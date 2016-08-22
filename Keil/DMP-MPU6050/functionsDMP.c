@@ -10,30 +10,49 @@
 #define MPU_endereco 0x68
 //************************TODO****************//
 // -------------------Algo semelhante ao writeBit e writeBits
-//Feito isso o negocio fica quase 100% pronto readBits(MPU_endereco, 0x75, 6, 6, buffer);
+//Feito isso o negocio fica quase 100% pronto
 //Ver na biblioteca original para entender como funcionam essas bibliotecas
 //-------------------readBits
 //-------------------writeBit
 //-------------------writeBits
 //-------------------delay
+//-------------------readByte
 //********************************************///
+/*
+    NOTE: Description of how the code works (when it isn't self evident).
+    XXX: Warning about possible pitfalls, can be used as NOTE:XXX:.
+    HACK: Not very well written or malformed code to circumvent a problem/bug. Should be used as HACK:FIXME:.
+    FIXME: This works, sort of, but it could be done better. (usually code written in a hurry that needs rewriting).
+    BUG: There is a problem here.
+    TODO: No problem, but addtional code needs to be written, usually when you are skipping something.
+*/
 //************FUNÇÕES Utilizadas no arduino *************//
-//  - mpu.initialize(); -Feito(Verificar)
-//  - mpu.testConnection(); -Feito(Verificar)
-//  - mpu.dmpInitialize(); -Pedir ajudar
-//  - mpu.set*Offset(int); -TODO
-//  - mpu.setDMPEnabled(bool); - Fazendo
-//  - mpu.getIntStatus(); -TODO
-//  - mpu.dmpGetFIFOPacketSize(); -TODO
-//  - mpu.getIntStatus() -TODO
-//  - mpu.getFIFOCount(); -TODO
-//  - mpu.resetFIFO(); -TODO
-//  - mpu.getFIFOCount(); -TODO
-//  - mpu.getFIFOBytes(fifoBuffer, packetSize); -TODO
-//  - mpu.dmpGetQuaternion(&q, fifoBuffer); -TODO
-//  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); -TODO
+//  - mpu.initialize(); -NOTE: Feito(Verificar)
+//  - mpu.testConnection(); -NOTE: Feito(Verificar)
+//  - mpu.dmpInitialize(); -FIXME: Pedir ajudar
+//  - mpu.set*Offset(int); - A fazer
+//  - mpu.setDMPEnabled(bool); -NOTE: Feito(Verificar)
+//  - mpu.getIntStatus(); -NOTE: Feito(Verificar)
+//  - mpu.dmpGetFIFOPacketSize(); - FIXME: Ué?
+//  - mpu.getFIFOCount(); - NOTE: Feito(Verificar)
+//  - mpu.resetFIFO(); - NOTE: Doing
+//  - mpu.getFIFOBytes(fifoBuffer, packetSize); - A fazer
+//  - mpu.dmpGetQuaternion(&q, fifoBuffer); - A fazer
+//  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - A fazer
 //**********************************************************//
+/*
+TODO: Informal tasks/features that are pending completion.
+FIXME (XXX) Areas of problematic or ugly code needing refactoring or cleanup.
+BUG: Reported defects tracked in bug database.
+IDEA: Possible RFE(Requests For Enhancement: Roadmap items not yet implemented.) candidates, but less formal than RFE.
+HACK: Temporary code to force inflexible functionality, or simply a test change, or workaround a known problem.
+NOTE: Sections where a code reviewer found something that needs discussion or further investigation.
+REVIEW: File-level indicator that review was conducted.
+*/
 
+//TODO: Melhorar implementação e uso de variaveis globais
+uint8_t buffer[14]; //usado em testConnection e getIntStatus
+uint16_t dmpPacketSize; //usado em dmpGetPacketSize e dmpInitialize
 
 void initialize(){
   //setClockSource(MPU6050_CLOCK_PLL_XGYRO);
@@ -75,7 +94,6 @@ bool testConnection(){
         return buffer[0];
     */
     //TODO: otimizar para nao ser necessario o uso do buffer
-    uint8_t buffer[14];
     readBits(MPU_endereco, 0x75, 6, 6, buffer);
     return buffer[0] == 0x34;
 }
@@ -128,13 +146,30 @@ void dmpInitialize(){
 
 //setOffsets
 
-void setDMPEnabled(bool enable){
+void setDMPEnabled(bool enabled){
     //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
     //I2Cdev::writeBit(devAddr, 0x6A, 7, true);
     //                 devAddr, regAddr,Bit, value
-    writeBit(devAddr, 0x6A, 7, true);
+    writeBit(devAddr, 0x6A, 7, enabled);
 }
 
-//getIntStatus()
+uint8_t getIntStatus(){
+    //I2Cdev::readByte(devAddr, MPU6050_RA_INT_STATUS, buffer);
+    //I2Cdev::readByte(devAddr, 0x3A, buffer);
+    //                 devAddr, regAddr, data timeout
+    readByte(MPU_endereco, 0x3A, buffer)
+    return buffer[0];
+}
 
-//dmpGetFIFOPacketSize()
+uint16_t dmpGetFIFOPacketSize() {
+    return dmpPacketSize;
+}
+
+uint16_t getFIFOCount() {
+    // I2Cdev::readBytes(devAddr, MPU6050_RA_FIFO_COUNTH, 2, buffer);
+    // I2Cdev::readBytes(devAddr, 0x72, 2, buffer);
+    //                   devAddr, regAddr, length, *data timeout
+    // return (((uint16_t)buffer[0]) << 8) | buffer[1];
+    readBytes(devAddr, 0x72, 2, buffer);
+    return (((uint16_t)buffer[0]) << 8) | buffer[1];
+}
