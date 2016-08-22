@@ -41,6 +41,7 @@ REVIEW: File-level indicator that review was conducted.
 //  - mpu.getFIFOBytes(fifoBuffer, packetSize); - Feito(Verificar), FIXME: Implementar variaveis globais
 //  - mpu.dmpGetQuaternion(&q, fifoBuffer); - Feito(Verificar)
 //  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - Feito(Verificar)
+//TODO: para facilitar a transferencia pensar sobre tranferir a FIFO
 //**********************************************************//
 
 //TODO: Melhorar implementação e uso de variaveis globais
@@ -143,7 +144,7 @@ void setDMPEnabled(bool enabled){
     //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
     //I2Cdev::writeBit(devAddr, 0x6A, 7, true);
     //                 devAddr, regAddr,Bit, value
-    writeBit(devAddr, 0x6A, 7, enabled);
+    writeBit(MPU_endereco, 0x6A, 7, enabled);
 }
 
 uint8_t getIntStatus(){
@@ -163,7 +164,7 @@ uint16_t getFIFOCount() {
     // I2Cdev::readBytes(devAddr, 0x72, 2, buffer);
     //                   devAddr, regAddr, length, *data timeout
     // return (((uint16_t)buffer[0]) << 8) | buffer[1];
-    readBytes(devAddr, 0x72, 2, buffer);
+    readBytes(MPU_endereco, 0x72, 2, buffer);
     return (((uint16_t)buffer[0]) << 8) | buffer[1];
 }
 
@@ -171,12 +172,12 @@ void resetFIFO() {
     //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
     //I2Cdev::writeBit(devAddr, 0x6A, 2, true);
     //                  devAddr, regAddr, bit, value
-    writeBit(devAddr, 0x6A, 2, true);
+    writeBit(MPU_endereco, 0x6A, 2, true);
 }
 
 void getFIFOBytes(uint8_t *data, uint8_t length) {
     if(length > 0){
-        readBytes(devAddr, 0x74, length, data);
+        readBytes(MPU_endereco, 0x74, length, data);
     } else {
     	*data = 0;
     }
@@ -205,7 +206,7 @@ uint8_t dmpGetQuaternion(Quaternion *q, const uint8_t* packet) {
 }
 
 void getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
-    readBytes(devAddr, 0x3B, 14, buffer);
+    readBytes(MPU_endereco, 0x3B, 14, buffer);
     *ax = (((int16_t)buffer[0]) << 8) | buffer[1];
     *ay = (((int16_t)buffer[2]) << 8) | buffer[3];
     *az = (((int16_t)buffer[4]) << 8) | buffer[5];
