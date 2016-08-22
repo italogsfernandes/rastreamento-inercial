@@ -17,6 +17,7 @@
 //-------------------writeBits
 //-------------------delay
 //-------------------readByte
+//-------------------readBytes
 //********************************************///
 /*
     NOTE: Description of how the code works (when it isn't self evident).
@@ -35,7 +36,7 @@
 //  - mpu.getIntStatus(); -NOTE: Feito(Verificar)
 //  - mpu.dmpGetFIFOPacketSize(); - FIXME: Ué?
 //  - mpu.getFIFOCount(); - NOTE: Feito(Verificar)
-//  - mpu.resetFIFO(); - NOTE: Doing
+//  - mpu.resetFIFO(); - NOTE: Feito(Verificar)
 //  - mpu.getFIFOBytes(fifoBuffer, packetSize); - A fazer
 //  - mpu.dmpGetQuaternion(&q, fifoBuffer); - A fazer
 //  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - A fazer
@@ -172,4 +173,11 @@ uint16_t getFIFOCount() {
     // return (((uint16_t)buffer[0]) << 8) | buffer[1];
     readBytes(devAddr, 0x72, 2, buffer);
     return (((uint16_t)buffer[0]) << 8) | buffer[1];
+}
+
+void resetFIFO() {
+    //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
+    //I2Cdev::writeBit(devAddr, 0x6A, 2, true);
+    //                  devAddr, regAddr, bit, value
+    writeBit(devAddr, 0x6A, 2, true);
 }
