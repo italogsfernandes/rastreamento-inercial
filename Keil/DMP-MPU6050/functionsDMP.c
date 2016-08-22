@@ -49,6 +49,7 @@ REVIEW: File-level indicator that review was conducted.
 //TODO: Melhorar implementação e uso de variaveis globais
 uint8_t buffer[14]; //usado em testConnection e getIntStatus
 uint16_t dmpPacketSize; //usado em dmpGetPacketSize e dmpInitialize
+uint8_t *dmpPacketBuffer; //usado em dmpGetQuaternion
 
 void initialize(){
   //setClockSource(MPU6050_CLOCK_PLL_XGYRO);
