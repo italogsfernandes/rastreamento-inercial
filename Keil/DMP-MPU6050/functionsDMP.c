@@ -38,8 +38,8 @@
 //  - mpu.getFIFOCount(); - NOTE: Feito(Verificar)
 //  - mpu.resetFIFO(); - NOTE: Feito(Verificar)
 //  - mpu.getFIFOBytes(fifoBuffer, packetSize); - NOTE: Feito(Verificar), FIXME: Implementar variaveis globais
-//  - mpu.dmpGetQuaternion(&q, fifoBuffer); - A fazer
-//  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - A fazer
+//  - mpu.dmpGetQuaternion(&q, fifoBuffer); - NOTE: Feito(Verificar)
+//  - mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); - NOTE: Doing
 //**********************************************************//
 /*
 TODO: Informal tasks/features that are pending completion.
@@ -188,4 +188,26 @@ void getFIFOBytes(uint8_t *data, uint8_t length) {
     } else {
     	*data = 0;
     }
+}
+
+uint8_t dmpGetQuaternion(int16_t *data, const uint8_t* packet) {
+    if (packet == 0) packet = dmpPacketBuffer;
+    data[0] = ((packet[0] << 8) | packet[1]);
+    data[1] = ((packet[4] << 8) | packet[5]);
+    data[2] = ((packet[8] << 8) | packet[9]);
+    data[3] = ((packet[12] << 8) | packet[13]);
+    return 0;
+}
+
+uint8_t dmpGetQuaternion(Quaternion *q, const uint8_t* packet) {
+    int16_t qI[4];
+    uint8_t status = dmpGetQuaternion(qI, packet);
+    if (status == 0) {
+        q -> w = (float)qI[0] / 16384.0f;
+        q -> x = (float)qI[1] / 16384.0f;
+        q -> y = (float)qI[2] / 16384.0f;
+        q -> z = (float)qI[3] / 16384.0f;
+        return 0;
+    }
+    return status; // int16 return value, indicates error if this line is reached
 }
