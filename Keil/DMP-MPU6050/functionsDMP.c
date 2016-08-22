@@ -18,6 +18,7 @@
 //-------------------delay
 //-------------------readByte
 //-------------------readBytes
+//-------------------writeWord
 //********************************************///
 /*
 TODO: Informal tasks/features that are pending completion.
@@ -32,7 +33,8 @@ REVIEW: File-level indicator that review was conducted.
 //  - mpu.initialize(); - Feito(Verificar)
 //  - mpu.testConnection(); - Feito(Verificar)
 //  - mpu.dmpInitialize(); -FIXME: Pedir ajudar
-//  - mpu.set*Offset(int); - NOTE: A fazer
+//  - mpu.set*Offset(int); - Feito(Verificar)
+//  - mpu.get*Offset(); - Feito(Verificar)
 //  - mpu.setDMPEnabled(bool); - Feito(Verificar)
 //  - mpu.getIntStatus(); - Feito(Verificar)
 //  - mpu.dmpGetFIFOPacketSize(); - FIXME: Ué?
@@ -214,3 +216,50 @@ void getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy,
     *gy = (((int16_t)buffer[10]) << 8) | buffer[11];
     *gz = (((int16_t)buffer[12]) << 8) | buffer[13];
 }
+
+/**********************NOTE: OFFSETS*********************/
+//Set
+void setXAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco,  0x06, offset);
+}
+void setYAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x08, offset);
+}
+void setZAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x0A, offset);
+}
+void setXGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x13, offset);
+}
+void setYGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x15, offset);
+}
+void setZGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x17, offset);
+}
+//Get
+int16_t getXAccelOffset() {
+    readBytes(MPU_endereco, 0x06, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYAccelOffset() {
+    readBytes(MPU_endereco, 0x08, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZAccelOffset() {
+    readBytes(MPU_endereco, 0x0A, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getXGyroOffset() {
+    readBytes(MPU_endereco, 0x13, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYGyroOffset() {
+    readBytes(MPU_endereco, 0x15, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZGyroOffset() {
+    readBytes(MPU_endereco, 0x17, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+/************************FIM dos OFFSETS****************/
