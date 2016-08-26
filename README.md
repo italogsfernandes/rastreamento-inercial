@@ -14,3 +14,5 @@ Coloquei neste repositório os códigos que estou escrevendo.
     * **readSensores***: Códigos para leitura de dados dos sensores, por enquanto está na forma mais simples e ainda vou fazer a parte da comunicação utilizando o rádio.
 
 * **Python**: Um data-logger bem útil pra salvar algumas leituras se for preciso. Há, também, algumas leituras salvas e plotadas no matlab.
+
+* **nRF24LE1**: Algumas informações e dúvidas sobre o nRF24LE1.
