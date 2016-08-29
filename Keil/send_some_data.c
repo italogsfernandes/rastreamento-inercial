@@ -11,6 +11,7 @@
 *
 * - Adicionar bibliotecas necessárias
 * - Inicializar payload e demais variaveis
+* - FIXME:  while(hal_clk_get_16m_source() != HAL_CLK_XOSC16M)?
 * - Ativar SPI do radio (FIXME: COMO? Oq é RFCTL?)
 * - Ativar interrupções - FIXME: COMO FUNCIONA?
 * - PWR_UP = 1 - Power up -  Utilizar: hal_nrf_set_power_mode(HAL_NRF_PWR_UP);
