@@ -12,6 +12,7 @@
 *
 * - Adicionar bibliotecas necessárias
 * - Inicializar payload e demais variaveis
+* - Ativar SPI do radio (FIXME: COMO? Oq é RFCTL?)
 * - Ativar interrupções - FIXME: COMO FUNCIONA?
 * - PWR_UP = 1 - Power up -  Utilizar: hal_nrf_set_power_mode(HAL_NRF_PWR_UP);
 * - Colocar vetor payload na tx-fifo: hal_nrf_write_tx_payload(payload,3U); // tamanho 3U
