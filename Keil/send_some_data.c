@@ -7,6 +7,7 @@
 *       - TX_ADDR = 0xE7E7E7E7E7 (default)
 *       - CRC: 1 byte, EN_CRC = 1, CRCO = 0, (defaults)
 *       - Power: 0 dBm (default)
+*       - PRIM_RX = 0 (PTX) (default)
 *
 *
 * - Adicionar bibliotecas necessárias
