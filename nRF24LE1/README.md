@@ -1,7 +1,8 @@
 # Sobre o nRF24LE1
 
-## RF Transceiver - Dúvidas
+## RF Transceiver - Dúvidas [Antigas]
 
+**`Observação`** - `Este é um arquivo antigo e não foi utilizado, é possível que contenha informações erradas e desatualizadas.`
 * **GFSK**: `Gaussian Frequency Shift Keying`. Acho que é uma modulação onde a frequência do sinal é alterada de acordo com o bit que se deseja enviar.
 * **ISM**: Insdustrial, Scientific and Medical radio bands. Vai de 2.400 a 2.4835 GHz. No Brasil é dividida em 11 canais de 22 MHz. O canal que será usado pode ser configurado nos registers do transceiver.
 * **ShockBurst**: `???` O pacote é enviado, e caso não tenha retorno é renviado uma quantidade de vezes definida.
