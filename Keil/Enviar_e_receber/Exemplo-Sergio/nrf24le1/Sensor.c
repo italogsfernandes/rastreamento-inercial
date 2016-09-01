@@ -9,11 +9,11 @@
 #define INTERRUPT_UART0 4   								// UART0, Receive & Transmitt interrupt
 #define INTERRUPT_TMR0	1
 
-#define BROADCAST				0										// Endereço 0 indica transmissão BROADCAST
+#define BROADCAST				0										// Endereï¿½o 0 indica transmissï¿½o BROADCAST
 #define TAM_FIFO 				120	  							// Tamanho da FIFO 100 bytes
-#define MYADDR					0x09								// Endereço deste sensor. Deve seguir o vetor ADDR_SENSOR
+#define MYADDR					0x09								// Endereï¿½o deste sensor. Deve seguir o vetor ADDR_SENSOR
 #define N_SAMPLE_PYL	  13									// Number of samples in 16 bits on RF Payload
-#define N_BYTES_CFG      6     
+#define N_BYTES_CFG      6
 
 /*Macros removed with the use of the corresponding bit for example: determining variable A minimum bits, you can, if (A & BIT0)*/
 
@@ -44,13 +44,13 @@ bit FIFOempty = 1;
 unsigned char infPld = 0;												// Information about the payload in the next transmition
 
 /**************************************************/
-// Variáveis do TMR0
+// Variï¿½veis do TMR0
 unsigned char NBT0H  = 0xE5;			// Este tempo
 unsigned char NBT0L  = 0xF6;			// equivale a
 unsigned char NOVT0  = 0x00;			// Freq. de Amostragem
 unsigned char NPRT0H = 0x00;			// de 200Hz
 unsigned char NPRT0L = 0x00;			//
-unsigned char count;	
+unsigned char count;
 
 /**************************************************/
 void start_T0(void)
@@ -90,7 +90,7 @@ void adc_init(void)
 unsigned char popFIFO()
 {
 	unsigned char	 aux;
-	 	
+
 	if(nDataFIFO > 0)
 	{
 		//LED_VM=!LED_VM;							//only one bit
@@ -115,11 +115,11 @@ void pushFIFO(unsigned char dado)
 	FIFO[index_in] = dado;
 	index_in++;
 	if(nDataFIFO<TAM_FIFO)
-		nDataFIFO++;	
-	if(index_in == TAM_FIFO) 
+		nDataFIFO++;
+	if(index_in == TAM_FIFO)
 		index_in = 0;
 	FIFOempty = 0;
-//	LED_VD=!LED_VD;							//only one bit 	
+//	LED_VD=!LED_VD;							//only one bit
 }
 
 /**************************************************/
@@ -128,9 +128,9 @@ void delay_time(unsigned long int atr)
 	atr = 2 * atr;
 	while(atr!=0)
 	{
-    _nop_();		
+    _nop_();
 		atr--;
-	}	
+	}
 }
 /**************************************************/
 void delay(unsigned int x)
@@ -165,19 +165,19 @@ void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 		//LED_VD=1;
 		TH0= NBT0H;
 		TL0= NBT0L;
-		readADCtoFIFO(0); 					// read the AD conversion result of the selected channel 
-		LED_VD=!LED_VD;							//only one bit 		
+		readADCtoFIFO(0); 					// read the AD conversion result of the selected channel
+		LED_VD=!LED_VD;							//only one bit
 	}
 	else													// Neste caso TH0=TL0=0
 	{
-		if(count==0)								
+		if(count==0)
 		{
 	//		LED_VD=1;
 			TH0= NPRT0H;
 			TL0= NPRT0L;
 			count=NOVT0;
-		//	LED_VD=!LED_VD;						//only one bit 
-			readADCtoFIFO(0); 				// read the AD conversion result of the selected channel 
+		//	LED_VD=!LED_VD;						//only one bit
+			readADCtoFIFO(0); 				// read the AD conversion result of the selected channel
 			LED_VD=!LED_VD;
 		}
 		else
@@ -188,15 +188,15 @@ void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 }
 
 /***************************************************/
-//          - - >    M A I N    < - - 
+//          - - >    M A I N    < - -
 /**************************************************/
 void main(void)
 {
 	unsigned char BioSampleH,BioSampleL, i, NDataPyl, j=0;;
 	count = NOVT0;
-	
-	// Set up GPIO													
-	P0DIR = 0xB7;                 // Output: P0.3 e P0.6 
+
+	// Set up GPIO
+	P0DIR = 0xB7;                 // Output: P0.3 e P0.6
 	P1DIR = 0xFF;                 // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0xFF
 	P2DIR = 0xFF;
 	P0CON = 0x00;                 // All general I/O
@@ -207,18 +207,18 @@ void main(void)
 	index_out = 0;
 	nDataFIFO = 0;
 	FIFOempty = 1;
-	
+
 	LED_VD = 1;
 	LED_VM = 1;
 	delay_time(100000);
-	LED_VM = 0;	
+	LED_VM = 0;
 	LED_VD = 0;
 
-	rf_init();                        
-	adc_init(); 								  // LE1 AD conversion initialization 
+	rf_init();
+	adc_init(); 								  // LE1 AD conversion initialization
 	EA = 1;  											// Enable global IRQ
-	RF = 1; 											// Radio IRQ enable																		
-	
+	RF = 1; 											// Radio IRQ enable
+
 	RX_Mode();										// Enable receive values
 
 	while(1)
@@ -226,13 +226,13 @@ void main(void)
 		if(newPayload)							// finish received
 		{
 			//sta = 0;
-			
+
 			if(rx_buf[0] == BROADCAST)
 			{
 				/**************************************/
 				// 0x02 -> Command START ACQUISITION
 				/**************************************/
-				if(rx_buf[1] == 0x02)  
+				if(rx_buf[1] == 0x02)
 				{
 					start_T0();
 					newPayload = 0;
@@ -240,17 +240,17 @@ void main(void)
 				/**************************************/
 				// 0x05 -> Command CANCEL ACQUISITION
 				/**************************************/
-				if(rx_buf[1] == 0x05)  
+				if(rx_buf[1] == 0x05)
 				{
 					stop_T0();
 					LED_VD = 0;
 					LED_VM = 0;
 					newPayload = 0;
-				}					
+				}
 				/**************************************/
 				// 0x08 -> Command UNDEFINED
 				/**************************************/
-				if(rx_buf[1] == 0x08)  
+				if(rx_buf[1] == 0x08)
 				{
 					pushFIFO(j);
 					tx_buf[0] = MYADDR; 													// Address of this sensor
@@ -260,11 +260,11 @@ void main(void)
 					while (!(TX_DS|MAX_RT)); 								// Check if the package was sent and try again if not
 					RX_Mode();
 					j++;
-				}		
+				}
 				/**************************************/
 				// 0x09 -> Command RESET SENSOR
-				/**************************************/				
-				if(rx_buf[1] == 0x09)  
+				/**************************************/
+				if(rx_buf[1] == 0x09)
 				{
 					index_in  = 0;
 					index_out = 0;
@@ -274,17 +274,17 @@ void main(void)
 					newPayload = 0;
 					LED_VD = 1;
 					LED_VM = 1;
-					delay_time(100000);					
+					delay_time(100000);
 					LED_VD = 0;
 					LED_VM = 0;
-				}		
+				}
 			}
 			if(rx_buf[0] == MYADDR)
 			{
 				/**************************************/
 				// 0x03 -> Command READ SENSOR from FIFO
 				/**************************************/
-				if(rx_buf[1] == 0x03)  
+				if(rx_buf[1] == 0x03)
 				{
 					tx_buf[0] = MYADDR; 													// Address of this sensor
 					for(i=0;i<2*N_SAMPLE_PYL;i=i+2)
@@ -296,15 +296,15 @@ void main(void)
 						if(FIFOempty)									  						// If FIFO empty, discard BioSample
 							break;
 						else
-						{	
+						{
 							tx_buf[i+3] = BioSampleH;   							// 8 bits MSB data AD sample
 							tx_buf[i+4] = BioSampleL;   							// 8 bits LSB data AD sample
 						}
 					}
 					NDataPyl = i;
-					tx_buf[2] = NDataPyl;													// Number of samples data bytes					
+					tx_buf[2] = NDataPyl;													// Number of samples data bytes
 					NDataPyl = NDataPyl + 3;
-					tx_buf[1] = (infPld<<4) + (nDataFIFO>>3);     // INF(4bits)+FIFO(4bits)					
+					tx_buf[1] = (infPld<<4) + (nDataFIFO>>3);     // INF(4bits)+FIFO(4bits)
 					TX_Mode_NOACK(NDataPyl);
 					while (!(TX_DS|MAX_RT)); 											// Check if the package was sent and try again if not
 					RX_Mode();
@@ -313,23 +313,23 @@ void main(void)
 				// 0x13 -> Command RE-READ SENSOR
 				// Retransmit last payload
 				/**************************************/
-				if(rx_buf[1] == 0x13)  
+				if(rx_buf[1] == 0x13)
 				{
 					TX_Mode_NOACK(NDataPyl);
 					while (!(TX_DS|MAX_RT)); 								// Check if the package was sent and try again if not
 					RX_Mode();
-				}	
+				}
 				/**************************************/
 				// 0x06 -> Command CONFIG SENSOR
 				/**************************************/
-				if(rx_buf[1] == 0x06)  
+				if(rx_buf[1] == 0x06)
 				{
 					NBT0H  = rx_buf[2];
 					NBT0L  = rx_buf[3];
-					NOVT0  = rx_buf[4];	
+					NOVT0  = rx_buf[4];
 					NPRT0H = rx_buf[5];
 					NPRT0L = rx_buf[6];
-					
+
 					tx_buf[0] = MYADDR; 									// Address of this sensor
 					tx_buf[1] = 0x06;										// INF(4bits)+FIFO(4bits)
 					tx_buf[2] = 0x01;										// 0x01 -> Data received: OK
@@ -337,10 +337,10 @@ void main(void)
 					while (!(TX_DS|MAX_RT)); 								// Check if the package was sent and try again if not
 					RX_Mode();
 					LED_VD = 1;
-					delay_time(30000);					
+					delay_time(30000);
 					LED_VD = 0;
 				}
-			}	
+			}
 		}
 	}
 }
