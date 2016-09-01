@@ -22,3 +22,14 @@
 * - Verificar interrupção de TX_DS e MAX_RT - FIXME: COMO FUNCIONA?
 */
 //FIXME: Biblioteca "hal_nrf.h"
+
+/**********************(purposed) Packet to Send***************************
+| [QUAT W] [QUAT X] [QUAT Y] [QUAT Z] [GYRO X] [GYRO Y] [GYRO Z] |
+|   0   1   2    3  4     5   6    7   8    9  10   11  12   13  |
+| [MAG X ] [MAG Y ] [MAG Z ] [ACC X ] [ACC Y ] [ACC Z ] |
+|  14  15  16  17   18   19   20  21  22   23   24  25  |
+**************************************************************/
+
+//Example with some numbers
+uint8_t paket2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
+                    21,22,23,24,25};
