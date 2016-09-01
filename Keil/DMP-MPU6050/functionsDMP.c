@@ -9,6 +9,7 @@
 
 #define MPU_endereco 0x68
 //************************TODO****************//
+//NOTE: O Eduardo falou q ia fazer essas:
 // -------------------Algo semelhante ao writeBit e writeBits
 //Feito isso o negocio fica quase 100% pronto
 //Ver na biblioteca original para entender como funcionam essas bibliotecas
