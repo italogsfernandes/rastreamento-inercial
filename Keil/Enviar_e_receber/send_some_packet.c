@@ -22,5 +22,3 @@
 * - Verificar interrupção de TX_DS e MAX_RT - FIXME: COMO FUNCIONA?
 */
 //FIXME: Biblioteca "hal_nrf.h"
-
-//TODO: comunicação seria RS232, MAX232 - pesquisar 
