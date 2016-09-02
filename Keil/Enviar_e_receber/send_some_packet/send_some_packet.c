@@ -30,60 +30,23 @@
 |  14  15  16  17   18   19   20  21  22   23   24  25  |
 **************************************************************/
 
+#include "reg24le1.h" //Definições de muitos endereços de registradores.
+#include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+#include "stdbool.h" //Bolleanos
+#include "API.h" //Define alguns registers e cabeçalhos de funções SPI
+#include "app.h" //Some UART and io functions
+#include "nRF-SPIComands.h" //rf_init, RF_IRQ, TX, RX, SPI_Write, SPI_Read ..
+/*TODO: remover pequenas coisas da biblioteca nRF-SPIComands q por enquanto
+* não é útil pro meu objetivo.
+* verificar a mesma coisa também em reg24le1
+*/
+/*HACK: Pra que serve as bibliotecas UART.H, hal_uart.h, que estão nos arquivos
+*mas não são usadas?
+*/
+
+
+
+
+
 //Example with some numbers
 uint8_t paket2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
-
-
-
-/**************************************************/
-void delay_time(unsigned long int atr)
-{
-	atr = 2 * atr;
-	while(atr!=0)
-	{
-    _nop_();
-		atr--;
-	}
-}
-/**************************************************/
-void delay(unsigned int x)
-{
-    unsigned int i,j;
-    i=0;
-    for(i=0;i<x;i++)
-    {
-       j=508;
-       while(j--);
-    }
-}
-/**************************************************/
-
-/***************************************************/
-//          - - >    M A I N    < - -
-/**************************************************/
-void main(void)
-{
-
-	// Set up GPIO - FIXME: O que alterar nessa parte?
-	P0DIR = 0xB7;                 // Output: P0.3 e P0.6
-	P1DIR = 0xFF;                 // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0xFF
-	P2DIR = 0xFF;
-	P0CON = 0x00;                 // All general I/O
-	P1CON = 0x00;                 // All general I/O
-	P2CON = 0x00;                 // All general I/O
-
-	index_in  = 0;
-	index_out = 0;
-	nDataFIFO = 0;
-	FIFOempty = 1;
-
-	rf_init();
-	EA = 1;  											// Enable global IRQ
-	RF = 1; 											// Radio IRQ enable
-	RX_Mode();										// Enable receive values
-
-	while(1)
-	{
-		delay_time(100000); //ql a unidade?
-	}
-}
