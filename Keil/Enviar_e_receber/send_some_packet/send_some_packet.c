@@ -58,12 +58,19 @@
 #define TX_ADR_WIDTH    5   // 5 bytes TX(RX) address width
 #define TX_PLOAD_WIDTH  26  // 26 bytes TX
 
+//HACK: Porque essa complicação toda so pra definir o LED?
+#define	PIN32
+#ifdef 	PIN32
 sbit LED = P0^3; // 1/0=light/dark
+#define p0dir	0xB7
+#define p1dir	0xFF
+#endif
 
 //Váriaveis globais:
 //Example with some numbers
 uint8_t packet2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 
+void delay(unsigned int x);
 
 /***************MAIN****************/
 void main(void){
@@ -101,3 +108,17 @@ void main(void){
         LED = 0;
     }
 }
+
+/**************************************************/
+void delay(unsigned int x)
+{
+    unsigned int i,j;
+    i=0;
+    for(i=0;i<x;i++)
+    {
+       j=508;
+           ;
+       while(j--);
+    }
+}
+/**************************************************/
