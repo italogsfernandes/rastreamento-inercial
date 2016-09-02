@@ -44,9 +44,60 @@
 *mas não são usadas?
 */
 
+/*NOTE: Códigos de referência:
+* /rastreamento-inercial/Keil/Enviar_e_receber/Exemplo-Sergio/*
+* ../Situacao_qnd_cheguei/nRF24LE1/Teste1nRF/TX/24le1TX.c
+* ../Situacao_qnd_cheguei/nRF24LE1/Teste1nRF/RX/24le1RX-Rev000.c
+* ../Situacao_qnd_cheguei/nRF24LE1/nRF24/Exemplos nRF24/-½-¿Á+transmission/24le1.c
+* ../Situacao_qnd_cheguei/nRF24LE1/nRF24/Exemplos nRF24/-½-¿Á+Receiver/24le1.c
+*/
 
+//FIXME: LER nRF-SPIComands e comparar com exemplos de referencia
 
+//Definições
+#define TX_ADR_WIDTH    5   // 5 bytes TX(RX) address width
+#define TX_PLOAD_WIDTH  26  // 26 bytes TX
 
+sbit LED = P0^3; // 1/0=light/dark
 
+//Váriaveis globais:
 //Example with some numbers
-uint8_t paket2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+uint8_t packet2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
+
+
+/***************MAIN****************/
+void main(void){
+    // Set up GPIO //TODO: rever P0DIR e P1DIR
+    P0DIR = 0xB7;    // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0XF0
+    P1DIR = 0xFF;    // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0XFF
+    P2DIR = 0xFF;
+    P0CON = 0x00;  	// All general I/O
+    P1CON = 0x00;  	// All general I/O
+    P2CON = 0x00;  	// All general I/O
+
+    LED=1;         // turn on LED
+    delay(2000);
+    LED=0;         // turn off LED
+
+    // Radio + SPI setup
+    RFCE = 0;       // Radio chip enable low
+    RFCKEN = 1;     // Radio clk enable
+    RF = 1;
+
+    //uart_init()
+    rf_init();
+    EA=1;//TODO: Descobrir se isso ativa as interrupções
+
+    while(1){
+        //TODO: Esse é o melhor jeito de passar o packet para o buffer?
+        for(int i = 0; i<26; i++){
+            tx_buf[i] = packet2send[i];
+        }
+        TX_MODE();
+        LED = 1;
+        while(!(TX_DS|MAX_RT));
+        sta = 0;
+        delay(1000);
+        LED = 0;
+    }
+}
