@@ -6,13 +6,13 @@
 #include "app.h"
 #include "nRF-SPIComands.h"
 
-#define INTERRUPT_UART0 4   								// UART0, Receive & Transmitt interrupt
+#define INTERRUPT_UART0 4   			// UART0, Receive & Transmitt interrupt
 #define INTERRUPT_TMR0	1
 
-#define BROADCAST				0										// Endere�o 0 indica transmiss�o BROADCAST
-#define TAM_FIFO 				120	  							// Tamanho da FIFO 100 bytes
-#define MYADDR					0x09								// Endere�o deste sensor. Deve seguir o vetor ADDR_SENSOR
-#define N_SAMPLE_PYL	  13									// Number of samples in 16 bits on RF Payload
+#define BROADCAST				0		// Endere�o 0 indica transmiss�o BROADCAST
+#define TAM_FIFO 				120		// Tamanho da FIFO 100 bytes
+#define MYADDR					0x09	// Endere�o deste sensor. Deve seguir o vetor ADDR_SENSOR
+#define N_SAMPLE_PYL	  13			// Number of samples in 16 bits on RF Payload
 #define N_BYTES_CFG      6
 
 /*Macros removed with the use of the corresponding bit for example: determining variable A minimum bits, you can, if (A & BIT0)*/
