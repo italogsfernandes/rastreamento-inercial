@@ -23,7 +23,7 @@
 */
 //FIXME: Biblioteca "hal_nrf.h"
 
-/**********************(purposed) Packet to Send***************************
+/********************** Packet to Send***************************
 | [QUAT W] [QUAT X] [QUAT Y] [QUAT Z] [GYRO X] [GYRO Y] [GYRO Z] |
 |   0   1   2    3  4     5   6    7   8    9  10   11  12   13  |
 | [MAG X ] [MAG Y ] [MAG Z ] [ACC X ] [ACC Y ] [ACC Z ] |
@@ -36,10 +36,7 @@
 #include "API.h" //Define alguns registers e cabeçalhos de funções SPI
 #include "app.h" //Some UART and io functions
 #include "nRF-SPIComands.h" //rf_init, RF_IRQ, TX, RX, SPI_Write, SPI_Read ..
-/*TODO: remover pequenas coisas da biblioteca nRF-SPIComands q por enquanto
-* não é útil pro meu objetivo.
-* verificar a mesma coisa também em reg24le1
-*/
+
 /*HACK: Pra que serve as bibliotecas UART.H, hal_uart.h, que estão nos arquivos
 *mas não são usadas?
 */
@@ -52,18 +49,9 @@
 * ../Situacao_qnd_cheguei/nRF24LE1/nRF24/Exemplos nRF24/-½-¿Á+Receiver/24le1.c
 */
 
-//FIXME: LER nRF-SPIComands e comparar com exemplos de referencia
-
-//Definições
-#define TX_ADR_WIDTH    5   // 5 bytes TX(RX) address width
-#define TX_PLOAD_WIDTH  26  // 26 bytes TX
-
-//HACK: Porque essa complicação toda so pra definir o LED?
 #define	PIN32
 #ifdef 	PIN32
 sbit LED = P0^3; // 1/0=light/dark
-#define p0dir	0xB7
-#define p1dir	0xFF
 #endif
 
 //Váriaveis globais:
@@ -74,9 +62,9 @@ void delay(unsigned int x);
 
 /***************MAIN****************/
 void main(void){
-    // Set up GPIO //TODO: rever P0DIR e P1DIR
-    P0DIR = 0xB7;    // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0XF0
-    P1DIR = 0xFF;    // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0XFF
+    // Set up GPIO
+    P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+    P1DIR = 0xFF;   // Output: P0.0 - P0.2, Input: P0.3 - P0.5	 0xFF
     P2DIR = 0xFF;
     P0CON = 0x00;  	// All general I/O
     P1CON = 0x00;  	// All general I/O
@@ -96,7 +84,6 @@ void main(void){
     EA=1; //ativa as interrupções
 
     while(1){
-        //TODO: Esse é o melhor jeito de passar o packet para o buffer?
         for(int i = 0; i<26; i++){
             tx_buf[i] = packet2send[i];
         }
