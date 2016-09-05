@@ -82,9 +82,9 @@ void main(void){
     P1CON = 0x00;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 
-    LED=1;         // turn on LED
+    LED = 1;         // turn on LED
     delay(2000);
-    LED=0;         // turn off LED
+    LED = 0;         // turn off LED
 
     // Radio + SPI setup
     RFCE = 0;       // Radio chip enable low
@@ -93,14 +93,14 @@ void main(void){
 
     //uart_init()
     rf_init();
-    EA=1;//TODO: Descobrir se isso ativa as interrupções
+    EA=1; //ativa as interrupções
 
     while(1){
         //TODO: Esse é o melhor jeito de passar o packet para o buffer?
         for(int i = 0; i<26; i++){
             tx_buf[i] = packet2send[i];
         }
-        TX_MODE();
+        TX_Mode_NOACK();
         LED = 1;
         while(!(TX_DS|MAX_RT));
         sta = 0;
