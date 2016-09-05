@@ -88,7 +88,7 @@ void main(void){
                 //Payload Ruim
             } else {
                 //Payload  boa
-
+                //FIXME: IMPLEMENTAR FUNÇÔES DE COMUNICAÇÂO SERIAL
             }
         }
     }
