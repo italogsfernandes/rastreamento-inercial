@@ -36,7 +36,7 @@
 #include "API.h" //Define alguns registers e cabeçalhos de funções SPI
 #include "app.h" //Some UART and io functions
 #include "nRF-SPIComands.h" //rf_init, RF_IRQ, TX, RX, SPI_Write, SPI_Read ..
-
+//FIXME: quem é intrins?
 /*HACK: Pra que serve as bibliotecas UART.H, hal_uart.h, que estão nos arquivos
 *mas não são usadas?
 */

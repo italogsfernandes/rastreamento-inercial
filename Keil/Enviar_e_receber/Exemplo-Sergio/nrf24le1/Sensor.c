@@ -7,7 +7,7 @@
 #include "nRF-SPIComands.h"
 
 #define INTERRUPT_UART0 4   			// UART0, Receive & Transmitt interrupt
-#define INTERRUPT_TMR0	1
+
 
 #define BROADCAST				0		// Endere�o 0 indica transmiss�o BROADCAST
 #define TAM_FIFO 				120		// Tamanho da FIFO 100 bytes

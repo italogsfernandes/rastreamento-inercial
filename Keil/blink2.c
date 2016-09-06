@@ -1,6 +1,11 @@
 #include "reg24le1.h" // I/O header file for NRF24LE1
 #include "hal_delay.h" // header file containing delay functions
 
+#define	PIN32
+#ifdef 	PIN32
+sbit LED1 = P0^3; // 1/0=light/dark
+sbit LED2 = P0^6; // 1/0=light/dark
+#endif
 
 void main() {
     //Registar name P0DIR - ADDR = 0x93
@@ -10,15 +15,17 @@ void main() {
     * pin operation
     */
     //Output: dir = 0, Input: dir = 1.
-  P0DIR = 0xF7; // Set all PORT0 as output
+  P0DIR = 0xB7; // Set P03 e P06 of PORT0 as output
 
   while(1) // infinite loop
   {
       //Pin0 de Port0 value
       //Endereço: 0x80
-    P03 = 1; // make Pin0 of Port0 low
+    LED1 = 1; // make Pin0 of Port0 low
+    LED2 = 0
     delay_ms(1000); // delay of 1 second
-    P03 = 0; // make Pin0 of Port0 High
+    LED1 = 0; // make Pin0 of Port0 High
+    LED2 = 1;
     delay_ms(1000); // delay of 1 second
   }
 }
