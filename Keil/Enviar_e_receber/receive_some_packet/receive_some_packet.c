@@ -4,11 +4,11 @@
 *   Parametros:
 *       - RF channel:  RF_CH = 2 (default)
 *       - Data rate: RF_DR_HIGH = 01 (dafault) 2 Mps
-*       - TX_ADDR = 0xE7E7E7E7E7 (default)
+*       - RX_ADDR_P0 = 0xE7E7E7E7E7 (default), 0xC2C2C2C2C2 (pipe 1) (default)
+*       - EN_RXADDR = Default, pipe 0 e pipe 1
 *       - CRC: 1 byte, EN_CRC = 1, CRCO = 0, (defaults)
 *       - Power: 0 dBm (default)
-*       - PRIM_RX = 0 (PTX) (default)
-*
+*       - PRIM_RX = 1 (PRX)
 *
 * - Adicionar bibliotecas necessárias
 * - Inicializar payload e demais variaveis
@@ -16,10 +16,11 @@
 * - Ativar SPI do radio (FIXME: COMO? Oq é RFCTL?)
 * - Ativar o clock do Radio.
 * - Ativar interrupções - FIXME: COMO FUNCIONA?
+* - PRIM_RX = 1 (PRX) -  hal_nrf_set_operation_mode(HAL_NRF_PRX);
+* - Configurar o tamanho da RX-Payload igual ao da TX. hal_nrf_set_rx_payload_width((int)HAL_NRF_PIPE0, 3);
 * - PWR_UP = 1 - Power up -  Utilizar: hal_nrf_set_power_mode(HAL_NRF_PWR_UP);
-* - Colocar vetor payload na tx-fifo: hal_nrf_write_tx_payload(payload,3U); // tamanho 3U
-* - CE_PULSE() - Pulsar CE para enviar a payload
-* - Verificar interrupção de TX_DS e MAX_RT - FIXME: COMO FUNCIONA?
+* - CE_HIGH() - Ativar CE para estar recebendo dados (ver figura 6)
+* - Verificar interrupção de RX_DR - FIXME: COMO FUNCIONA?
 */
 //FIXME: Biblioteca "hal_nrf.h"
 
@@ -36,10 +37,6 @@
 #include "API.h" //Define alguns registers e cabeçalhos de funções SPI
 #include "app.h" //Some UART and io functions
 #include "nRF-SPIComands.h" //rf_init, RF_IRQ, TX, RX, SPI_Write, SPI_Read ..
-//FIXME: quem é intrins?
-/*HACK: Pra que serve as bibliotecas UART.H, hal_uart.h, que estão nos arquivos
-*mas não são usadas?
-*/
 
 /*NOTE: Códigos de referência:
 * /rastreamento-inercial/Keil/Enviar_e_receber/Exemplo-Sergio/*
@@ -53,10 +50,6 @@
 #ifdef 	PIN32
 sbit LED = P0^3; // 1/0=light/dark
 #endif
-
-//Váriaveis globais:
-//Example with some numbers
-uint8_t packet2send[26] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25};
 
 void delay(unsigned int x);
 
@@ -83,16 +76,21 @@ void main(void){
     rf_init();
     EA=1; //ativa as interrupções
 
+    RX_Mode();
     while(1){
-        for(int i = 0; i<26; i++){
-            tx_buf[i] = packet2send[i];
+        if(newPayload)								// finish received
+        {
+            LED=1;
+            sta=0;
+            if(payloadWidth != 26){
+                payloadWidth = 0;
+                newPayload = 0;
+                //Payload Ruim
+            } else {
+                //Payload  boa
+                //FIXME: IMPLEMENTAR FUNÇÔES DE COMUNICAÇÂO SERIAL
+            }
         }
-        TX_Mode_NOACK();
-        LED = 1;
-        while(!(TX_DS|MAX_RT));
-        sta = 0;
-        delay(1000);
-        LED = 0;
     }
 }
 
