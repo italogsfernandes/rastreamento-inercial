@@ -1,0 +1,214 @@
+C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:02:08 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN timer.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE timer.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*Código para comunicação UART entre o nrf24le1 e um arduino
+   2          * pin P0.3 - TX
+   3          * pin P0.4 - RX
+   4          * please do not use P0.3 as LED or P0.4 as W2SCL
+   5          * i dont know if P0.4 could work with 2 functions (RX and SCL)
+   6          */
+   7          
+   8          #include "reg24le1.h" // I/O header file for NRF24LE1
+   9          #include "stdint.h"
+  10          #include "API.h"
+  11          
+  12          #define INTERRUPT_TMR0  1
+  13          
+  14          //Definições dos botões e leds
+  15          #define PIN32
+  16          #ifdef  PIN32
+  17          //Pushbuttons
+  18          sbit S1  = P0^2;    // 1/0=no/press
+  19          sbit S2  = P1^4;    // 1/0=no/press
+  20          //LEDS
+  21          sbit LEDVD = P0^6; // 1/0=light/dark
+  22          #endif
+  23          
+  24          void uart_init(void);
+  25          void uart_putchar(uint8_t x);
+  26          void putstring(char *s);
+  27          void delay_ms(unsigned int x);
+  28          void start_T0(void);
+  29          void stop_T0(void);
+  30          
+  31          /**************************************************/
+  32          // Variáveis do TMR0
+  33          unsigned char NBT0H  = 0x52;                    // Este tempo
+  34          unsigned char NBT0L  = 0x63;                    // equivale a
+  35          unsigned char NOVT0  = 0x00;                    // Freq. de Amostragem
+  36          unsigned char NPRT0H = 0x00;                    // de 30Hz
+  37          unsigned char NPRT0L = 0x00;                    //
+  38          unsigned char count;    
+  39          
+  40          
+  41          /**************************************************/
+  42          void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
+  43          {
+  44   1              if(!NOVT0)
+  45   1              {
+  46   2                      putstring("Lorem Ipsum1\n");
+  47   2                      TH0= NBT0H;
+  48   2                      TL0= NBT0L;     
+  49   2              }
+  50   1              else                                                                                                    // Neste caso TH0=TL0=0
+  51   1              {
+  52   2                      if(count==0)                                                            
+  53   2                      {
+  54   3                              putstring("Ipsum Lorem2\n");
+  55   3                              TH0= NPRT0H;
+C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:02:08 PAGE 2   
+
+  56   3                              TL0= NPRT0L;
+  57   3                              count=NOVT0;
+  58   3                      }
+  59   2                      else
+  60   2                      {
+  61   3                              count--;
+  62   3                      }
+  63   2              }
+  64   1              
+  65   1      }
+  66          /**************************************************/
+  67          
+  68          void luzes_iniciais(void){
+  69   1              LEDVD = 1;
+  70   1              delay_ms(1000);
+  71   1              LEDVD = 0;
+  72   1              delay_ms(1000);
+  73   1              LEDVD = 1;
+  74   1              delay_ms(1000);
+  75   1              LEDVD = 0;
+  76   1      }
+  77          
+  78          void setup(void){
+  79   1               // Set up GPIO
+  80   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
+  81   1          P1DIR = 0xFF;   // Tudo input
+  82   1          P2DIR = 0xFF;
+  83   1          P0CON = 0x00;       // All general I/O
+  84   1          P1CON = 0x00;       // All general I/O
+  85   1          P2CON = 0x00;       // All general I/O
+  86   1      
+  87   1              // Initializes the UART
+  88   1              uart_init();
+  89   1      
+  90   1              // Enable global interrupts
+  91   1              EA = 1;
+  92   1      
+  93   1              count = NOVT0;
+  94   1       
+  95   1          luzes_iniciais();
+  96   1      }
+  97          void main(void){
+  98   1              setup();        
+  99   1              while(1){
+ 100   2                      if(!S1){
+ 101   3                              putstring("acendeu\n");
+ 102   3                              LEDVD = 1;
+ 103   3                              start_T0();
+ 104   3                              delay_ms(100); //evita ruidos
+ 105   3                              while(!S1); //espera soltar o botao
+ 106   3                              delay_ms(100);
+ 107   3                      }
+ 108   2                      if(!S2){
+ 109   3                              putstring("apagou\n");
+ 110   3                              LEDVD = 0;
+ 111   3                              stop_T0();
+ 112   3                              delay_ms(100);
+ 113   3                              while(!S2);//espera soltar o botao
+ 114   3                              delay_ms(100);
+ 115   3                      }
+ 116   2              }
+ 117   1      }
+C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:02:08 PAGE 3   
+
+ 118          /**************************************************/
+ 119          /****************UART******************************/
+ 120          /**************************************************/
+ 121          void uart_init(void)
+ 122          {
+ 123   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
+ 124   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
+ 125   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
+ 126   1          SM1 = 1;                      // ..8 bit variable baud rate
+ 127   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
+ 128   1          ADCON |= 0x80;                // Select internal baud rate generator
+ 129   1                                                                        // (ADCON??????0??????????J?????'???????????????????? )
+ 130   1          S0RELL = 0xf3;                // baudrate 38400
+ 131   1          S0RELH = 0x03;
+ 132   1          TI0 = 0;                                      // S0CON^1:?????????????????????????
+ 133   1              S0BUF=0x00;                                       //????0????????J???
+ 134   1      }
+ 135          /**************************************************/
+ 136          void uart_putchar(uint8_t x)
+ 137          {
+ 138   1              while (!TI0);
+ 139   1              TI0=0;
+ 140   1              S0BUF=x;
+ 141   1      }
+ 142          
+ 143          /*****************************/
+ 144          // Repeated putchar to print a string
+ 145          void putstring(char *s)
+ 146          {
+ 147   1              while(*s != 0)
+ 148   1              uart_putchar(*s++);
+ 149   1      }
+ 150          /**************************************************/
+ 151          void delay_ms(unsigned int x)
+ 152          {
+ 153   1          unsigned int i,j;
+ 154   1          i=0;
+ 155   1          for(i=0;i<x;i++)
+ 156   1          {
+ 157   2             j=508;
+ 158   2                 ;
+ 159   2             while(j--);
+ 160   2          }
+ 161   1      }
+ 162          /**************************************************/
+ 163          /****************TIMER*****************************/
+ 164          /**************************************************/
+ 165          //Timer comfigurado para freq de amostragem 30Hz
+ 166          void start_T0(void)
+ 167          {
+ 168   1              TMOD=0x31;                                              // Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
+ 169   1              TH0= NBT0H;
+ 170   1              TL0= NBT0L;
+ 171   1              ET0=1;                                                          // Active interrupt on Timer 0
+ 172   1              EA=1;                                                                   // Active all interrupts
+ 173   1              TR0=1;                                                          // Timer 0 --> RUN
+ 174   1      }
+ 175          /**************************************************/
+ 176          void stop_T0(void)
+ 177          {
+ 178   1              TMOD=0x31;                                              // Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
+ 179   1              TH0= NBT0H;
+C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:02:08 PAGE 4   
+
+ 180   1              TL0= NBT0L;
+ 181   1              ET0=0;                                                          // Active interrupt on Timer 0
+ 182   1              EA=1;                                                                   // Active all interrupts
+ 183   1              TR0=0;                                                          // Timer 0 --> RUN
+ 184   1      }
+ 185          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    357    ----
+   CONSTANT SIZE    =     45    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6       3
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

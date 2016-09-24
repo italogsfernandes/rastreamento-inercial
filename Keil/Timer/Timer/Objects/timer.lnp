@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\timer.obj" 
+TO ".\Objects\timer" 
+PRINT(".\Listings\timer.m51") RAMSIZE(256) 
