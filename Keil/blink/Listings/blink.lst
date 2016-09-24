@@ -1,0 +1,86 @@
+C51 COMPILER V9.56.0.0   BLINK                                                             09/22/2016 16:52:34 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE BLINK
+OBJECT MODULE PLACED IN .\Objects\blink.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE blink.c BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\blink.lst) OBJECT(.\O
+                    -bjects\blink.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //Definições de muitos endereços de registradores.
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Bolleanos
+   4          
+   5          //Definições dos botões e leds
+   6          #define PIN32
+   7          #ifdef  PIN32
+   8          //Pushbuttons
+   9          sbit S1  = P0^2;    // 1/0=no/press
+  10          sbit S2  = P1^4;    // 1/0=no/press
+  11          //LEDS
+  12          sbit LED1 = P0^3; // 1/0=light/dark
+  13          sbit LED2 = P0^6; // 1/0=light/dark
+  14          #endif
+  15          
+  16          void delay(unsigned int x);
+  17          
+  18          void luzes_iniciais(void){
+  19   1              LED1 = 1; LED2 = 0;
+  20   1              delay(1000);
+  21   1              LED1 = 0; LED2 = 1;
+  22   1              delay(1000);
+  23   1              LED1 = 1; LED2 = 1;
+  24   1              delay(1000);
+  25   1              LED1 = 0; LED2 = 0;
+  26   1      }
+  27          
+  28          void setup(void){
+  29   1               // Set up GPIO
+  30   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+  31   1          P1DIR = 0xFF;   // Tudo input
+  32   1          P2DIR = 0xFF;
+  33   1          P0CON = 0x00;       // All general I/O
+  34   1          P1CON = 0x00;       // All general I/O
+  35   1          P2CON = 0x00;       // All general I/O
+  36   1      
+  37   1          luzes_iniciais();
+  38   1      }
+  39          void main(void){
+  40   1              setup();
+  41   1              while(1){
+  42   2                      LED1 = !LED1;
+  43   2                      LED2 = !LED2;
+  44   2                      delay(1000);
+  45   2              }
+  46   1      }
+  47          
+  48          /**************************************************/
+  49          void delay(unsigned int x)
+  50          {
+  51   1          unsigned int i,j;
+  52   1          i=0;
+  53   1          for(i=0;i<x;i++)
+  54   1          {
+C51 COMPILER V9.56.0.0   BLINK                                                             09/22/2016 16:52:34 PAGE 2   
+
+  55   2             j=508;
+  56   2                 ;
+  57   2             while(j--);
+  58   2          }
+  59   1      }
+  60          /**************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     92    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
