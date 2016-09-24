@@ -1,0 +1,141 @@
+C51 COMPILER V9.56.0.0   MOD2                                                              09/22/2016 18:11:10 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MOD2
+OBJECT MODULE PLACED IN ..\Objects\MOD2.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE MOD2.c BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\MOD2.lst) OBJECT(..\Ob
+                    -jects\MOD2.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //Definições de muitos endereços de registradores.
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Booleanos
+   4          #include "API.h"
+   5          #include "nRF-SPIComands.h"
+   6          
+   7          //Subendereços usados no sistema
+   8          #define MY_SUB_ADDR 0x02
+   9          #define OTHER_SUB_ADDR 0x01
+  10          // pacote = [sub_endereço_destinatario] [sinal_led]
+  11          #define Sinal_LED1 0x0A
+  12          #define Sinal_LED2 0x0B
+  13          
+  14          //Definições dos botões e leds
+  15          #define PIN32
+  16          #ifdef  PIN32
+  17          //Pushbuttons
+  18          sbit S1  = P0^2;    // 1/0=no/press
+  19          sbit S2  = P1^4;    // 1/0=no/press
+  20          //LEDS
+  21          sbit LED1 = P0^3; // 1/0=light/dark
+  22          sbit LED2 = P0^6; // 1/0=light/dark
+  23          #endif
+  24          
+  25          void delay(unsigned int x);
+  26          
+  27          void luzes_iniciais(void){
+  28   1              LED1 = 1; LED2 = 0;
+  29   1              delay(1000);
+  30   1              LED1 = 0; LED2 = 1;
+  31   1              delay(1000);
+  32   1              LED1 = 1; LED2 = 1;
+  33   1              delay(1000);
+  34   1              LED1 = 0; LED2 = 0;
+  35   1      }
+  36          
+  37          void setup(void){
+  38   1               // Set up GPIO
+  39   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+  40   1          P1DIR = 0xFF;   // Tudo input
+  41   1          P2DIR = 0xFF;
+  42   1          P0CON = 0x00;       // All general I/O
+  43   1          P1CON = 0x00;       // All general I/O
+  44   1          P2CON = 0x00;       // All general I/O
+  45   1              // Radio + SPI setup
+  46   1          RFCE = 0;       // Radio chip enable low
+  47   1          RFCKEN = 1;     // Radio clk enable
+  48   1          RF = 1;
+  49   1      
+  50   1          rf_init();
+  51   1          EA=1; //ativa as interrupções
+  52   1              luzes_iniciais();
+  53   1          RX_Mode(); 
+  54   1      }
+C51 COMPILER V9.56.0.0   MOD2                                                              09/22/2016 18:11:10 PAGE 2   
+
+  55          void main(void){
+  56   1              setup();
+  57   1              while(1){
+  58   2                      if(!S1){
+  59   3                              //LED1 = !LED1; //feedback
+  60   3                              //montando o pacote:
+  61   3                              tx_buf[0] = OTHER_SUB_ADDR;
+  62   3                              tx_buf[1] = Sinal_LED1;
+  63   3                              //enviando e retornando ao padrao:
+  64   3                              TX_Mode_NOACK(2);
+  65   3                              RX_Mode();
+  66   3                              delay(100);      //delays para evitar sinais de malcontato
+  67   3                              while(!S1);  //aguarda soltar o botão
+  68   3                              delay(100); //delay para evitar sinais de mal contato
+  69   3                      }
+  70   2                      if(!S2){
+  71   3                              //LED2 = !LED2; //feedback
+  72   3                              //montando o pacote:
+  73   3                              tx_buf[0] = OTHER_SUB_ADDR;
+  74   3                              tx_buf[1] = Sinal_LED2;
+  75   3                              //enviando e retornando ao padrao:
+  76   3                              TX_Mode_NOACK(2);
+  77   3                              RX_Mode();
+  78   3                              delay(100);      //delays para evitar sinais de malcontato
+  79   3                              while(!S2);  //aguarda soltar o botão
+  80   3                              delay(100); //delay para evitar sinais de mal contato
+  81   3                      }
+  82   2                      if(newPayload){
+  83   3                              //verifica se o sinal é para mim
+  84   3                              if(rx_buf[0]== MY_SUB_ADDR){
+  85   4                                       switch(rx_buf[1]){
+  86   5                                              case Sinal_LED1:
+  87   5                                                      LED1 = !LED1;
+  88   5                                                      break;
+  89   5                                              case Sinal_LED2:
+  90   5                                                      LED2 = !LED2;
+  91   5                                                      break;
+  92   5                                      }
+  93   4      
+  94   4                              }
+  95   3                              sta = 0;
+  96   3                      newPayload = 0;
+  97   3                      }
+  98   2              }
+  99   1      }
+ 100          
+ 101          /**************************************************/
+ 102          void delay(unsigned int x)
+ 103          {
+ 104   1          unsigned int i,j;
+ 105   1          i=0;
+ 106   1          for(i=0;i<x;i++)
+ 107   1          {
+ 108   2             j=508;
+ 109   2                 ;
+ 110   2             while(j--);
+ 111   2          }
+ 112   1      }
+ 113          /**************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+C51 COMPILER V9.56.0.0   MOD2                                                              09/22/2016 18:11:10 PAGE 3   
+
+   CODE SIZE        =    606    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     11      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

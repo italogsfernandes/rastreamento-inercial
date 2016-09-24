@@ -1,0 +1,4 @@
+"..\Objects\STARTUP.obj",
+"..\Objects\MOD1.obj" 
+TO "..\Objects\btn_and_led_MOD1" 
+PRINT(".\btn_and_led_MOD1.m51") RAMSIZE(256) 
