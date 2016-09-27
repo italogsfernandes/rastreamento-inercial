@@ -1,4 +1,4 @@
-/*Código para comunicação UART entre o nrf24le1 e um arduino
+/*Cï¿½digo para comunicaï¿½ï¿½o UART entre o nrf24le1 e um arduino
 * pin P0.3 - TX
 * pin P0.4 - RX
 * please do not use P0.3 as LED or P0.4 as W2SCL
@@ -11,7 +11,7 @@
 
 #define INTERRUPT_TMR0	1
 
-//Definições dos botões e leds
+//Definiï¿½ï¿½es dos botï¿½es e leds
 #define	PIN32
 #ifdef 	PIN32
 //Pushbuttons
@@ -29,19 +29,23 @@ void start_T0(void);
 void stop_T0(void);
 
 /**************************************************/
-// Variáveis do TMR0
+// Variï¿½veis do TMR0
 unsigned char NBT0H  = 0x52;			// Este tempo
 unsigned char NBT0L  = 0x63;			// equivale a
 unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 30Hz
 
 /**************************************************/
+int timer_flag = 3;
 void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
 	{
-		putstring("Lorem Ipsum1\n");
+		timer_flag--;
+		if(timer_flag <= 0){
+			putstring("Lorem Ipsum1\n");
+		}
 		TH0= NBT0H;
-		TL0= NBT0L;	
+		TL0= NBT0L;
 	}
 }
 /**************************************************/
@@ -71,11 +75,11 @@ void setup(void){
 	// Enable global interrupts
 	EA = 1;
 
- 
+
     luzes_iniciais();
 }
 void main(void){
-	setup();	
+	setup();
 	while(1){
 		if(!S1){
 			putstring("acendeu\n");
@@ -162,4 +166,3 @@ void stop_T0(void)
 	EA=1;									// Active all interrupts
 	TR0=0;								// Timer 0 --> RUN
 }
-
