@@ -11,7 +11,7 @@ strikes = 0;
 
 horario = datetime.now()
 horario_anterior = horario
-arq = open("leituras/"+ str(horario) + '-dados.txt', 'w')
+arq = open( "leituras/" + str(horario) + '-dados.txt', 'w')
 
 log = 'AAAA-MM-DD HH-MM-SS.ssssss\tXac\tYac\tZac\tXgi\tYgi\tZgi\tXma\tYma\tZma\tWq\tIq\tJq\tKq\t\n'
 arq.write(log)

@@ -1,17 +1,17 @@
-#include "reg24le1.h" //Definições de muitos endereços de registradores.
+#include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
 #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
 #include "stdbool.h" //Booleanos
 #include "API.h"
 #include "nRF-SPIComands.h"
 
-//Subendereços usados no sistema
+//Subendereï¿½os usados no sistema
 #define MY_SUB_ADDR 0x01
 #define OTHER_SUB_ADDR 0x02
-// pacote = [sub_endereço_destinatario] [sinal_led]
+// pacote = [sub_endereï¿½o_destinatario] [sinal_led]
 #define Sinal_LED1 0x0A
 #define Sinal_LED2 0x0B
 
-//Definições dos botões e leds
+//Definiï¿½ï¿½es dos botï¿½es e leds
 #define	PIN32
 #ifdef 	PIN32
 //Pushbuttons
@@ -48,9 +48,9 @@ void setup(void){
     RF = 1;
 
     rf_init();
-    EA=1; //ativa as interrupções
+    EA=1; //ativa as interrupï¿½ï¿½es
 	luzes_iniciais();
-    RX_Mode(); 
+    RX_Mode();
 }
 void main(void){
 	setup();
@@ -64,7 +64,7 @@ void main(void){
 			TX_Mode_NOACK(2);
 			RX_Mode();
 			delay(100);	 //delays para evitar sinais de malcontato
-			while(!S1);  //aguarda soltar o botão
+			while(!S1);  //aguarda soltar o botï¿½o
 			delay(100); //delay para evitar sinais de mal contato
 		}
 		if(!S2){
@@ -76,11 +76,11 @@ void main(void){
 			TX_Mode_NOACK(2);
 			RX_Mode();
 			delay(100);	 //delays para evitar sinais de malcontato
-			while(!S2);  //aguarda soltar o botão
+			while(!S2);  //aguarda soltar o botï¿½o
 			delay(100); //delay para evitar sinais de mal contato
 		}
 		if(newPayload){
-			//verifica se o sinal é para mim
+			//verifica se o sinal ï¿½ para mim
 			if(rx_buf[0]== MY_SUB_ADDR){
 				 switch(rx_buf[1]){
 					case Sinal_LED1:
