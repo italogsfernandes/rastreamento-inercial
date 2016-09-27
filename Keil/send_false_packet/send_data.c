@@ -94,7 +94,7 @@ uint8_t pacotes[] = {
 	17,147,253,27,255,40,194,136,0,0,255,255,255,254,3,218,255,127,31,40,0,101,0,133,0,175,
 	17,145,253,25,255,39,194,136,0,0,255,255,255,254,3,221,255,129,31,40,0,103,0,132,0,174,
 	17,143,253,24,255,38,194,135,0,0,0,0,255,254,3,222,255,131,31,36,0,103,0,131,0,174
-}
+};
 // pacote a receber= [sub_endere�o_destinatario] [parar ou iniciar leituras]
 #define Sinal_iniciar 0x0A
 #define Sinal_parar 0x0B
@@ -230,11 +230,23 @@ void stop_T0(void)
 }
 /********************PACOTE******************/
 void enviar_pacote_leituras(){
-
-
-
+	LED2 = 1;
+	for(int i = 1; i<27; i++){
+		tx_buf[i] = pacote[i];
+	}
+	TX_Mode_NOACK(27);
+	RX_Mode();
+	LED2 = 0;
 }
+int index_pacote = 0;
 void realizar_leituras(){
-
-
+	pacote[0] = MY_SUB_ADDR; //o pacote sempre começa com o endereço
+	for(int i = 0; i<26; i++){ //é preenchido com as 26 leituras
+		pacote[i+1] = pacotes[index_pacote+i];
+	}
+	index_pacote = index_pacote+26;//passa para a proxima linha de pacotes de exemplo
+	//TODO: calcular melhor esse numero maximo
+	if(index_pacote >= 2000){ //se ta chegando no final recomeça
+		index_pacote=0;
+	}
 }
