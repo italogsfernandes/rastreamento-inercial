@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:04:42 PAGE 1   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 14:44:17 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TIMER
@@ -62,7 +62,7 @@ line level    source
   52   1              LEDVD = 0;
   53   1              delay_ms(1000);
   54   1              LEDVD = 1;
-C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:04:42 PAGE 2   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 14:44:17 PAGE 2   
 
   55   1              delay_ms(1000);
   56   1              LEDVD = 0;
@@ -126,7 +126,7 @@ line level    source
  114   1      }
  115          /**************************************************/
  116          void uart_putchar(uint8_t x)
-C51 COMPILER V9.56.0.0   TIMER                                                             09/23/2016 22:04:42 PAGE 3   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 14:44:17 PAGE 3   
 
  117          {
  118   1              while (!TI0);

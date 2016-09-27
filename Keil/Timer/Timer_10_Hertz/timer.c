@@ -42,7 +42,7 @@ void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 	{
 		timer_flag--;
 		if(timer_flag <= 0){
-			putstring("Lorem Ipsum1\n");
+			putstring("Lorem Ipsum10_HZ\n");
 			timer_flag = 3;
 		}
 		TH0= NBT0H;
