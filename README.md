@@ -20,6 +20,8 @@ Desenvolvimento de um sistema de rastreamento inercial.
 
 * **Python**: Um data-logger bem útil pra salvar algumas leituras se for preciso. Há, também, algumas leituras salvas e plotadas no matlab.
 
+* **eagle**: Projeto no eagle para a confecção de uma PCB utilizando o CI MAX232.
+
 ## Resultado do teste do send false packet
 Frequência de amostragem X amostras
 ![](Keil/Testados/Timer/Resultados/resultados_timer_sem_fio.jpg)
