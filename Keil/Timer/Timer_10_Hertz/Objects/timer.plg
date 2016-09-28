@@ -4,28 +4,13 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 D:\BIOLAB\rastreamento-inercial\Keil\Timer\Timer_10_Hertz\timer.uvproj
-Project File Date:  09/23/2016
+Project File Date:  09/27/2016
 
 <h2>Output:</h2>
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling timer.c...
 linking...
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_PUTSTRING?TIMER
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TMR0_IRQ?TIMER
-Program Size: data=20.0 xdata=0 code=569
+Program Size: data=17.0 xdata=0 code=522
 creating hex file from ".\Objects\timer"...
-".\Objects\timer" - 0 Error(s), 1 Warning(s).
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling timer.c...
-linking...
-*** WARNING L15: MULTIPLE CALL TO SEGMENT
-    SEGMENT: ?PR?_PUTSTRING?TIMER
-    CALLER1: ?C_C51STARTUP
-    CALLER2: ?PR?TMR0_IRQ?TIMER
-Program Size: data=20.0 xdata=0 code=573
-creating hex file from ".\Objects\timer"...
-".\Objects\timer" - 0 Error(s), 1 Warning(s).
+".\Objects\timer" - 0 Error(s), 0 Warning(s).

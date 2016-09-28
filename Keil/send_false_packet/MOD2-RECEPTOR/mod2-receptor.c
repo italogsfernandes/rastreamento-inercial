@@ -5,10 +5,19 @@
 * i dont know if P0.4 could work with 2 functions (RX and SCL)
 */
 
-#include "reg24le1.h" // I/O header file for NRF24LE1
-#include "stdint.h"
+#include "reg24le1.h" //Defini??es de muitos endere?os de registradores.
+#include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+#include "stdbool.h" //Booleanos
 #include "API.h"
+#include "nRF-SPIComands.h"
 
+//Subendere?os usados no sistema
+#define MY_SUB_ADDR 0x02
+#define OTHER_SUB_ADDR 0x01
+// pacote a receber= [sub_endere?o_destinatario] QWH	QWL	QXH	QXL	QYH	QYL	QZH	QZL	AXH	AXL	AYH	AYL	AZH	AZL GXH	GXL	GYH	GYL	GZH	GZL	MXH	MXL	MYH	MYL	MZH	MZL
+// pacote a enviar= [sub_endere?o_destinatario] [parar ou iniciar leituras]
+#define Sinal_iniciar 0x0A
+#define Sinal_parar 0x0B
 
 //Definições dos botões e leds
 #define	PIN32
@@ -21,9 +30,10 @@ sbit LEDVD = P0^6; // 1/0=light/dark
 #endif
 
 void uart_init(void);
-void putstring(char *s);
 void uart_putchar(uint8_t x);
+void putstring(char *s);
 void delay_ms(unsigned int x);
+int i = 0;
 
 void luzes_iniciais(void){
         LEDVD = 1;
@@ -44,33 +54,61 @@ void setup(void){
     P1CON = 0x00;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 
-	 luzes_iniciais();
-	// Initializes the UART
+	// Radio + SPI setup
+    RFCE = 0;       // Radio chip enable low
+    RFCKEN = 1;     // Radio clk enable
+    RF = 1;
+	//inicia o rf
+	rf_init();
+ 	// Initializes the UART
 	uart_init();
 
 	// Enable global interrupts
 	EA = 1;
- 
+	RX_Mode();
     luzes_iniciais();
+	putstring("receptor ligado");
 }
 void main(void){
 	setup();	
 	while(1){
 		if(!S1){
-			putstring("acendeu\n");
-			LEDVD = 1;
+			//montando o pacote:
+			tx_buf[0] = OTHER_SUB_ADDR;
+			tx_buf[1] = Sinal_iniciar;
+			//enviando e retornando ao padrao:
+			TX_Mode_NOACK(2);
+			RX_Mode();
+			putstring("sinal start enviado");
 			delay_ms(100); //evita ruidos
 			while(!S1); //espera soltar o botao
 			delay_ms(100);
 		}
 		if(!S2){
-			putstring("apagou\n");
+			//montando o pacote:
+			tx_buf[0] = OTHER_SUB_ADDR;
+			tx_buf[1] = Sinal_parar;
+			//enviando e retornando ao padrao:
+			TX_Mode_NOACK(2);
+			RX_Mode();
+			putstring("sinal stop enviado");
 			LEDVD = 0;
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
 		}
+		if(newPayload){
+			//verifica se o sinal ? para mim
+			if(rx_buf[0]== MY_SUB_ADDR){
+			 	  for(i=1;i<payloadWidth; i++){
+				  	uart_putchar(rx_buf[i]);
+				  }
+			}
+			sta = 0;
+     		newPayload = 0;
+		}
 	}
+	
 }
 /**************************************************/
 void uart_init(void)
@@ -94,7 +132,6 @@ void uart_putchar(uint8_t x)
 	TI0=0;
 	S0BUF=x;
 }
-
 /*****************************/
 // Repeated putchar to print a string
 void putstring(char *s)

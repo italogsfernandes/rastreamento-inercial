@@ -33,13 +33,13 @@ void stop_T0(void);
 unsigned char NBT0H  = 0x52;			// Este tempo
 unsigned char NBT0L  = 0x63;			// equivale a
 unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 30Hz
-
+unsigned char timer_tick_flag = 0;
 /**************************************************/
 void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
 	{
-		putstring("Lorem Ipsum1\n");
+		timer_tick_flag = 1;
 		TH0= NBT0H;
 		TL0= NBT0L;	
 	}
@@ -92,6 +92,10 @@ void main(void){
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
+		}
+		if(timer_tick_flag){
+			putstring("Lorem Ipsum1\n");
+			timer_tick_flag = 0;
 		}
 	}
 }

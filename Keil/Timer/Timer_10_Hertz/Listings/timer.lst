@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 17:04:45 PAGE 1   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/28/2016 09:02:21 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TIMER
@@ -51,64 +51,64 @@ line level    source
   41   1              if(!NOVT0)
   42   1              {
   43   2                      timer_flag--;
-  44   2                      if(timer_flag <= 0){
-  45   3                              putstring("Lorem Ipsum10_HZ\n");
-  46   3                              timer_flag = 3;
-  47   3                      }
-  48   2                      TH0= NBT0H;
-  49   2                      TL0= NBT0L;
-  50   2              }
-  51   1      }
-  52          /**************************************************/
-  53          
-  54          void luzes_iniciais(void){
-C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 17:04:45 PAGE 2   
+  44   2                      TH0= NBT0H;
+  45   2                      TL0= NBT0L;
+  46   2              }
+  47   1      }
+  48          /**************************************************/
+  49          
+  50          void luzes_iniciais(void){
+  51   1              LEDVD = 1;
+  52   1              delay_ms(1000);
+  53   1              LEDVD = 0;
+  54   1              delay_ms(1000);
+C51 COMPILER V9.56.0.0   TIMER                                                             09/28/2016 09:02:21 PAGE 2   
 
   55   1              LEDVD = 1;
   56   1              delay_ms(1000);
   57   1              LEDVD = 0;
-  58   1              delay_ms(1000);
-  59   1              LEDVD = 1;
-  60   1              delay_ms(1000);
-  61   1              LEDVD = 0;
-  62   1      }
-  63          
-  64          void setup(void){
-  65   1               // Set up GPIO
-  66   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
-  67   1          P1DIR = 0xFF;   // Tudo input
-  68   1          P2DIR = 0xFF;
-  69   1          P0CON = 0x00;       // All general I/O
-  70   1          P1CON = 0x00;       // All general I/O
-  71   1          P2CON = 0x00;       // All general I/O
-  72   1      
-  73   1              // Initializes the UART
-  74   1              uart_init();
+  58   1      }
+  59          
+  60          void setup(void){
+  61   1               // Set up GPIO
+  62   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
+  63   1          P1DIR = 0xFF;   // Tudo input
+  64   1          P2DIR = 0xFF;
+  65   1          P0CON = 0x00;       // All general I/O
+  66   1          P1CON = 0x00;       // All general I/O
+  67   1          P2CON = 0x00;       // All general I/O
+  68   1      
+  69   1              // Initializes the UART
+  70   1              uart_init();
+  71   1      
+  72   1              // Enable global interrupts
+  73   1              EA = 1;
+  74   1      
   75   1      
-  76   1              // Enable global interrupts
-  77   1              EA = 1;
-  78   1      
-  79   1      
-  80   1          luzes_iniciais();
-  81   1      }
-  82          void main(void){
-  83   1              setup();
-  84   1              while(1){
-  85   2                      if(!S1){
-  86   3                              putstring("acendeu\n");
-  87   3                              LEDVD = 1;
-  88   3                              start_T0();
-  89   3                              delay_ms(100); //evita ruidos
-  90   3                              while(!S1); //espera soltar o botao
-  91   3                              delay_ms(100);
-  92   3                      }
-  93   2                      if(!S2){
-  94   3                              putstring("apagou\n");
-  95   3                              LEDVD = 0;
-  96   3                              stop_T0();
-  97   3                              delay_ms(100);
-  98   3                              while(!S2);//espera soltar o botao
-  99   3                              delay_ms(100);
+  76   1          luzes_iniciais();
+  77   1      }
+  78          void main(void){
+  79   1              setup();
+  80   1              while(1){
+  81   2                      if(!S1){
+  82   3                              putstring("acendeu\n");
+  83   3                              LEDVD = 1;
+  84   3                              start_T0();
+  85   3                              delay_ms(100); //evita ruidos
+  86   3                              while(!S1); //espera soltar o botao
+  87   3                              delay_ms(100);
+  88   3                      }
+  89   2                      if(!S2){
+  90   3                              putstring("apagou\n");
+  91   3                              LEDVD = 0;
+  92   3                              stop_T0();
+  93   3                              delay_ms(100);
+  94   3                              while(!S2);//espera soltar o botao
+  95   3                              delay_ms(100);
+  96   3                      }
+  97   2                      if(timer_flag <= 0){
+  98   3                              putstring("Lorem Ipsum10_HZ\n");
+  99   3                              timer_flag = 3;
  100   3                      }
  101   2              }
  102   1      }
@@ -126,7 +126,7 @@ line level    source
  114   1                                                                        // (ADCON??????0??????????J?????'???????????????????? )
  115   1          S0RELL = 0xf3;                // baudrate 38400
  116   1          S0RELH = 0x03;
-C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 17:04:45 PAGE 3   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/28/2016 09:02:21 PAGE 3   
 
  117   1          TI0 = 0;                                      // S0CON^1:?????????????????????????
  118   1              S0BUF=0x00;                                       //????0????????J???
@@ -184,13 +184,13 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    353    ----
+   CODE SIZE        =    302    ----
    CONSTANT SIZE    =     35    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      5       3
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.56.0.0   TIMER                                                             09/27/2016 17:04:45 PAGE 4   
+C51 COMPILER V9.56.0.0   TIMER                                                             09/28/2016 09:02:21 PAGE 4   
 
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
