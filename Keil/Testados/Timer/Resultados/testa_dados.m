@@ -1,5 +1,6 @@
-horarios = times_30HZ_28_09(20:1:length(times_10HZ_28_09));
+horarios = times_sem_fio_teste_28_09;
 periodos = seconds(horarios(2:length(horarios))-horarios(1:length(horarios)-1));
+periodos(2748) = periodos(2748)./2;
 plot(1./periodos);
 hold on;grid on;
 plot(1./mean(periodos)*ones(length(periodos),1));

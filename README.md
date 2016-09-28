@@ -19,3 +19,7 @@ Desenvolvimento de um sistema de rastreamento inercial.
     * send_false_packet: Envia um pacote falso para um radio receptor, este recebe e encaminha para uma porta serial.
 
 * **Python**: Um data-logger bem útil pra salvar algumas leituras se for preciso. Há, também, algumas leituras salvas e plotadas no matlab.
+
+## Resultado do teste do send false packet
+Frequência de amostragem X amostras
+![](Keil/Testados/Timer/Resultados/resultados_timer_sem_fio.jpg)

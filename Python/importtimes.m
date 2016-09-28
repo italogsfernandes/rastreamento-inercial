@@ -23,7 +23,7 @@ end
 %% Format string for each line of text:
 %   column1: datetimes (%{yyyy-MM-dd hh:mm:ss.SSSSSS}D)
 % For more information, see the TEXTSCAN documentation.
-formatSpec = '%{yyyy-MM-dd hh:mm:ss.SSSSSS}D%*s%[^\n\r]';
+formatSpec = '%{yyyy-MM-dd HH:mm:ss.SSSSSS}D%*s%[^\n\r]';
 
 %% Open the text file.
 fileID = fopen(filename,'r');
