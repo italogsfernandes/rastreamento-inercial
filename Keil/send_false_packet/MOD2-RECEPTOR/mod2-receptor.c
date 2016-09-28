@@ -103,6 +103,7 @@ void main(void){
 			 	  for(i=1;i<payloadWidth; i++){
 				  	uart_putchar(rx_buf[i]);
 				  }
+				  uart_putchar('\n');
 			}
 			sta = 0;
      		newPayload = 0;
