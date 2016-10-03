@@ -1,3 +1,21 @@
+/* Explicação:
+    Leitor:
+    Ao se clicar no botão 1 - É realizada uma leitura e enviada
+    Ao se clicar no botão 2 - É enviado um sinal para o led
+    Esse sinal é apenas um modo de saber se o radio esta funcionando bem.
+
+    Ao receber o comando de realizar leituras. Essas sao realizadas e enviadas de volta.
+    Ao se receber o comando de acender o led, o esdado do led2 é alterado.
+
+    Receptor:
+    Ao receber qlqr sinal ele é enviado na serial para o arduino due.
+    Caso seja um sinal de led, ele é mostrado e o led acesso.
+    Casso seja uma leitura antes de mostrar ela é formadada.
+
+    Ao se clicar em seus botoes é enviado um sinal de requisitar leitura ou um
+    sinal de alterar led.
+*/
+
 #include "hal_w2_isr.h"
 #include "reg24le1.h" //Defini��es de muitos endere�os de registradores.
 #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
