@@ -23,12 +23,9 @@
 sbit S1  = P0^2;    // 1/0=no/press
 sbit S2  = P1^4;    // 1/0=no/press
 //LEDS
-sbit LEDVD = P0^3; // 1/0=light/dark
+sbit LEDVD = P0^6; // 1/0=light/dark
 #endif
 
-int16_t Xac;
-int16_t Yac;
-int16_t Zac;
 
 void uart_init(void);
 void putstring(char *s);
@@ -70,7 +67,7 @@ void setup(void){
 	EA = 1;
 	RX_Mode();
     luzes_iniciais();
-	putstring("receptor ligado");
+	putstring("receptor ligado\n");
 }
 void main(void){
 	setup();

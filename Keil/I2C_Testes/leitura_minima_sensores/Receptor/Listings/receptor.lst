@@ -1,0 +1,198 @@
+C51 COMPILER V9.56.0.0   RECEPTOR                                                          10/03/2016 09:36:40 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE RECEPTOR
+OBJECT MODULE PLACED IN ..\Objects\receptor.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE receptor.c BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\receptor.lst) OBJE
+                    -CT(..\Objects\receptor.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //Defini��es de muitos endere�os de registradores.
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Booleanos
+   4          #include "API.h"
+   5          #include "nRF-SPIComands.h"
+   6          
+   7          //Subendere�os usados no sistema
+   8          #define MY_SUB_ADDR 0x01
+   9          #define OTHER_SUB_ADDR 0x02
+  10          //pacote para enviar:
+  11          // pacote = [OTHER_SUB_ADDR] [COMANDO]
+  12          //Pacote para receber
+  13          // pacote = [OTHER_SUB_ADDR] [sinal de leituras] [leituras]
+  14          //ou pacote = [OTHER_SUB_ADDR] [sinal_led]
+  15          #define Sinal_Requisitar_Leituras 0x0A
+  16          #define Sinal_LED 0x0B
+  17          #define Sinal_leituras 0x0C
+  18          
+  19          //Defini��es dos bot�es e leds
+  20          #define PIN32
+  21          #ifdef  PIN32
+  22          //Pushbuttons
+  23          sbit S1  = P0^2;    // 1/0=no/press
+  24          sbit S2  = P1^4;    // 1/0=no/press
+  25          //LEDS
+  26          sbit LEDVD = P0^6; // 1/0=light/dark
+  27          #endif
+  28          
+  29          
+  30          void uart_init(void);
+  31          void putstring(char *s);
+  32          void uart_putchar(uint8_t x);
+  33          void delay_ms(unsigned int x);
+  34          
+  35          
+  36          void delay(unsigned int x);
+  37          
+  38          void luzes_iniciais(void){
+  39   1              LEDVD = 1;
+  40   1              delay_ms(1000);
+  41   1              LEDVD = 0;
+  42   1              delay_ms(1000);
+  43   1              LEDVD = 1;
+  44   1              delay_ms(1000);
+  45   1              LEDVD = 0;
+  46   1      }
+  47          
+  48          void setup(void){
+  49   1               // Set up GPIO
+  50   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
+  51   1          P1DIR = 0xFF;   // Tudo input
+  52   1          P2DIR = 0xFF;
+  53   1          P0CON = 0x00;       // All general I/O
+  54   1          P1CON = 0x00;       // All general I/O
+C51 COMPILER V9.56.0.0   RECEPTOR                                                          10/03/2016 09:36:40 PAGE 2   
+
+  55   1          P2CON = 0x00;       // All general I/O
+  56   1      
+  57   1              // Radio + SPI setup
+  58   1          RFCE = 0;       // Radio chip enable low
+  59   1          RFCKEN = 1;     // Radio clk enable
+  60   1          RF = 1;
+  61   1              //inicia o rf
+  62   1              rf_init();
+  63   1              // Initializes the UART
+  64   1              uart_init();
+  65   1      
+  66   1              // Enable global interrupts
+  67   1              EA = 1;
+  68   1              RX_Mode();
+  69   1          luzes_iniciais();
+  70   1              putstring("receptor ligado\n");
+  71   1      }
+  72          void main(void){
+  73   1              setup();
+  74   1          //pacote para enviar:
+  75   1          // pacote = [OTHER_SUB_ADDR] [COMANDO]
+  76   1          //Pacote para receber
+  77   1          // pacote = [OTHER_SUB_ADDR] [sinal de leituras] [leituras]
+  78   1          //ou pacote = [OTHER_SUB_ADDR] [sinal_led]
+  79   1              while(1){
+  80   2                      if(!S1){
+  81   3                              //montando o pacote:
+  82   3                              tx_buf[0] = OTHER_SUB_ADDR;
+  83   3                              tx_buf[1] = Sinal_Requisitar_Leituras;
+  84   3                              //enviando e retornando ao padrao:
+  85   3                              TX_Mode_NOACK(2);
+  86   3                              RX_Mode();
+  87   3                              putstring("sinal requisitar enviado\n");
+  88   3                              delay_ms(100); //evita ruidos
+  89   3                              while(!S1); //espera soltar o botao
+  90   3                              delay_ms(100);
+  91   3                      }
+  92   2                      if(!S2){
+  93   3                              //montando o pacote:
+  94   3                              tx_buf[0] = OTHER_SUB_ADDR;
+  95   3                              tx_buf[1] = Sinal_LED;
+  96   3                              //enviando e retornando ao padrao:
+  97   3                              TX_Mode_NOACK(2);
+  98   3                              RX_Mode();
+  99   3                              putstring("sinal LED enviado\n");
+ 100   3                              delay_ms(100);
+ 101   3                              while(!S2);//espera soltar o botao
+ 102   3                              delay_ms(100);
+ 103   3                      }
+ 104   2                      if(newPayload){
+ 105   3                  int i;
+ 106   3                  switch(rx_buf[1]){
+ 107   4                      case Sinal_leituras:
+ 108   4                          uart_putchar(rx_buf[0]);
+ 109   4                          for(i=2;i<payloadWidth; i++){
+ 110   5                              uart_putchar(rx_buf[i]);
+ 111   5                          }
+ 112   4                          uart_putchar('\n');
+ 113   4                          break;
+ 114   4                      case Sinal_LED:
+ 115   4                          LEDVD = !LEDVD;
+ 116   4                          break;
+C51 COMPILER V9.56.0.0   RECEPTOR                                                          10/03/2016 09:36:40 PAGE 3   
+
+ 117   4                  }
+ 118   3      
+ 119   3                              sta = 0;
+ 120   3                      newPayload = 0;
+ 121   3                      }
+ 122   2              }
+ 123   1      
+ 124   1      }
+ 125          
+ 126          /**************************************************/
+ 127          void uart_init(void)
+ 128          {
+ 129   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
+ 130   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
+ 131   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
+ 132   1          SM1 = 1;                      // ..8 bit variable baud rate
+ 133   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
+ 134   1          ADCON |= 0x80;                // Select internal baud rate generator
+ 135   1                                                                        // (ADCON??????0??????????J?????'???????????????????? )
+ 136   1          S0RELL = 0xf3;                // baudrate 38400
+ 137   1          S0RELH = 0x03;
+ 138   1          TI0 = 0;                                      // S0CON^1:?????????????????????????
+ 139   1              S0BUF=0x00;                                       //????0????????J???
+ 140   1      }
+ 141          /**************************************************/
+ 142          void uart_putchar(uint8_t x)
+ 143          {
+ 144   1              while (!TI0);
+ 145   1              TI0=0;
+ 146   1              S0BUF=x;
+ 147   1      }
+ 148          
+ 149          /*****************************/
+ 150          // Repeated putchar to print a string
+ 151          void putstring(char *s)
+ 152          {
+ 153   1              while(*s != 0)
+ 154   1              uart_putchar(*s++);
+ 155   1      }
+ 156          /**************************************************/
+ 157          void delay_ms(unsigned int x)
+ 158          {
+ 159   1          unsigned int i,j;
+ 160   1          i=0;
+ 161   1          for(i=0;i<x;i++)
+ 162   1          {
+ 163   2             j=508;
+ 164   2                 ;
+ 165   2             while(j--);
+ 166   2          }
+ 167   1      }
+ 168          /**************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    745    ----
+   CONSTANT SIZE    =     62    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     61      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+C51 COMPILER V9.56.0.0   RECEPTOR                                                          10/03/2016 09:36:40 PAGE 4   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

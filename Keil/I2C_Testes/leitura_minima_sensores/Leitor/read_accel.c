@@ -50,6 +50,7 @@ sbit LEDVM = P0^6; // 1/0=light/dark
 
 //Onde as leituras serão salvas:
 uint8_t readings[6];
+int i=0;
 
 void delay_ms(unsigned int x);
 void setup_i2c_mpu(void);
@@ -92,9 +93,9 @@ void main(void){
 	while(1){
 	 	if(!S1){
             requisitar_e_enviar();
-			delay(100);	 //delays para evitar sinais de malcontato
+			delay_ms(100);	 //delays para evitar sinais de malcontato
 			while(!S1);  //aguarda soltar o bot�o
-			delay(100); //delay para evitar sinais de mal contato
+			delay_ms(100); //delay para evitar sinais de mal contato
 		}
 		if(!S2){
 			//LEDVD = !LEDVD; //feedback
@@ -104,9 +105,9 @@ void main(void){
 			//enviando e retornando ao padrao:
 			TX_Mode_NOACK(2);
 			RX_Mode();
-			delay(100);	 //delays para evitar sinais de malcontato
+			delay_ms(100);	 //delays para evitar sinais de malcontato
 			while(!S2);  //aguarda soltar o bot�o
-			delay(100); //delay para evitar sinais de mal contato
+			delay_ms(100); //delay para evitar sinais de mal contato
 		}
 		if(newPayload){
 			//verifica se o sinal � para mim
@@ -144,7 +145,10 @@ void delay_ms(unsigned int x)
 void setup_i2c_mpu(void)
 {
     //iniciar i2c
-    i2c_mpu_writeByte(MPU_endereco,0x6B,0x00);
+
+    //i2c_mpu_writeByte(MPU_endereco,0x6B,0x00);
+	uint8_t aux = 0x00;
+	i2c_mpu_writeBytes(MPU_endereco, 0x6B, 1, &aux);
 }
 
 void requisitarAccelMPU6050(void) {
@@ -162,7 +166,6 @@ void requisitar_e_enviar(void){
     requisitarAccelMPU6050();
     tx_buf[0] = MY_SUB_ADDR;
     tx_buf[1] = Sinal_leituras;
-    int i=0;
     for(;i<6;i++){
         tx_buf[i+2] = readings[i];
     }
@@ -170,3 +173,11 @@ void requisitar_e_enviar(void){
     TX_Mode_NOACK(8);
     RX_Mode();
 }
+
+void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
+{
+
+	I2C_IRQ_handler();
+}
+
+

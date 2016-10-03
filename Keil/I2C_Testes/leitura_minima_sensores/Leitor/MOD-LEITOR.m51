@@ -1,0 +1,608 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/03/2016  10:05:42  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE ..\Objects\STARTUP.obj, ..\Objects\read_accel.obj TO ..\Objects\MOD-LEITOR PRINT (.\MOD-LEIT
+>> OR.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\Objects\STARTUP.obj (?C_STARTUP)
+  ..\Objects\read_accel.obj (READ_ACCEL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTOPTR)
+
+
+LINK MAP OF MODULE:  ..\Objects\MOD-LEITOR (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000CH     UNIT         _DATA_GROUP_
+                    0014H     000CH                  *** GAP ***
+            DATA    0020H     0001H     BIT_ADDR     ?BA?READ_ACCEL
+            BIT     0021H.0   0000H.1   UNIT         ?BI?READ_ACCEL
+                    0021H.1   0000H.7                *** GAP ***
+            DATA    0022H     0044H     UNIT         ?DT?READ_ACCEL
+            IDATA   0066H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0048H                  *** GAP ***
+            CODE    004BH     0003H     ABSOLUTE     
+                    004EH     0005H                  *** GAP ***
+            CODE    0053H     0003H     ABSOLUTE     
+                    0056H     07AAH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0086H     UNIT         ?PR?RF_IRQ?READ_ACCEL
+            CODE    0912H     004DH     UNIT         ?PR?MAIN?READ_ACCEL
+            CODE    095FH     0046H     UNIT         ?PR?RF_INIT?READ_ACCEL
+            CODE    09A5H     003DH     UNIT         ?PR?_SPI_WRITE_BUF?READ_ACCEL
+            CODE    09E2H     003BH     UNIT         ?PR?I2C_IRQ?READ_ACCEL
+            CODE    0A1DH     003BH     UNIT         ?C?LIB_CODE
+            CODE    0A58H     0038H     UNIT         ?PR?REQUISITAR_E_ENVIAR?READ_ACCEL
+            CODE    0A90H     0031H     UNIT         ?PR?_SPI_READ_BUF?READ_ACCEL
+            CODE    0AC1H     0029H     UNIT         ?PR?SETUP?READ_ACCEL
+            CODE    0AEAH     0027H     UNIT         ?PR?_TX_MODE_NOACK?READ_ACCEL
+            CODE    0B11H     0025H     UNIT         ?PR?_DELAY_MS?READ_ACCEL
+            CODE    0B36H     001EH     UNIT         ?PR?LUZES_INICIAIS?READ_ACCEL
+            CODE    0B54H     0014H     UNIT         ?PR?SETUP_I2C_MPU?READ_ACCEL
+            CODE    0B68H     0013H     UNIT         ?PR?_SPI_RW_REG?READ_ACCEL
+            CODE    0B7BH     0012H     UNIT         ?PR?REQUISITARACCELMPU6050?READ_ACCEL
+            CODE    0B8DH     0011H     UNIT         ?PR?RX_MODE?READ_ACCEL
+            CODE    0B9EH     0011H     UNIT         ?C_INITSEG
+            CODE    0BAFH     000DH     UNIT         ?PR?_SPI_READ?READ_ACCEL
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 2
+
+
+            CODE    0BBCH     000AH     UNIT         ?PR?_SPI_RW?READ_ACCEL
+
+
+
+OVERLAY MAP OF MODULE:   ..\Objects\MOD-LEITOR (?C_STARTUP)
+
+
+SEGMENT                                         DATA_GROUP 
+  +--> CALLED SEGMENT                         START    LENGTH
+-------------------------------------------------------------
+?C_C51STARTUP                                 -----    -----
+  +--> ?PR?MAIN?READ_ACCEL
+  +--> ?C_INITSEG
+
+?PR?MAIN?READ_ACCEL                           -----    -----
+  +--> ?PR?SETUP?READ_ACCEL
+  +--> ?PR?REQUISITAR_E_ENVIAR?READ_ACCEL
+  +--> ?PR?_DELAY_MS?READ_ACCEL
+  +--> ?PR?_TX_MODE_NOACK?READ_ACCEL
+  +--> ?PR?RX_MODE?READ_ACCEL
+
+?PR?SETUP?READ_ACCEL                          -----    -----
+  +--> ?PR?RF_INIT?READ_ACCEL
+  +--> ?PR?SETUP_I2C_MPU?READ_ACCEL
+  +--> ?PR?LUZES_INICIAIS?READ_ACCEL
+  +--> ?PR?RX_MODE?READ_ACCEL
+
+?PR?RF_INIT?READ_ACCEL                        -----    -----
+  +--> ?PR?_SPI_WRITE_BUF?READ_ACCEL
+  +--> ?PR?_SPI_RW_REG?READ_ACCEL
+
+?PR?_SPI_WRITE_BUF?READ_ACCEL                 000AH    0005H
+  +--> ?PR?_SPI_RW?READ_ACCEL
+
+?PR?_SPI_RW_REG?READ_ACCEL                    -----    -----
+  +--> ?PR?_SPI_RW?READ_ACCEL
+
+?PR?SETUP_I2C_MPU?READ_ACCEL                  0008H    0001H
+
+?PR?LUZES_INICIAIS?READ_ACCEL                 -----    -----
+  +--> ?PR?_DELAY_MS?READ_ACCEL
+
+?PR?RX_MODE?READ_ACCEL                        -----    -----
+  +--> ?PR?_SPI_RW_REG?READ_ACCEL
+
+?PR?REQUISITAR_E_ENVIAR?READ_ACCEL            -----    -----
+  +--> ?PR?REQUISITARACCELMPU6050?READ_ACCEL
+  +--> ?PR?_TX_MODE_NOACK?READ_ACCEL
+  +--> ?PR?RX_MODE?READ_ACCEL
+
+?PR?_TX_MODE_NOACK?READ_ACCEL                 0008H    0002H
+  +--> ?PR?_SPI_RW_REG?READ_ACCEL
+  +--> ?PR?_SPI_WRITE_BUF?READ_ACCEL
+
+*** NEW ROOT ***************************************************
+
+?PR?RF_IRQ?READ_ACCEL                         -----    -----
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 3
+
+
+  +--> ?PR?_SPI_READ?READ_ACCEL
+  +--> ?PR?_SPI_READ_BUF?READ_ACCEL
+  +--> ?PR?_SPI_RW_REG?READ_ACCEL
+
+?PR?_SPI_READ?READ_ACCEL                      -----    -----
+  +--> ?PR?_SPI_RW?READ_ACCEL
+
+?PR?_SPI_READ_BUF?READ_ACCEL                  000FH    0005H
+  +--> ?PR?_SPI_RW?READ_ACCEL
+
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   ?_I2C_MPU_READBYTES?BYTE
+   ?_I2C_MPU_WRITEBYTES?BYTE
+   I2C_IRQ_HANDLER
+   _HAL_W2_CONFIGURE_MASTER
+   _I2C_MPU_READBYTES
+   _I2C_MPU_WRITEBYTES
+
+
+
+SYMBOL TABLE OF MODULE:  ..\Objects\MOD-LEITOR (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:0066H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 4
+
+
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        READ_ACCEL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:0A58H         PUBLIC        requisitar_e_enviar
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:0080H.2       PUBLIC        S1
+  B:0090H.4       PUBLIC        S2
+  B:00A8H.7       PUBLIC        EA
+  D:0022H         PUBLIC        rx_buf
+  C:09E2H         PUBLIC        I2C_IRQ
+  D:003DH         PUBLIC        tx_buf
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  C:0B8DH         PUBLIC        RX_Mode
+  B:00B8H.1       PUBLIC        RF
+  D:00E7H         PUBLIC        SPIRDAT
+  B:0021H.0       PUBLIC        newPayload
+  B:0020H.6       PUBLIC        RX_DR
+  B:00E8H.0       PUBLIC        RFCE
+  B:0020H.5       PUBLIC        TX_DS
+  C:0912H         PUBLIC        main
+  C:0AC1H         PUBLIC        setup
+  D:0088H         PUBLIC        TCON
+  B:00E8H.2       PUBLIC        RFCKEN
+  D:0058H         PUBLIC        ADDR_HOST
+  C:0B54H         PUBLIC        setup_i2c_mpu
+  D:0020H         PUBLIC        sta
+  C:0A90H         PUBLIC        _SPI_Read_Buf
+  C:0BAFH         PUBLIC        _SPI_Read
+  D:005DH         PUBLIC        readings
+  C:0B15H         PUBLIC        _delay_ms
+  C:09B0H         PUBLIC        _SPI_Write_Buf
+  D:0093H         PUBLIC        P0DIR
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  C:0AEAH         PUBLIC        _TX_Mode_NOACK
+  D:009FH         PUBLIC        P1CON
+  D:0095H         PUBLIC        P2DIR
+  D:0097H         PUBLIC        P2CON
+  D:0098H         PUBLIC        S0CON
+  C:0B36H         PUBLIC        luzes_iniciais
+  C:088CH         PUBLIC        RF_IRQ
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:0063H         PUBLIC        i
+  D:00F8H         PUBLIC        FSR
+  C:0B7BH         PUBLIC        requisitarAccelMPU6050
+  B:0020H.4       PUBLIC        MAX_RT
+  C:095FH         PUBLIC        rf_init
+  B:0080H.3       PUBLIC        LEDVD
+  D:0065H         PUBLIC        payloadWidth
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 5
+
+
+  C:0B68H         PUBLIC        _SPI_RW_Reg
+  C:0BBCH         PUBLIC        _SPI_RW
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  B:00E8H.1       PUBLIC        RFCSN
+  D:00E6H         PUBLIC        SPIRSTAT
+  -------         PROC          _SPI_RW
+  D:0007H         SYMBOL        value
+  C:0BBCH         LINE#         29
+  C:0BBCH         LINE#         30
+  C:0BBCH         LINE#         31
+  C:0BBEH         LINE#         33
+  C:0BC3H         LINE#         35
+  C:0BC5H         LINE#         36
+  -------         ENDPROC       _SPI_RW
+  -------         PROC          _SPI_RW_REG
+  D:0007H         SYMBOL        reg
+  D:0006H         SYMBOL        value
+  -------         DO            
+  D:0005H         SYMBOL        status
+  -------         ENDDO         
+  C:0B68H         LINE#         38
+  C:0B6AH         LINE#         39
+  C:0B6AH         LINE#         42
+  C:0B6CH         LINE#         43
+  C:0B71H         LINE#         44
+  C:0B76H         LINE#         45
+  C:0B78H         LINE#         47
+  C:0B7AH         LINE#         48
+  -------         ENDPROC       _SPI_RW_REG
+  -------         PROC          _SPI_READ
+  D:0007H         SYMBOL        reg
+  -------         DO            
+  D:0007H         SYMBOL        reg_val
+  -------         ENDDO         
+  C:0BAFH         LINE#         50
+  C:0BAFH         LINE#         51
+  C:0BAFH         LINE#         54
+  C:0BB1H         LINE#         55
+  C:0BB4H         LINE#         56
+  C:0BB9H         LINE#         57
+  C:0BBBH         LINE#         59
+  C:0BBBH         LINE#         60
+  -------         ENDPROC       _SPI_READ
+  -------         PROC          _SPI_READ_BUF
+  D:0007H         SYMBOL        reg
+  D:0010H         SYMBOL        pBuf
+  D:0013H         SYMBOL        bytes
+  -------         DO            
+  D:0006H         SYMBOL        status
+  D:0005H         SYMBOL        byte_ctr
+  -------         ENDDO         
+  C:0A90H         LINE#         62
+  C:0A96H         LINE#         63
+  C:0A96H         LINE#         66
+  C:0A98H         LINE#         67
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 6
+
+
+  C:0A9DH         LINE#         69
+  C:0AA5H         LINE#         70
+  C:0ABCH         LINE#         72
+  C:0ABEH         LINE#         74
+  C:0AC0H         LINE#         75
+  -------         ENDPROC       _SPI_READ_BUF
+  -------         PROC          L?0059
+  -------         ENDPROC       L?0059
+  -------         PROC          _SPI_WRITE_BUF
+  D:0007H         SYMBOL        reg
+  D:000BH         SYMBOL        pBuf
+  D:000EH         SYMBOL        bytes
+  -------         DO            
+  D:0006H         SYMBOL        status
+  D:0005H         SYMBOL        byte_ctr
+  -------         ENDDO         
+  C:09B0H         LINE#         77
+  C:09B6H         LINE#         78
+  C:09B6H         LINE#         81
+  C:09B8H         LINE#         82
+  C:09BDH         LINE#         83
+  C:09C5H         LINE#         84
+  C:09DDH         LINE#         85
+  C:09DFH         LINE#         86
+  C:09E1H         LINE#         87
+  -------         ENDPROC       _SPI_WRITE_BUF
+  -------         PROC          RX_MODE
+  C:0B8DH         LINE#         90
+  C:0B8DH         LINE#         91
+  C:0B8DH         LINE#         92
+  C:0B90H         LINE#         93
+  C:0B92H         LINE#         94
+  C:0B94H         LINE#         95
+  C:0B9BH         LINE#         96
+  C:0B9DH         LINE#         97
+  -------         ENDPROC       RX_MODE
+  -------         PROC          _TX_MODE_NOACK
+  D:0008H         SYMBOL        payloadLength
+  C:0AEAH         LINE#         99
+  C:0AEEH         LINE#         100
+  C:0AEEH         LINE#         101
+  C:0AF0H         LINE#         102
+  C:0AF7H         LINE#         103
+  C:0AFAH         LINE#         104
+  C:0B08H         LINE#         106
+  C:0B0AH         LINE#         107
+  C:0B10H         LINE#         108
+  -------         ENDPROC       _TX_MODE_NOACK
+  -------         PROC          RF_IRQ
+  C:088CH         LINE#         111
+  C:08A5H         LINE#         113
+  C:08ACH         LINE#         114
+  C:08AFH         LINE#         115
+  C:08AFH         LINE#         116
+  C:08BDH         LINE#         117
+  C:08C4H         LINE#         118
+  C:08C6H         LINE#         119
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 7
+
+
+  C:08CDH         LINE#         120
+  C:08D4H         LINE#         121
+  C:08D4H         LINE#         122
+  C:08D7H         LINE#         123
+  C:08DEH         LINE#         124
+  C:08E0H         LINE#         125
+  C:08E0H         LINE#         126
+  C:08E0H         LINE#         127
+  C:08E3H         LINE#         128
+  C:08EAH         LINE#         129
+  C:08EDH         LINE#         130
+  C:08F4H         LINE#         132
+  C:08FBH         LINE#         133
+  -------         ENDPROC       RF_IRQ
+  -------         PROC          RF_INIT
+  C:095FH         LINE#         136
+  C:095FH         LINE#         137
+  C:095FH         LINE#         138
+  C:0961H         LINE#         139
+  C:0963H         LINE#         141
+  C:0971H         LINE#         142
+  C:0974H         LINE#         143
+  C:097BH         LINE#         145
+  C:0982H         LINE#         146
+  C:0989H         LINE#         147
+  C:0990H         LINE#         148
+  C:0997H         LINE#         150
+  C:099EH         LINE#         151
+  -------         ENDPROC       RF_INIT
+  -------         PROC          LUZES_INICIAIS
+  C:0B36H         LINE#         61
+  C:0B36H         LINE#         62
+  C:0B38H         LINE#         63
+  C:0B3FH         LINE#         64
+  C:0B41H         LINE#         65
+  C:0B48H         LINE#         66
+  C:0B4AH         LINE#         67
+  C:0B51H         LINE#         68
+  C:0B53H         LINE#         69
+  -------         ENDPROC       LUZES_INICIAIS
+  -------         PROC          SETUP
+  C:0AC1H         LINE#         71
+  C:0AC1H         LINE#         73
+  C:0AC4H         LINE#         74
+  C:0AC7H         LINE#         75
+  C:0ACAH         LINE#         76
+  C:0ACDH         LINE#         77
+  C:0ACFH         LINE#         78
+  C:0AD1H         LINE#         80
+  C:0AD3H         LINE#         81
+  C:0AD5H         LINE#         82
+  C:0AD7H         LINE#         84
+  C:0ADAH         LINE#         85
+  C:0ADFH         LINE#         86
+  C:0AE1H         LINE#         87
+  C:0AE4H         LINE#         88
+  C:0AE7H         LINE#         89
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 8
+
+
+  -------         ENDPROC       SETUP
+  -------         PROC          MAIN
+  C:0912H         LINE#         91
+  C:0912H         LINE#         92
+  C:0915H         LINE#         93
+  C:0915H         LINE#         94
+  C:0918H         LINE#         95
+  C:091BH         LINE#         96
+  C:091EH         LINE#         97
+  C:0921H         LINE#         98
+  C:0924H         LINE#         99
+  C:0924H         LINE#         100
+  C:0927H         LINE#         103
+  C:092AH         LINE#         104
+  C:092DH         LINE#         106
+  C:0934H         LINE#         107
+  C:0937H         LINE#         108
+  C:093AH         LINE#         109
+  C:093DH         LINE#         110
+  C:0940H         LINE#         111
+  C:0940H         LINE#         112
+  C:0943H         LINE#         114
+  C:0948H         LINE#         115
+  C:0951H         LINE#         116
+  C:0951H         LINE#         117
+  C:0954H         LINE#         118
+  C:0956H         LINE#         119
+  C:0956H         LINE#         120
+  C:0958H         LINE#         121
+  C:0958H         LINE#         122
+  C:0958H         LINE#         124
+  C:0958H         LINE#         125
+  C:095BH         LINE#         126
+  C:095DH         LINE#         127
+  C:095DH         LINE#         128
+  -------         ENDPROC       MAIN
+  C:0B11H         SYMBOL        L?0058
+  -------         PROC          L?0057
+  -------         ENDPROC       L?0057
+  C:0B11H         SYMBOL        L?0058
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0B15H         LINE#         132
+  C:0B15H         LINE#         133
+  C:0B15H         LINE#         135
+  C:0B18H         LINE#         136
+  C:0B1FH         LINE#         137
+  C:0B1FH         LINE#         138
+  C:0B23H         LINE#         140
+  C:0B2EH         LINE#         141
+  C:0B35H         LINE#         142
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          SETUP_I2C_MPU
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 9
+
+
+  -------         DO            
+  D:0008H         SYMBOL        aux
+  -------         ENDDO         
+  C:0B54H         LINE#         145
+  C:0B54H         LINE#         146
+  C:0B54H         LINE#         150
+  C:0B57H         LINE#         151
+  -------         ENDPROC       SETUP_I2C_MPU
+  -------         PROC          REQUISITARACCELMPU6050
+  C:0B7BH         LINE#         154
+  C:0B7BH         LINE#         156
+  -------         ENDPROC       REQUISITARACCELMPU6050
+  -------         PROC          REQUISITAR_E_ENVIAR
+  C:0A58H         LINE#         163
+  C:0A58H         LINE#         166
+  C:0A5BH         LINE#         167
+  C:0A5EH         LINE#         168
+  C:0A61H         LINE#         169
+  C:0A6EH         LINE#         170
+  C:0A7CH         LINE#         171
+  C:0A86H         LINE#         173
+  C:0A8DH         LINE#         174
+  -------         ENDPROC       REQUISITAR_E_ENVIAR
+  -------         PROC          I2C_IRQ
+  C:09E2H         LINE#         177
+  C:09FFH         LINE#         180
+  C:0A02H         LINE#         181
+  -------         ENDPROC       I2C_IRQ
+  -------         ENDMOD        READ_ACCEL
+
+  -------         MODULE        ?C?CLDPTR
+  C:0A1DH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:0A36H         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_WRITEBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 10
+
+
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0ADDH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B58H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B5AH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B5DH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_WRITEBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B66H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B7CH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B7FH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B82H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B8BH
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0A00H
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0313H BYTE (38%) *
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  10:05:42  PAGE 11
+
+
+******************************************************************************
+
+Program Size: data=90.1 xdata=0 code=975
+LINK/LOCATE RUN COMPLETE.  16 WARNING(S),  0 ERROR(S)
