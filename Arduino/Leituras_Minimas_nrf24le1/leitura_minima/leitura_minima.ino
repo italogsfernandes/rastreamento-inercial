@@ -11,7 +11,8 @@ void loop() {
   //      do jeito que ta vai dar certo não.
   //      Muita margem pra erro
   if (Serial1.available()) {
-    if ( (Sensor_desejado = Serial1.read()) == 0x02) {
+    Sensor_desejado = Serial1.read();
+    if ( Sensor_desejado == 0x02) {
       Xac = Serial1.read() << 8 | Serial1.read();
       Yac = Serial1.read() << 8 | Serial1.read();
       Zac = Serial1.read() << 8 | Serial1.read();

@@ -98,7 +98,7 @@ void main(void){
 			delay_ms(100); //delay para evitar sinais de mal contato
 		}
 		if(!S2){
-			//LEDVD = !LEDVD; //feedback
+			LEDVD = !LEDVD; //feedback
 			//montando o pacote:
 			tx_buf[0] = MY_SUB_ADDR;
 			tx_buf[1] = Sinal_LED;
@@ -145,9 +145,6 @@ void delay_ms(unsigned int x)
 void setup_i2c_mpu(void)
 {
     //iniciar i2c
-
-    //i2c_mpu_writeByte(MPU_endereco,0x6B,0x00);
-	//uint8_t aux = 0x00;
 	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
 }
 

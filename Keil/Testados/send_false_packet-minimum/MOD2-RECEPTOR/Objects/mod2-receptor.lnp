@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\mod2-receptor.obj" 
+TO ".\Objects\mod2-receptor" 
+PRINT(".\Listings\mod2-receptor.m51") RAMSIZE(256) 

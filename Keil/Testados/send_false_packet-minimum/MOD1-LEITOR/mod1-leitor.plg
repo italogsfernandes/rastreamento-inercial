@@ -1,0 +1,443 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\send_false_packet\MOD1-LEITOR\mod1-leitor.uvproj
+Project File Date:  09/28/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(142): warning C206: 'delay': missing function-prototype
+send_data.c(142): error C267: 'delay': requires ANSI-style prototype
+send_data.c(234): error C141: syntax error near 'int'
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C141: syntax error near ')'
+send_data.c(244): error C141: syntax error near 'int'
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(234): error C141: syntax error near 'int'
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(234): error C141: syntax error near ')'
+send_data.c(244): error C141: syntax error near 'int'
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C202: 'i': undefined identifier
+send_data.c(244): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(234): error C141: syntax error near 'int'
+send_data.c(234): error C202: 'i': undefined identifier
+send_data.c(235): error C202: 'i': undefined identifier
+send_data.c(236): error C202: 'i': undefined identifier
+send_data.c(245): error C141: syntax error near 'int'
+send_data.c(245): error C202: 'i': undefined identifier
+send_data.c(246): error C202: 'i': undefined identifier
+send_data.c(247): error C202: 'i': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(245): error C141: syntax error near 'int'
+send_data.c(245): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(253): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(15): error C141: syntax error near '}'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+Program Size: data=94.1 xdata=0 code=1012
+creating hex file from ".\Objects\mod1-leitor"...
+".\Objects\mod1-leitor" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(245): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(239): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(231): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(221): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(213): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(204): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(198): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(193): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(187): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(184): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(179): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(176): error C249: 'DATA': SEGMENT TOO LARGE
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  007CH
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=146.1 xdata=0 code=1065
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+Program Size: data=94.1 xdata=0 code=1012
+creating hex file from ".\Objects\mod1-leitor"...
+".\Objects\mod1-leitor" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  007CH
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=146.1 xdata=0 code=1065
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  007CH
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=146.1 xdata=0 code=1065
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  007CH
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=146.1 xdata=0 code=1065
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  0062H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=120.1 xdata=0 code=1039
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA    
+    SEGMENT: ?DT?SEND_DATA
+    LENGTH:  0062H
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  INDEX_PACOTE
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NOVT0
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTES
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PAYLOADWIDTH
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  I
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0L
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  NBT0H
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  ADDR_HOST
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TIMER_FLAG
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  TX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  RX_BUF
+    SEGMENT: ?DT?SEND_DATA
+*** ERROR L105: PUBLIC REFERS TO IGNORED SEGMENT
+    SYMBOL:  PACOTE
+    SEGMENT: ?DT?SEND_DATA
+Program Size: data=120.1 xdata=0 code=1039
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+Program Size: data=94.1 xdata=0 code=1012
+creating hex file from ".\Objects\mod1-leitor"...
+".\Objects\mod1-leitor" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+send_data.c(12): error C141: syntax error near ':'
+send_data.c(24): error C247: non-address/-constant initializer
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+Program Size: data=66.1 xdata=0 code=938
+creating hex file from ".\Objects\mod1-leitor"...
+".\Objects\mod1-leitor" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling send_data.c...
+linking...
+Program Size: data=66.1 xdata=0 code=938
+creating hex file from ".\Objects\mod1-leitor"...
+".\Objects\mod1-leitor" - 0 Error(s), 0 Warning(s).

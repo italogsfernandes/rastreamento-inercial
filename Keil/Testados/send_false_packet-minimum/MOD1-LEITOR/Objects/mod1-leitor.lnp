@@ -1,0 +1,4 @@
+".\Objects\STARTUP.obj",
+".\Objects\send_data.obj" 
+TO ".\Objects\mod1-leitor" 
+PRINT(".\Listings\mod1-leitor.m51") RAMSIZE(256) 

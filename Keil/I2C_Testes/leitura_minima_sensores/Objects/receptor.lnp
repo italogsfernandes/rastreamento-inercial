@@ -1,4 +1,0 @@
-"..\Objects\STARTUP.obj",
-"..\Objects\receptor.obj" 
-TO "..\Objects\receptor" 
-PRINT(".\Listings\receptor.m51") RAMSIZE(256) 
