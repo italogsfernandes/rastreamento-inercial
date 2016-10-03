@@ -147,14 +147,14 @@ void setup_i2c_mpu(void)
     //iniciar i2c
 
     //i2c_mpu_writeByte(MPU_endereco,0x6B,0x00);
-	uint8_t aux = 0x00;
-	i2c_mpu_writeBytes(MPU_endereco, 0x6B, 1, &aux);
+	//uint8_t aux = 0x00;
+	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
 }
 
 void requisitarAccelMPU6050(void) {
     //Ler 6 bytes a partir de 0x3B
     i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
-    //salvar em cada variavel
+    //salvar em cada variavel -- Nao sera realizado aqui pois isso sera tarefa do arduino
     // Xac = readings[0] << 8 | readings[1];   //0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
     // Yac = readings[2] << 8 | readings[3];   //0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
     // Zac = readings[4] << 8 | readings[5];   //0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)

@@ -10,111 +10,25 @@ Project File Date:  10/03/2016
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling read_accel.c...
-nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
 hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-hal_w2_isr.h(189): error C141: syntax error near ')'
+read_accel.c(151): error C208: '_i2c_mpu_writeByte': too many actual parameters
 Target not created
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling read_accel.c...
 hal_w2_isr.h(189): error C141: syntax error near ')'
+read_accel.c(151): error C208: '_i2c_mpu_writeByte': too many actual parameters
 Target not created
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling read_accel.c...
-read_accel.c(95): warning C206: 'delay': missing function-prototype
-read_accel.c(95): error C267: 'delay': requires ANSI-style prototype
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-hal_w2_isr.h(189): error C141: syntax error near ')'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-read_accel.c(95): warning C206: 'delay': missing function-prototype
-read_accel.c(95): error C267: 'delay': requires ANSI-style prototype
-read_accel.c(168): error C141: syntax error near 'int'
-read_accel.c(168): error C202: 'i': undefined identifier
-read_accel.c(169): error C202: 'i': undefined identifier
-read_accel.c(170): error C202: 'i': undefined identifier
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-read_accel.c(168): error C141: syntax error near 'int'
-read_accel.c(168): error C202: 'i': undefined identifier
-read_accel.c(169): error C202: 'i': undefined identifier
-read_accel.c(170): error C202: 'i': undefined identifier
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling read_accel.c...
-read_accel.c(168): error C141: syntax error near 'uint8_t'
-read_accel.c(168): error C202: 'i': undefined identifier
-read_accel.c(169): error C202: 'i': undefined identifier
-read_accel.c(170): error C202: 'i': undefined identifier
+read_accel.c(156): warning C206: 'i2c_mpu_readBytes': missing function-prototype
+read_accel.c(156): error C267: 'i2c_mpu_readBytes': requires ANSI-style prototype
 Target not created
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling read_accel.c...
 linking...
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  _I2C_MPU_READBYTES
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  _I2C_MPU_WRITEBYTES
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
-    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
 *** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
     SYMBOL:  I2C_IRQ_HANDLER
     MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
@@ -126,41 +40,135 @@ linking...
     MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
     ADDRESS: 0ADDH
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    SYMBOL:  I2C_IRQ_HANDLER
     MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B58H
+    ADDRESS: 0A00H
+Program Size: data=90.1 xdata=0 code=939
+creating hex file from "..\Objects\MOD-LEITOR"...
+"..\Objects\MOD-LEITOR" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling read_accel.c...
+hal_w2_isr.h(189): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling read_accel.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
     MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B5AH
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_WRITEBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B5DH
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  _I2C_MPU_WRITEBYTES
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B66H
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B7CH
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B7FH
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B82H
-*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
-    SYMBOL:  _I2C_MPU_READBYTES
-    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
-    ADDRESS: 0B8BH
+    ADDRESS: 0ADDH
 *** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
     SYMBOL:  I2C_IRQ_HANDLER
     MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
     ADDRESS: 0A00H
-Program Size: data=90.1 xdata=0 code=975
+Program Size: data=90.1 xdata=0 code=939
 creating hex file from "..\Objects\MOD-LEITOR"...
-"..\Objects\MOD-LEITOR" - 0 Error(s), 16 Warning(s).
+"..\Objects\MOD-LEITOR" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling read_accel.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_WRITEBYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0ADDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_WRITEBYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0BB9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B68H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B6BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B6EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B77H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0A00H
+Program Size: data=90.1 xdata=0 code=964
+creating hex file from "..\Objects\MOD-LEITOR"...
+"..\Objects\MOD-LEITOR" - 0 Error(s), 12 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling read_accel.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _I2C_MPU_WRITEBYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0ADDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_WRITEBYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0BB9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B68H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B6BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_I2C_MPU_READBYTES?BYTE
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B6EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _I2C_MPU_READBYTES
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0B77H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  ..\Objects\read_accel.obj (READ_ACCEL)
+    ADDRESS: 0A00H
+Program Size: data=90.1 xdata=0 code=964
+creating hex file from "..\Objects\MOD-LEITOR"...
+"..\Objects\MOD-LEITOR" - 0 Error(s), 12 Warning(s).
