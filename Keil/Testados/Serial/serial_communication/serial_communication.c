@@ -1,4 +1,4 @@
-/*Código para comunicação UART entre o nrf24le1 e um arduino
+/*Cï¿½digo para comunicaï¿½ï¿½o UART entre o nrf24le1 e um arduino
 * pin P0.3 - TX
 * pin P0.4 - RX
 * please do not use P0.3 as LED or P0.4 as W2SCL
@@ -10,7 +10,7 @@
 #include "API.h"
 
 
-//Definições dos botões e leds
+//Definiï¿½ï¿½es dos botï¿½es e leds
 #define	PIN32
 #ifdef 	PIN32
 //Pushbuttons
@@ -50,11 +50,11 @@ void setup(void){
 
 	// Enable global interrupts
 	EA = 1;
- 
+
     luzes_iniciais();
 }
 void main(void){
-	setup();	
+	setup();
 	while(1){
 		if(!S1){
 			putstring("acendeu\n");

@@ -5,7 +5,7 @@
     Esse sinal é apenas um modo de saber se o radio esta funcionando bem.
 
     Ao receber o comando de realizar leituras. Essas sao realizadas e enviadas de volta.
-    Ao se receber o comando de acender o led, o esdado do led2 é alterado.
+    Ao se receber o comando de acender o led, o esdado do LEDVD é alterado.
 
     Receptor:
     Ao receber qlqr sinal ele é enviado na serial para o arduino due.
@@ -24,14 +24,15 @@
 #include "nRF-SPIComands.h"
 
 //Subendere�os usados no sistema
-#define MY_SUB_ADDR 0x01
-#define OTHER_SUB_ADDR 0x02
+#define MY_SUB_ADDR 0x02
+#define OTHER_SUB_ADDR 0x01
 //pacote para enviar:
-// pacote = [MY_SUB_ADDR] [readings]
+// pacote = [MY_SUB_ADDR] [Sinal_leituras] [readings]
 //Pacote para receber
 // pacote = [MY_SUB_ADDR] [COMANDO]
 #define Sinal_Requisitar_Leituras 0x0A
-#define Sinal_LED2 0x0B
+#define Sinal_LED 0x0B
+#define Sinal_leituras 0x0C
 
 //Endereço I2C do sensor
 #define MPU_endereco 0x68
@@ -43,27 +44,27 @@
 sbit S1  = P0^2;    // 1/0=no/press
 sbit S2  = P1^4;    // 1/0=no/press
 //LEDS
-sbit LED1 = P0^3; // 1/0=light/dark
-sbit LED2 = P0^6; // 1/0=light/dark
+sbit LEDVD = P0^3; // 1/0=light/dark
+sbit LEDVM = P0^6; // 1/0=light/dark
 #endif
 
 //Onde as leituras serão salvas:
 uint8_t readings[6];
 
-void delay(unsigned int x);
+void delay_ms(unsigned int x);
 void setup_i2c_mpu(void);
 void requisitarAccelMPU6050(void);
 void requisitar_e_enviar(void);
 
 
 void luzes_iniciais(void){
-        LED1 = 1; LED2 = 0;
-        delay(1000);
-        LED1 = 0; LED2 = 1;
-        delay(1000);
-        LED1 = 1; LED2 = 1;
-        delay(1000);
-        LED1 = 0; LED2 = 0;
+        LEDVD = 1;
+        delay_ms(1000);
+        LEDVD = 0;
+        delay_ms(1000);
+        LEDVD = 1;
+        delay_ms(1000);
+        LEDVD = 0;
 }
 
 void setup(void){
@@ -96,10 +97,10 @@ void main(void){
 			delay(100); //delay para evitar sinais de mal contato
 		}
 		if(!S2){
-			//LED2 = !LED2; //feedback
+			//LEDVD = !LEDVD; //feedback
 			//montando o pacote:
 			tx_buf[0] = MY_SUB_ADDR;
-			tx_buf[1] = Sinal_LED2;
+			tx_buf[1] = Sinal_LED;
 			//enviando e retornando ao padrao:
 			TX_Mode_NOACK(2);
 			RX_Mode();
@@ -114,8 +115,8 @@ void main(void){
 					case Sinal_Requisitar_Leituras:
 						requisitar_e_enviar();
 						break;
-					case Sinal_LED2:
-						LED2 = !LED2;
+					case Sinal_LED:
+						LEDVD = !LEDVD;
 						break;
 				}
 
@@ -127,7 +128,7 @@ void main(void){
 }
 
 /**************************************************/
-void delay(unsigned int x)
+void delay_ms(unsigned int x)
 {
     unsigned int i,j;
     i=0;
@@ -160,11 +161,12 @@ void requisitar_e_enviar(void){
     //montando o pacote:
     requisitarAccelMPU6050();
     tx_buf[0] = MY_SUB_ADDR;
+    tx_buf[1] = Sinal_leituras;
     int i=0;
     for(;i<6;i++){
-        tx_buf[i+1] = readings[i];
+        tx_buf[i+2] = readings[i];
     }
     //enviando e retornando ao padrao:
-    TX_Mode_NOACK(7);
+    TX_Mode_NOACK(8);
     RX_Mode();
 }
