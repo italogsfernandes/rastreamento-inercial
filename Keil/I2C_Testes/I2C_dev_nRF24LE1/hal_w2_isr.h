@@ -18,6 +18,14 @@
  * @ingroup hal_nrf24le1
  *
  */
+ /*NOTE: Alteracoes feitas por italo:
+ * As seguintes funções foram escritas:
+ * Para que seja possivel se comunicar com a mpu6050 utilizando o protocolo i2c
+ * - i2c_mpu_writeByte
+ * - i2c_mpu_writeBytes
+ * - i2c_mpu_readByte
+ * - i2c_mpu_readBytes
+ */
 
 #ifndef HAL_W2_H__
 #define HAL_W2_H__
@@ -177,5 +185,11 @@ bool hal_w2_read(uint8_t address, uint8_t *buffer, uint8_t buffer_size);
 uint8_t hal_w2_wait_data_ready_ISR(void);
 
 void I2C_IRQ_handler (void);
+//NOTE: Adicionadas por italo fernandes:
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data);
+bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr);
+bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr);
+bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr);
+
 #endif // HAL_W2_H__
 /** @}  */

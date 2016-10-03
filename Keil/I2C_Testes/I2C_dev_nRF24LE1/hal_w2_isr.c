@@ -312,11 +312,11 @@ void hal_w2_soft_reset()
 }
 /*********************MINHAS MODIFICAÇOES***********************/
 
-bool i2c_mpu_write_byte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
     return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data);
 }
 
-void i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
 
     uint8_t w2_status;
     bool ack_received;
@@ -343,12 +343,12 @@ void i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint
     return ack_received;
 }
 
-void i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data, uint16_t timeout) {
-    i2c_mpu_readBytes(devAddr, regAddr, 1, data, timeout);
+bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
+    i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
 }
 
 
-void i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
 
     uint8_t w2_status;
     bool ack_received;

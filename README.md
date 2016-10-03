@@ -17,6 +17,9 @@ Desenvolvimento de um sistema de rastreamento inercial.
         * Timer: Timer de 30Hz.
         * Timer_10_Hertz: Timer de 10HZ.
     * send_false_packet: Envia um pacote falso para um radio receptor, este recebe e encaminha para uma porta serial.
+    * **I2C_Testes**: É dividido em:
+        * I2C_dev_nRF24LE1: Implementação da biblioteca I2C_dev. As suas funções e métodos estãos sendo escritas de forma que funcione com o nRF24LE1.
+        * leitura_minima_sensores: Realiza a mínima configuração da mpu_6050 para ler dados de aceleração. A sua DMP, nem sua interrupção não são usadas nesse caso.
 
 * **Python**: Um data-logger bem útil pra salvar algumas leituras se for preciso. Há, também, algumas leituras salvas e plotadas no matlab.
 
