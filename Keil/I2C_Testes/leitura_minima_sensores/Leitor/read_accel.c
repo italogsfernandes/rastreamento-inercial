@@ -23,49 +23,48 @@
 #include "API.h"
 #include "nRF-SPIComands.h"
 
-//Subendere�os usados no sistema
-#define MY_SUB_ADDR 0x02
-#define OTHER_SUB_ADDR 0x01
+//Subendere?os usados no sistema
+#define MY_SUB_ADDR 0x01
+#define OTHER_SUB_ADDR 0x02
 //pacote para enviar:
-// pacote = [MY_SUB_ADDR] [Sinal_leituras] [readings]
+// pacote = [sub_endere?o_destinatario] AXH	AXL	AYH	AYL	AZH	AZL
 //Pacote para receber
 // pacote = [MY_SUB_ADDR] [COMANDO]
-#define Sinal_Requisitar_Leituras 0x0A
-#define Sinal_LED 0x0B
-#define Sinal_leituras 0x0C
+#define Sinal_request_data 0x0A
+#define Sinal_LEDS 0x0B
 
 //Endereço I2C do sensor
-#define MPU_endereco 0x68
+#define MPU_endereco 0x69
 
-//Defini��es dos bot�es e leds
+//Defini??es dos bot?es e leds
 #define	PIN32
 #ifdef 	PIN32
 //Pushbuttons
 sbit S1  = P0^2;    // 1/0=no/press
 sbit S2  = P1^4;    // 1/0=no/press
 //LEDS
-sbit LEDVD = P0^3; // 1/0=light/dark
-sbit LEDVM = P0^6; // 1/0=light/dark
+sbit LED1 = P0^3; // 1/0=light/dark
+sbit LED2 = P0^6; // 1/0=light/dark
 #endif
 
 //Onde as leituras serão salvas:
-uint8_t readings[6];
+uint8_t readings[6] = {0,5,0,128,0,255};
 int i=0;
 
 void delay_ms(unsigned int x);
 void setup_i2c_mpu(void);
 void requisitarAccelMPU6050(void);
-void requisitar_e_enviar(void);
+void enviar_pacote_inercial(void);
 
 
 void luzes_iniciais(void){
-        LEDVD = 1;
+        LED1 = 1; LED2 = 0;
         delay_ms(1000);
-        LEDVD = 0;
+        LED1 = 0; LED2 = 1;
         delay_ms(1000);
-        LEDVD = 1;
+        LED1 = 1; LED2 = 1;
         delay_ms(1000);
-        LEDVD = 0;
+        LED1 = 0; LED2 = 0;
 }
 
 void setup(void){
@@ -76,48 +75,60 @@ void setup(void){
     P0CON = 0x00;  	// All general I/O
     P1CON = 0x00;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
+	//luzes_iniciais();
+	
 	// Radio + SPI setup
     RFCE = 0;       // Radio chip enable low
     RFCKEN = 1;     // Radio clk enable
     RF = 1;
-
     rf_init();
-    hal_w2_configure_master(HAL_W2_400KHZ);
     EA=1; //ativa as interrup��es
-    setup_i2c_mpu();
+    RX_Mode();
 	luzes_iniciais();
+}
+
+void configure_radio(void){
+	P0DIR = 0xB7;
+	// Radio + SPI setup
+    RFCE = 0;       // Radio chip enable low
+    RFCKEN = 1;     // Radio clk enable
+    RF = 1;
+    rf_init();
+    EA=1; //ativa as interrup��es
     RX_Mode();
 }
 void main(void){
 	setup();
 	while(1){
-	 	if(!S1){
-            requisitar_e_enviar();
-			delay_ms(100);	 //delays para evitar sinais de malcontato
-			while(!S1);  //aguarda soltar o bot�o
-			delay_ms(100); //delay para evitar sinais de mal contato
+		if(!S1){
+			configure_radio();
+			enviar_pacote_inercial();
+			delay_ms(100); //evita ruidos
+			while(!S1); //espera soltar o botao
+			delay_ms(100);
 		}
 		if(!S2){
-			LEDVD = !LEDVD; //feedback
-			//montando o pacote:
-			tx_buf[0] = MY_SUB_ADDR;
-			tx_buf[1] = Sinal_LED;
-			//enviando e retornando ao padrao:
-			TX_Mode_NOACK(2);
-			RX_Mode();
-			delay_ms(100);	 //delays para evitar sinais de malcontato
-			while(!S2);  //aguarda soltar o bot�o
-			delay_ms(100); //delay para evitar sinais de mal contato
+			hal_w2_configure_master(HAL_W2_400KHZ);
+			EA=1; //ativa as interrup��es
+			delay_ms(100);
+			setup_i2c_mpu();
+			delay_ms(100);
+			requisitarAccelMPU6050();
+			delay_ms(100);
+			while(!S2);//espera soltar o botao
+			delay_ms(100);
 		}
 		if(newPayload){
-			//verifica se o sinal � para mim
-			if(rx_buf[0]== MY_SUB_ADDR){
+			//verifica se o sinal ? para mim
+			if(rx_buf[0] == MY_SUB_ADDR){
 				 switch(rx_buf[1]){
-					case Sinal_Requisitar_Leituras:
-						requisitar_e_enviar();
+					case Sinal_request_data:
+						requisitarAccelMPU6050();
+						enviar_pacote_inercial();
 						break;
-					case Sinal_LED:
-						LEDVD = !LEDVD;
+					case Sinal_LEDS:
+						LED1 = !LED1;
+						LED2 = !LED2;
 						break;
 				}
 
@@ -157,18 +168,16 @@ void requisitarAccelMPU6050(void) {
     // Zac = readings[4] << 8 | readings[5];   //0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
 }
 
-void requisitar_e_enviar(void){
-    //LED1 = !LED1; //feedback
-    //montando o pacote:
-    requisitarAccelMPU6050();
+void enviar_pacote_inercial(void){
+    LED2 = 1;
     tx_buf[0] = MY_SUB_ADDR;
-    tx_buf[1] = Sinal_leituras;
-    for(;i<6;i++){
-        tx_buf[i+2] = readings[i];
+    for(i=1;i<7;i++){
+        tx_buf[i] = readings[i-1];
     }
     //enviando e retornando ao padrao:
-    TX_Mode_NOACK(8);
+    TX_Mode_NOACK(7);
     RX_Mode();
+	LED2 = 0;
 }
 
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL

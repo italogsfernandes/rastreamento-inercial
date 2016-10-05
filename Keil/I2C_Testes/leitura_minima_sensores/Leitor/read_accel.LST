@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/03/2016 12:33:32 PAGE 1   
+C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/04/2016 09:23:10 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE READ_ACCEL
@@ -32,171 +32,180 @@ line level    source
   23          #include "API.h"
   24          #include "nRF-SPIComands.h"
   25          
-  26          //Subendere�os usados no sistema
-  27          #define MY_SUB_ADDR 0x02
-  28          #define OTHER_SUB_ADDR 0x01
+  26          //Subendere?os usados no sistema
+  27          #define MY_SUB_ADDR 0x01
+  28          #define OTHER_SUB_ADDR 0x02
   29          //pacote para enviar:
-  30          // pacote = [MY_SUB_ADDR] [Sinal_leituras] [readings]
+  30          // pacote = [sub_endere?o_destinatario] AXH     AXL     AYH     AYL     AZH     AZL
   31          //Pacote para receber
   32          // pacote = [MY_SUB_ADDR] [COMANDO]
-  33          #define Sinal_Requisitar_Leituras 0x0A
-  34          #define Sinal_LED 0x0B
-  35          #define Sinal_leituras 0x0C
-  36          
-  37          //Endereço I2C do sensor
-  38          #define MPU_endereco 0x68
-  39          
-  40          //Defini��es dos bot�es e leds
-  41          #define PIN32
-  42          #ifdef  PIN32
-  43          //Pushbuttons
-  44          sbit S1  = P0^2;    // 1/0=no/press
-  45          sbit S2  = P1^4;    // 1/0=no/press
-  46          //LEDS
-  47          sbit LEDVD = P0^3; // 1/0=light/dark
-  48          sbit LEDVM = P0^6; // 1/0=light/dark
-  49          #endif
-  50          
-  51          //Onde as leituras serão salvas:
-  52          uint8_t readings[6];
-  53          int i=0;
-  54          
-  55          void delay_ms(unsigned int x);
-C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/03/2016 12:33:32 PAGE 2   
+  33          #define Sinal_request_data 0x0A
+  34          #define Sinal_LEDS 0x0B
+  35          
+  36          //Endereço I2C do sensor
+  37          #define MPU_endereco 0x69
+  38          
+  39          //Defini??es dos bot?es e leds
+  40          #define PIN32
+  41          #ifdef  PIN32
+  42          //Pushbuttons
+  43          sbit S1  = P0^2;    // 1/0=no/press
+  44          sbit S2  = P1^4;    // 1/0=no/press
+  45          //LEDS
+  46          sbit LED1 = P0^3; // 1/0=light/dark
+  47          sbit LED2 = P0^6; // 1/0=light/dark
+  48          #endif
+  49          
+  50          //Onde as leituras serão salvas:
+  51          uint8_t readings[6] = {0,5,0,128,0,255};
+  52          int i=0;
+  53          
+  54          void delay_ms(unsigned int x);
+  55          void setup_i2c_mpu(void);
+C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/04/2016 09:23:10 PAGE 2   
 
-  56          void setup_i2c_mpu(void);
-  57          void requisitarAccelMPU6050(void);
-  58          void requisitar_e_enviar(void);
+  56          void requisitarAccelMPU6050(void);
+  57          void enviar_pacote_inercial(void);
+  58          
   59          
-  60          
-  61          void luzes_iniciais(void){
-  62   1              LEDVD = 1;
-  63   1              delay_ms(1000);
-  64   1              LEDVD = 0;
-  65   1              delay_ms(1000);
-  66   1              LEDVD = 1;
-  67   1              delay_ms(1000);
-  68   1              LEDVD = 0;
-  69   1      }
-  70          
-  71          void setup(void){
-  72   1               // Set up GPIO
-  73   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
-  74   1          P1DIR = 0xFF;   // Tudo input
-  75   1          P2DIR = 0xFF;
-  76   1          P0CON = 0x00;       // All general I/O
-  77   1          P1CON = 0x00;       // All general I/O
-  78   1          P2CON = 0x00;       // All general I/O
-  79   1              // Radio + SPI setup
-  80   1          RFCE = 0;       // Radio chip enable low
-  81   1          RFCKEN = 1;     // Radio clk enable
-  82   1          RF = 1;
-  83   1      
+  60          void luzes_iniciais(void){
+  61   1              LED1 = 1; LED2 = 0;
+  62   1              delay_ms(1000);
+  63   1              LED1 = 0; LED2 = 1;
+  64   1              delay_ms(1000);
+  65   1              LED1 = 1; LED2 = 1;
+  66   1              delay_ms(1000);
+  67   1              LED1 = 0; LED2 = 0;
+  68   1      }
+  69          
+  70          void setup(void){
+  71   1               // Set up GPIO
+  72   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+  73   1          P1DIR = 0xFF;   // Tudo input
+  74   1          P2DIR = 0xFF;
+  75   1          P0CON = 0x00;       // All general I/O
+  76   1          P1CON = 0x00;       // All general I/O
+  77   1          P2CON = 0x00;       // All general I/O
+  78   1              //luzes_iniciais();
+  79   1              
+  80   1              // Radio + SPI setup
+  81   1          RFCE = 0;       // Radio chip enable low
+  82   1          RFCKEN = 1;     // Radio clk enable
+  83   1          RF = 1;
   84   1          rf_init();
-  85   1          hal_w2_configure_master(HAL_W2_400KHZ);
-  86   1          EA=1; //ativa as interrup��es
-  87   1          setup_i2c_mpu();
-  88   1              luzes_iniciais();
-  89   1          RX_Mode();
-  90   1      }
-  91          void main(void){
-  92   1              setup();
-  93   1              while(1){
-  94   2                      if(!S1){
-  95   3                  requisitar_e_enviar();
-  96   3                              delay_ms(100);   //delays para evitar sinais de malcontato
-  97   3                              while(!S1);  //aguarda soltar o bot�o
-  98   3                              delay_ms(100); //delay para evitar sinais de mal contato
-  99   3                      }
- 100   2                      if(!S2){
- 101   3                              //LEDVD = !LEDVD; //feedback
- 102   3                              //montando o pacote:
- 103   3                              tx_buf[0] = MY_SUB_ADDR;
- 104   3                              tx_buf[1] = Sinal_LED;
- 105   3                              //enviando e retornando ao padrao:
- 106   3                              TX_Mode_NOACK(2);
- 107   3                              RX_Mode();
- 108   3                              delay_ms(100);   //delays para evitar sinais de malcontato
- 109   3                              while(!S2);  //aguarda soltar o bot�o
- 110   3                              delay_ms(100); //delay para evitar sinais de mal contato
- 111   3                      }
- 112   2                      if(newPayload){
- 113   3                              //verifica se o sinal � para mim
- 114   3                              if(rx_buf[0]== MY_SUB_ADDR){
- 115   4                                       switch(rx_buf[1]){
- 116   5                                              case Sinal_Requisitar_Leituras:
- 117   5                                                      requisitar_e_enviar();
-C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/03/2016 12:33:32 PAGE 3   
+  85   1          EA=1; //ativa as interrup��es
+  86   1          RX_Mode();
+  87   1              luzes_iniciais();
+  88   1      }
+  89          
+  90          void configure_radio(void){
+  91   1              P0DIR = 0xB7;
+  92   1              // Radio + SPI setup
+  93   1          RFCE = 0;       // Radio chip enable low
+  94   1          RFCKEN = 1;     // Radio clk enable
+  95   1          RF = 1;
+  96   1          rf_init();
+  97   1          EA=1; //ativa as interrup��es
+  98   1          RX_Mode();
+  99   1      }
+ 100          void main(void){
+ 101   1              setup();
+ 102   1              while(1){
+ 103   2                      if(!S1){
+ 104   3                              configure_radio();
+ 105   3                              enviar_pacote_inercial();
+ 106   3                              delay_ms(100); //evita ruidos
+ 107   3                              while(!S1); //espera soltar o botao
+ 108   3                              delay_ms(100);
+ 109   3                      }
+ 110   2                      if(!S2){
+ 111   3                              hal_w2_configure_master(HAL_W2_400KHZ);
+ 112   3                              EA=1; //ativa as interrup��es
+ 113   3                              delay_ms(100);
+ 114   3                              setup_i2c_mpu();
+ 115   3                              delay_ms(100);
+ 116   3                              requisitarAccelMPU6050();
+ 117   3                              delay_ms(100);
+C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/04/2016 09:23:10 PAGE 3   
 
- 118   5                                                      break;
- 119   5                                              case Sinal_LED:
- 120   5                                                      LEDVD = !LEDVD;
- 121   5                                                      break;
- 122   5                                      }
- 123   4      
- 124   4                              }
- 125   3                              sta = 0;
- 126   3                      newPayload = 0;
- 127   3                      }
- 128   2              }
- 129   1      }
- 130          
- 131          /**************************************************/
- 132          void delay_ms(unsigned int x)
- 133          {
- 134   1          unsigned int i,j;
- 135   1          i=0;
- 136   1          for(i=0;i<x;i++)
- 137   1          {
- 138   2             j=508;
- 139   2                 ;
- 140   2             while(j--);
- 141   2          }
- 142   1      }
- 143          /**************************************************/
- 144          /************MPU**********************************/
- 145          void setup_i2c_mpu(void)
- 146          {
- 147   1          //iniciar i2c
- 148   1              i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
- 149   1      }
- 150          
- 151          void requisitarAccelMPU6050(void) {
- 152   1          //Ler 6 bytes a partir de 0x3B
- 153   1          i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
- 154   1          //salvar em cada variavel -- Nao sera realizado aqui pois isso sera tarefa do arduino
- 155   1          // Xac = readings[0] << 8 | readings[1];   //0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
- 156   1          // Yac = readings[2] << 8 | readings[3];   //0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
- 157   1          // Zac = readings[4] << 8 | readings[5];   //0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
- 158   1      }
- 159          
- 160          void requisitar_e_enviar(void){
- 161   1          //LED1 = !LED1; //feedback
- 162   1          //montando o pacote:
- 163   1          requisitarAccelMPU6050();
- 164   1          tx_buf[0] = MY_SUB_ADDR;
- 165   1          tx_buf[1] = Sinal_leituras;
- 166   1          for(;i<6;i++){
- 167   2              tx_buf[i+2] = readings[i];
- 168   2          }
- 169   1          //enviando e retornando ao padrao:
- 170   1          TX_Mode_NOACK(8);
- 171   1          RX_Mode();
- 172   1      }
- 173          
- 174          void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
- 175          {
- 176   1      
- 177   1              I2C_IRQ_handler();
- 178   1      }
- 179          
-C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/03/2016 12:33:32 PAGE 4   
+ 118   3                              while(!S2);//espera soltar o botao
+ 119   3                              delay_ms(100);
+ 120   3                      }
+ 121   2                      if(newPayload){
+ 122   3                              //verifica se o sinal ? para mim
+ 123   3                              if(rx_buf[0] == MY_SUB_ADDR){
+ 124   4                                       switch(rx_buf[1]){
+ 125   5                                              case Sinal_request_data:
+ 126   5                                                      requisitarAccelMPU6050();
+ 127   5                                                      enviar_pacote_inercial();
+ 128   5                                                      break;
+ 129   5                                              case Sinal_LEDS:
+ 130   5                                                      LED1 = !LED1;
+ 131   5                                                      LED2 = !LED2;
+ 132   5                                                      break;
+ 133   5                                      }
+ 134   4      
+ 135   4                              }
+ 136   3                              sta = 0;
+ 137   3                      newPayload = 0;
+ 138   3                      }
+ 139   2              }
+ 140   1      }
+ 141          
+ 142          /**************************************************/
+ 143          void delay_ms(unsigned int x)
+ 144          {
+ 145   1          unsigned int i,j;
+ 146   1          i=0;
+ 147   1          for(i=0;i<x;i++)
+ 148   1          {
+ 149   2             j=508;
+ 150   2                 ;
+ 151   2             while(j--);
+ 152   2          }
+ 153   1      }
+ 154          /**************************************************/
+ 155          /************MPU**********************************/
+ 156          void setup_i2c_mpu(void)
+ 157          {
+ 158   1          //iniciar i2c
+ 159   1              i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
+ 160   1      }
+ 161          
+ 162          void requisitarAccelMPU6050(void) {
+ 163   1          //Ler 6 bytes a partir de 0x3B
+ 164   1          i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+ 165   1          //salvar em cada variavel -- Nao sera realizado aqui pois isso sera tarefa do arduino
+ 166   1          // Xac = readings[0] << 8 | readings[1];   //0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
+ 167   1          // Yac = readings[2] << 8 | readings[3];   //0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
+ 168   1          // Zac = readings[4] << 8 | readings[5];   //0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
+ 169   1      }
+ 170          
+ 171          void enviar_pacote_inercial(void){
+ 172   1          LED2 = 1;
+ 173   1          tx_buf[0] = MY_SUB_ADDR;
+ 174   1          for(i=1;i<7;i++){
+ 175   2              tx_buf[i] = readings[i-1];
+ 176   2          }
+ 177   1          //enviando e retornando ao padrao:
+ 178   1          TX_Mode_NOACK(7);
+ 179   1          RX_Mode();
+C51 COMPILER V9.56.0.0   READ_ACCEL                                                        10/04/2016 09:23:10 PAGE 4   
 
- 180          
+ 180   1              LED2 = 0;
+ 181   1      }
+ 182          
+ 183          void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
+ 184          {
+ 185   1      
+ 186   1              I2C_IRQ_handler();
+ 187   1      }
+ 188          
+ 189          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    739    ----
+   CODE SIZE        =    757    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

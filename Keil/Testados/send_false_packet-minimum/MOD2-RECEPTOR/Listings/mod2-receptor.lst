@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 12:59:57 PAGE 1   
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 17:10:47 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MOD2_RECEPTOR
@@ -62,7 +62,7 @@ line level    source
   51   1          P1DIR = 0xFF;   // Tudo input
   52   1          P2DIR = 0xFF;
   53   1          P0CON = 0x00;       // All general I/O
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 12:59:57 PAGE 2   
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 17:10:47 PAGE 2   
 
   54   1          P1CON = 0x00;       // All general I/O
   55   1          P2CON = 0x00;       // All general I/O
@@ -92,7 +92,7 @@ line level    source
   79   3                              //enviando e retornando ao padrao:
   80   3                              TX_Mode_NOACK(2);
   81   3                              RX_Mode();
-  82   3                              putstring("sinal request enviado\n");
+  82   3                              //putstring("sinal request enviado\n");
   83   3                              delay_ms(100); //evita ruidos
   84   3                              while(!S1); //espera soltar o botao
   85   3                              delay_ms(100);
@@ -113,66 +113,67 @@ line level    source
  100   2                      if(newPayload){
  101   3                              //verifica se o sinal ? para mim
  102   3                              if(rx_buf[0]== OTHER_SUB_ADDR){
- 103   4                                        for(i=0;i<payloadWidth; i++){
- 104   5                                              uart_putchar(rx_buf[i]);
- 105   5                                        }
- 106   4                                        uart_putchar('\n');
- 107   4                              }
- 108   3                              sta = 0;
- 109   3                      newPayload = 0;
- 110   3                      }
- 111   2              }
- 112   1              
- 113   1      }
- 114          /**************************************************/
- 115          void uart_init(void)
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 12:59:57 PAGE 3   
+ 103   4                                    uart_putchar(OTHER_SUB_ADDR);
+ 104   4                                        for(i=1;i<7; i++){
+ 105   5                                              uart_putchar(rx_buf[i]);
+ 106   5                                        }
+ 107   4                                        uart_putchar('\n');
+ 108   4                              }
+ 109   3                              sta = 0;
+ 110   3                      newPayload = 0;
+ 111   3                      }
+ 112   2              }
+ 113   1              
+ 114   1      }
+ 115          /**************************************************/
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/03/2016 17:10:47 PAGE 3   
 
- 116          {
- 117   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
- 118   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
- 119   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
- 120   1          SM1 = 1;                      // ..8 bit variable baud rate
- 121   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
- 122   1          ADCON |= 0x80;                // Select internal baud rate generator
- 123   1                                                                        // (ADCON??????0??????????J?????'???????????????????? )
- 124   1          S0RELL = 0xf3;                // baudrate 38400
- 125   1          S0RELH = 0x03;
- 126   1          TI0 = 0;                                      // S0CON^1:?????????????????????????
- 127   1              S0BUF=0x00;                                       //????0????????J???
- 128   1      }
- 129          /**************************************************/
- 130          void uart_putchar(uint8_t x)
- 131          {
- 132   1              while (!TI0);
- 133   1              TI0=0;
- 134   1              S0BUF=x;
- 135   1      }
- 136          /*****************************/
- 137          // Repeated putchar to print a string
- 138          void putstring(char *s)
- 139          {
- 140   1              while(*s != 0)
- 141   1              uart_putchar(*s++);
- 142   1      }
- 143          /**************************************************/
- 144          void delay_ms(unsigned int x)
- 145          {
- 146   1          unsigned int i,j;
- 147   1          i=0;
- 148   1          for(i=0;i<x;i++)
- 149   1          {
- 150   2             j=508;
- 151   2                 ;
- 152   2             while(j--);
- 153   2          }
- 154   1      }
- 155          /**************************************************/
+ 116          void uart_init(void)
+ 117          {
+ 118   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
+ 119   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
+ 120   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
+ 121   1          SM1 = 1;                      // ..8 bit variable baud rate
+ 122   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
+ 123   1          ADCON |= 0x80;                // Select internal baud rate generator
+ 124   1                                                                        // (ADCON??????0??????????J?????'???????????????????? )
+ 125   1          S0RELL = 0xf3;                // baudrate 38400
+ 126   1          S0RELH = 0x03;
+ 127   1          TI0 = 0;                                      // S0CON^1:?????????????????????????
+ 128   1              S0BUF=0x00;                                       //????0????????J???
+ 129   1      }
+ 130          /**************************************************/
+ 131          void uart_putchar(uint8_t x)
+ 132          {
+ 133   1              while (!TI0);
+ 134   1              TI0=0;
+ 135   1              S0BUF=x;
+ 136   1      }
+ 137          /*****************************/
+ 138          // Repeated putchar to print a string
+ 139          void putstring(char *s)
+ 140          {
+ 141   1              while(*s != 0)
+ 142   1              uart_putchar(*s++);
+ 143   1      }
+ 144          /**************************************************/
+ 145          void delay_ms(unsigned int x)
+ 146          {
+ 147   1          unsigned int i,j;
+ 148   1          i=0;
+ 149   1          for(i=0;i<x;i++)
+ 150   1          {
+ 151   2             j=508;
+ 152   2                 ;
+ 153   2             while(j--);
+ 154   2          }
+ 155   1      }
+ 156          /**************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    733    ----
-   CONSTANT SIZE    =     60    ----
+   CODE SIZE        =    726    ----
+   CONSTANT SIZE    =     37    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =     63      15

@@ -79,7 +79,7 @@ void main(void){
 			//enviando e retornando ao padrao:
 			TX_Mode_NOACK(2);
 			RX_Mode();
-			putstring("sinal request enviado\n");
+			//putstring("sinal request enviado\n");
 			delay_ms(100); //evita ruidos
 			while(!S1); //espera soltar o botao
 			delay_ms(100);
@@ -100,7 +100,8 @@ void main(void){
 		if(newPayload){
 			//verifica se o sinal ? para mim
 			if(rx_buf[0]== OTHER_SUB_ADDR){
-			 	  for(i=0;i<payloadWidth; i++){
+			      uart_putchar(OTHER_SUB_ADDR);
+			 	  for(i=1;i<7; i++){
 				  	uart_putchar(rx_buf[i]);
 				  }
 				  uart_putchar('\n');
