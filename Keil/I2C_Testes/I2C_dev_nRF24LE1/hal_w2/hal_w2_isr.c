@@ -344,7 +344,7 @@ bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint
 }
 
 bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
-    i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
+    return i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
 }
 
 

@@ -16,15 +16,15 @@ void main()
     //Ao se precionar o botão
     //  realizar leitura
     //  despachar leitura
+	IIC_init();
 }
-
 //XXX: impementar
 /**************************************************/
 /************MPU**********************************/
 void setup_i2c_mpu(void){
     //iniciar i2c
     //Set the register Power Management to start
-	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
+	writebyte(0x6B, 0x00);
 }
 
 void requisitarAccelMPU6050(void){
@@ -33,6 +33,7 @@ void requisitarAccelMPU6050(void){
     // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
     // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
     // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
+	multyread(readings,int len)
     i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
 }
 
