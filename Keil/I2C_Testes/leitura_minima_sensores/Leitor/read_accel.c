@@ -34,7 +34,7 @@
 #define Sinal_LEDS 0x0B
 
 //Endereço I2C do sensor
-#define MPU_endereco 0x69
+#define MPU_endereco 0x68
 
 //Defini??es dos bot?es e leds
 #define	PIN32
@@ -76,7 +76,7 @@ void setup(void){
     P1CON = 0x00;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 	//luzes_iniciais();
-	
+
 	// Radio + SPI setup
     RFCE = 0;       // Radio chip enable low
     RFCKEN = 1;     // Radio clk enable
@@ -185,5 +185,3 @@ void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
 
 	I2C_IRQ_handler();
 }
-
-

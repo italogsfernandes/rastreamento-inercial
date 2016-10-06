@@ -1,18 +1,10 @@
 #include "reg24le1.h"
 #include "IIC_app.h"
+#include "stdbool.h"
 #include "intrins.h"
 
-void delay(unsigned int dx)
-{
-    unsigned int di;
-    for(;dx>0;dx--)
-    for(di=120;di>0;di--)
-    {
-        ;
-    }
-}
 
-void IIC_init()
+void IIC_init(void)
 {
     FREQSEL(2);
     MODE(MASTER);
@@ -20,8 +12,20 @@ void IIC_init()
     W2SADR=0x00;
     EN2WIRE();        //ʹ��2-wire
 }
-
-void Io_config()
+//TODO: Testar sem, acho que eh desnecessaria
+void ex_int(void)
+{
+    IEN0|=0X80;
+    IEN0|=0X01;
+    TCON|=0X01;       //�½��ش���
+    INTEXP|=0x08; 	  //��P05�����ж�
+    P0DIR|=0X20;	  //P05����
+    P0DIR|=0x40;	  //P06����
+    P05=1;
+    P06=1;
+}
+//TODO: testar sem acho q é desnecessaria
+void Io_config(void)
 {
     //LED p00
     P0DIR&=0XFE;      //LED ����
@@ -30,105 +34,39 @@ void Io_config()
     P10=0X01;
 }
 
-unsigned char readbyte(unsigned int addr)
-{
-    unsigned char byte;
-    START();
-    W2DAT=((slaveaddr+0xa0)<<1)+0;//write from slave
-    while(ACK);
-    W2DAT=addr;
-    while(ACK);
-    START();
-    W2DAT=((slaveaddr+0xa0)<<1)+1;//read from slave
-    while(ACK);
-    while(!READY);
-    byte=W2DAT;
-    STOP();
-    return byte;
-
-}
-//ѡ��д
-void writebyte(unsigned int addr,unsigned char dat)
-{
-    unsigned char byte=dat;
-    START();
-    W2DAT=((slaveaddr+0xa0)<<1)+0;//write
-    if(!ACK) //IF ACK
-    W2DAT=addr;
-    if(!ACK)
-    W2DAT=byte;
-    STOP();
-}
-
-//������
-//XXX: cade o addr do register?
-void multyread(char *buffer,int len)
-{
-    char *cbuffer=buffer;
-    W2DAT=((slaveaddr+0xa0)<<1)+1;//read from slave
-    if(!ACK) //IF ACK
-    {
-        while(len--)
-        {
-            while(!READY);
-            *cbuffer++=W2DAT;
-        }
-
-        STOP();
-    }
-
-}
-
-//ҳд
-void multwrite(char *buffer,int addr)
-{
-    char * cbuffer=buffer;
-    char numlimit=0;
-    START();
-    W2DAT=((slaveaddr+0xa0)<<1)+0;//write from slave
-    if(!ACK) //IF ACK
-    W2DAT=addr;
-    if(!ACK)
-    {
-        W2DAT=*cbuffer++ ;
-        numlimit++;
-        if(numlimit==16)
-        return;
-    }
-
-}
 /*********************MINHAS MODIFICAÇOES***********************/
 
-void i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
     return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data);
 }
 
-void i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+    bool ack_received;
     START();
     W2DAT=((devAddr+0xa0)<<1)+0;//write
     if(!ACK){ //IF ACK
         W2DAT=regAddr;
     }
-    //antes isso era um if? ue?
-    //XXX: trocar por while
-    if(!ACK) {
+    //BUG: antes isso era um if? ue?
+    while(!ACK && data_len-- > 0) {
         W2DAT=*data_ptr++ ;
         numlimit++;
-        if(numlimit==16)
-        return false;
+        if(numlimit==16){
+            return false;
+        }
     }
-
-    if(!ACK)
-    W2DAT=byte;
+    ack_received = !ACK;
     STOP();
+    return ack_received;
 }
 
-void i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
-    i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
+bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
+    return i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
 }
 
 
-void i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+    bool ack_received;
     START();
     W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
     while(ACK);
@@ -143,5 +81,7 @@ void i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
         while(!READY);
         *data_ptr++=W2DAT;
     }
+    ack_received = !ACK;
     STOP();
+    return ack_received;
 }
