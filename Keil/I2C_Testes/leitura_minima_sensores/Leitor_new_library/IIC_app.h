@@ -26,7 +26,7 @@ void IIC_init();
 void Io_config();
 void ex_int(void);
 //NOTE: Adicionadas por italo fernandes:
-bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data);
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data_to_write);
 bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr);
 bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr);
 bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr);

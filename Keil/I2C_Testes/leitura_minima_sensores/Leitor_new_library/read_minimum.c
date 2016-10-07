@@ -1,7 +1,7 @@
 #include "reg24le1.h" //registers address
 #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
 #include "stdbool.h" //Booleanos
-#include "IIC_app.h" //i2n
+//#include "IIC_app.h" //i2c
 #include "intrins.h"
 #include "API.h"
 #include "nRF-SPIComands.h" //radio commands
@@ -54,11 +54,11 @@ void setup(void){
     RX_Mode();
 	luzes_iniciais();
 	//I2C_SETUP
-	Io_config(); //XXX: realmente necessaria
-	ex_int(); //XXX: realmente necessaria
-	IIC_init();//initial iic
-	setup_i2c_mpu();
-	requisitarAccelMPU6050();
+	//Io_config(); //XXX: realmente necessaria
+	//ex_int(); //XXX: realmente necessaria
+	//IIC_init();//initial iic
+	//setup_i2c_mpu();
+	//requisitarAccelMPU6050();
 }
 void main()
 {
@@ -78,7 +78,7 @@ void main()
 			delay_ms(100);
 		}
 		if(!S2){
-			requisitarAccelMPU6050();
+			//requisitarAccelMPU6050();
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
@@ -87,7 +87,7 @@ void main()
 			if(rx_buf[0] == MY_SUB_ADDR){
 				switch (rx_buf[1]) {
 					case Sinal_request_data:
-						requisitarAccelMPU6050();
+						//requisitarAccelMPU6050();
 						enviar_pacote_inercial();
 						break;
 					case Sinal_LEDS:
@@ -96,9 +96,24 @@ void main()
 						break;
 				}
 			}
+			newPayload = 0;
+			sta = 0;
 		}
 	}
 }
+/**************************************************/
+void delay_ms(unsigned int x)
+{
+    unsigned int i,j;
+    i=0;
+    for(i=0;i<x;i++)
+    {
+       j=508;
+           ;
+       while(j--);
+    }
+}
+/**************************************************/
 void luzes_iniciais(void){
         LED1 = 1; LED2 = 0;
         delay_ms(1000);
@@ -110,20 +125,20 @@ void luzes_iniciais(void){
 }
 /**************************************************/
 /************MPU**********************************/
-void setup_i2c_mpu(void){
-    //iniciar i2c
-    //Set the register Power Management to start
-	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
-}
-
-void requisitarAccelMPU6050(void){
-    //Ler 6 bytes a partir de 0x3B
-    //Sendo esses:
-    // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
-    // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
-    // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
-    i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
-}
+//void setup_i2c_mpu(void){
+//    //iniciar i2c
+//    //Set the register Power Management to start
+//	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
+//}
+//
+//void requisitarAccelMPU6050(void){
+//    //Ler 6 bytes a partir de 0x3B
+//    //Sendo esses:
+//    // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
+//    // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
+//    // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
+//    i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+//}
 
 void enviar_pacote_inercial(void){
     LED2 = 1;

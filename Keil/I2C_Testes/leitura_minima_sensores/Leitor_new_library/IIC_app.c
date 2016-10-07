@@ -36,8 +36,8 @@ void Io_config(void)
 
 /*********************MINHAS MODIFICAÇOES***********************/
 
-bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
-    return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data);
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data_to_write){
+    return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data_to_write);
 }
 
 bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {

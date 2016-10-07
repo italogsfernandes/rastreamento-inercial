@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        10/03/2016  12:54:17  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/06/2016  17:41:26  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
 
 
 OVERLAY MAP OF MODULE:   .\Objects\mod1-leitor (?C_STARTUP)
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 2
 
 
 
@@ -119,7 +119,7 @@ SEGMENT                                        DATA_GROUP
   +--> ?PR?_SPI_RW?SEND_DATA
 
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 3
 
 
 
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
   C:0B1EH         PUBLIC        RX_Mode
   B:00B8H.1       PUBLIC        RF
   D:00E7H         PUBLIC        SPIRDAT
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 4
 
 
   B:0021H.0       PUBLIC        newPayload
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
   C:0B0BH         LINE#         38
   C:0B0DH         LINE#         39
   C:0B0DH         LINE#         42
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 5
 
 
   C:0B0FH         LINE#         43
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
   C:0990H         LINE#         85
   C:0992H         LINE#         86
   C:0994H         LINE#         87
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 6
 
 
   -------         ENDPROC       _SPI_WRITE_BUF
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
   C:092EH         LINE#         145
   C:0935H         LINE#         146
   C:093CH         LINE#         147
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 7
 
 
   C:0943H         LINE#         148
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod1-leitor (?C_STARTUP)
   C:0A05H         LINE#         86
   -------         ENDPROC       MAIN
   C:0A95H         SYMBOL        L?0050
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/03/2016  12:54:17  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/06/2016  17:41:26  PAGE 8
 
 
   -------         PROC          L?0049
