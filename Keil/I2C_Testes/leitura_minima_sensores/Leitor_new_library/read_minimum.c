@@ -6,6 +6,20 @@
 #include "API.h"
 #include "nRF-SPIComands.h" //radio commands
 
+#define MASTER 0X02
+#define SLAVE  0x00
+
+#define READY (W2CON1&0X01)	  //if ready ==1,not ready==0
+#define ACK   (W2CON1&0X02 )  //1;no ack and 0 ack
+#define EN2WIRE()  W2CON0|=0x01;//enable 2 wire
+#define DISABLE2WIRE() 	W2CON0&=0xFE;
+#define STOP()    W2CON0|=0x20;
+#define START()   W2CON0|=0x10;
+#define FREQSEL(x)  W2CON0|=(x<<2);
+#define MODE(x)	   W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
+
+
+
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
 #define OTHER_SUB_ADDR 0x02
@@ -36,6 +50,76 @@ void requisitarAccelMPU6050(void);
 void enviar_pacote_inercial(void);
 void luzes_iniciais(void);
 
+void I2C_init(void){
+	//IOconfig
+	P1DIR|=0X01;
+	P10=0X01;
+	//ext
+	IEN0|=0X80;
+	IEN0|=0X01;
+	TCON|=0X01;       //�½��ش���
+	INTEXP|=0x08; 	  //��P05�����ж�
+	P0DIR|=0X20;	  //P05����
+	P0DIR|=0x40;	  //P06����
+	P05=1;
+	P06=1;
+
+	//original
+    FREQSEL(2);
+    MODE(MASTER);
+	//NOTE: ja tentei trocar isso pro 0xDF e colocar um  &
+    W2CON1|=0x20;     //�������е��ж�
+    W2SADR=0x00;
+    EN2WIRE();        //ʹ��2-wire
+}
+bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+    bool ack_received;
+	uint8_t numlimit = 0;
+    START();
+    W2DAT=((devAddr+0xa0)<<1)+0;//write
+    if(!ACK){ //IF ACK
+        W2DAT=regAddr;
+    }
+    //BUG: antes isso era um if? ue?
+    while(!ACK && data_len-- > 0) {
+        W2DAT=*data_ptr++ ;
+        numlimit++;
+        if(numlimit==16){
+            return false;
+        }
+    }
+    ack_received = !ACK;
+    STOP();
+    return ack_received;
+}
+bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+    bool ack_received;
+    START();
+    W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
+	if(!ACK){ W2DAT=regAddr;}else{return false; }
+    if(!ACK){ START();}else{return false;}
+
+    //W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
+    //if(ACK){return false;}
+	tx_buf[0] = MY_SUB_ADDR;
+	i = 1;
+    while(data_len-- > 0 && !ACK)
+    {
+		//BUG: XXX: O programa esta parando neste la�o
+       while(!(W2CON1&0X01)){
+		LED1 = 1;
+		}
+		LED1 = 0;
+		tx_buf[i] = W2DAT;
+		i++;
+        //*data_ptr++=W2DAT;
+    }
+   	TX_Mode_NOACK(i+1);
+    RX_Mode();
+    ack_received = !ACK;
+    STOP();
+    return ack_received;
+}
 void setup(void){
 	 // Set up GPIO
     P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
@@ -54,11 +138,14 @@ void setup(void){
     RX_Mode();
 	luzes_iniciais();
 	//I2C_SETUP
+	I2C_init();
+      
 	//Io_config(); //XXX: realmente necessaria
 	//ex_int(); //XXX: realmente necessaria
 	//IIC_init();//initial iic
-	//setup_i2c_mpu();
+	setup_i2c_mpu();
 	//requisitarAccelMPU6050();
+	EA = 1; 
 }
 void main()
 {
@@ -78,7 +165,7 @@ void main()
 			delay_ms(100);
 		}
 		if(!S2){
-			//requisitarAccelMPU6050();
+			requisitarAccelMPU6050();
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
@@ -87,7 +174,7 @@ void main()
 			if(rx_buf[0] == MY_SUB_ADDR){
 				switch (rx_buf[1]) {
 					case Sinal_request_data:
-						//requisitarAccelMPU6050();
+						requisitarAccelMPU6050();
 						enviar_pacote_inercial();
 						break;
 					case Sinal_LEDS:
@@ -125,20 +212,21 @@ void luzes_iniciais(void){
 }
 /**************************************************/
 /************MPU**********************************/
-//void setup_i2c_mpu(void){
-//    //iniciar i2c
-//    //Set the register Power Management to start
-//	i2c_mpu_writeByte(MPU_endereco, 0x6B, 0x00);
-//}
-//
-//void requisitarAccelMPU6050(void){
-//    //Ler 6 bytes a partir de 0x3B
-//    //Sendo esses:
-//    // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
-//    // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
-//    // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
-//    i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
-//}
+void setup_i2c_mpu(void){
+    //iniciar i2c
+    //Set the register Power Management to start
+	uint8_t ligar_mpu = 0x00;
+	i2c_mpu_writeBytes(MPU_endereco, 0x6B,1, &ligar_mpu);
+}
+
+void requisitarAccelMPU6050(void){
+    //Ler 6 bytes a partir de 0x3B
+    //Sendo esses:
+    // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
+    // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
+    // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
+   	LED2 = i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+}
 
 void enviar_pacote_inercial(void){
     LED2 = 1;

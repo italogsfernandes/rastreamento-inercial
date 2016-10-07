@@ -29,7 +29,7 @@ void Io_config(void)
 {
     //LED p00
     P0DIR&=0XFE;      //LED ����
-    P00=0;//XXX: why?
+    P00=0;
     P1DIR|=0X01;
     P10=0X01;
 }
@@ -42,6 +42,7 @@ bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data_to_write){
 
 bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
     bool ack_received;
+	uint8_t numlimit = 0;
     START();
     W2DAT=((devAddr+0xa0)<<1)+0;//write
     if(!ACK){ //IF ACK
@@ -49,7 +50,7 @@ bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint
     }
     //BUG: antes isso era um if? ue?
     while(!ACK && data_len-- > 0) {
-        W2DAT=*data_ptr++ ;
+        W2DAT=*data_ptr++;
         numlimit++;
         if(numlimit==16){
             return false;

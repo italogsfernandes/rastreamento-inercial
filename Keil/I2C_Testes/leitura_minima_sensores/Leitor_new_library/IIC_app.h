@@ -22,8 +22,8 @@
 #define MODE(x)	   W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
 
 //some functions
-void IIC_init();
-void Io_config();
+void IIC_init(void);
+void Io_config(void);
 void ex_int(void);
 //NOTE: Adicionadas por italo fernandes:
 bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data_to_write);
