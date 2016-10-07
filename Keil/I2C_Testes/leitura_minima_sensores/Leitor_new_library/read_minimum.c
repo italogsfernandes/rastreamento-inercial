@@ -31,7 +31,7 @@
 #define Sinal_LEDS 0x0B
 
 //EndereÃ§o I2C do sensor em 3.3V
-#define MPU_endereco 0x68
+#define MPU_endereco 0x69
 
 //Pushbuttons
 sbit S1  = P0^2;    // 1/0=no/press
@@ -105,7 +105,7 @@ bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
 	i = 1;
     while(data_len-- > 0 && !ACK)
     {
-		//BUG: XXX: O programa esta parando neste laço
+		//BUG: XXX: O programa esta parando neste laï¿½o
        while(!(W2CON1&0X01)){
 		LED1 = 1;
 		}
@@ -139,13 +139,13 @@ void setup(void){
 	luzes_iniciais();
 	//I2C_SETUP
 	I2C_init();
-      
+
 	//Io_config(); //XXX: realmente necessaria
 	//ex_int(); //XXX: realmente necessaria
 	//IIC_init();//initial iic
 	setup_i2c_mpu();
 	//requisitarAccelMPU6050();
-	EA = 1; 
+	EA = 1;
 }
 void main()
 {
