@@ -153,7 +153,7 @@ void hal_w2_configure_master(hal_w2_clk_freq_t mode)
   hal_w2_set_clk_freq(mode);
   hal_w2_set_op_mode(HAL_W2_MASTER);
 
-  INTEXP |= 0x04;                         // Enable 2 wire interrupts
+  INTEXP |= 0x04;  // Enable 2 wire interrupts
 	IEN1 |= 0x04; // Enable 2-wire complete interrupt
   W2CON1 = 0x00;
 

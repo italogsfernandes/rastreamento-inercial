@@ -1,0 +1,262 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/10/2016  07:51:29  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\write_teste_hal.obj TO .\Objects\write_teste_hal PRINT (.\w
+>> rite_teste_hal.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\write_teste_hal (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0005H     UNIT         ?DT?WRITE_TESTE_HAL
+            IDATA   000DH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0050H                  *** GAP ***
+            CODE    0053H     0003H     ABSOLUTE     
+                    0056H     07AAH                  *** GAP ***
+            CODE    0800H     008CH     UNIT         ?C_C51STARTUP
+            CODE    088CH     0049H     UNIT         ?PR?MAIN?WRITE_TESTE_HAL
+            CODE    08D5H     003BH     UNIT         ?PR?I2C_IRQ?WRITE_TESTE_HAL
+            CODE    0910H     0025H     UNIT         ?PR?_DELAY_MS?WRITE_TESTE_HAL
+            CODE    0935H     001EH     UNIT         ?PR?LUZES_INICIAIS?WRITE_TESTE_HAL
+            CODE    0953H     0008H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\write_teste_hal (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?WRITE_TESTE_HAL
+  +--> ?C_INITSEG
+
+?PR?MAIN?WRITE_TESTE_HAL
+  +--> ?PR?LUZES_INICIAIS?WRITE_TESTE_HAL
+  +--> ?PR?_DELAY_MS?WRITE_TESTE_HAL
+
+?PR?LUZES_INICIAIS?WRITE_TESTE_HAL
+  +--> ?PR?_DELAY_MS?WRITE_TESTE_HAL
+
+
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  07:51:29  PAGE 2
+
+
+UNRESOLVED EXTERNAL SYMBOLS:
+   ?_HAL_W2_WRITE?BYTE
+   I2C_IRQ_HANDLER
+   _HAL_W2_CONFIGURE_MASTER
+   _HAL_W2_WRITE
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\write_teste_hal (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0800H         SEGMENT       ?C_C51STARTUP
+  I:000DH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0803H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0800H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0800H         LINE#         133
+  C:0802H         LINE#         134
+  C:0803H         LINE#         135
+  C:0804H         LINE#         136
+  C:0806H         LINE#         185
+  C:0809H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        WRITE_TESTE_HAL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:0080H.2       PUBLIC        S1
+  B:0090H.4       PUBLIC        S2
+  B:00A8H.7       PUBLIC        EA
+  B:0080H.3       PUBLIC        LED1
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  07:51:29  PAGE 3
+
+
+  B:0080H.6       PUBLIC        LED2
+  C:08D5H         PUBLIC        I2C_IRQ
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:0008H         PUBLIC        data_string
+  C:088CH         PUBLIC        main
+  D:0088H         PUBLIC        TCON
+  C:0914H         PUBLIC        _delay_ms
+  D:0093H         PUBLIC        P0DIR
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  D:009FH         PUBLIC        P1CON
+  D:0095H         PUBLIC        P2DIR
+  D:0097H         PUBLIC        P2CON
+  D:0096H         PUBLIC        P3DIR
+  D:0098H         PUBLIC        S0CON
+  C:0935H         PUBLIC        luzes_iniciais
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          MAIN
+  C:088CH         LINE#         21
+  C:088CH         LINE#         22
+  C:088CH         LINE#         29
+  C:088FH         LINE#         30
+  C:0892H         LINE#         31
+  C:0895H         LINE#         32
+  C:0898H         LINE#         33
+  C:089AH         LINE#         34
+  C:089CH         LINE#         35
+  C:089FH         LINE#         36
+  C:08A2H         LINE#         38
+  C:08A7H         LINE#         39
+  C:08A9H         LINE#         41
+  C:08A9H         LINE#         42
+  C:08A9H         LINE#         43
+  C:08ACH         LINE#         44
+  C:08BAH         LINE#         45
+  C:08BDH         LINE#         46
+  C:08C0H         LINE#         47
+  C:08C3H         LINE#         48
+  C:08C3H         LINE#         49
+  C:08C6H         LINE#         50
+  C:08CAH         LINE#         51
+  C:08CDH         LINE#         52
+  C:08D0H         LINE#         53
+  C:08D3H         LINE#         54
+  C:08D3H         LINE#         56
+  -------         ENDPROC       MAIN
+  C:0910H         SYMBOL        L?0021
+  -------         PROC          L?0020
+  -------         ENDPROC       L?0020
+  C:0910H         SYMBOL        L?0021
+  -------         PROC          _DELAY_MS
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  07:51:29  PAGE 4
+
+
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0914H         LINE#         58
+  C:0914H         LINE#         59
+  C:0914H         LINE#         61
+  C:0917H         LINE#         62
+  C:091EH         LINE#         63
+  C:091EH         LINE#         64
+  C:0922H         LINE#         66
+  C:092DH         LINE#         67
+  C:0934H         LINE#         68
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          LUZES_INICIAIS
+  C:0935H         LINE#         70
+  C:0935H         LINE#         71
+  C:0939H         LINE#         72
+  C:0940H         LINE#         73
+  C:0944H         LINE#         74
+  C:0947H         LINE#         75
+  C:094BH         LINE#         76
+  C:094EH         LINE#         77
+  C:0952H         LINE#         78
+  -------         ENDPROC       LUZES_INICIAIS
+  -------         PROC          I2C_IRQ
+  C:08D5H         LINE#         81
+  C:08F2H         LINE#         84
+  C:08F5H         LINE#         85
+  -------         ENDPROC       I2C_IRQ
+  -------         ENDMOD        WRITE_TESTE_HAL
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08A5H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  07:51:29  PAGE 5
+
+
+    ADDRESS: 08B3H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B8H
+
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08F3H
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00E0H BYTE (10%) *
+******************************************************************************
+
+Program Size: data=14.0 xdata=0 code=353
+LINK/LOCATE RUN COMPLETE.  8 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,448 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\I2C_Testes\leitura_minima_sensores\Write_teste_IIC\write_teste_IIC.uvproj
+Project File Date:  10/10/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(35): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(35): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(35): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+IIC_app.h(16): warning C317: attempt to redefine macro 'true'
+IIC_app.h(17): warning C317: attempt to redefine macro 'false'
+write_teste_IIC.c(38): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(38): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(38): error C202: 'WDCON': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08BCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=309
+"write_teste_IIC" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08BCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=309
+"write_teste_IIC" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08BCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=309
+"write_teste_IIC" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UART_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08BCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=309
+"write_teste_IIC" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  UART_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  UART_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08B9H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08BCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=309
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 10 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  EX_INT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08DBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  EX_INT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 08DEH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=306
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 8 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IO_CONFIG
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0881H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=149
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=146
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  IIC_INIT
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0807H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITEBYTE
+    MODULE:  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+    ADDRESS: 0810H
+Program Size: data=9.0 xdata=0 code=146
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IO_CONFIG?WRITE_TESTE_IIC
+Program Size: data=9.0 xdata=0 code=202
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?IO_CONFIG?WRITE_TESTE_IIC
+Program Size: data=9.0 xdata=0 code=202
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=205
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+write_teste_IIC.c(47): error C202: 'LED1': undefined identifier
+write_teste_IIC.c(49): error C202: 'LED1': undefined identifier
+write_teste_IIC.c(52): error C202: 'LED2': undefined identifier
+write_teste_IIC.c(54): error C202: 'LED2': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=217
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=218
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=218
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_IIC.c...
+linking...
+Program Size: data=9.0 xdata=0 code=218
+creating hex file from ".\Objects\write_teste_IIC"...
+".\Objects\write_teste_IIC" - 0 Error(s), 0 Warning(s).

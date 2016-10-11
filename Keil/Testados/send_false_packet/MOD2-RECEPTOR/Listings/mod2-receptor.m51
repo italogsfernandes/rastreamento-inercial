@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        09/28/2016  12:24:38  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/07/2016  20:35:28  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
             CODE    0BDBH     000AH     UNIT         ?PR?_SPI_RW?MOD2_RECEPTOR
             CODE    0BE5H     0008H     UNIT         ?PR?_UART_PUTCHAR?MOD2_RECEPTOR
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 2
 
 
 
@@ -119,7 +119,7 @@ SEGMENT                                    DATA_GROUP
 ?PR?RF_IRQ?MOD2_RECEPTOR                 -----    -----
   +--> ?PR?_SPI_READ?MOD2_RECEPTOR
   +--> ?PR?_SPI_READ_BUF?MOD2_RECEPTOR
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 3
 
 
   +--> ?PR?_SPI_RW_REG?MOD2_RECEPTOR
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   D:00B0H         PUBLIC        P3
   B:0080H.2       PUBLIC        S1
   B:0090H.4       PUBLIC        S2
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 4
 
 
   B:00A8H.7       PUBLIC        EA
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   D:00E8H         PUBLIC        RFCON
   D:00D0H         PUBLIC        PSW
   D:00C0H         PUBLIC        IRCON
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 5
 
 
   B:00E8H.1       PUBLIC        RFCSN
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:0ABEH         LINE#         72
   C:0AC0H         LINE#         74
   C:0AC2H         LINE#         75
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 6
 
 
   -------         ENDPROC       _SPI_READ_BUF
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:095FH         LINE#         122
   C:0962H         LINE#         123
   C:0969H         LINE#         124
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 7
 
 
   C:096BH         LINE#         125
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:088CH         LINE#         72
   C:088CH         LINE#         73
   C:088FH         LINE#         74
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 8
 
 
   C:088FH         LINE#         75
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:0BEAH         LINE#         134
   C:0BECH         LINE#         135
   -------         ENDPROC       _UART_PUTCHAR
-BL51 BANKED LINKER/LOCATER V6.22                                                      09/28/2016  12:24:38  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/07/2016  20:35:28  PAGE 9
 
 
   -------         PROC          _PUTSTRING

@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     09/28/2016 12:24:37 PAGE 1   
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/07/2016 20:35:26 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MOD2_RECEPTOR
@@ -62,7 +62,7 @@ line level    source
   51   1          P1DIR = 0xFF;   // Tudo input
   52   1          P2DIR = 0xFF;
   53   1          P0CON = 0x00;       // All general I/O
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     09/28/2016 12:24:37 PAGE 2   
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/07/2016 20:35:26 PAGE 2   
 
   54   1          P1CON = 0x00;       // All general I/O
   55   1          P2CON = 0x00;       // All general I/O
@@ -126,7 +126,7 @@ line level    source
  113   1      }
  114          /**************************************************/
  115          void uart_init(void)
-C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     09/28/2016 12:24:37 PAGE 3   
+C51 COMPILER V9.56.0.0   MOD2_RECEPTOR                                                     10/07/2016 20:35:26 PAGE 3   
 
  116          {
  117   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)

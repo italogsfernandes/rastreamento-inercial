@@ -31,7 +31,7 @@
 #define Sinal_LEDS 0x0B
 
 //Endereço I2C do sensor em 3.3V
-#define MPU_endereco 0x69
+#define MPU_endereco 0x68
 
 //Pushbuttons
 sbit S1  = P0^2;    // 1/0=no/press
@@ -51,18 +51,6 @@ void enviar_pacote_inercial(void);
 void luzes_iniciais(void);
 
 void I2C_init(void){
-	//IOconfig
-	P1DIR|=0X01;
-	P10=0X01;
-	//ext
-	IEN0|=0X80;
-	IEN0|=0X01;
-	TCON|=0X01;       //�½��ش���
-	INTEXP|=0x08; 	  //��P05�����ж�
-	P0DIR|=0X20;	  //P05����
-	P0DIR|=0x40;	  //P06����
-	P05=1;
-	P06=1;
 
 	//original
     FREQSEL(2);
@@ -93,17 +81,16 @@ bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint
     return ack_received;
 }
 bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
-    bool ack_received;
     START();
     W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
 	if(!ACK){ W2DAT=regAddr;}else{return false; }
     if(!ACK){ START();}else{return false;}
 
-    //W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
+    W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
     //if(ACK){return false;}
 	tx_buf[0] = MY_SUB_ADDR;
 	i = 1;
-    while(data_len-- > 0 && !ACK)
+    while(data_len-- > 0)
     {
 		//BUG: XXX: O programa esta parando neste la�o
        while(!(W2CON1&0X01)){
@@ -116,10 +103,31 @@ bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
     }
    	TX_Mode_NOACK(i+1);
     RX_Mode();
-    ack_received = !ACK;
     STOP();
-    return ack_received;
+    return true;
 }
+
+uint8_t readbyte(uint8_t devAddr, uint8_t regAddr)
+{
+	  uint8_t data_read;
+    START();
+    W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
+    while(ACK);
+    W2DAT=regAddr;
+    while(ACK);
+    START();
+    W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
+    //while(ACK);
+   // while(!READY){
+		LED1 = 1;
+	//}
+	LED1 = 0;
+    data_read=W2DAT;
+    STOP();
+    return data_read;
+
+}
+
 void setup(void){
 	 // Set up GPIO
     P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
@@ -225,7 +233,12 @@ void requisitarAccelMPU6050(void){
     // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
     // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
     // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
-   	LED2 = i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+   	//LED2 = i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+	uint8_t initial_regAddr = 0x3B;
+
+	for(i = 0;i<6; i++){
+		readings[i] = readbyte(MPU_endereco, initial_regAddr+i);
+	}
 }
 
 void enviar_pacote_inercial(void){

@@ -1,0 +1,156 @@
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/10/2016 08:37:51 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE WRITE_TESTE_IIC
+OBJECT MODULE PLACED IN .\Objects\write_teste_IIC.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE write_teste_IIC.c BROWSE DEBUG OBJECTEXTEND OBJECT(.\Objects\write_teste
+                    -_IIC.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //Defini��es de muitos endere�os de registradores.
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Bolleanos
+   4          
+   5          #include "intrins.h"
+   6           /*************General********************/
+   7          void delay_ms(unsigned int x);
+   8          void luzes_iniciais(void);
+   9          //Pushbuttons
+  10          sbit S1  = P0^2;    // 1/0=no/press
+  11          sbit S2  = P1^4;    // 1/0=no/press
+  12          //LEDS
+  13          sbit LED1 = P0^3; // 1/0=light/dark
+  14          sbit LED2 = P0^6; // 1/0=light/dark
+  15          
+  16          
+  17          /*********LIRBARY***********/
+  18          #define startaddr 0x00
+  19          #define endaddr   0x10 
+  20          #define slaveaddr 0x07    //define a slave device's address 
+  21          
+  22          #define MASTER 0X02
+  23          #define SLAVE  0x00
+  24          
+  25          #define READY (W2CON1&0X01)       //if ready ==1,not ready==0
+  26          #define ACK   (W2CON1&0X02 )  //1;no ack and 0 ack
+  27          #define EN2WIRE()  W2CON0|=0x01;//enable 2 wire
+  28          #define DISABLE2WIRE()  W2CON0&=0xFE;
+  29          #define STOP()    W2CON0|=0x20;
+  30          #define START()   W2CON0|=0x10;
+  31          #define FREQSEL(x)  W2CON0|=(x<<2);
+  32          #define MODE(x)    W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
+  33          
+  34          //some functions
+  35          void Io_config()
+  36          {
+  37   1          //LED p00
+  38   1          P0DIR&=0XFE;      //f ����
+  39   1          P00=0;
+  40   1          P1DIR|=0X01;
+  41   1          P10=0X01;
+  42   1      }
+  43          void IIC_init()
+  44          {
+  45   1          FREQSEL(2);
+  46   1          MODE(MASTER);
+  47   1          W2CON1|=0x20;     //�������е��ж�
+  48   1          W2SADR=0x00;
+  49   1          EN2WIRE();        //ʹ��2-wire
+  50   1      }
+  51          //ѡ��д
+  52          void writebyte(unsigned int addr,unsigned char dat)
+  53          {
+  54   1          unsigned char byte=dat;
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/10/2016 08:37:51 PAGE 2   
+
+  55   1          START();
+  56   1          W2DAT=((slaveaddr)<<1)+0;//write
+  57   1              while(ACK){
+  58   2               LED1 = 1;
+  59   2              }
+  60   1              LED1 = 0;
+  61   1          W2DAT=addr;
+  62   1              while(ACK){
+  63   2               LED2 = 1;
+  64   2              }
+  65   1              LED2 = 0;
+  66   1          W2DAT=byte;
+  67   1          STOP();
+  68   1      }
+  69          /*************END-LIBRARY***************/
+  70          
+  71          void setup(void){
+  72   1          // Set up GPIO
+  73   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+  74   1          P1DIR = 0xFF;   // Tudo input
+  75   1          P2DIR = 0xFF;
+  76   1          P0CON = 0x00;       // All general I/O
+  77   1          P1CON = 0x00;       // All general I/O
+  78   1          P2CON = 0x00;       // All general I/O
+  79   1      
+  80   1          Io_config();
+  81   1          //uart_init();
+  82   1          //ex_int();
+  83   1          //puts("--just a iic test by syman--2010,9,10\n");
+  84   1          luzes_iniciais();
+  85   1      }
+  86          void main(void){
+  87   1        setup();
+  88   1        while(1){
+  89   2              if(!S1){
+  90   3                      //WDCON &= 0x7f; //�رմ���
+  91   3                      IIC_init();//initial iic
+  92   3                      writebyte(0x97,0x98);
+  93   3                      luzes_iniciais();
+  94   3                      delay_ms(100); //evita ruidos
+  95   3                      while(!S1); //espera soltar o botao
+  96   3                      delay_ms(100);
+  97   3              }
+  98   2          if(!S2){
+  99   3                      LED2 = !LED2;
+ 100   3                      LED1 = !LED1;
+ 101   3                      delay_ms(100); //evita ruidos
+ 102   3                      while(!S2); //espera soltar o botao
+ 103   3                      delay_ms(100);
+ 104   3          }
+ 105   2        }
+ 106   1      }
+ 107          /****************General*************************/
+ 108          void delay_ms(unsigned int x)
+ 109          {
+ 110   1          unsigned int i,j;
+ 111   1          i=0;
+ 112   1          for(i=0;i<x;i++)
+ 113   1          {
+ 114   2             j=508;
+ 115   2                 ;
+ 116   2             while(j--);
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/10/2016 08:37:51 PAGE 3   
+
+ 117   2          }
+ 118   1      }
+ 119          void luzes_iniciais(void){
+ 120   1              LED1 = 1; LED2 = 0;
+ 121   1              delay_ms(1000);
+ 122   1              LED1 = 0; LED2 = 1;
+ 123   1              delay_ms(1000);
+ 124   1              LED1 = 1; LED2 = 1;
+ 125   1              delay_ms(1000);
+ 126   1              LED1 = 0; LED2 = 0;
+ 127   1      }
+ 128          /****************END-General*************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    203    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

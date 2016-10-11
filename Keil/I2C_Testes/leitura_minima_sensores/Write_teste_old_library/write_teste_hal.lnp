@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"write_teste_hal.obj" 
+TO "write_teste_hal" 
+RAMSIZE(256) 
