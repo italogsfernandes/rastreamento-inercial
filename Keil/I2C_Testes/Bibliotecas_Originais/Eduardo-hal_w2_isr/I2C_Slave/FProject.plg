@@ -1,0 +1,20 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+C:\Nordic Semiconductor\Misc\Training\I2C_Slave\FProject.uvproj
+Project File Date:  01/16/2013
+
+<h2>Output:</h2>
+Rebuild target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(18): warning C280: 'w2con1_value': unreferenced local variable
+main.c(19): warning C280: 'W2DAT_value': unreferenced local variable
+compiling hal_delay.c...
+compiling hal_w2.c...
+linking...
+Program Size: data=38.0 xdata=0 code=876
+creating hex file from "FProject"...
+"FProject" - 0 Error(s), 2 Warning(s).
