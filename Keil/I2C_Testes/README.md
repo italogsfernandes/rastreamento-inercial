@@ -1,7 +1,20 @@
-# Como configurar e usar o I2C
-...Segundo nrf24LE1 Product Specification.
+# I2C
+...Segundo nrf24LE1 Product Specification e as libraries lidas.
 
-## General
+## Lista de problemas
+*   Em **IIC** e **hal_w2_isr**, Definição de pinagem
+*   Em **IIC** = `(devAddr+0xa0)`
+*   Em **IIC**, código para e trava em `while(!READY);`
+*   Em **IIC**, ao tentar ler com o arduino a esrita não resulta em nada.
+*   Em **IIC**, talvez o W2CON1 esteja sendo limpo andes de `while(!READY);`
+*   Em **IIC**, muitos `if(ACK);` no lugar de `while(ACK);`
+*   Em **IIC**, há o uso de um LED em P00, verificar todas ocorrências e remover.
+*   Em **IIC**, Pra que serve **ex_int()** e **Io_config()***?.
+
+
+
+
+## General Setup
 
 * Set '1' to wire2Enable, before doing anything.
 * Sempre ler W2DAT.
