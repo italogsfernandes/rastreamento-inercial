@@ -31,56 +31,56 @@ sbit LED2 = P0^6; // 1/0=light/dark
 #define FREQSEL(x)  W2CON0|=(x<<2);
 #define MODE(x)	   W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
 
-//some functions
-void Io_config()
+
+void IIC_init(void)
 {
-    //LED p00
-    P0DIR&=0XFE;      //f ����
-    P00=0;
-    P1DIR|=0X01;
-    P10=0X01;
+    EN2WIRE();
+	//FREQSEL(0x01);
+    W2CON0 &= 0xF3;	  // Frequ�ncia
+	W2CON0 |= 0x04;
+	W2CON0 |= 0x02;      // Master select
+    W2CON1 = 0x00;  //maskirq
+    W2SADR = 0x00;
 }
-void IIC_init()
+void ex_int(void)
 {
-    FREQSEL(2);
-    MODE(MASTER);
-    W2CON1|=0x20;     //�������е��ж�
-    W2SADR=0x00;
-    EN2WIRE();        //ʹ��2-wire
+    //IEN0|=0X80;
+    //IEN0|=0X01;
+    //TCON|=0X01;       //?�??????
+	////INTEXP|=0x04; 	  //??P05???????
+	//IEN1 |= 0x04;
 }
-//ѡ��д
+
 void writebyte(unsigned int addr,unsigned char dat)
 {
-    unsigned char byte=dat;
     START();
-    W2DAT=((slaveaddr)<<1)+0;//write
-	while(ACK){
-	 LED1 = 1;
-	}
-	LED1 = 0;
-    W2DAT=addr;
-	while(ACK){
-	 LED2 = 1;
-	}
-	LED2 = 0;
-    W2DAT=byte;
+    W2DAT=((addr)<<1)+0;//write
+	//while(ACK);
+    W2DAT=dat;
+	//while(ACK);
     STOP();
 }
 /*************END-LIBRARY***************/
 
 void setup(void){
     // Set up GPIO
-    P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+    P0DIR = 0x87;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
     P1DIR = 0xFF;   // Tudo input
     P2DIR = 0xFF;
     P0CON = 0x00;  	// All general I/O
     P1CON = 0x00;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
+	P04 = 1;
+	P05 = 1;
 
-    Io_config();
-    //uart_init();
-    //ex_int();
-    //puts("--just a iic test by syman--2010,9,10\n");
+	IEN0|=0X80;
+    IEN0|=0X01;
+    TCON|=0X01;       //?�??????
+	INTEXP|=0x04; 	  //??P05???????
+	IEN1 |= 0x04;
+
+	//ex_int();
+	//IIC_init();
     luzes_iniciais();
 }
 void main(void){
@@ -89,8 +89,9 @@ void main(void){
 	if(!S1){
 		//WDCON &= 0x7f; //�رմ���
 		IIC_init();//initial iic
-		writebyte(0x97,0x98);
-		luzes_iniciais();
+		delay_ms(100);
+		writebyte(0x07,0x98);
+		LED1 = !LED1;
 		delay_ms(100); //evita ruidos
 		while(!S1); //espera soltar o botao
 		delay_ms(100);

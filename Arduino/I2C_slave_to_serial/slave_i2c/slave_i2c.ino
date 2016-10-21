@@ -5,7 +5,7 @@ char to_send = 5;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(38400);
-  Wire.begin(0x07 =);
+  Wire.begin(0x07);
   Wire1.begin();
   Wire.onReceive(receivingEvent);
   Wire.onRequest(requestingEvent);
