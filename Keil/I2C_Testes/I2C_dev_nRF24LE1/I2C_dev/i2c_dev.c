@@ -1,19 +1,7 @@
 #include "reg24le1.h"
-#include "IIC_app.h"
+#include "i2c_dev.h"
 #include "stdbool.h"
 #include "intrins.h"
-
-#define xStop W2CON0|=0x20
-#define xStart  W2CON0|= 0x10
-#define FREQ_STANDART_MODE W2CON0&=0xF3; W2CON0|=0x04
-#define FREQ_FAST_MODE  W2CON0&=0xF3; W2CON0|=0x08
-#define masterSelect W2CON0|=0x02
-#define slaveSelect W2CON0 &=0x02
-#define wire2Enable W2CON0|=0x01
-#define wire2Disable W2CON0&=0xFE
-#define maskIrq W2CON1|= 0x20
-#define ACK (W2CON1&0X02)
-#define dataReady (W2CON1&0X01)
 
 void i2c_setup(void)
 {
@@ -46,12 +34,11 @@ void i2c_setup(void)
 }
 void i2c_begin(void)
 {
-    FREQSEL(I2C_FASTMODE);
-    MODE(MASTER);
-    //XXX:BUG: PQ TA DESATIVANDO AS INTERRUPCOES?
-    W2CON1|=0x20;   //Disable all interrupts, why?
-    W2SADR=0x00;
-    EN2WIRE();  //ativa o i2c
+    FREQ_STANDART_MODE();
+    masterSelect();
+    maskIrq_irqOff(); //mascarando as interrupções, será necessario ler status continuamente
+    W2SADR=0x00; //seta para responder ao endereço global.
+    wire2Enable(); //ativando o i2c
 }
 
 void i2c_write(uint8_t devAddr, uint8_t data_to_write){

@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+//NOTE: definições nao usadas na library
 #define I2C_IDLE    0x00      // Define the clock frequency
 #define I2C_100K    0x01      // Define the clock frequency
 #define I2C_400K    0x02      // Define the clock frequency

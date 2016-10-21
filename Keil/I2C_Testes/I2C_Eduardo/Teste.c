@@ -47,8 +47,10 @@ void main()
   // Configurações iniciais
   P05 = 1;
   P06 = 1;
+//NOTE: oq ta havendo aqui?
   IEN0 |= 0X80;
   IEN0 |= 0X01;
+  //NOTE: Por que nao usar a funcao de frequencia da biblioteca?
   W2CON0 |= 0x04;     // Clock frequency, STD mode
   W2CON0 &= 0xF7;
   W2SADR=0x00
@@ -56,8 +58,11 @@ void main()
   // Set master select
   operationMode(true);
 
+  //TODO: to ativando as interrupções mas nao tem interrupt handle?
+  //ue?
   // Enable all interrupts for I2C
   enableISR(true);
+
 
   // Enable I2C
   enableI2C(true);
@@ -70,16 +75,16 @@ void main()
 	   if(!S1)
       {
   			// Initial transfer
-        startI2C();
+        startI2C(); //NOTE: isso ta desativando as interrupções(ligando a mascara)
         W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
         while(ACK);
         stopI2C();
-
   			delay_ms(100); //evita ruidos
 
         startI2C();
         W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
-        W2DAT = 0x00;
+        W2DAT = 0x00; //XXX: como a mascara ta ligada, precisaria verificar o
+        //ack para nao ocorrer encavalamento de dados?
         W2DAT = 0xFF;
         stopI2C();
 
