@@ -1,0 +1,4 @@
+".\output\STARTUP.obj",
+".\output\Teste.obj" 
+TO ".\output\i2c_eduardo" 
+PRINT(".\i2c_eduardo.m51") RAMSIZE(256) 
