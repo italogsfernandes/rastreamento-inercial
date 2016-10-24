@@ -92,9 +92,9 @@ void writebyte(unsigned int addr,unsigned char dat)
     unsigned char byte=dat;
     START();
     W2DAT=((slaveaddr+0xa0)<<1)+0;//write
-    if(!ACK) //IF ACK
+    while(ACK); //IF ACK
     W2DAT=addr;
-    if(!ACK)
+    while(ACK);
     W2DAT=byte;
     STOP();
 }
