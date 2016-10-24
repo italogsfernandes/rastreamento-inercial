@@ -1,13 +1,13 @@
 /* Copyright (c) 2009 Nordic Semiconductor. All Rights Reserved.
  *
- * The information contained herein is confidential property of Nordic 
- * Semiconductor ASA.Terms and conditions of usage are described in detail 
- * in NORDIC SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT. 
+ * The information contained herein is confidential property of Nordic
+ * Semiconductor ASA.Terms and conditions of usage are described in detail
+ * in NORDIC SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT.
  *
  * Licensees are granted free, non-transferable use of the information. NO
  * WARRENTY of ANY KIND is provided. This heading must NOT be removed from
  * the file.
- *              
+ *
  * $LastChangedRevision: 2503 $
  */
 
@@ -31,13 +31,13 @@
 #define CLOCK_FREQUENCY_0     2     // W2CON0 register bit 2
 #define MASTER_SELECT         1     // W2CON0 register bit 1
 #define WIRE_2_ENABLE         0     // W2CON0 register bit 0
- 	uint8_t w2_status; 
+ 	uint8_t w2_status;
 	bool data_ready;
 void hal_w2_soft_reset();
 
 /* Slave specific functions */
 uint8_t hal_w2_wait_data_ready_ISR(void)
-{   
+{
     data_ready=0;
     while (!data_ready); // deadlock avoidance may needed.
     return w2_status;
@@ -47,12 +47,12 @@ void I2C_IRQ_handler (void)
 
 	w2_status = W2CON1;
 	data_ready = (w2_status & W2CON1_FLAG_DATA_READY);
-    
+
 }
 void hal_w2_respond_to_gen_adr(bool resp_gen)
-{ 
+{
   if(resp_gen)
-  {                                                                   
+  {
     W2CON0 = W2CON0 | (1 << BROADCAST_ENABLE);  // Set "broadcastEnable" bit
   }
   else
@@ -63,7 +63,7 @@ void hal_w2_respond_to_gen_adr(bool resp_gen)
 
 void hal_w2_alter_clock(bool alt_clk)
 {
-  if(alt_clk)                         
+  if(alt_clk)
   {
     W2CON0 = W2CON0 | (1 << CLOCK_STOP);      // Set "clockStop" bit
   }
@@ -74,9 +74,9 @@ void hal_w2_alter_clock(bool alt_clk)
 }
 
 void hal_w2_irq_stop_cond_enable(bool stop_cond)
-{ 
+{
   if(stop_cond)
-  {                                                                  
+  {
     W2CON0 = W2CON0 & ~(1 << X_STOP);         // Clear "xStop" bit
   }
   else
@@ -105,14 +105,14 @@ void hal_w2_set_slave_address(uint8_t address)
 /* General functions */
 
 void hal_w2_set_clk_freq(hal_w2_clk_freq_t freq)
-{                                             
-  W2CON0 = (W2CON0 & 0xF3) | (((uint8_t)freq) << CLOCK_FREQUENCY_0);       
+{
+  W2CON0 = (W2CON0 & 0xF3) | (((uint8_t)freq) << CLOCK_FREQUENCY_0);
 }                                             // Update "clockFrequency" bits
 
 void hal_w2_set_op_mode(hal_w2_op_mode_t mode)
 {
   if(mode == HAL_W2_MASTER)                   // Check for master mode
-  {                                                                  
+  {
     W2CON0 = W2CON0 | (1 << MASTER_SELECT);   // Set "masterSelect" bit
   }
   else
@@ -122,7 +122,7 @@ void hal_w2_set_op_mode(hal_w2_op_mode_t mode)
 }
 
 void hal_w2_enable(bool en)
-{ 
+{
   if(en)
   {
     W2CON0 = W2CON0 | (1 << WIRE_2_ENABLE);   // Set "wire2Enable" bit
@@ -156,8 +156,8 @@ void hal_w2_configure_master(hal_w2_clk_freq_t mode)
   INTEXP |= 0x04;                         // Enable 2 wire interrupts
 	IEN1 |= 0x04; // Enable 2-wire complete interrupt
   W2CON1 = 0x00;
-	
-  hal_w2_all_irq_enable(true);             // Enable interrupts in the 2-wire  
+
+  hal_w2_all_irq_enable(true);             // Enable interrupts in the 2-wire
   SPIF = 0;
 }
 
@@ -224,12 +224,12 @@ bool hal_w2_read(uint8_t address, uint8_t *data_ptr, uint8_t data_len)
 {
   uint8_t w2_status;
   bool ack_received;
-  
+
   ack_received = hal_w2_init_transfer(address, HAL_W2_DIR_READ);
 
-  if (ack_received == false) 
+  if (ack_received == false)
   {
-    // This situation (NACK received on bus while trying to read from a slave) leads to a deadlock in the 2-wire interface. 
+    // This situation (NACK received on bus while trying to read from a slave) leads to a deadlock in the 2-wire interface.
     hal_w2_soft_reset(); // Workaround for the deadlock
   }
 
@@ -247,7 +247,7 @@ bool hal_w2_read(uint8_t address, uint8_t *data_ptr, uint8_t data_len)
     ack_received = !(w2_status & W2CON1_FLAG_NACK);
   }
 
-  return ack_received;  
+  return ack_received;
 }
 
 void hal_w2_soft_reset()
@@ -255,30 +255,30 @@ void hal_w2_soft_reset()
 #ifndef W2_SOFT_RESET_NOT_AVAILABLE
   uint8_t pulsecount, w2_freq;
 
-  // Store the selected 2-wire frequency 
+  // Store the selected 2-wire frequency
   w2_freq = W2CON0 & 0x0C;
   // Prepare the GPIO's to take over SDA & SCL
   HAL_W2_CLEAR_SDA_SCL;
   HAL_W2_OVERRIDE_SDA_SCL(1, 1);
   //P0DIR = 0xFF;
-  
+
   // Reset 2-wire. SCL goes high.
   W2CON0 = 0x03;
   W2CON0 = 0x07;
-  
+
   // Disable 2-wire.
   W2CON0 = 0x06;
-  
-  // SDA and SCL are now under software control, and both are high. 
+
+  // SDA and SCL are now under software control, and both are high.
   // Complete first SCL pulse.
   //P0DIR = 0xEF;
   HAL_W2_OVERRIDE_SDA_SCL(1, 0);
-  
+
   // SCL low
   delay_us(5);
   //P0DIR = 0xCF;
   HAL_W2_OVERRIDE_SDA_SCL(0, 0);
-  
+
   // SDA low
   // Create SCL pulses for 7 more data bits and ACK/NACK
   delay_us(5);
@@ -291,22 +291,100 @@ void hal_w2_soft_reset()
     HAL_W2_OVERRIDE_SDA_SCL(0, 0);
     delay_us(5);
   }
-  
+
   // Generating stop condition by driving SCL high
   delay_us(5);
   //P0DIR = 0xDF;
   HAL_W2_OVERRIDE_SDA_SCL(0, 1);
-  
+
   // Drive SDA high
   delay_us(5);
   //P0DIR = 0xFF;
   HAL_W2_OVERRIDE_SDA_SCL(1, 1);
-  
+
   // Work-around done. Return control to 2-wire.
   W2CON0 = 0x07;
-  
+
   // Reset 2-wire and return to master mode at the frequency selected before calling this function
   W2CON0 = 0x03;
   W2CON0 = 0x03 | w2_freq;
 #endif
+}
+
+/*********************MINHAS MODIFICAÇOES***********************/
+
+bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data_to_write){
+    return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data_to_write);
+}
+
+bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+
+    uint8_t w2_status;
+    bool ack_received;
+
+    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_WRITE);
+    HAL_W2_WRITE(regAddr);
+    w2_status = hal_w2_wait_data_ready_ISR();
+    if (w2_status & W2CON1_FLAG_NACK)
+    {
+      ack_received = false;
+    }
+
+    while (data_len-- > 0 && ack_received == true)
+    {
+      HAL_W2_WRITE(*data_ptr++);
+      w2_status = hal_w2_wait_data_ready_ISR();
+      if (w2_status & W2CON1_FLAG_NACK)
+      {
+        ack_received = false;
+      }
+    }
+    HAL_W2_ISSUE_STOP_COND;
+
+    return ack_received;
+}
+
+bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
+    i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
+}
+
+
+bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+
+    uint8_t w2_status;
+    bool ack_received;
+
+    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_WRITE);
+    HAL_W2_WRITE(regAddr);
+    w2_status = hal_w2_wait_data_ready_ISR();
+    if (w2_status & W2CON1_FLAG_NACK)
+    {
+      ack_received = false;
+    }
+    //XXX: Não to usando o stop contition
+    //De acordo com a pag 36 do datasheet
+
+    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_READ);
+
+    if (ack_received == false)
+    {
+      // This situation (NACK received on bus while trying to read from a slave) leads to a deadlock in the 2-wire interface.
+      hal_w2_soft_reset(); // Workaround for the deadlock
+      //XXX: depois desse reset as coisas vao dar certo? nao preciro reconfigurar o endereço do registrador ?
+    }
+
+    while (data_len-- && ack_received)
+    {
+      if (data_len == 0)
+      {
+        HAL_W2_ISSUE_STOP_COND;
+      }
+
+      w2_status = hal_w2_wait_data_ready_ISR();
+
+      *data_ptr++ = HAL_W2_READ();
+      ack_received = !(w2_status & W2CON1_FLAG_NACK);
+    }
+
+    return ack_received;
 }
