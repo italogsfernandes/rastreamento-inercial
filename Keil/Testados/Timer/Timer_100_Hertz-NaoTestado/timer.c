@@ -95,7 +95,7 @@ void main(void){
 			delay_ms(100);
 		}
 		if(timer_flag <= 0){
-			putstring("Lorem Ipsum10_HZ\n");
+			putstring("Lorem Ipsum100_HZ\n");
 			timer_flag = 1;
 		}
 	}
