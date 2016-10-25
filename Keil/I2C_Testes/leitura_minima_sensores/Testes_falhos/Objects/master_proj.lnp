@@ -1,0 +1,4 @@
+"..\Objects\STARTUP.obj",
+"..\Objects\master_code.obj" 
+TO "..\Objects\master_proj" 
+PRINT(".\master_proj.m51") RAMSIZE(256) 

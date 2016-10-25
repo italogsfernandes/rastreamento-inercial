@@ -1,0 +1,111 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\blink\blink-project.uvproj
+Project File Date:  09/22/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+blink.c(39): warning C206: 'luzes_iniciais': missing function-prototype
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_TX_MODE_NOACK?BLINK
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SETUP?BLINK
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY?BLINK
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  LUZES_INICIAIS
+    MODULE:  blink.obj (BLINK)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  LUZES_INICIAIS
+    MODULE:  blink.obj (BLINK)
+    ADDRESS: 0A44H
+Program Size: data=88.1 xdata=0 code=697
+"blink-project" - 0 Error(s), 6 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+blink.c(55): error C202: 'LED': undefined identifier
+blink.c(55): error C141: syntax error near '}'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_TX_MODE_NOACK?BLINK
+Program Size: data=88.1 xdata=0 code=736
+"blink-project" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+nRF-SPIComands.h(94): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(101): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(102): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(103): error C202: 'WR_TX_PLOAD': undefined identifier
+nRF-SPIComands.h(112): error C202: 'STATUS': undefined identifier
+nRF-SPIComands.h(115): error C202: 'RD_RX_PLOAD': undefined identifier
+nRF-SPIComands.h(116): error C202: 'FLUSH_RX': undefined identifier
+nRF-SPIComands.h(118): error C202: 'R_RX_PLD_WIDTH': undefined identifier
+nRF-SPIComands.h(122): error C202: 'FLUSH_RX': undefined identifier
+nRF-SPIComands.h(127): error C202: 'FLUSH_TX': undefined identifier
+nRF-SPIComands.h(129): error C202: 'FLUSH_TX': undefined identifier
+nRF-SPIComands.h(131): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(140): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(141): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(142): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(144): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(145): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(146): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(147): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(149): error C202: 'WRITE_REG': undefined identifier
+nRF-SPIComands.h(150): error C202: 'WRITE_REG': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+blink.c(4): warning C318: can't open file 'nRF-SPIComands.h'
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+blink.c(4): warning C318: can't open file 'nRF-SPIComands.h'
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 1 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+linking...
+Program Size: data=9.0 xdata=0 code=107
+"blink-project" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling blink.c...
+linking...
+Program Size: data=9.0 xdata=0 code=107
+creating hex file from ".\Objects\blink-project"...
+".\Objects\blink-project" - 0 Error(s), 0 Warning(s).

@@ -1,0 +1,4 @@
+"..\Objects\STARTUP.obj",
+"..\Objects\read_accel.obj" 
+TO "..\Objects\MOD-LEITOR" 
+PRINT(".\MOD-LEITOR.m51") RAMSIZE(256) 

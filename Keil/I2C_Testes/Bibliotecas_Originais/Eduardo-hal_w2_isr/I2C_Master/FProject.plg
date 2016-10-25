@@ -1,0 +1,334 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\Situacao-qnd-cheguei\Usefull nRF24LE1\usefull nrf24le1\i2c_master\I2C_Master\FProject.uvproj
+Project File Date:  10/04/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
+..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
+main.c(47): error C141: syntax error near 'uint8_t'
+main.c(47): error C202: 'i': undefined identifier
+main.c(48): error C141: syntax error near 'xdata'
+main.c(48): error C202: 'data_string': undefined identifier
+main.c(58): error C202: 'data_string': undefined identifier
+main.c(60): error C202: 'i': undefined identifier
+main.c(65): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
+..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
+compiling hal_delay.c...
+..\hal\hal_delay.c(26): warning C318: can't open file 'memdefs.h'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
+..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
+main.c(47): error C141: syntax error near 'xdata'
+main.c(47): error C202: 'data_string': undefined identifier
+main.c(57): error C202: 'data_string': undefined identifier
+main.c(59): error C202: 'i': undefined identifier
+main.c(64): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
+..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
+compiling hal_delay.c...
+..\hal\hal_delay.c(26): warning C318: can't open file 'memdefs.h'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(47): error C141: syntax error near 'xdata'
+main.c(47): error C202: 'data_string': undefined identifier
+main.c(57): error C202: 'data_string': undefined identifier
+main.c(59): error C202: 'i': undefined identifier
+main.c(64): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(47): error C141: syntax error near 'xdata'
+main.c(47): error C202: 'data_string': undefined identifier
+main.c(57): error C202: 'data_string': undefined identifier
+main.c(63): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(47): error C141: syntax error near 'uint8_t'
+main.c(47): error C202: 'data_string': undefined identifier
+main.c(57): error C202: 'data_string': undefined identifier
+main.c(63): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(48): error C141: syntax error near 'xdata'
+main.c(48): error C202: 'data_string': undefined identifier
+main.c(58): error C202: 'data_string': undefined identifier
+main.c(64): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+main.c(48): error C141: syntax error near 'uint8_t'
+main.c(48): error C202: 'data_string': undefined identifier
+main.c(58): error C202: 'data_string': undefined identifier
+main.c(64): error C202: 'data_string': undefined identifier
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA
+    SEGMENT: ?DT?HAL_W2_SOFT_RESET?HAL_W2_ISR
+    LENGTH:  000002H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA
+    SEGMENT: ?DT?HAL_W2_ISR
+    LENGTH:  000002H   
+Program Size: data=132.0 xdata=0 const=0 code=773
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA
+    SEGMENT: ?DT?HAL_W2_SOFT_RESET?HAL_W2_ISR
+    LENGTH:  000002H   
+*** ERROR L107: ADDRESS SPACE OVERFLOW
+    SPACE:   DATA
+    SEGMENT: ?DT?HAL_W2_ISR
+    LENGTH:  000002H   
+Program Size: data=132.0 xdata=0 const=0 code=773
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=37.0 xdata=0 const=0 code=906
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=37.0 xdata=0 const=0 code=918
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=37.0 xdata=0 const=0 code=918
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=32.0 xdata=5 const=0 code=919
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=37.0 xdata=0 const=0 code=918
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling main.c...
+compiling hal_w2_isr.c...
+compiling hal_delay.c...
+linking...
+*** ERROR L104: MULTIPLE PUBLIC DEFINITIONS
+    SYMBOL:  _delay_ms
+    MODULE:  ..\ITALO-objects\hal_delay.obj (HAL_DELAY)
+   DEFINED:  ..\ITALO-objects\main.obj (MAIN)
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _HAL_W2_READ/HAL_W2_ISR
+*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
+    NAME:    _DELAY_MS/HAL_DELAY
+Program Size: data=37.0 xdata=0 const=0 code=918
+Target not created

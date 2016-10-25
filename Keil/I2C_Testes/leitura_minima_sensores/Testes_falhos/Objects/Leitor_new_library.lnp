@@ -1,0 +1,4 @@
+"..\Objects\STARTUP.obj",
+"..\Objects\read_minimum.obj" 
+TO "..\Objects\Leitor_new_library" 
+PRINT(".\Listings\Leitor_new_library.m51") RAMSIZE(256) 

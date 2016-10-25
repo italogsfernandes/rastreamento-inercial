@@ -1,0 +1,157 @@
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/13/2016 11:57:56 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE WRITE_TESTE_IIC
+OBJECT MODULE PLACED IN .\Objects\write_teste_IIC.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE write_teste_IIC.c BROWSE DEBUG OBJECTEXTEND OBJECT(.\Objects\write_teste
+                    -_IIC.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //Definições de muitos endereços de registradores.
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Bolleanos
+   4          
+   5          #include "intrins.h"
+   6           /*************General********************/
+   7          void delay_ms(unsigned int x);
+   8          void luzes_iniciais(void);
+   9          //Pushbuttons
+  10          sbit S1  = P0^2;    // 1/0=no/press
+  11          sbit S2  = P1^4;    // 1/0=no/press
+  12          //LEDS
+  13          sbit LED1 = P0^3; // 1/0=light/dark
+  14          sbit LED2 = P0^6; // 1/0=light/dark
+  15          
+  16          
+  17          /*********LIRBARY***********/
+  18          #define startaddr 0x00
+  19          #define endaddr   0x10 
+  20          #define slaveaddr 0x07    //define a slave device's address 
+  21          
+  22          #define MASTER 0X02
+  23          #define SLAVE  0x00
+  24          
+  25          #define READY (W2CON1&0X01)       //if ready ==1,not ready==0
+  26          #define ACK   (W2CON1&0X02 )  //1;no ack and 0 ack
+  27          #define EN2WIRE()  W2CON0|=0x01;//enable 2 wire
+  28          #define DISABLE2WIRE()  W2CON0&=0xFE;
+  29          #define STOP()    W2CON0|=0x20;
+  30          #define START()   W2CON0|=0x10;
+  31          #define FREQSEL(x)  W2CON0|=(x<<2);
+  32          #define MODE(x)    W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
+  33          
+  34          
+  35          void IIC_init(void)
+  36          {
+  37   1          EN2WIRE();
+  38   1              //FREQSEL(0x01);
+  39   1          W2CON0 &= 0xF3;       // Frequência
+  40   1              W2CON0 |= 0x04;
+  41   1              W2CON0 |= 0x02;      // Master select
+  42   1          W2CON1 = 0x00;  //maskirq
+  43   1          W2SADR = 0x00;
+  44   1      }
+  45          void ex_int(void)
+  46          {
+  47   1          //IEN0|=0X80;
+  48   1          //IEN0|=0X01;
+  49   1          //TCON|=0X01;       //?½??????
+  50   1              ////INTEXP|=0x04;         //??P05???????
+  51   1              //IEN1 |= 0x04;
+  52   1      }
+  53          
+  54          void writebyte(unsigned int addr,unsigned char dat)
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/13/2016 11:57:56 PAGE 2   
+
+  55          {
+  56   1          START();
+  57   1          W2DAT=((addr)<<1)+0;//write
+  58   1              //while(ACK);
+  59   1          W2DAT=dat;
+  60   1              //while(ACK);
+  61   1          STOP();
+  62   1      }
+  63          /*************END-LIBRARY***************/
+  64          
+  65          void setup(void){
+  66   1          // Set up GPIO
+  67   1          P0DIR = 0x87;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+  68   1          P1DIR = 0xFF;   // Tudo input
+  69   1          P2DIR = 0xFF;
+  70   1          P0CON = 0x00;       // All general I/O
+  71   1          P1CON = 0x00;       // All general I/O
+  72   1          P2CON = 0x00;       // All general I/O
+  73   1              P04 = 1;
+  74   1              P05 = 1;
+  75   1      
+  76   1              IEN0|=0X80;
+  77   1          IEN0|=0X01;
+  78   1          TCON|=0X01;       //?½??????
+  79   1              INTEXP|=0x04;     //??P05???????
+  80   1              IEN1 |= 0x04;
+  81   1      
+  82   1              //ex_int();
+  83   1              //IIC_init();
+  84   1          luzes_iniciais();
+  85   1      }
+  86          void main(void){
+  87   1        setup();
+  88   1        while(1){
+  89   2              if(!S1){
+  90   3                      //WDCON &= 0x7f; //ï¿½Ø±Õ´ï¿½ï¿½ï¿½
+  91   3                      IIC_init();//initial iic
+  92   3                      delay_ms(100);
+  93   3                      writebyte(0x07,0x98);
+  94   3                      LED1 = !LED1;
+  95   3                      delay_ms(100); //evita ruidos
+  96   3                      while(!S1); //espera soltar o botao
+  97   3                      delay_ms(100);
+  98   3              }
+  99   2          if(!S2){
+ 100   3                      LED2 = !LED2;
+ 101   3                      LED1 = !LED1;
+ 102   3                      delay_ms(100); //evita ruidos
+ 103   3                      while(!S2); //espera soltar o botao
+ 104   3                      delay_ms(100);
+ 105   3          }
+ 106   2        }
+ 107   1      }
+ 108          /****************General*************************/
+ 109          void delay_ms(unsigned int x)
+ 110          {
+ 111   1          unsigned int i,j;
+ 112   1          i=0;
+ 113   1          for(i=0;i<x;i++)
+ 114   1          {
+ 115   2             j=508;
+ 116   2                 ;
+C51 COMPILER V9.56.0.0   WRITE_TESTE_IIC                                                   10/13/2016 11:57:56 PAGE 3   
+
+ 117   2             while(j--);
+ 118   2          }
+ 119   1      }
+ 120          void luzes_iniciais(void){
+ 121   1              LED1 = 1; LED2 = 0;
+ 122   1              delay_ms(1000);
+ 123   1              LED1 = 0; LED2 = 1;
+ 124   1              delay_ms(1000);
+ 125   1              LED1 = 1; LED2 = 1;
+ 126   1              delay_ms(1000);
+ 127   1              LED1 = 0; LED2 = 0;
+ 128   1      }
+ 129          /****************END-General*************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    191    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

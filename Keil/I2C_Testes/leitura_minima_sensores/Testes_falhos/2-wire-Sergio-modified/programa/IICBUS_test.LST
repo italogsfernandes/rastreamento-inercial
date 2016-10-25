@@ -1,0 +1,84 @@
+C51 COMPILER V9.00   IICBUS_TEST                                                           11/13/2010 14:52:47 PAGE 1   
+
+
+C51 COMPILER V9.00, COMPILATION OF MODULE IICBUS_TEST
+OBJECT MODULE PLACED IN IICBUS_test.OBJ
+COMPILER INVOKED BY: D:\Program Files\KEIL C  V4\C51\BIN\C51.EXE IICBUS_test.c LARGE BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+*** WARNING C500 IN LINE 1 OF IICBUS_TEST.C: LICENSE ERROR (R208: RENEW LICENSE ID CODE (LIC))
+
+   1          #include "reg24le1.h"
+   2          #include "IIC_app.h"
+   3          #include "intrins.h"
+   4          
+   5          unsigned char rbuffer[0x10]={ '0','0','0','0',
+   6                                        '0','0','0','0',
+   7                                                                    '0','0','0','0',
+   8                                                                    '0','0','0','0',
+   9                                        };
+  10          extern char wbuffer[0x10];
+  11          extern char init_time;
+  12          
+  13          void main()
+  14          {
+  15   1      unsigned int i;
+  16   1      unsigned char flag=0;
+  17   1      Io_config();
+  18   1      uart_init();
+  19   1      ex_int();
+  20   1      puts("--just a iic test by syman--2010,9,10\n");
+  21   1      while(1)
+  22   1      {
+  23   2       if(LED)
+  24   2       {
+  25   3       WDCON &= 0x7f; //关闭串口
+  26   3       if(init_time)
+  27   3       {IIC_init();//initial iic
+  28   4       init_time=0;}
+  29   3       for(i=startaddr;i<endaddr;i++)
+  30   3       {rbuffer[i]=readbyte(i);
+  31   4       }
+  32   3       _nop_();_nop_();_nop_();_nop_();
+  33   3       _nop_();_nop_();_nop_();_nop_();
+  34   3       for(i=startaddr;i<endaddr;i++)
+  35   3       {writebyte(i,wbuffer[i]);
+  36   4       }
+  37   3       }else {
+  38   3              //led 熄灭的时候
+  39   3              //IIC disable
+  40   3               DISABLE2WIRE(); 
+  41   3               if(init_time)
+  42   3               { uart_init();
+  43   4               init_time=0;
+  44   4               }
+  45   3               for(i=0;i<0x10;i++)
+  46   3               {
+  47   4               if((i%8==0))
+  48   4               send('\n');
+  49   4               send(rbuffer[i]);
+  50   4               }
+  51   3               send('\n');
+  52   3               send('\n');
+  53   3         }
+  54   2       }
+C51 COMPILER V9.00   IICBUS_TEST                                                           11/13/2010 14:52:47 PAGE 2   
+
+  55   1       delay(200);
+  56   1      
+  57   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    267    ----
+   CONSTANT SIZE    =     39    ----
+   XDATA SIZE       =     16       3
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

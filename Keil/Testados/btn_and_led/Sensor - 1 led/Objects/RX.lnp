@@ -1,0 +1,4 @@
+".\Objects\Sensor.obj",
+".\Objects\STARTUP.obj" 
+TO ".\Objects\RX" 
+PRINT(".\Listings\RX.m51") RAMSIZE(256) 

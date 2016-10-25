@@ -1,0 +1,595 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/25/2013  10:15:19  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL\C51\BIN\BL51.EXE STARTUP.obj, main.obj, .\hal_delay.obj, .\hal_w2.obj TO FProject RAMSIZE (256) DISABLEWARNING (
+>> 16)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  main.obj (MAIN)
+  .\hal_delay.obj (HAL_DELAY)
+  .\hal_w2.obj (HAL_W2)
+  C:\KEIL\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL\C51\LIB\C51S.LIB (?C?CSTPTR)
+
+
+LINK MAP OF MODULE:  FProject (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0007H     UNIT         ?DT?HAL_W2_WAIT_DATA_READY?HAL_W2
+            DATA    000FH     0007H     UNIT         ?DT?_HAL_W2_WRITE?HAL_W2
+            DATA    0016H     0006H     UNIT         ?DT?_HAL_W2_READ?HAL_W2
+            DATA    001CH     0005H     UNIT         ?DT?MAIN
+            DATA    0021H     0002H     UNIT         ?DT?HAL_W2_SOFT_RESET?HAL_W2
+            DATA    0023H     0002H     UNIT         _DATA_GROUP_
+            IDATA   0025H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0006H     UNIT         ?PR?_HAL_W2_SET_SLAVE_ADDRESS?HAL_W2
+                    0009H     0002H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     0044H     UNIT         ?PR?_HAL_W2_WRITE?HAL_W2
+                    0052H     0001H                  *** GAP ***
+            CODE    0053H     0003H     ABSOLUTE     
+            CODE    0056H     008CH     UNIT         ?C_C51STARTUP
+            CODE    00E2H     0083H     UNIT         ?PR?HAL_W2_SOFT_RESET?HAL_W2
+            CODE    0165H     004DH     UNIT         ?PR?_HAL_W2_READ?HAL_W2
+            CODE    01B2H     0049H     UNIT         ?PR?MAIN?MAIN
+            CODE    01FBH     0049H     UNIT         ?PR?I2C_IRQ?MAIN
+            CODE    0244H     002BH     UNIT         ?C?LIB_CODE
+            CODE    026FH     0027H     UNIT         ?PR?HAL_W2_WAIT_DATA_READY?HAL_W2
+            CODE    0296H     0021H     UNIT         ?PR?_HAL_W2_CONFIGURE_MASTER?HAL_W2
+            CODE    02B7H     001AH     UNIT         ?PR?_DELAY_US?HAL_DELAY
+            CODE    02D1H     0016H     UNIT         ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2
+            CODE    02E7H     0014H     UNIT         ?PR?_DELAY_MS?HAL_DELAY
+            CODE    02FBH     0010H     UNIT         ?C_INITSEG
+            CODE    030BH     000EH     UNIT         ?PR?_HAL_W2_SET_CLK_FREQ?HAL_W2
+            CODE    0319H     000BH     UNIT         ?PR?_HAL_W2_RESPOND_TO_GEN_ADR?HAL_W2
+            CODE    0324H     000BH     UNIT         ?PR?_HAL_W2_ALTER_CLOCK?HAL_W2
+            CODE    032FH     000BH     UNIT         ?PR?_HAL_W2_IRQ_STOP_COND_ENABLE?HAL_W2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 2
+
+
+            CODE    033AH     000BH     UNIT         ?PR?_HAL_W2_IRQ_ADR_MATCH_ENABLE?HAL_W2
+            CODE    0345H     000BH     UNIT         ?PR?_HAL_W2_SET_OP_MODE?HAL_W2
+            CODE    0350H     000BH     UNIT         ?PR?_HAL_W2_ENABLE?HAL_W2
+            CODE    035BH     000BH     UNIT         ?PR?_HAL_W2_ALL_IRQ_ENABLE?HAL_W2
+            CODE    0366H     0009H     UNIT         ?PR?TIMER0_IRQ?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   FProject (?C_STARTUP)
+
+
+SEGMENT                                           DATA_GROUP 
+  +--> CALLED SEGMENT                           START    LENGTH
+---------------------------------------------------------------
+?C_C51STARTUP                                   -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                   0023H    0002H
+  +--> ?PR?_HAL_W2_ENABLE?HAL_W2
+  +--> ?PR?_HAL_W2_SET_CLK_FREQ?HAL_W2
+  +--> ?PR?_HAL_W2_SET_OP_MODE?HAL_W2
+  +--> ?PR?_HAL_W2_SET_SLAVE_ADDRESS?HAL_W2
+  +--> ?PR?_HAL_W2_ALTER_CLOCK?HAL_W2
+  +--> ?PR?_HAL_W2_IRQ_ADR_MATCH_ENABLE?HAL_W2
+  +--> ?PR?_HAL_W2_IRQ_STOP_COND_ENABLE?HAL_W2
+
+
+
+SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:0056H         SEGMENT       ?C_C51STARTUP
+  I:0025H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0059H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:0056H         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 3
+
+
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:0056H         LINE#         133
+  C:0058H         LINE#         134
+  C:0059H         LINE#         135
+  C:005AH         LINE#         136
+  C:005CH         LINE#         185
+  C:005FH         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  C:0366H         PUBLIC        Timer0_IRQ
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:01FBH         PUBLIC        I2C_IRQ
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:001CH         PUBLIC        flag
+  D:00E1H         PUBLIC        W2CON1
+  C:01B2H         PUBLIC        main
+  D:001DH         PUBLIC        TX
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:001EH         PUBLIC        first_byte
+  B:00A8H.1       PUBLIC        ET0
+  D:008CH         PUBLIC        TH0
+  D:001FH         PUBLIC        flag2
+  D:008AH         PUBLIC        TL0
+  D:0020H         PUBLIC        int_count
+  D:00A6H         PUBLIC        INTEXP
+  D:0093H         PUBLIC        P0DIR
+  D:0094H         PUBLIC        P1DIR
+  D:0095H         PUBLIC        P2DIR
+  D:00DAH         PUBLIC        W2DAT
+  D:0096H         PUBLIC        P3DIR
+  D:0098H         PUBLIC        S0CON
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          MAIN
+  -------         DO            
+  D:0023H         SYMBOL        w2con1_value
+  D:0024H         SYMBOL        W2DAT_value
+  -------         ENDDO         
+  C:01B2H         LINE#         14
+  C:01B2H         LINE#         15
+  C:01B2H         LINE#         20
+  C:01B5H         LINE#         22
+  C:01B8H         LINE#         23
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 4
+
+
+  C:01BAH         LINE#         24
+  C:01BCH         LINE#         26
+  C:01BEH         LINE#         27
+  C:01C1H         LINE#         28
+  C:01C4H         LINE#         29
+  C:01C7H         LINE#         33
+  C:01CCH         LINE#         34
+  C:01D1H         LINE#         35
+  C:01D6H         LINE#         36
+  C:01DBH         LINE#         37
+  C:01E0H         LINE#         38
+  C:01E5H         LINE#         39
+  C:01EAH         LINE#         40
+  C:01EDH         LINE#         41
+  C:01F0H         LINE#         42
+  C:01F3H         LINE#         43
+  C:01F6H         LINE#         44
+  -------         ENDPROC       MAIN
+  -------         PROC          TIMER0_IRQ
+  C:0366H         LINE#         49
+  C:0366H         LINE#         51
+  C:0368H         LINE#         52
+  C:036BH         LINE#         53
+  C:036EH         LINE#         54
+  -------         ENDPROC       TIMER0_IRQ
+  -------         PROC          I2C_IRQ
+  -------         DO            
+  D:0007H         SYMBOL        w2con1_value
+  D:0007H         SYMBOL        w2dat_value
+  -------         ENDDO         
+  C:01FBH         LINE#         56
+  C:0204H         LINE#         60
+  C:0206H         LINE#         61
+  C:020AH         LINE#         62
+  C:020AH         LINE#         64
+  C:020CH         LINE#         65
+  C:0211H         LINE#         66
+  C:0211H         LINE#         67
+  C:0214H         LINE#         68
+  C:0214H         LINE#         69
+  C:0216H         LINE#         71
+  C:0216H         LINE#         72
+  C:0219H         LINE#         73
+  C:021CH         LINE#         74
+  C:021CH         LINE#         75
+  C:021EH         LINE#         77
+  C:021EH         LINE#         78
+  C:0222H         LINE#         79
+  C:0222H         LINE#         80
+  C:0227H         LINE#         81
+  C:0227H         LINE#         82
+  C:022BH         LINE#         83
+  C:022BH         LINE#         84
+  C:022EH         LINE#         85
+  C:022EH         LINE#         86
+  C:0230H         LINE#         88
+  C:0230H         LINE#         89
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 5
+
+
+  C:0232H         LINE#         91
+  C:023DH         LINE#         92
+  C:023DH         LINE#         94
+  C:023DH         LINE#         95
+  C:023DH         LINE#         98
+  -------         ENDPROC       I2C_IRQ
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        HAL_DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:02E7H         PUBLIC        _delay_ms
+  C:02C2H         PUBLIC        _delay_us
+  -------         PROC          L?0011
+  -------         ENDPROC       L?0011
+  -------         PROC          _DELAY_US
+  D:0006H         SYMBOL        us
+  C:02C2H         LINE#         37
+  C:02C2H         LINE#         38
+  C:02C2H         LINE#         40
+  C:02C2H         LINE#         41
+  C:02C3H         LINE#         42
+  C:02C4H         LINE#         43
+  C:02C5H         LINE#         44
+  C:02C6H         LINE#         45
+  C:02C7H         LINE#         46
+  C:02D0H         LINE#         47
+  -------         ENDPROC       _DELAY_US
+  -------         PROC          _DELAY_MS
+  D:0004H         SYMBOL        ms
+  C:02E7H         LINE#         49
+  C:02EBH         LINE#         50
+  C:02EBH         LINE#         52
+  C:02EBH         LINE#         53
+  C:02EBH         LINE#         54
+  C:02EEH         LINE#         55
+  C:02EEH         LINE#         56
+  C:02F1H         LINE#         57
+  C:02FAH         LINE#         58
+  -------         ENDPROC       _DELAY_MS
+  -------         ENDMOD        HAL_DELAY
+
+  -------         MODULE        HAL_W2
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:0350H         PUBLIC        _hal_w2_enable
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  C:0319H         PUBLIC        _hal_w2_respond_to_gen_adr
+  D:00E2H         PUBLIC        W2CON0
+  C:030BH         PUBLIC        _hal_w2_set_clk_freq
+  D:00E1H         PUBLIC        W2CON1
+  C:02D1H         PUBLIC        _hal_w2_init_transfer
+  C:0324H         PUBLIC        _hal_w2_alter_clock
+  B:00C0H.2       PUBLIC        SPIF
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 6
+
+
+  D:00D9H         PUBLIC        W2SADR
+  D:0088H         PUBLIC        TCON
+  C:0345H         PUBLIC        _hal_w2_set_op_mode
+  C:0003H         PUBLIC        _hal_w2_set_slave_address
+  C:0165H         PUBLIC        _hal_w2_read
+  C:033AH         PUBLIC        _hal_w2_irq_adr_match_enable
+  C:026FH         PUBLIC        hal_w2_wait_data_ready
+  C:000EH         PUBLIC        _hal_w2_write
+  C:035BH         PUBLIC        _hal_w2_all_irq_enable
+  C:0296H         PUBLIC        _hal_w2_configure_master
+  D:00A6H         PUBLIC        INTEXP
+  D:0094H         PUBLIC        P1DIR
+  D:00DAH         PUBLIC        W2DAT
+  D:0098H         PUBLIC        S0CON
+  C:00E2H         PUBLIC        hal_w2_soft_reset
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  C:032FH         PUBLIC        _hal_w2_irq_stop_cond_enable
+  D:00F8H         PUBLIC        FSR
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          _HAL_W2_RESPOND_TO_GEN_ADR
+  D:0007H         SYMBOL        resp_gen
+  C:0319H         LINE#         39
+  C:0319H         LINE#         40
+  C:0319H         LINE#         41
+  C:031CH         LINE#         42
+  C:031CH         LINE#         43
+  C:031FH         LINE#         44
+  C:0320H         LINE#         46
+  C:0320H         LINE#         47
+  C:0323H         LINE#         48
+  C:0323H         LINE#         49
+  -------         ENDPROC       _HAL_W2_RESPOND_TO_GEN_ADR
+  -------         PROC          _HAL_W2_ALTER_CLOCK
+  D:0007H         SYMBOL        alt_clk
+  C:0324H         LINE#         51
+  C:0324H         LINE#         52
+  C:0324H         LINE#         53
+  C:0327H         LINE#         54
+  C:0327H         LINE#         55
+  C:032AH         LINE#         56
+  C:032BH         LINE#         58
+  C:032BH         LINE#         59
+  C:032EH         LINE#         60
+  C:032EH         LINE#         61
+  -------         ENDPROC       _HAL_W2_ALTER_CLOCK
+  -------         PROC          _HAL_W2_IRQ_STOP_COND_ENABLE
+  D:0007H         SYMBOL        stop_cond
+  C:032FH         LINE#         63
+  C:032FH         LINE#         64
+  C:032FH         LINE#         65
+  C:0332H         LINE#         66
+  C:0332H         LINE#         67
+  C:0335H         LINE#         68
+  C:0336H         LINE#         70
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 7
+
+
+  C:0336H         LINE#         71
+  C:0339H         LINE#         72
+  C:0339H         LINE#         73
+  -------         ENDPROC       _HAL_W2_IRQ_STOP_COND_ENABLE
+  -------         PROC          _HAL_W2_IRQ_ADR_MATCH_ENABLE
+  D:0007H         SYMBOL        addr_match
+  C:033AH         LINE#         75
+  C:033AH         LINE#         76
+  C:033AH         LINE#         77
+  C:033DH         LINE#         78
+  C:033DH         LINE#         79
+  C:0340H         LINE#         80
+  C:0341H         LINE#         82
+  C:0341H         LINE#         83
+  C:0344H         LINE#         84
+  C:0344H         LINE#         85
+  -------         ENDPROC       _HAL_W2_IRQ_ADR_MATCH_ENABLE
+  -------         PROC          _HAL_W2_SET_SLAVE_ADDRESS
+  D:0007H         SYMBOL        address
+  C:0003H         LINE#         87
+  C:0003H         LINE#         88
+  C:0003H         LINE#         89
+  C:0008H         LINE#         90
+  -------         ENDPROC       _HAL_W2_SET_SLAVE_ADDRESS
+  -------         PROC          _HAL_W2_SET_CLK_FREQ
+  D:0007H         SYMBOL        freq
+  C:030BH         LINE#         94
+  C:030BH         LINE#         95
+  C:030BH         LINE#         96
+  C:0318H         LINE#         97
+  -------         ENDPROC       _HAL_W2_SET_CLK_FREQ
+  -------         PROC          _HAL_W2_SET_OP_MODE
+  D:0007H         SYMBOL        mode
+  C:0345H         LINE#         99
+  C:0345H         LINE#         100
+  C:0345H         LINE#         101
+  C:0348H         LINE#         102
+  C:0348H         LINE#         103
+  C:034BH         LINE#         104
+  C:034CH         LINE#         106
+  C:034CH         LINE#         107
+  C:034FH         LINE#         108
+  C:034FH         LINE#         109
+  -------         ENDPROC       _HAL_W2_SET_OP_MODE
+  -------         PROC          _HAL_W2_ENABLE
+  D:0007H         SYMBOL        en
+  C:0350H         LINE#         111
+  C:0350H         LINE#         112
+  C:0350H         LINE#         113
+  C:0353H         LINE#         114
+  C:0353H         LINE#         115
+  C:0356H         LINE#         116
+  C:0357H         LINE#         118
+  C:0357H         LINE#         119
+  C:035AH         LINE#         120
+  C:035AH         LINE#         121
+  -------         ENDPROC       _HAL_W2_ENABLE
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 8
+
+
+  -------         PROC          _HAL_W2_ALL_IRQ_ENABLE
+  D:0007H         SYMBOL        irq
+  C:035BH         LINE#         123
+  C:035BH         LINE#         124
+  C:035BH         LINE#         127
+  C:035EH         LINE#         128
+  C:035EH         LINE#         129
+  C:0361H         LINE#         130
+  C:0362H         LINE#         132
+  C:0362H         LINE#         133
+  C:0365H         LINE#         134
+  C:0365H         LINE#         135
+  -------         ENDPROC       _HAL_W2_ALL_IRQ_ENABLE
+  -------         PROC          _HAL_W2_CONFIGURE_MASTER
+  D:0006H         SYMBOL        mode
+  C:0296H         LINE#         137
+  C:0298H         LINE#         138
+  C:0298H         LINE#         139
+  C:029DH         LINE#         140
+  C:02A2H         LINE#         141
+  C:02A7H         LINE#         143
+  C:02AAH         LINE#         145
+  C:02ADH         LINE#         146
+  C:02B0H         LINE#         147
+  C:02B4H         LINE#         148
+  C:02B6H         LINE#         149
+  -------         ENDPROC       _HAL_W2_CONFIGURE_MASTER
+  -------         PROC          HAL_W2_WAIT_DATA_READY
+  -------         DO            
+  D:0008H         SYMBOL        timeout_counter
+  D:000CH         SYMBOL        w2_status
+  D:000DH         SYMBOL        data_ready
+  D:000EH         SYMBOL        nack_received
+  -------         ENDDO         
+  C:026FH         LINE#         151
+  C:026FH         LINE#         152
+  C:026FH         LINE#         153
+  C:0279H         LINE#         159
+  C:0279H         LINE#         160
+  C:027CH         LINE#         161
+  C:0282H         LINE#         162
+  C:0288H         LINE#         163
+  C:028FH         LINE#         164
+  C:0293H         LINE#         167
+  C:0295H         LINE#         168
+  -------         ENDPROC       HAL_W2_WAIT_DATA_READY
+  -------         PROC          _HAL_W2_INIT_TRANSFER
+  D:0007H         SYMBOL        address
+  D:0005H         SYMBOL        direction
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  -------         ENDDO         
+  C:02D1H         LINE#         170
+  C:02D1H         LINE#         171
+  C:02D1H         LINE#         174
+  C:02D4H         LINE#         175
+  C:02DAH         LINE#         177
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 9
+
+
+  C:02DDH         LINE#         179
+  C:02E1H         LINE#         180
+  C:02E1H         LINE#         181
+  C:02E4H         LINE#         182
+  C:02E4H         LINE#         184
+  C:02E4H         LINE#         185
+  C:02E6H         LINE#         186
+  C:02E6H         LINE#         187
+  -------         ENDPROC       _HAL_W2_INIT_TRANSFER
+  -------         PROC          _HAL_W2_WRITE
+  D:0007H         SYMBOL        address
+  D:0010H         SYMBOL        data_ptr
+  D:0013H         SYMBOL        data_len
+  -------         DO            
+  D:0014H         SYMBOL        ack_received
+  -------         DO            
+  D:0015H         SYMBOL        w2_status
+  -------         ENDDO         
+  -------         ENDDO         
+  C:000EH         LINE#         189
+  C:0014H         LINE#         190
+  C:0014H         LINE#         192
+  C:001BH         LINE#         194
+  C:002AH         LINE#         195
+  C:002AH         LINE#         197
+  C:003DH         LINE#         198
+  C:0042H         LINE#         199
+  C:0047H         LINE#         200
+  C:0047H         LINE#         201
+  C:004AH         LINE#         202
+  C:004AH         LINE#         203
+  C:004CH         LINE#         205
+  C:004FH         LINE#         207
+  C:0051H         LINE#         208
+  -------         ENDPROC       _HAL_W2_WRITE
+  -------         PROC          _HAL_W2_READ
+  D:0007H         SYMBOL        address
+  D:0017H         SYMBOL        data_ptr
+  D:001AH         SYMBOL        data_len
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  D:001BH         SYMBOL        ack_received
+  -------         ENDDO         
+  C:0165H         LINE#         210
+  C:016BH         LINE#         211
+  C:016BH         LINE#         215
+  C:0172H         LINE#         217
+  C:0176H         LINE#         218
+  C:0176H         LINE#         220
+  C:0179H         LINE#         221
+  C:0179H         LINE#         224
+  C:0184H         LINE#         225
+  C:0184H         LINE#         226
+  C:0188H         LINE#         227
+  C:0188H         LINE#         228
+  C:018BH         LINE#         229
+  C:018BH         LINE#         231
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/25/2013  10:15:19  PAGE 10
+
+
+  C:018EH         LINE#         233
+  C:01A1H         LINE#         234
+  C:01ADH         LINE#         235
+  C:01AFH         LINE#         237
+  C:01B1H         LINE#         238
+  -------         ENDPROC       _HAL_W2_READ
+  -------         PROC          HAL_W2_SOFT_RESET
+  -------         DO            
+  D:0021H         SYMBOL        pulsecount
+  D:0022H         SYMBOL        w2_freq
+  -------         ENDDO         
+  C:00E2H         LINE#         240
+  C:00E2H         LINE#         241
+  C:00E2H         LINE#         246
+  C:00E8H         LINE#         248
+  C:00EBH         LINE#         249
+  C:00F3H         LINE#         253
+  C:00F6H         LINE#         254
+  C:00F9H         LINE#         257
+  C:00FCH         LINE#         262
+  C:0104H         LINE#         265
+  C:010BH         LINE#         267
+  C:010EH         LINE#         271
+  C:0115H         LINE#         272
+  C:0118H         LINE#         273
+  C:0118H         LINE#         275
+  C:0120H         LINE#         276
+  C:0127H         LINE#         278
+  C:012AH         LINE#         279
+  C:0131H         LINE#         280
+  C:013AH         LINE#         283
+  C:0141H         LINE#         285
+  C:0149H         LINE#         288
+  C:0150H         LINE#         290
+  C:0158H         LINE#         293
+  C:015BH         LINE#         296
+  C:015EH         LINE#         297
+  C:0164H         LINE#         299
+  -------         ENDPROC       HAL_W2_SOFT_RESET
+  -------         ENDMOD        HAL_W2
+
+  -------         MODULE        ?C?CLDPTR
+  C:0244H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:025DH         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+Program Size: data=38.0 xdata=0 code=876
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

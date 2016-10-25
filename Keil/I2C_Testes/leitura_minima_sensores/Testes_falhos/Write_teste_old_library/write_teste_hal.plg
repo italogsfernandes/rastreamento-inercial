@@ -1,0 +1,148 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\I2C_Testes\leitura_minima_sensores\Write_teste_old_library\write_teste_hal.uvproj
+Project File Date:  10/10/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_hal.c...
+write_teste_hal.c(4): warning C318: can't open file 'hal_delay.h'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 089EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ACH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ECH
+Program Size: data=14.0 xdata=0 code=346
+"write_teste_hal" - 0 Error(s), 9 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_hal.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 089EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ACH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ECH
+Program Size: data=14.0 xdata=0 code=346
+"write_teste_hal" - 0 Error(s), 8 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_hal.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 089EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ACH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08ECH
+Program Size: data=14.0 xdata=0 code=346
+creating hex file from ".\Objects\write_teste_hal"...
+".\Objects\write_teste_hal" - 0 Error(s), 8 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling write_teste_hal.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_CONFIGURE_MASTER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08A5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_HAL_W2_WRITE?BYTE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _HAL_W2_WRITE
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08B8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  I2C_IRQ_HANDLER
+    MODULE:  .\Objects\write_teste_hal.obj (WRITE_TESTE_HAL)
+    ADDRESS: 08F3H
+Program Size: data=14.0 xdata=0 code=353
+creating hex file from ".\Objects\write_teste_hal"...
+".\Objects\write_teste_hal" - 0 Error(s), 8 Warning(s).

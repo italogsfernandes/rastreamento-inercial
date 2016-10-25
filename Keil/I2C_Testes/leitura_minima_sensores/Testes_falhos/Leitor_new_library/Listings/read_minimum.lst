@@ -1,0 +1,287 @@
+C51 COMPILER V9.56.0.0   READ_MINIMUM                                                      10/07/2016 09:31:50 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE READ_MINIMUM
+OBJECT MODULE PLACED IN ..\Objects\read_minimum.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE read_minimum.c BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\read_minimum.l
+                    -st) OBJECT(..\Objects\read_minimum.obj)
+
+line level    source
+
+   1          #include "reg24le1.h" //registers address
+   2          #include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+   3          #include "stdbool.h" //Booleanos
+   4          //#include "IIC_app.h" //i2c
+   5          #include "intrins.h"
+   6          #include "API.h"
+   7          #include "nRF-SPIComands.h" //radio commands
+   8          
+   9          #define MASTER 0X02
+  10          #define SLAVE  0x00
+  11          
+  12          #define READY (W2CON1&0X01)       //if ready ==1,not ready==0
+  13          #define ACK   (W2CON1&0X02 )  //1;no ack and 0 ack
+  14          #define EN2WIRE()  W2CON0|=0x01;//enable 2 wire
+  15          #define DISABLE2WIRE()  W2CON0&=0xFE;
+  16          #define STOP()    W2CON0|=0x20;
+  17          #define START()   W2CON0|=0x10;
+  18          #define FREQSEL(x)  W2CON0|=(x<<2);
+  19          #define MODE(x)    W2CON0&=(0xff-0x02);W2CON0|=x;  //master or slave
+  20          
+  21          
+  22          
+  23          //Subendere?os usados no sistema
+  24          #define MY_SUB_ADDR 0x01
+  25          #define OTHER_SUB_ADDR 0x02
+  26          //pacote para enviar:
+  27          // pacote = [sub_endere?o_destinatario] AXH     AXL     AYH     AYL     AZH     AZL
+  28          //Pacote para receber
+  29          // pacote = [MY_SUB_ADDR] [COMANDO]
+  30          #define Sinal_request_data 0x0A
+  31          #define Sinal_LEDS 0x0B
+  32          
+  33          //Endereço I2C do sensor em 3.3V
+  34          #define MPU_endereco 0x68
+  35          
+  36          //Pushbuttons
+  37          sbit S1  = P0^2;    // 1/0=no/press
+  38          sbit S2  = P1^4;    // 1/0=no/press
+  39          //LEDS
+  40          sbit LED1 = P0^3; // 1/0=light/dark
+  41          sbit LED2 = P0^6; // 1/0=light/dark
+  42          
+  43          //Onde as leituras serão salvas:
+  44          uint8_t readings[6] = {0,5,0,128,0,255};
+  45          int i=0;
+  46          
+  47          void delay_ms(unsigned int x);
+  48          void setup_i2c_mpu(void);
+  49          void requisitarAccelMPU6050(void);
+  50          void enviar_pacote_inercial(void);
+  51          void luzes_iniciais(void);
+  52          
+  53          void I2C_init(void){
+  54   1      
+C51 COMPILER V9.56.0.0   READ_MINIMUM                                                      10/07/2016 09:31:50 PAGE 2   
+
+  55   1              //original
+  56   1          FREQSEL(2);
+  57   1          MODE(MASTER);
+  58   1              //NOTE: ja tentei trocar isso pro 0xDF e colocar um  &
+  59   1          W2CON1|=0x20;     //�������е��ж�
+  60   1          W2SADR=0x00;
+  61   1          EN2WIRE();        //ʹ��2-wire
+  62   1      }
+  63          bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+  64   1          bool ack_received;
+  65   1              uint8_t numlimit = 0;
+  66   1          START();
+  67   1          W2DAT=((devAddr+0xa0)<<1)+0;//write
+  68   1          if(!ACK){ //IF ACK
+  69   2              W2DAT=regAddr;
+  70   2          }
+  71   1          //BUG: antes isso era um if? ue?
+  72   1          while(!ACK && data_len-- > 0) {
+  73   2              W2DAT=*data_ptr++ ;
+  74   2              numlimit++;
+  75   2              if(numlimit==16){
+  76   3                  return false;
+  77   3              }
+  78   2          }
+  79   1          ack_received = !ACK;
+  80   1          STOP();
+  81   1          return ack_received;
+  82   1      }
+  83          bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
+  84   1          START();
+  85   1          W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
+  86   1              if(!ACK){ W2DAT=regAddr;}else{return false; }
+  87   1          if(!ACK){ START();}else{return false;}
+  88   1      
+  89   1          W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
+  90   1          //if(ACK){return false;}
+  91   1              tx_buf[0] = MY_SUB_ADDR;
+  92   1              i = 1;
+  93   1          while(data_len-- > 0)
+  94   1          {
+  95   2                      //BUG: XXX: O programa esta parando neste la�o
+  96   2             while(!(W2CON1&0X01)){
+  97   3                      LED1 = 1;
+  98   3                      }
+  99   2                      LED1 = 0;
+ 100   2                      tx_buf[i] = W2DAT;
+ 101   2                      i++;
+ 102   2              //*data_ptr++=W2DAT;
+ 103   2          }
+ 104   1              TX_Mode_NOACK(i+1);
+ 105   1          RX_Mode();
+ 106   1          STOP();
+ 107   1          return true;
+ 108   1      }
+*** WARNING C280 IN LINE 83 OF read_minimum.c: 'data_ptr': unreferenced local variable
+ 109          
+ 110          uint8_t readbyte(uint8_t devAddr, uint8_t regAddr)
+ 111          {
+ 112   1              uint8_t data_read;
+ 113   1          START();
+ 114   1          W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
+ 115   1          while(ACK);
+C51 COMPILER V9.56.0.0   READ_MINIMUM                                                      10/07/2016 09:31:50 PAGE 3   
+
+ 116   1          W2DAT=regAddr;
+ 117   1          while(ACK);
+ 118   1          START();
+ 119   1          W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
+ 120   1          //while(ACK);
+ 121   1         // while(!READY){
+ 122   1                      LED1 = 1;
+ 123   1              //}
+ 124   1              LED1 = 0;
+ 125   1          data_read=W2DAT;
+ 126   1          STOP();
+ 127   1          return data_read;
+ 128   1      
+ 129   1      }
+ 130          
+ 131          void setup(void){
+ 132   1               // Set up GPIO
+ 133   1          P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
+ 134   1          P1DIR = 0xFF;   // Tudo input
+ 135   1          P2DIR = 0xFF;
+ 136   1          P0CON = 0x00;       // All general I/O
+ 137   1          P1CON = 0x00;       // All general I/O
+ 138   1          P2CON = 0x00;       // All general I/O
+ 139   1      
+ 140   1              // Radio + SPI setup
+ 141   1          RFCE = 0;       // Radio chip enable low
+ 142   1          RFCKEN = 1;     // Radio clk enable
+ 143   1          RF = 1;
+ 144   1          rf_init();
+ 145   1          EA=1; //ativa as interrup��es
+ 146   1          RX_Mode();
+ 147   1              luzes_iniciais();
+ 148   1              //I2C_SETUP
+ 149   1              I2C_init();
+ 150   1            
+ 151   1              //Io_config(); //XXX: realmente necessaria
+ 152   1              //ex_int(); //XXX: realmente necessaria
+ 153   1              //IIC_init();//initial iic
+ 154   1              setup_i2c_mpu();
+ 155   1              //requisitarAccelMPU6050();
+ 156   1              EA = 1; 
+ 157   1      }
+ 158          void main()
+ 159          {
+ 160   1          //lógica:
+ 161   1          //iniciar i2c
+ 162   1          //configurar sensores
+ 163   1          //iniciar rf
+ 164   1          //Ao se precionar o botão
+ 165   1          //  realizar leitura
+ 166   1          //  despachar leitura
+ 167   1              setup();
+ 168   1              while (1) {
+ 169   2                      if(!S1){
+ 170   3                              enviar_pacote_inercial();
+ 171   3                              delay_ms(100); //evita ruidos
+ 172   3                              while(!S1); //espera soltar o botao
+ 173   3                              delay_ms(100);
+ 174   3                      }
+ 175   2                      if(!S2){
+ 176   3                              requisitarAccelMPU6050();
+ 177   3                              delay_ms(100);
+C51 COMPILER V9.56.0.0   READ_MINIMUM                                                      10/07/2016 09:31:50 PAGE 4   
+
+ 178   3                              while(!S2);//espera soltar o botao
+ 179   3                              delay_ms(100);
+ 180   3                      }
+ 181   2                      if(newPayload){
+ 182   3                              if(rx_buf[0] == MY_SUB_ADDR){
+ 183   4                                      switch (rx_buf[1]) {
+ 184   5                                              case Sinal_request_data:
+ 185   5                                                      requisitarAccelMPU6050();
+ 186   5                                                      enviar_pacote_inercial();
+ 187   5                                                      break;
+ 188   5                                              case Sinal_LEDS:
+ 189   5                                                      LED1 = !LED1;
+ 190   5                                                      LED2 = !LED2;
+ 191   5                                                      break;
+ 192   5                                      }
+ 193   4                              }
+ 194   3                              newPayload = 0;
+ 195   3                              sta = 0;
+ 196   3                      }
+ 197   2              }
+ 198   1      }
+ 199          /**************************************************/
+ 200          void delay_ms(unsigned int x)
+ 201          {
+ 202   1          unsigned int i,j;
+ 203   1          i=0;
+ 204   1          for(i=0;i<x;i++)
+ 205   1          {
+ 206   2             j=508;
+ 207   2                 ;
+ 208   2             while(j--);
+ 209   2          }
+ 210   1      }
+ 211          /**************************************************/
+ 212          void luzes_iniciais(void){
+ 213   1              LED1 = 1; LED2 = 0;
+ 214   1              delay_ms(1000);
+ 215   1              LED1 = 0; LED2 = 1;
+ 216   1              delay_ms(1000);
+ 217   1              LED1 = 1; LED2 = 1;
+ 218   1              delay_ms(1000);
+ 219   1              LED1 = 0; LED2 = 0;
+ 220   1      }
+ 221          /**************************************************/
+ 222          /************MPU**********************************/
+ 223          void setup_i2c_mpu(void){
+ 224   1          //iniciar i2c
+ 225   1          //Set the register Power Management to start
+ 226   1              uint8_t ligar_mpu = 0x00;
+ 227   1              i2c_mpu_writeBytes(MPU_endereco, 0x6B,1, &ligar_mpu);
+ 228   1      }
+ 229          
+ 230          void requisitarAccelMPU6050(void){
+ 231   1          //Ler 6 bytes a partir de 0x3B
+ 232   1          //Sendo esses:
+ 233   1          // [ACCEL_XOUT_H] [ACCEL_XOUT_L]
+ 234   1          // [ACCEL_YOUT_H] [ACCEL_YOUT_L]
+ 235   1          // [ACCEL_ZOUT_H] [ACCEL_ZOUT_L]
+ 236   1              //LED2 = i2c_mpu_readBytes(MPU_endereco,0x3B, 6,readings);
+ 237   1              uint8_t initial_regAddr = 0x3B;
+ 238   1      
+ 239   1              for(i = 0;i<6; i++){
+C51 COMPILER V9.56.0.0   READ_MINIMUM                                                      10/07/2016 09:31:50 PAGE 5   
+
+ 240   2                      readings[i] = readbyte(MPU_endereco, initial_regAddr+i);
+ 241   2              }
+ 242   1      }
+ 243          
+ 244          void enviar_pacote_inercial(void){
+ 245   1          LED2 = 1;
+ 246   1          tx_buf[0] = MY_SUB_ADDR;
+ 247   1          for(i=1;i<7;i++){
+ 248   2              tx_buf[i] = readings[i-1];
+ 249   2          }
+ 250   1          //enviando e retornando ao padrao:
+ 251   1          TX_Mode_NOACK(7);
+ 252   1          RX_Mode();
+ 253   1              LED2 = 0;
+ 254   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    950    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     69      25
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      1    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

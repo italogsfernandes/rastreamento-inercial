@@ -1,0 +1,262 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/13/2016  11:57:57  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\write_teste_IIC.obj TO .\Objects\write_teste_IIC PRINT (.\w
+>> rite_teste_IIC.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\write_teste_IIC.obj (WRITE_TESTE_IIC)
+
+
+LINK MAP OF MODULE:  .\Objects\write_teste_IIC (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0034H     UNIT         ?PR?MAIN?WRITE_TESTE_IIC
+            CODE    0834H     0026H     UNIT         ?PR?SETUP?WRITE_TESTE_IIC
+            CODE    085AH     0025H     UNIT         ?PR?_DELAY_MS?WRITE_TESTE_IIC
+            CODE    087FH     001EH     UNIT         ?PR?LUZES_INICIAIS?WRITE_TESTE_IIC
+            CODE    089DH     0012H     UNIT         ?PR?IIC_INIT?WRITE_TESTE_IIC
+            CODE    08AFH     000FH     UNIT         ?PR?_WRITEBYTE?WRITE_TESTE_IIC
+            CODE    08BEH     000CH     UNIT         ?C_C51STARTUP
+            CODE    08CAH     0001H     UNIT         ?PR?EX_INT?WRITE_TESTE_IIC
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\write_teste_IIC (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?WRITE_TESTE_IIC
+
+?PR?MAIN?WRITE_TESTE_IIC
+  +--> ?PR?SETUP?WRITE_TESTE_IIC
+  +--> ?PR?IIC_INIT?WRITE_TESTE_IIC
+  +--> ?PR?_DELAY_MS?WRITE_TESTE_IIC
+  +--> ?PR?_WRITEBYTE?WRITE_TESTE_IIC
+
+?PR?SETUP?WRITE_TESTE_IIC
+  +--> ?PR?LUZES_INICIAIS?WRITE_TESTE_IIC
+
+?PR?LUZES_INICIAIS?WRITE_TESTE_IIC
+  +--> ?PR?_DELAY_MS?WRITE_TESTE_IIC
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/13/2016  11:57:57  PAGE 2
+
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\write_teste_IIC (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:08BEH         SEGMENT       ?C_C51STARTUP
+  I:0008H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:08C1H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:08BEH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:08BEH         LINE#         133
+  C:08C0H         LINE#         134
+  C:08C1H         LINE#         135
+  C:08C2H         LINE#         136
+  C:08C4H         LINE#         185
+  C:08C7H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        WRITE_TESTE_IIC
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:0080H.2       PUBLIC        S1
+  B:0090H.4       PUBLIC        S2
+  B:0080H.3       PUBLIC        LED1
+  B:0080H.6       PUBLIC        LED2
+  C:08CAH         PUBLIC        ex_int
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00E2H         PUBLIC        W2CON0
+  D:00E1H         PUBLIC        W2CON1
+  C:0800H         PUBLIC        main
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/13/2016  11:57:57  PAGE 3
+
+
+  C:0834H         PUBLIC        setup
+  B:0080H.4       PUBLIC        P04
+  B:0080H.5       PUBLIC        P05
+  D:00D9H         PUBLIC        W2SADR
+  D:0088H         PUBLIC        TCON
+  C:085EH         PUBLIC        _delay_ms
+  D:00A6H         PUBLIC        INTEXP
+  D:0093H         PUBLIC        P0DIR
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  D:009FH         PUBLIC        P1CON
+  D:0095H         PUBLIC        P2DIR
+  D:00DAH         PUBLIC        W2DAT
+  D:0097H         PUBLIC        P2CON
+  D:0098H         PUBLIC        S0CON
+  C:08AFH         PUBLIC        _writebyte
+  C:087FH         PUBLIC        luzes_iniciais
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  C:089DH         PUBLIC        IIC_init
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          IIC_INIT
+  C:089DH         LINE#         35
+  C:089DH         LINE#         36
+  C:089DH         LINE#         37
+  C:08A0H         LINE#         39
+  C:08A3H         LINE#         40
+  C:08A6H         LINE#         41
+  C:08A9H         LINE#         42
+  C:08ACH         LINE#         43
+  C:08AEH         LINE#         44
+  -------         ENDPROC       IIC_INIT
+  -------         PROC          EX_INT
+  C:08CAH         LINE#         45
+  C:08CAH         LINE#         46
+  C:08CAH         LINE#         52
+  -------         ENDPROC       EX_INT
+  -------         PROC          _WRITEBYTE
+  D:0006H         SYMBOL        addr
+  D:0005H         SYMBOL        dat
+  C:08AFH         LINE#         54
+  C:08AFH         LINE#         55
+  C:08AFH         LINE#         56
+  C:08B2H         LINE#         57
+  C:08B8H         LINE#         59
+  C:08BAH         LINE#         61
+  C:08BDH         LINE#         62
+  -------         ENDPROC       _WRITEBYTE
+  -------         PROC          SETUP
+  C:0834H         LINE#         65
+  C:0834H         LINE#         67
+  C:0837H         LINE#         68
+  C:083AH         LINE#         69
+  C:083DH         LINE#         70
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/13/2016  11:57:57  PAGE 4
+
+
+  C:0840H         LINE#         71
+  C:0842H         LINE#         72
+  C:0844H         LINE#         73
+  C:0846H         LINE#         74
+  C:0848H         LINE#         76
+  C:084BH         LINE#         77
+  C:084EH         LINE#         78
+  C:0851H         LINE#         79
+  C:0854H         LINE#         80
+  C:0857H         LINE#         84
+  -------         ENDPROC       SETUP
+  -------         PROC          MAIN
+  C:0800H         LINE#         86
+  C:0800H         LINE#         87
+  C:0803H         LINE#         88
+  C:0803H         LINE#         89
+  C:0806H         LINE#         91
+  C:0809H         LINE#         92
+  C:080CH         LINE#         93
+  C:0815H         LINE#         94
+  C:0817H         LINE#         95
+  C:081CH         LINE#         96
+  C:081FH         LINE#         97
+  C:0822H         LINE#         98
+  C:0822H         LINE#         99
+  C:0825H         LINE#         100
+  C:0827H         LINE#         101
+  C:0829H         LINE#         102
+  C:082CH         LINE#         103
+  C:082FH         LINE#         104
+  C:0832H         LINE#         105
+  C:0832H         LINE#         106
+  -------         ENDPROC       MAIN
+  C:085AH         SYMBOL        L?0024
+  -------         PROC          L?0023
+  -------         ENDPROC       L?0023
+  C:085AH         SYMBOL        L?0024
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:085EH         LINE#         109
+  C:085EH         LINE#         110
+  C:085EH         LINE#         112
+  C:0861H         LINE#         113
+  C:0868H         LINE#         114
+  C:0868H         LINE#         115
+  C:086CH         LINE#         117
+  C:0877H         LINE#         118
+  C:087EH         LINE#         119
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          LUZES_INICIAIS
+  C:087FH         LINE#         120
+  C:087FH         LINE#         121
+  C:0883H         LINE#         122
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/13/2016  11:57:57  PAGE 5
+
+
+  C:088AH         LINE#         123
+  C:088EH         LINE#         124
+  C:0891H         LINE#         125
+  C:0895H         LINE#         126
+  C:0898H         LINE#         127
+  C:089CH         LINE#         128
+  -------         ENDPROC       LUZES_INICIAIS
+  -------         ENDMOD        WRITE_TESTE_IIC
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?EX_INT?WRITE_TESTE_IIC
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00CEH BYTE (10%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=206
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

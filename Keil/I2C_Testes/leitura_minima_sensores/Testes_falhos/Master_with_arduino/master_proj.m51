@@ -1,0 +1,270 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/10/2016  06:28:01  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE ..\Objects\STARTUP.obj, ..\Objects\master_code.obj TO ..\Objects\master_proj PRINT (.\master
+>> _proj.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  ..\Objects\STARTUP.obj (?C_STARTUP)
+  ..\Objects\master_code.obj (MASTER_CODE)
+
+
+LINK MAP OF MODULE:  ..\Objects\master_proj (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0032H     UNIT         ?PR?MAIN?MASTER_CODE
+            CODE    0832H     0025H     UNIT         ?PR?_DELAY_MS?MASTER_CODE
+            CODE    0857H     001FH     UNIT         ?PR?_WIRE_READ?MASTER_CODE
+            CODE    0876H     001EH     UNIT         ?PR?LUZES_INICIAIS?MASTER_CODE
+            CODE    0894H     001EH     UNIT         ?PR?_WIRE_WRITE?MASTER_CODE
+            CODE    08B2H     0018H     UNIT         ?PR?SETUP?MASTER_CODE
+            CODE    08CAH     0013H     UNIT         ?PR?I2C_INIT?MASTER_CODE
+            CODE    08DDH     000CH     UNIT         ?C_C51STARTUP
+
+
+
+OVERLAY MAP OF MODULE:   ..\Objects\master_proj (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?MASTER_CODE
+
+?PR?MAIN?MASTER_CODE
+  +--> ?PR?SETUP?MASTER_CODE
+  +--> ?PR?_WIRE_WRITE?MASTER_CODE
+  +--> ?PR?_DELAY_MS?MASTER_CODE
+  +--> ?PR?_WIRE_READ?MASTER_CODE
+
+?PR?SETUP?MASTER_CODE
+  +--> ?PR?I2C_INIT?MASTER_CODE
+  +--> ?PR?LUZES_INICIAIS?MASTER_CODE
+
+?PR?LUZES_INICIAIS?MASTER_CODE
+  +--> ?PR?_DELAY_MS?MASTER_CODE
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  06:28:01  PAGE 2
+
+
+
+
+
+SYMBOL TABLE OF MODULE:  ..\Objects\master_proj (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:08DDH         SEGMENT       ?C_C51STARTUP
+  I:0008H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:08E0H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:08DDH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:08DDH         LINE#         133
+  C:08DFH         LINE#         134
+  C:08E0H         LINE#         135
+  C:08E1H         LINE#         136
+  C:08E3H         LINE#         185
+  C:08E6H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        MASTER_CODE
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:0080H.2       PUBLIC        S1
+  B:0090H.4       PUBLIC        S2
+  B:00A8H.7       PUBLIC        EA
+  B:0080H.3       PUBLIC        LED1
+  B:0080H.6       PUBLIC        LED2
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:00E2H         PUBLIC        W2CON0
+  D:00E1H         PUBLIC        W2CON1
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  06:28:01  PAGE 3
+
+
+  C:0800H         PUBLIC        main
+  C:08B2H         PUBLIC        setup
+  D:00D9H         PUBLIC        W2SADR
+  D:0088H         PUBLIC        TCON
+  C:0857H         PUBLIC        _wire_read
+  C:0894H         PUBLIC        _wire_write
+  C:0836H         PUBLIC        _delay_ms
+  C:08CAH         PUBLIC        I2C_init
+  D:0093H         PUBLIC        P0DIR
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  D:009FH         PUBLIC        P1CON
+  D:0095H         PUBLIC        P2DIR
+  D:00DAH         PUBLIC        W2DAT
+  D:0097H         PUBLIC        P2CON
+  D:0098H         PUBLIC        S0CON
+  C:0876H         PUBLIC        luzes_iniciais
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          SETUP
+  C:08B2H         LINE#         46
+  C:08B2H         LINE#         48
+  C:08B5H         LINE#         49
+  C:08B8H         LINE#         50
+  C:08BBH         LINE#         51
+  C:08BEH         LINE#         52
+  C:08C0H         LINE#         53
+  C:08C2H         LINE#         56
+  C:08C5H         LINE#         58
+  C:08C7H         LINE#         59
+  -------         ENDPROC       SETUP
+  -------         PROC          MAIN
+  C:0800H         LINE#         62
+  C:0800H         LINE#         63
+  C:0803H         LINE#         64
+  C:0803H         LINE#         65
+  C:0806H         LINE#         66
+  C:080DH         LINE#         67
+  C:0810H         LINE#         68
+  C:0813H         LINE#         69
+  C:0816H         LINE#         70
+  C:0816H         LINE#         71
+  C:0819H         LINE#         72
+  C:0821H         LINE#         73
+  C:0823H         LINE#         74
+  C:0825H         LINE#         75
+  C:0827H         LINE#         76
+  C:0827H         LINE#         77
+  C:082AH         LINE#         78
+  C:082DH         LINE#         79
+  C:0830H         LINE#         80
+  C:0830H         LINE#         81
+  -------         ENDPROC       MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  06:28:01  PAGE 4
+
+
+  C:0832H         SYMBOL        L?0033
+  -------         PROC          L?0032
+  -------         ENDPROC       L?0032
+  C:0832H         SYMBOL        L?0033
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0836H         LINE#         84
+  C:0836H         LINE#         85
+  C:0836H         LINE#         87
+  C:0839H         LINE#         88
+  C:0840H         LINE#         89
+  C:0840H         LINE#         90
+  C:0844H         LINE#         92
+  C:084FH         LINE#         93
+  C:0856H         LINE#         94
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          LUZES_INICIAIS
+  C:0876H         LINE#         95
+  C:0876H         LINE#         96
+  C:087AH         LINE#         97
+  C:0881H         LINE#         98
+  C:0885H         LINE#         99
+  C:0888H         LINE#         100
+  C:088CH         LINE#         101
+  C:088FH         LINE#         102
+  C:0893H         LINE#         103
+  -------         ENDPROC       LUZES_INICIAIS
+  -------         PROC          I2C_INIT
+  C:08CAH         LINE#         106
+  C:08CAH         LINE#         108
+  C:08CDH         LINE#         109
+  C:08D3H         LINE#         111
+  C:08D6H         LINE#         112
+  C:08D9H         LINE#         113
+  C:08DCH         LINE#         114
+  -------         ENDPROC       I2C_INIT
+  -------         PROC          _WIRE_READ
+  D:0007H         SYMBOL        devAddr
+  -------         DO            
+  D:0007H         SYMBOL        data_read
+  -------         ENDDO         
+  C:0857H         LINE#         115
+  C:0857H         LINE#         117
+  C:085AH         LINE#         118
+  C:0860H         LINE#         119
+  C:0865H         LINE#         120
+  C:086AH         LINE#         121
+  C:086CH         LINE#         122
+  C:086EH         LINE#         123
+  C:0870H         LINE#         124
+  C:0872H         LINE#         125
+  C:0875H         LINE#         126
+  C:0875H         LINE#         127
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/10/2016  06:28:01  PAGE 5
+
+
+  -------         ENDPROC       _WIRE_READ
+  -------         PROC          _WIRE_WRITE
+  D:0007H         SYMBOL        devAddr
+  D:0005H         SYMBOL        value_to_write
+  -------         DO            
+  D:0007H         SYMBOL        ack_received
+  -------         ENDDO         
+  C:0894H         LINE#         128
+  C:0894H         LINE#         130
+  C:0897H         LINE#         131
+  C:089CH         LINE#         132
+  C:08A1H         LINE#         133
+  C:08A3H         LINE#         134
+  C:08A3H         LINE#         135
+  C:08AEH         LINE#         136
+  C:08B1H         LINE#         137
+  C:08B1H         LINE#         138
+  -------         ENDPROC       _WIRE_WRITE
+  -------         ENDMOD        MASTER_CODE
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00ECH BYTE (11%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=236
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
