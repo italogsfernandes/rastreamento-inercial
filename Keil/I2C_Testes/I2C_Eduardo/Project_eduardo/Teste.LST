@@ -1,0 +1,130 @@
+C51 COMPILER V9.56.0.0   TESTE                                                             10/22/2016 10:06:47 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TESTE
+OBJECT MODULE PLACED IN .\output\Teste.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Teste.c BROWSE DEBUG OBJECTEXTEND OBJECT(.\output\Teste.obj)
+
+line level    source
+
+   1          #include "reg24le1.h"
+   2          #include "I2CDev.h"
+   3          #include <stdint.h>
+   4          
+   5          //  Pushbuttons
+   6          sbit S1  = P0^2;    // 1/0 = no/press
+   7          sbit S2  = P1^4;    // 1/0 = no/press
+   8          //  LEDS
+   9          sbit LED1 = P0^3;   // 1/0 = light/dark
+  10          sbit LED2 = P0^6;   // 1/0 = light/dark
+  11          
+  12          void delay_ms(unsigned int x)
+  13          {
+  14   1          unsigned int i,j;
+  15   1          i=0;
+  16   1          for(i=0;i<x;i++)
+  17   1          {
+  18   2             j=508;
+  19   2                 ;
+  20   2             while(j--);
+  21   2          }
+  22   1      }
+  23          
+  24          void luzes_iniciais(void){
+  25   1              LED1 = 1; LED2 = 0;
+  26   1              delay_ms(1000);
+  27   1              LED1 = 0; LED2 = 1;
+  28   1              delay_ms(1000);
+  29   1              LED1 = 1; LED2 = 1;
+  30   1              delay_ms(1000);
+  31   1              LED1 = 0; LED2 = 0;
+  32   1      }
+  33          
+  34          void main()
+  35          {
+  36   1        luzes_iniciais();
+  37   1      
+  38   1        // Init GPIO Pins
+  39   1        P0DIR = 0x00;
+  40   1              P1DIR = 0xFF;
+  41   1              P2DIR = 0xFF;
+  42   1              P3DIR = 0xFF;
+  43   1      
+  44   1        // Enable all interrupts
+  45   1        EA = 1;
+  46   1      
+  47   1        // Configurações iniciais
+  48   1        P05 = 1;
+  49   1        P06 = 1;
+  50   1      //NOTE: oq ta havendo aqui?
+  51   1        IEN0 |= 0X80;
+  52   1        IEN0 |= 0X01;
+  53   1        //NOTE: Por que nao usar a funcao de frequencia da biblioteca?
+  54   1        W2CON0 |= 0x04;     // Clock frequency, STD mode
+  55   1        W2CON0 &= 0xF7;
+C51 COMPILER V9.56.0.0   TESTE                                                             10/22/2016 10:06:47 PAGE 2   
+
+  56   1        W2SADR=0x00;
+  57   1      
+  58   1        // Set master select
+  59   1        operationMode(true);
+  60   1      
+  61   1        //TODO: to ativando as interrupções mas nao tem interrupt handle?
+  62   1        //ue?
+  63   1        // Enable all interrupts for I2C
+  64   1        enableISR(true);
+  65   1      
+  66   1      
+  67   1        // Enable I2C
+  68   1        enableI2C(true);
+  69   1      
+  70   1        //TCON |= 0X01;
+  71   1        //INTEXP |= 0x04;
+  72   1      
+  73   1        while(1)
+  74   1              {
+  75   2                 if(!S1)
+  76   2            {
+  77   3                              // Initial transfer
+  78   3              startI2C(); //NOTE: isso ta desativando as interrupções(ligando a mascara)
+  79   3              W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
+  80   3              while(ACK);
+  81   3              stopI2C();
+  82   3                              delay_ms(100); //evita ruidos
+  83   3      
+  84   3              startI2C();
+  85   3              W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
+  86   3              W2DAT = 0x00; //XXX: como a mascara ta ligada, precisaria verificar o
+  87   3              //ack para nao ocorrer encavalamento de dados?
+  88   3              W2DAT = 0xFF;
+  89   3              stopI2C();
+  90   3      
+  91   3      
+  92   3                              while(!S1); //espera soltar o botao
+  93   3                              delay_ms(100);
+  94   3                        }
+  95   2                        if(!S2)
+  96   2            {
+  97   3                              LED1 = !LED1;
+  98   3              LED2 = !LED2;
+  99   3                              delay_ms(100); //evita ruidos
+ 100   3                              while(!S2); //espera soltar o botao
+ 101   3                              delay_ms(100);
+ 102   3                        }
+ 103   2      
+ 104   2              }
+ 105   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    176    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

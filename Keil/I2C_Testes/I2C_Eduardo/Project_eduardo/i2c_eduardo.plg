@@ -1,0 +1,64 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\I2C_Testes\I2C_Eduardo\Project_eduardo\i2c_eduardo.uvproj
+Project File Date:  10/22/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling Teste.c...
+Teste.c(59): error C141: syntax error near 'operationMode'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling Teste.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  STOPI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _ENABLEI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _ENABLEISR
+    MODULE:  .\output\Teste.obj (TESTE)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _OPERATIONMODE
+    MODULE:  .\output\Teste.obj (TESTE)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  STARTI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _OPERATIONMODE
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0826H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _ENABLEISR
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 082BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _ENABLEI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0830H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  STARTI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0836H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  STOPI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0841H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  STARTI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0847H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  STOPI2C
+    MODULE:  .\output\Teste.obj (TESTE)
+    ADDRESS: 0853H
+Program Size: data=9.0 xdata=0 code=191
+creating hex file from ".\output\i2c_eduardo"...
+".\output\i2c_eduardo" - 0 Error(s), 12 Warning(s).

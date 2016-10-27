@@ -30,12 +30,13 @@ void stop_T0(void);
 
 /**************************************************/
 // Vari�veis do TMR0
-unsigned char NBT0H  = 0xCB;			// Este tempo
-unsigned char NBT0L  = 0xEA;			// equivale a
-unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 100Hz
+unsigned char NBT0H  = 0x52;			// Este tempo
+unsigned char NBT0L  = 0x63;			// equivale a
+unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 30Hz
 
 /**************************************************/
-int timer_flag = 1;
+int timer_flag = 3;
+
 void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
@@ -96,7 +97,7 @@ void main(void){
 		}
 		if(timer_flag <= 0){
 			putstring("Lorem Ipsum10_HZ\n");
-			timer_flag = 1;
+			timer_flag = 3;
 		}
 	}
 }

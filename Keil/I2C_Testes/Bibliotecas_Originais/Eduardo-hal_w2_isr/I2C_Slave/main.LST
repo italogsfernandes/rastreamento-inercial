@@ -1,0 +1,126 @@
+C51 COMPILER V9.50a   MAIN                                                                 02/25/2013 10:15:19 PAGE 1   
+
+
+C51 COMPILER V9.50a, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE main.c BROWSE INCDIR(..\hal;..\hal\nrf24le1;..\common) DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /******************************************************/
+   2          /* I2C Slave example code
+   3          /* Wait for data, increase the first byte by 1,
+   4          /* Send back the first byte increased when requested.
+   5          /******************************************************/
+   6          
+   7          #include "nrf24le1.h"
+   8          #include <hal_w2.h>
+   9          uint8_t flag =0;
+  10          uint8_t flag2 =0;
+  11          uint8_t int_count=0;
+  12          uint8_t TX =0;
+  13          uint8_t first_byte=0;
+  14          void main()
+  15          {
+  16   1      
+  17   1      //      uint8_t data_string[3];
+  18   1              uint8_t w2con1_value;
+  19   1              uint8_t W2DAT_value;
+  20   1              flag=0;
+  21   1              //*************************Setup Timer0
+  22   1              TMOD |= 0x01;   //16 bit timer
+  23   1              ET0=1; //Enable interupt 
+  24   1              EA= 1;
+  25   1      //*************************** Init GPIO Pins    
+  26   1              P0DIR = 0x00;
+  27   1              P1DIR = 0xFF;
+  28   1              P2DIR = 0xFF;   
+  29   1              P3DIR = 0xFF;
+  30   1      
+  31   1      //*************************** Init I2C
+  32   1              
+  33   1              hal_w2_enable(1);  
+  34   1              hal_w2_set_clk_freq(HAL_W2_400KHZ);
+  35   1              hal_w2_set_op_mode(HAL_W2_SLAVE);
+  36   1              hal_w2_set_slave_address(0x07);// Slave ADDRESS 0x07
+  37   1              hal_w2_alter_clock(1);
+  38   1              hal_w2_irq_adr_match_enable(1);
+  39   1              hal_w2_irq_stop_cond_enable(0);
+  40   1              INTEXP |= 0x04; 
+  41   1              IEN1 |= 0x04;
+  42   1              P0=0xAA;
+  43   1              flag=0;
+  44   1              while(1){P0=flag;}
+  45   1              
+  46   1      
+  47   1      }
+*** WARNING C280 IN LINE 18 OF main.c: 'w2con1_value': unreferenced local variable
+*** WARNING C280 IN LINE 19 OF main.c: 'W2DAT_value': unreferenced local variable
+  48          
+  49          void Timer0_IRQ(void) interrupt 1
+  50          {
+  51   1              flag++;
+  52   1              TL0=0;
+  53   1              TH0=0xFF;
+C51 COMPILER V9.50a   MAIN                                                                 02/25/2013 10:15:19 PAGE 2   
+
+  54   1      }
+  55          
+  56          void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
+  57          {
+  58   1              uint8_t w2con1_value;
+  59   1              uint8_t w2dat_value;
+  60   1              w2con1_value = W2CON1;
+  61   1              if ((w2con1_value & 0x04) )        //Interrupt for address matched
+  62   1              {
+  63   2                      // Check if RX or TX
+  64   2                      int_count++;
+  65   2                      if (W2DAT&0x01) //TX
+  66   2                      {
+  67   3                              TX=1; //TX
+  68   3                              W2DAT=flag;
+  69   3                      }
+  70   2                      else //RX
+  71   2                      {
+  72   3                              TX=0; //RX
+  73   3                              first_byte=1;
+  74   3                       }
+  75   2              }
+  76   1              else  
+  77   1              {
+  78   2                      if ((w2con1_value & 0x01)) //  Interrupt for byte sent or received 
+  79   2                      {
+  80   3                              if (TX==1) //next byte to send
+  81   3                              {
+  82   4                                      if (!(w2con1_value & 0x02))     // if not NAK
+  83   4                                      {
+  84   5                                                      W2DAT=flag;
+  85   5                                      }
+  86   4                              }
+  87   3                              else //byte to receive
+  88   3                              {
+  89   4                                      w2dat_value=W2DAT;
+  90   4                                      //get the value of the first byte and increase by 1 
+  91   4                                      if (first_byte) {flag=w2dat_value+1;first_byte=0;}
+  92   4                              }
+  93   3                                      
+  94   3                      }
+  95   2              }                  
+  96   1              
+  97   1      
+  98   1       }
+  99          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    155    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      5       2
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)
