@@ -4,27 +4,79 @@ First write 1 in bit7 of IEN0 to enable global interrupts and 1 in bit0.
 Write 1 in bit3 of INTEXP to select INT0.
 We have to write ISR for INT0.
 */
-
-
+/*Portas usadas
+P0.2 = btn 1 - pull up
+P0.4 = btn 2 - pull up
+P0.3 = LED vermelho
+P0.6 = Interrupt ...
+P0.5 = W2SDA
+P0.4 = W2SCL
+*/
 
 #include"reg24le1.h"         // I/O header file for NRF24LE1
-#include &lt;stdint.h&gt;     // header file containing standard I/O functions
+#include"stdint.h"         // header file containing standard I/O functions
 #include"hal_delay.h"      // header file containing delay functions
 #include"isrdef24le1.h"    //header file containing Interrupt Service Routine definition for NRF24LE1
+
+//Definicoes dos botoes e leds
+#define	PIN32 //m�dulo com 32 pinos
+#ifdef 	PIN32
+//Pushbuttons
+sbit S1  = P0^2;    // 1/0=no/press
+sbit S2  = P1^4;    // 1/0=no/press
+//LEDS
+sbit LEDVM = P0^3; // 1/0=light/dark
+//LED desativado pois havera uma interrupção nele:
+//sbit LEDVD = P0^6; // 1/0=light/dark
+#endif
+
+void luzes_iniciais(void);
+void italo_delay_ms(unsigned int x);
+
+void setup(void){
+    //*************************** Init GPIO Pins
+    P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
+    P1DIR = 0xFF;   // Tudo input
+    P2DIR = 0xFF;
+    P0CON = 0x00;  	// All general I/O
+    P1CON = 0x00;  	// All general I/O
+    P2CON = 0x00;  	// All general I/O
+    //*************************** Init I2C
+    luzes_iniciais();
+}
+
 void main() // main code
 {
-    P0DIR = 0xf0;           // make upper 4 bits of Port0 as input
-    P1DIR = 0;                  // set Port1 as output
-    P1 = 0x00;                 // make all pins of Port1 low
-    IEN0 = 0x81;              // enable interrupt from pin
-    INTEXP = 0x08;       // enable INT0
+    setup();
+    IEN0&=0x81;          // enable interrupt from pin
+    INTEXP&=0x10;       // enable INT1
+    TCON&=0x04;         //select falling for int1 mode
     while(1);                     // infinite loop, wait for interrupt
 
 }
-EXT_INT0_ISR()  // Interrupt Service Routine
+EXT_INT1_ISR()  // Interrupt Service Routine
 {
-    P1 = 0xff;                                  // make all pins of Port1 high
-    delay_ms(1000);                   // delay of 1 second
-    P1 = 0x00;                            // make all pins of Port1 Low
-    delay_ms(1000);                 // delay of 1 second
+    LEDVM = !LEDVM;
 }
+/****************/
+void italo_delay_ms(unsigned int x)
+{
+    unsigned int i,j;
+    i=0;
+    for(i=0;i<x;i++)
+    {
+       j=508;
+           ;
+       while(j--);
+    }
+}
+void luzes_iniciais(void){
+        LEDVM = 1;
+        italo_delay_ms(1000);
+        LEDVM = 0;
+        italo_delay_ms(1000);
+        LEDVM = 1;
+        italo_delay_ms(1000);
+        LEDVM = 0;
+}
+/***************/
