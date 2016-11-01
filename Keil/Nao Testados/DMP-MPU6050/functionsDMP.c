@@ -10,10 +10,6 @@
 #include "stdbool.h"
 
 //************************TODO****************//
-//NOTE: O Eduardo falou q ia fazer essas:
-// -------------------Algo semelhante ao writeBit e writeBits
-//Feito isso o negocio fica quase 100% pronto
-//Ver na biblioteca original para entender como funcionam essas bibliotecas
 //-------------------readBits
 //-------------------writeBit
 //-------------------writeBits
@@ -47,13 +43,6 @@ uint8_t *dmpPacketBuffer; //usado em dmpGetQuaternion
 
 void initialize(){
   //setClockSource(MPU6050_CLOCK_PLL_XGYRO);
-  /*setClockSource(0x01);
-   *                   devAddr, regAddr, bitStart, length, data);
-   * I2Cdev::writeBits(devAddr,   0x6B,         2,      3, 0x01);
-   * I2Cdev::writeBits(devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
-   */
-
-  // Resumindo: Implementar writeBits abaixo:
   writeBits(MPU_endereco, 0x6B, 2, 3, 0x01); //setClockSource
 
 
@@ -146,13 +135,13 @@ void dmpInitialize(){
 
   //BUG: nem o povo que fez a original sabia oq ta acontecendo
   //setSlaveAddress(0, 0x7F);
-  writeByte(devAddr, 0x25, 0x7F);
+  writeByte(MPU_endereco, 0x25, 0x7F);
   //setI2CMasterModeEnabled(false);
-  writeBit(devAddr, 0x6A, 5, false);
+  writeBit(MPU_endereco, 0x6A, 5, false);
   //setSlaveAddress(0, 0x68);
-  writeByte(devAddr, 0x25, 0x68);
+  writeByte(MPU_endereco, 0x25, 0x68);
   //resetI2CMaster()
-  writeBit(devAddr, 0x6A, 1, true);
+  writeBit(MPU_endereco, 0x6A, 1, true);
   delay(20);
 
   // load DMP code into memory banks
@@ -161,29 +150,29 @@ void dmpInitialize(){
       //BUG: funcoes dentro do if
       if (writeProgDMPConfigurationSet(dmpConfig, MPU6050_DMP_CONFIG_SIZE)) {
           //setClockSource(MPU6050_CLOCK_PLL_ZGYRO);
-          writeBits(devAddr, 0x6B, 2, 3, 0x03);
+          writeBits(MPU_endereco, 0x6B, 2, 3, 0x03);
           //setIntEnabled(0x12);
-          writeByte(devAddr, 0x38, 0x12);
+          writeByte(MPU_endereco, 0x38, 0x12);
           //setRate(4); // 1khz / (1 + 4) = 200 Hz
-          writeByte(devAddr, 0x19, 4);
+          writeByte(MPU_endereco, 0x19, 4);
           //setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
-          writeBits(devAddr, 0x1A, 5, 3, 0x1);
+          writeBits(MPU_endereco, 0x1A, 5, 3, 0x1);
           //setDLPFMode(MPU6050_DLPF_BW_42);
-          writeBits(devAddr, 0x1A, 2, 3, 0x03);
+          writeBits(MPU_endereco, 0x1A, 2, 3, 0x03);
           //setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
-          writeBits(devAddr, 0x1B, 4, 2, 0x03);
+          writeBits(MPU_endereco, 0x1B, 4, 2, 0x03);
           //setDMPConfig1(0x03);
           //setDMPConfig2(0x00);
-          writeByte(devAddr, 0x70, 0x03);
-          writeByte(devAddr, 0x71, 0x00);
+          writeByte(MPU_endereco, 0x70, 0x03);
+          writeByte(MPU_endereco, 0x71, 0x00);
           //setOTPBankValid(false);
-          writeBit(devAddr, 0x00, 0, false);
+          writeBit(MPU_endereco, 0x00, 0, false);
           //setXGyroOffsetTC(xgOffsetTC);
           //setYGyroOffsetTC(ygOffsetTC);
           //setZGyroOffsetTC(zgOffsetTC);
-          writeBits(devAddr, 0x00, 6, 6, xgOffsetTC);
-          writeBits(devAddr, 0x01, 6, 6, ygOffsetTC);
-          writeBits(devAddr, 0x02, 6, 6, zgOffsetTC);
+          writeBits(MPU_endereco, 0x00, 6, 6, xgOffsetTC);
+          writeBits(MPU_endereco, 0x01, 6, 6, ygOffsetTC);
+          writeBits(MPU_endereco, 0x02, 6, 6, zgOffsetTC);
           //XXX: I stopped here yesterday, ok i'm back
 
           //BUG: tipo de memoria a se utilizar
@@ -208,21 +197,21 @@ void dmpInitialize(){
           getFIFOBytes(fifoBuffer, fifoCount);
 
           //setMotionDetectionThreshold(2);
-          writeByte(devAddr, 0x1F, 2);
+          writeByte(MPU_endereco, 0x1F, 2);
           //setZeroMotionDetectionThreshold(156);
-          writeByte(devAddr, 0x21, 156);
+          writeByte(MPU_endereco, 0x21, 156);
           //setMotionDetectionDuration(80);
-          writeByte(devAddr, 0x20, 80);
+          writeByte(MPU_endereco, 0x20, 80);
           //setZeroMotionDetectionDuration(0);
-          writeByte(devAddr, 0x22, 0);
+          writeByte(MPU_endereco, 0x22, 0);
 
           resetFIFO();
           //writeBit(devAddr, 0x6A, 2, true);
           //setFIFOEnabled(true);
-          writeBit(devAddr, 0x6A, 6, true);
+          writeBit(MPU_endereco, 0x6A, 6, true);
           setDMPEnabled(true);
           //resetDMP();
-          writeBit(devAddr, 0x6A, 3, true);
+          writeBit(MPU_endereco, 0x6A, 3, true);
 
           //(F("Writing final memory update 3/7 (function unknown)..."));
           for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
@@ -280,18 +269,18 @@ void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
-    writeByte(devAddr, 0x6D, bank);
+    writeByte(MPU_endereco, 0x6D, bank);
 }
 int8_t getXGyroOffsetTC() {
-    readBits(devAddr, 0x00, 6, 6, buffer);
+    readBits(MPU_endereco, 0x00, 6, 6, buffer);
     return buffer[0];
 }
 int8_t getYGyroOffsetTC() {
-    readBits(devAddr, 0x01, 6, 6, buffer);
+    readBits(MPU_endereco, 0x01, 6, 6, buffer);
     return buffer[0];
 }
 int8_t getZGyroOffsetTC() {
-    readBits(devAddr, 0x02, 6, 6, buffer);
+    readBits(MPU_endereco, 0x02, 6, 6, buffer);
     return buffer[0];
 }
 bool MPU6050::writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
@@ -325,14 +314,14 @@ bool MPU6050::writeMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t b
             // write the chunk of data as specified
             progBuffer = (uint8_t *)data + i;
         }
-        writeBytes(devAddr, 0x6F, chunkSize, progBuffer);
+        writeBytes(MPU_endereco, 0x6F, chunkSize, progBuffer);
 
         // verify data if needed
         if (verify && verifyBuffer) {
             setMemoryBank(bank);
             //setMemoryStartAddress(address);
             writeByte(MPU_endereco, 0x6E, address);
-            readBytes(devAddr, 0x6F, chunkSize, verifyBuffer);
+            readBytes(MPU_endereco, 0x6F, chunkSize, verifyBuffer);
             if (memcmp(progBuffer, verifyBuffer, chunkSize) != 0) {
                 free(verifyBuffer);
                 if (useProgMem) free(progBuffer);
@@ -418,7 +407,7 @@ bool MPU6050::writeDMPConfigurationSet(const uint8_t *data, uint16_t dataSize, b
                 //setIntZeroMotionEnabled(true);
                 //setIntFIFOBufferOverflowEnabled(true);
                 //setIntDMPEnabled(true);
-                I2Cdev::writeByte(devAddr, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
+                writeByte(MPU_endereco, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
 
                 success = true;
             } else {
