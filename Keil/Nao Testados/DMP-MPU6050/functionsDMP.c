@@ -4,8 +4,10 @@
 #include "nrf24le1.h"
 
 //Bibliotecas do exemplo de I2C
-#include <hal_w2_isr.h> //Biblioteca para o I2C. TODO: Selecionar entre essa e a outra disponivel (hal_w2)
+#include <hal_w2_isr.h>
 #include "hal_delay.h"
+#include "stdint.h"
+#include "stdbool.h"
 
 //************************TODO****************//
 //NOTE: O Eduardo falou q ia fazer essas:
@@ -72,7 +74,6 @@ void initialize(){
   writeBit(MPU_endereco, 0x6B, 6, false); //setSleepEnabled(false);
 }
 
-//TODO: Verificar se vou precisar de biblioteca pra este tipo?
 bool testConnection(){
     //return getDeviceID() == 0x34;
     // getDeviceID:
