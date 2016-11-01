@@ -18,7 +18,7 @@ P0.4 = W2SCL
 #include"hal_delay.h"      // header file containing delay functions
 #include"isrdef24le1.h"    //header file containing Interrupt Service Routine definition for NRF
 
-#define INTERRUPT_IPF 2		
+#define INTERRUPT_IPF 2		//referencia keil interrupt 8051
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
 #ifdef 	PIN32

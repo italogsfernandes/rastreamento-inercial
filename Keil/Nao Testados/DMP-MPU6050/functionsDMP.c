@@ -49,17 +49,7 @@ void initialize(){
   /************************************/
   /* setFullScaleGyroRange(MPU6050_GYRO_FS_250);
    * setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-   * Vou levar em conta que por padrão
-   * as escalas estão definidas em +-250graus/s e +-2g
-   * Se precisar dps me preocupo com isso?
-  */
-  /************************************/
-  /* setSleepEnabled(false)
-   * I2Cdev::writeBit(devAddr, 0x6B, 6, false);
-   * I2Cdev::writeBit(devAddr, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
    */
-
-  // Resumindo: Implementar writeBit abaixo:
   writeBit(MPU_endereco, 0x6B, 6, false); //setSleepEnabled(false);
 }
 
