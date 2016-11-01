@@ -1,0 +1,117 @@
+C51 COMPILER V9.56.0.0   INTERRUPT_TESTE_INT1                                              10/31/2016 09:33:58 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE INTERRUPT_TESTE_INT1
+OBJECT MODULE PLACED IN interrupt_teste_INT1.OBJ
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE interrupt_teste_INT1.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          /*
+   2          INT0 is P0.5 and for INT1 is P0.6.
+   3          First write 1 in bit7 of IEN0 to enable global interrupts and 1 in bit0.
+   4          Write 1 in bit3 of INTEXP to select INT0.
+   5          We have to write ISR for INT0.
+   6          */
+   7          /*Portas usadas
+   8          P0.2 = btn 1 - pull up
+   9          P0.4 = btn 2 - pull up
+  10          P0.3 = LED vermelho
+  11          P0.6 = Interrupt ...
+  12          P0.5 = W2SDA
+  13          P0.4 = W2SCL
+  14          */
+  15          
+  16          #include"reg24le1.h"         // I/O header file for NRF24LE1
+  17          #include"stdint.h"         // header file containing standard I/O functions
+  18          #include"hal_delay.h"      // header file containing delay functions
+  19          #include"isrdef24le1.h"    //header file containing Interrupt Service Routine definition for NRF24LE1
+  20          
+  21          //Definicoes dos botoes e leds
+  22          #define PIN32 //m�dulo com 32 pinos
+  23          #ifdef  PIN32
+  24          //Pushbuttons
+  25          sbit S1  = P0^2;    // 1/0=no/press
+  26          sbit S2  = P1^4;    // 1/0=no/press
+  27          //LEDS
+  28          sbit LEDVM = P0^3; // 1/0=light/dark
+  29          //LED desativado pois havera uma interrupção nele:
+  30          //sbit LEDVD = P0^6; // 1/0=light/dark
+  31          #endif
+  32          
+  33          void luzes_iniciais(void);
+  34          void italo_delay_ms(unsigned int x);
+  35          
+  36          void setup(void){
+  37   1          //*************************** Init GPIO Pins
+  38   1          P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
+  39   1          P1DIR = 0xFF;   // Tudo input
+  40   1          P2DIR = 0xFF;
+  41   1          P0CON = 0x00;       // All general I/O
+  42   1              //PQ p1com?
+  43   1          P1CON |= 0x53;      // All general I/O
+  44   1          P2CON = 0x00;       // All general I/O
+  45   1          //*************************** Init I2C
+  46   1          luzes_iniciais();
+  47   1      }
+  48          
+  49          void main() // main code
+  50          {
+  51   1          setup();
+  52   1              EX0=1;
+  53   1              INTEXP = 0x10;
+  54   1              IT0 = 1;
+  55   1              EA = 1;
+C51 COMPILER V9.56.0.0   INTERRUPT_TESTE_INT1                                              10/31/2016 09:33:58 PAGE 2   
+
+  56   1              LEDVM = 1;
+  57   1          /*
+  58   1              IEN0&=0x81;          // enable interrupt from pin
+  59   1          INTEXP&=0x10;       // enable INT1
+  60   1          TCON&=0x04;         //select falling for int1 mode
+  61   1              */
+  62   1      
+  63   1          while(1);                     // infinite loop, wait for interrupt
+  64   1      
+  65   1      }
+  66          
+  67          void ext0_irq(void) interrupt 0 
+  68          {
+  69   1          LEDVM = !LEDVM;
+  70   1      }
+  71          /****************/
+  72          void italo_delay_ms(unsigned int x)
+  73          {
+  74   1          unsigned int i,j;
+  75   1          i=0;
+  76   1          for(i=0;i<x;i++)
+  77   1          {
+  78   2             j=508;
+  79   2                 ;
+  80   2             while(j--);
+  81   2          }
+  82   1      }
+  83          void luzes_iniciais(void){
+  84   1              LEDVM = 1;
+  85   1              italo_delay_ms(1000);
+  86   1              LEDVM = 0;
+  87   1              italo_delay_ms(1000);
+  88   1              LEDVM = 1;
+  89   1              italo_delay_ms(1000);
+  90   1              LEDVM = 0;
+  91   1      }
+  92          /***************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     94    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

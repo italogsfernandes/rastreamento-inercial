@@ -16,8 +16,9 @@ P0.4 = W2SCL
 #include"reg24le1.h"         // I/O header file for NRF24LE1
 #include"stdint.h"         // header file containing standard I/O functions
 #include"hal_delay.h"      // header file containing delay functions
-#include"isrdef24le1.h"    //header file containing Interrupt Service Routine definition for NRF24LE1
+#include"isrdef24le1.h"    //header file containing Interrupt Service Routine definition for NRF
 
+#define INTERRUPT_IPF 0		//pq 0?
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
 #ifdef 	PIN32
@@ -39,7 +40,8 @@ void setup(void){
     P1DIR = 0xFF;   // Tudo input
     P2DIR = 0xFF;
     P0CON = 0x00;  	// All general I/O
-    P1CON = 0x00;  	// All general I/O
+	//PQ p1com?
+    P1CON |= 0x53;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
     //*************************** Init I2C
     luzes_iniciais();
@@ -48,13 +50,22 @@ void setup(void){
 void main() // main code
 {
     setup();
-    IEN0&=0x81;          // enable interrupt from pin
+	EX0=1;
+	INTEXP = 0x10;
+	IT0 = 1;
+	EA = 1;
+	LEDVM = 1;
+    /*
+	IEN0&=0x81;          // enable interrupt from pin
     INTEXP&=0x10;       // enable INT1
     TCON&=0x04;         //select falling for int1 mode
+	*/
+
     while(1);                     // infinite loop, wait for interrupt
 
 }
-EXT_INT1_ISR()  // Interrupt Service Routine
+
+void ext0_irq(void) interrupt INTERRUPT_IPF 
 {
     LEDVM = !LEDVM;
 }

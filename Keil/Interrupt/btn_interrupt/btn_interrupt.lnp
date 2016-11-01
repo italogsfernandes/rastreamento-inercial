@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"interrupt_teste_INT1.obj" 
+TO "btn_interrupt" 
+RAMSIZE(256) 

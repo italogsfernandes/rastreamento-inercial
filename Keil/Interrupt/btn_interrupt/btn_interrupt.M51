@@ -1,0 +1,199 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/31/2016  09:33:59  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE STARTUP.obj, interrupt_teste_INT1.obj TO btn_interrupt RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  STARTUP.obj (?C_STARTUP)
+  interrupt_teste_INT1.obj (INTERRUPT_TESTE_INT1)
+
+
+LINK MAP OF MODULE:  btn_interrupt (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            IDATA   0008H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0003H     ABSOLUTE     
+                    0006H     07FAH                  *** GAP ***
+            CODE    0800H     0021H     UNIT         ?PR?_ITALO_DELAY_MS?INTERRUPT_TESTE_INT1
+            CODE    0821H     0016H     UNIT         ?PR?LUZES_INICIAIS?INTERRUPT_TESTE_INT1
+            CODE    0837H     0014H     UNIT         ?PR?SETUP?INTERRUPT_TESTE_INT1
+            CODE    084BH     0010H     UNIT         ?PR?MAIN?INTERRUPT_TESTE_INT1
+            CODE    085BH     000CH     UNIT         ?C_C51STARTUP
+            CODE    0867H     0003H     UNIT         ?PR?EXT0_IRQ?INTERRUPT_TESTE_INT1
+
+
+
+OVERLAY MAP OF MODULE:   btn_interrupt (?C_STARTUP)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?INTERRUPT_TESTE_INT1
+
+?PR?MAIN?INTERRUPT_TESTE_INT1
+  +--> ?PR?SETUP?INTERRUPT_TESTE_INT1
+
+?PR?SETUP?INTERRUPT_TESTE_INT1
+  +--> ?PR?LUZES_INICIAIS?INTERRUPT_TESTE_INT1
+
+?PR?LUZES_INICIAIS?INTERRUPT_TESTE_INT1
+  +--> ?PR?_ITALO_DELAY_MS?INTERRUPT_TESTE_INT1
+
+
+
+SYMBOL TABLE OF MODULE:  btn_interrupt (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 2
+
+
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:085BH         SEGMENT       ?C_C51STARTUP
+  I:0008H         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:085EH         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:085BH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:085BH         LINE#         133
+  C:085DH         LINE#         134
+  C:085EH         LINE#         135
+  C:085FH         LINE#         136
+  C:0861H         LINE#         185
+  C:0864H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        INTERRUPT_TESTE_INT1
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  C:084BH         PUBLIC        main
+  C:0867H         PUBLIC        ext0_irq
+  C:0837H         PUBLIC        setup
+  D:0088H         PUBLIC        TCON
+  B:00A8H.0       PUBLIC        EX0
+  B:0088H.0       PUBLIC        IT0
+  C:0800H         PUBLIC        _italo_delay_ms
+  D:00A6H         PUBLIC        INTEXP
+  D:0093H         PUBLIC        P0DIR
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  D:009FH         PUBLIC        P1CON
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 3
+
+
+  D:0095H         PUBLIC        P2DIR
+  D:0097H         PUBLIC        P2CON
+  D:0098H         PUBLIC        S0CON
+  C:0821H         PUBLIC        luzes_iniciais
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  B:0080H.3       PUBLIC        LEDVM
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          SETUP
+  C:0837H         LINE#         36
+  C:0837H         LINE#         38
+  C:083AH         LINE#         39
+  C:083DH         LINE#         40
+  C:0840H         LINE#         41
+  C:0843H         LINE#         43
+  C:0846H         LINE#         44
+  C:0848H         LINE#         46
+  -------         ENDPROC       SETUP
+  -------         PROC          MAIN
+  C:084BH         LINE#         49
+  C:084BH         LINE#         50
+  C:084BH         LINE#         51
+  C:084EH         LINE#         52
+  C:0850H         LINE#         53
+  C:0853H         LINE#         54
+  C:0855H         LINE#         55
+  C:0857H         LINE#         56
+  C:0859H         LINE#         63
+  -------         ENDPROC       MAIN
+  -------         PROC          EXT0_IRQ
+  C:0867H         LINE#         67
+  C:0867H         LINE#         69
+  C:0869H         LINE#         70
+  -------         ENDPROC       EXT0_IRQ
+  -------         PROC          _ITALO_DELAY_MS
+  D:0006H         SYMBOL        x
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:0800H         LINE#         72
+  C:0800H         LINE#         73
+  C:0800H         LINE#         75
+  C:0803H         LINE#         76
+  C:080AH         LINE#         77
+  C:080AH         LINE#         78
+  C:080EH         LINE#         80
+  C:0819H         LINE#         81
+  C:0820H         LINE#         82
+  -------         ENDPROC       _ITALO_DELAY_MS
+  -------         PROC          LUZES_INICIAIS
+  C:0821H         LINE#         83
+  C:0821H         LINE#         84
+  C:0823H         LINE#         85
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 4
+
+
+  C:082AH         LINE#         86
+  C:082CH         LINE#         87
+  C:082FH         LINE#         88
+  C:0831H         LINE#         89
+  C:0834H         LINE#         90
+  C:0836H         LINE#         91
+  -------         ENDPROC       LUZES_INICIAIS
+  -------         ENDMOD        INTERRUPT_TESTE_INT1
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0070H BYTE ( 5%) *
+******************************************************************************
+
+Program Size: data=9.0 xdata=0 code=112
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
