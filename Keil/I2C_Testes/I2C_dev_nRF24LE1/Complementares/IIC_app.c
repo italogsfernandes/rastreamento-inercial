@@ -1,87 +1,57 @@
-#include "reg24le1.h"
-#include "IIC_app.h"
-#include "stdbool.h"
-#include "intrins.h"
+C51 COMPILER V9.00   IIC_APP                                                               11/13/2010 14:52:47 PAGE 1   
 
 
-void IIC_init(void)
-{
-    FREQSEL(2);
-    MODE(MASTER);
-    W2CON1|=0x20;     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½Ð¶ï¿½
-    W2SADR=0x00;
-    EN2WIRE();        //Ê¹ï¿½ï¿½2-wire
-}
-//TODO: Testar sem, acho que eh desnecessaria
-void ex_int(void)
-{
-    IEN0|=0X80;
-    IEN0|=0X01;
-    TCON|=0X01;       //ï¿½Â½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½
-    INTEXP|=0x08; 	  //ï¿½ï¿½P05ï¿½ï¿½ï¿½ï¿½ï¿½Ð¶ï¿½
-    P0DIR|=0X20;	  //P05ï¿½ï¿½ï¿½ï¿½
-    P0DIR|=0x40;	  //P06ï¿½ï¿½ï¿½ï¿½
-    P05=1;
-    P06=1;
-}
-//TODO: testar sem acho q Ã© desnecessaria
-void Io_config(void)
-{
-    //LED p00
-    P0DIR&=0XFE;      //LED ï¿½ï¿½ï¿½ï¿½
-    P00=0;//XXX: why?
-    P1DIR|=0X01;
-    P10=0X01;
-}
+C51 COMPILER V9.00, COMPILATION OF MODULE IIC_APP
+OBJECT MODULE PLACED IN IIC_app.OBJ
+COMPILER INVOKED BY: D:\Program Files\KEIL C  V4\C51\BIN\C51.EXE IIC_app.c LARGE BROWSE DEBUG OBJECTEXTEND
 
-/*********************MINHAS MODIFICAÃ‡OES***********************/
+line level    source
 
-bool i2c_mpu_writeByte(uint8_t devAddr, uint8_t regAddr, uint8_t data){
-    return i2c_mpu_writeBytes(devAddr, regAddr, 1, &data);
-}
+*** WARNING C500 IN LINE 1 OF IIC_APP.C: LICENSE ERROR (R208: RENEW LICENSE ID CODE (LIC))
 
-bool i2c_mpu_writeBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
-    bool ack_received;
-    START();
-    W2DAT=((devAddr+0xa0)<<1)+0;//write
-    if(!ACK){ //IF ACK
-        W2DAT=regAddr;
-    }
-    //BUG: antes isso era um if? ue?
-    while(!ACK && data_len-- > 0) {
-        W2DAT=*data_ptr++ ;
-        numlimit++;
-        if(numlimit==16){
-            return false;
-        }
-    }
-    ack_received = !ACK;
-    STOP();
-    return ack_received;
-}
-
-bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
-    return i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
-}
-
-
-bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
-    bool ack_received;
-    START();
-    W2DAT=((devAddr+0xa0)<<1)+0;//write from slave
-    while(ACK);
-    W2DAT=regAddr;
-    while(ACK);
-
-    START();
-    W2DAT=((devAddr+0xa0)<<1)+1;//read from slave
-    while(ACK);
-    while(data_len-- && !ACK)
-    {
-        while(!READY);
-        *data_ptr++=W2DAT;
-    }
-    ack_received = !ACK;
-    STOP();
-    return ack_received;
-}
+   1          #include "reg24le1.h"
+   2          #include "IIC_app.h"
+   3          #include "intrins.h"
+   4          
+   5          void delay(unsigned int dx)
+   6          {
+   7   1      unsigned int di;
+   8   1        for(;dx>0;dx--)
+   9   1          for(di=120;di>0;di--)
+  10   1                  {
+  11   2                      ;
+  12   2                      }
+  13   1       }
+  14                                          
+  15          void IIC_init()
+  16          {
+  17   1      FREQSEL(2);
+  18   1      MODE(MASTER);
+  19   1      W2CON1|=0x20;     //ÆÁ±ÎËùÓÐµÄÖÐ¶Ï
+  20   1      W2SADR=0x00;
+  21   1      EN2WIRE();        //Ê¹ÄÜ2-wire
+  22   1      }
+  23          
+  24          void Io_config()
+  25          {
+  26   1      //LED p00
+  27   1      P0DIR&=0XFE;      //LED Êä³ö
+  28   1      P00=0;
+  29   1      P1DIR|=0X01;
+  30   1      P10=0X01;
+  31   1      }
+  32          
+  33          void uart_init()
+  34          {
+  35   1          CLKCTRL = 0x28;                         // ÉèÖÃÊ±ÖÓÔ´Îª16M  
+  36   1              CLKLFCTRL = 0x01; 
+  37   1      
+  38   1              P0DIR &= 0xF7;                          // P03 (TxD) 
+  39   1              P0DIR |= 0x10;                          // P04 (RxD)  
+  40   1              P0|=0x18;        
+  41   1                      
+  42   1              S0CON = 0x50;  
+  43   1              PCON |= 0x80;                           // ²¨ÌØÂÊ±¶Ôö
+  44   1              WDCON |= 0x80;                          // Ñ¡ÔñÄÚ²¿²¨ÌØÂÊ·¢ÉúÆ÷
+  45   1              
+  4

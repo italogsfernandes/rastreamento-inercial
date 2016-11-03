@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        10/31/2016  09:33:59  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/03/2016  10:03:13  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -25,8 +25,9 @@ LINK MAP OF MODULE:  btn_interrupt (?C_STARTUP)
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
-            CODE    0003H     0003H     ABSOLUTE     
-                    0006H     07FAH                  *** GAP ***
+                    0003H     0010H                  *** GAP ***
+            CODE    0013H     0003H     ABSOLUTE     
+                    0016H     07EAH                  *** GAP ***
             CODE    0800H     0021H     UNIT         ?PR?_ITALO_DELAY_MS?INTERRUPT_TESTE_INT1
             CODE    0821H     0016H     UNIT         ?PR?LUZES_INICIAIS?INTERRUPT_TESTE_INT1
             CODE    0837H     0014H     UNIT         ?PR?SETUP?INTERRUPT_TESTE_INT1
@@ -58,10 +59,10 @@ SEGMENT
 
 SYMBOL TABLE OF MODULE:  btn_interrupt (?C_STARTUP)
 
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/03/2016  10:03:13  PAGE 2
+
+
   VALUE           TYPE          NAME
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 2
-
-
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
@@ -118,10 +119,10 @@ SYMBOL TABLE OF MODULE:  btn_interrupt (?C_STARTUP)
   D:0093H         PUBLIC        P0DIR
   D:009EH         PUBLIC        P0CON
   D:0094H         PUBLIC        P1DIR
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/03/2016  10:03:13  PAGE 3
+
+
   D:009FH         PUBLIC        P1CON
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 3
-
-
   D:0095H         PUBLIC        P2DIR
   D:0097H         PUBLIC        P2CON
   D:0098H         PUBLIC        S0CON
@@ -134,30 +135,30 @@ SYMBOL TABLE OF MODULE:  btn_interrupt (?C_STARTUP)
   D:00D0H         PUBLIC        PSW
   D:00C0H         PUBLIC        IRCON
   -------         PROC          SETUP
-  C:0837H         LINE#         36
-  C:0837H         LINE#         38
-  C:083AH         LINE#         39
-  C:083DH         LINE#         40
-  C:0840H         LINE#         41
-  C:0843H         LINE#         43
-  C:0846H         LINE#         44
-  C:0848H         LINE#         46
+  C:0837H         LINE#         37
+  C:0837H         LINE#         39
+  C:083AH         LINE#         40
+  C:083DH         LINE#         41
+  C:0840H         LINE#         42
+  C:0843H         LINE#         44
+  C:0846H         LINE#         45
+  C:0848H         LINE#         47
   -------         ENDPROC       SETUP
   -------         PROC          MAIN
-  C:084BH         LINE#         49
   C:084BH         LINE#         50
   C:084BH         LINE#         51
-  C:084EH         LINE#         52
-  C:0850H         LINE#         53
-  C:0853H         LINE#         54
-  C:0855H         LINE#         55
-  C:0857H         LINE#         56
-  C:0859H         LINE#         63
+  C:084BH         LINE#         52
+  C:084EH         LINE#         53
+  C:0850H         LINE#         54
+  C:0853H         LINE#         55
+  C:0855H         LINE#         56
+  C:0857H         LINE#         57
+  C:0859H         LINE#         64
   -------         ENDPROC       MAIN
   -------         PROC          EXT0_IRQ
-  C:0867H         LINE#         67
-  C:0867H         LINE#         69
-  C:0869H         LINE#         70
+  C:0867H         LINE#         68
+  C:0867H         LINE#         70
+  C:0869H         LINE#         71
   -------         ENDPROC       EXT0_IRQ
   -------         PROC          _ITALO_DELAY_MS
   D:0006H         SYMBOL        x
@@ -165,29 +166,29 @@ SYMBOL TABLE OF MODULE:  btn_interrupt (?C_STARTUP)
   D:0004H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:0800H         LINE#         72
   C:0800H         LINE#         73
-  C:0800H         LINE#         75
-  C:0803H         LINE#         76
-  C:080AH         LINE#         77
+  C:0800H         LINE#         74
+  C:0800H         LINE#         76
+  C:0803H         LINE#         77
   C:080AH         LINE#         78
-  C:080EH         LINE#         80
-  C:0819H         LINE#         81
-  C:0820H         LINE#         82
+  C:080AH         LINE#         79
+  C:080EH         LINE#         81
+  C:0819H         LINE#         82
+  C:0820H         LINE#         83
   -------         ENDPROC       _ITALO_DELAY_MS
   -------         PROC          LUZES_INICIAIS
-  C:0821H         LINE#         83
   C:0821H         LINE#         84
-  C:0823H         LINE#         85
-BL51 BANKED LINKER/LOCATER V6.22                                                      10/31/2016  09:33:59  PAGE 4
+  C:0821H         LINE#         85
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/03/2016  10:03:13  PAGE 4
 
 
-  C:082AH         LINE#         86
-  C:082CH         LINE#         87
-  C:082FH         LINE#         88
-  C:0831H         LINE#         89
-  C:0834H         LINE#         90
-  C:0836H         LINE#         91
+  C:0823H         LINE#         86
+  C:082AH         LINE#         87
+  C:082CH         LINE#         88
+  C:082FH         LINE#         89
+  C:0831H         LINE#         90
+  C:0834H         LINE#         91
+  C:0836H         LINE#         92
   -------         ENDPROC       LUZES_INICIAIS
   -------         ENDMOD        INTERRUPT_TESTE_INT1
 

@@ -1,105 +1,75 @@
-#include "reg24le1.h"
-#include "I2CDev.h"
-#include <stdint.h>
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<ProjectOpt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="project_opt.xsd">
 
-//  Pushbuttons
-sbit S1  = P0^2;    // 1/0 = no/press
-sbit S2  = P1^4;    // 1/0 = no/press
-//  LEDS
-sbit LED1 = P0^3;   // 1/0 = light/dark
-sbit LED2 = P0^6;   // 1/0 = light/dark
+  <SchemaVersion>1.0</SchemaVersion>
 
-void delay_ms(unsigned int x)
-{
-    unsigned int i,j;
-    i=0;
-    for(i=0;i<x;i++)
-    {
-       j=508;
-           ;
-       while(j--);
-    }
-}
+  <Header>### uVision Project, (C) Keil Software</Header>
 
-void luzes_iniciais(void){
-        LED1 = 1; LED2 = 0;
-        delay_ms(1000);
-        LED1 = 0; LED2 = 1;
-        delay_ms(1000);
-        LED1 = 1; LED2 = 1;
-        delay_ms(1000);
-        LED1 = 0; LED2 = 0;
-}
+  <Extensions>
+    <cExt>*.c</cExt>
+    <aExt>*.s*; *.src; *.a*</aExt>
+    <oExt>*.obj</oExt>
+    <lExt>*.lib</lExt>
+    <tExt>*.txt; *.h; *.inc</tExt>
+    <pExt>*.plm</pExt>
+    <CppX>*.cpp</CppX>
+  </Extensions>
 
-void main()
-{
-  luzes_iniciais();
+  <DaveTm>
+    <dwLowDateTime>0</dwLowDateTime>
+    <dwHighDateTime>0</dwHighDateTime>
+  </DaveTm>
 
-  // Init GPIO Pins
-  P0DIR = 0x00;
-	P1DIR = 0xFF;
-	P2DIR = 0xFF;
-	P3DIR = 0xFF;
-
-  // Enable all interrupts
-  EA = 1;
-
-  // Configurações iniciais
-  P05 = 1;
-  P06 = 1;
-//NOTE: oq ta havendo aqui?
-  IEN0 |= 0X80;
-  IEN0 |= 0X01;
-  //NOTE: Por que nao usar a funcao de frequencia da biblioteca?
-  W2CON0 |= 0x04;     // Clock frequency, STD mode
-  W2CON0 &= 0xF7;
-  W2SADR=0x00
-
-  // Set master select
-  operationMode(true);
-
-  //TODO: to ativando as interrupções mas nao tem interrupt handle?
-  //ue?
-  // Enable all interrupts for I2C
-  enableISR(true);
-
-
-  // Enable I2C
-  enableI2C(true);
-
-  //TCON |= 0X01;
-  //INTEXP |= 0x04;
-
-  while(1)
-	{
-	   if(!S1)
-      {
-  			// Initial transfer
-        startI2C(); //NOTE: isso ta desativando as interrupções(ligando a mascara)
-        W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
-        while(ACK);
-        stopI2C();
-  			delay_ms(100); //evita ruidos
-
-        startI2C();
-        W2DAT = ((0x68 << 1) | 0);    // 0 = WRITE
-        W2DAT = 0x00; //XXX: como a mascara ta ligada, precisaria verificar o
-        //ack para nao ocorrer encavalamento de dados?
-        W2DAT = 0xFF;
-        stopI2C();
-
-
-  			while(!S1); //espera soltar o botao
-  			delay_ms(100);
-		  }
-		  if(!S2)
-      {
-  			LED1 = !LED1;
-        LED2 = !LED2;
-  			delay_ms(100); //evita ruidos
-  			while(!S2); //espera soltar o botao
-  			delay_ms(100);
-		  }
-
-	}
-}
+  <Target>
+    <TargetName>APP</TargetName>
+    <ToolsetNumber>0x0</ToolsetNumber>
+    <ToolsetName>MCS-51</ToolsetName>
+    <TargetOption>
+      <CLK51>24000000</CLK51>
+      <OPTTT>
+        <gFlags>1</gFlags>
+        <BeepAtEnd>1</BeepAtEnd>
+        <RunSim>1</RunSim>
+        <RunTarget>0</RunTarget>
+      </OPTTT>
+      <OPTHX>
+        <HexSelection>0</HexSelection>
+        <FlashByte>65535</FlashByte>
+        <HexRangeLowAddress>0</HexRangeLowAddress>
+        <HexRangeHighAddress>0</HexRangeHighAddress>
+        <HexOffset>0</HexOffset>
+      </OPTHX>
+      <OPTLEX>
+        <PageWidth>120</PageWidth>
+        <PageLength>65</PageLength>
+        <TabStop>8</TabStop>
+        <ListingPath>.\</ListingPath>
+      </OPTLEX>
+      <ListingPage>
+        <CreateCListing>1</CreateCListing>
+        <CreateAListing>1</CreateAListing>
+        <CreateLListing>1</CreateLListing>
+        <CreateIListing>0</CreateIListing>
+        <AsmCond>1</AsmCond>
+        <AsmSymb>1</AsmSymb>
+        <AsmXref>0</AsmXref>
+        <CCond>1</CCond>
+        <CCode>0</CCode>
+        <CListInc>0</CListInc>
+        <CSymb>0</CSymb>
+        <LinkerCodeListing>0</LinkerCodeListing>
+      </ListingPage>
+      <OPTXL>
+        <LMap>1</LMap>
+        <LComments>1</LComments>
+        <LGenerateSymbols>1</LGenerateSymbols>
+        <LLibSym>1</LLibSym>
+        <LLines>1</LLines>
+        <LLocSym>1</LLocSym>
+        <LPubSym>1</LPubSym>
+        <LXref>0</LXref>
+        <LExpSel>0</LExpSel>
+      </OPTXL>
+      <OPTFL>
+        <tvExp>1</tvExp>
+        <tvExpOptDlg>0</tv

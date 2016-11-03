@@ -9,55 +9,62 @@
  * the file.
  *              
  * $LastChangedRevision: 133 $
- */ 
-
-/** @file
- * @brief This file contain definitions related to the USB-controller and internal structures
  */
 
-#ifndef USB_H__
-#define USB_H__
+/** @file
+ * @brief Implementation of hal_uart
+ */
 
+//lint -e788
+//lint -e714
+
+#include "nrf24le1.h"
 #include <stdint.h>
+#include <stdbool.h>
+#include "hal_uart.h"
 
-#include "hal_usb.h"
-
-#define USB_ENDPOINT_IN_COUNT 5
-#define USB_ENDPOINT_OUT_COUNT 5
-
-#define USB_EP0_HSNAK() do { ep0cs = 0x02; } while(0)
-#define USB_EP0_STALL() do { ep0cs = 0x11; } while(0) // Set both DSTALL and STALL when we want to stall a request during a SETUP transaction
-#define USB_EP0_DSTALL() do { ep0cs |= 0x10; } while(0)
-
-#define INT_SUDAV    0x00
-#define INT_SOF      0x04
-#define INT_SUTOK    0x08
-#define INT_SUSPEND  0x0C
-#define INT_USBRESET 0x10
-#define INT_EP0IN    0x18
-#define INT_EP0OUT   0x1C
-#define INT_EP1IN    0x20
-#define INT_EP1OUT   0x24
-#define INT_EP2IN    0x28
-#define INT_EP2OUT   0x2C
-#define INT_EP3IN    0x30
-#define INT_EP3OUT   0x34
-#define INT_EP4IN    0x38
-#define INT_EP4OUT   0x3C
-#define INT_EP5IN    0x40
-#define INT_EP5OUT   0x44
-
-#define BM_REQUEST_TYPE  0
-#define B_REQUEST        1
-#define W_VALUE          2
-#define W_INDEX          4
-#define W_LENGTH         6
-
-typedef struct
-{
-    uint8_t *data_ptr;
-    uint8_t data_size;
-    uint8_t pkt_size;
-} packetizer_t;
-
+#ifndef UART_NBUF
+#define UART_NBUF   8
 #endif
+
+#define BAUD_57K6   1015  // = Round(1024 - (2*16e6)/(64*57600))
+#define BAUD_38K4   1011  // = Round(1024 - (2*16e6)/(64*38400))
+#define BAUD_19K2    998  // = Round(1024 - (2*16e6)/(64*19200))
+#define BAUD_9K6     972  // = Round(1024 - (2*16e6)/(64*9600))
+
+static uint8_t uart_tx_wp, uart_tx_rp, uart_tx_cnt;
+static uint8_t idata uart_tx[UART_NBUF];
+
+static uint8_t uart_rx_wp, uart_rx_rp, uart_rx_cnt;
+static uint8_t idata uart_rx[UART_NBUF];
+
+UART0_ISR()
+{
+  if (RI0 == 1)
+  {
+    RI0 = 0;
+    if (uart_rx_cnt < UART_NBUF)
+    {
+      uart_rx[uart_rx_wp] = S0BUF;
+      uart_rx_wp = (uart_rx_wp + 1) % UART_NBUF;
+      uart_rx_cnt++;
+    }
+  }
+  if (TI0 == 1)
+  {
+    TI0 = 0;
+    if (uart_tx_cnt > 1)
+    {
+      S0BUF = uart_tx[uart_tx_rp];
+      uart_tx_rp = (uart_tx_rp + 1) % UART_NBUF;
+    }
+    uart_tx_cnt--;
+  }
+}
+
+void hal_uart_init(hal_uart_baudrate_t baud)
+{
+  uint16_t temp;
+
+  ES0 = 0;                      // Disable UART0 interrupt while initializing
+  
