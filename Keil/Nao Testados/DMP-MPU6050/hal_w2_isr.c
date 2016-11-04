@@ -411,8 +411,29 @@ bool i2c_mpu_writeBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8
         data_to_write &= mask; // zero all non-important bits in data
         b &= ~(mask); // zero all important bits in existing byte
         b |= data_to_write; // combine data with existing byte
-        return writeByte(devAddr, regAddr, b);
+        return i2c_mpu_writeByte(devAddr, regAddr, b);
     } else {
         return false;
     }
+}
+int8_t i2c_mpu_readBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t *data_ptr){
+    uint8_t b;
+    uint8_t count = i2c_mpu_readByte(devAddr, regAddr, &b);
+    *data_ptr = b & (1 << bitNum);
+    return count;
+}
+int8_t i2c_mpu_readBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t data_length, uint8_t *data_ptr){
+    // 01101001 read byte
+    // 76543210 bit numbers
+    //    xxx   args: bitStart=4, length=3
+    //    010   masked
+    //   -> 010 shifted
+    uint8_t count, b;
+    if ((count = i2c_mpu_readByte(devAddr, regAddr, &b)) != 0) {
+        uint8_t mask = ((1 << data_length) - 1) << (bitStart - data_length + 1);
+        b &= mask;
+        b >>= (bitStart - data_length + 1);
+        *data_ptr = b;
+    }
+    return count;
 }
