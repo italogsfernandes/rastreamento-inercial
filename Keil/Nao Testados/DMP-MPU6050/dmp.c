@@ -52,32 +52,19 @@ void delay_i2c(unsigned int x) {
     }
 }
 
-void initialize(){
-  //setClockSource(MPU6050_CLOCK_PLL_XGYRO);
-  writeBits(MPU_endereco, 0x6B, 2, 3, 0x01); //setClockSource
-
-
-  /************************************/
-  /* setFullScaleGyroRange(MPU6050_GYRO_FS_250);
-   * setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-   */
+void initialize(void){
+  writeBits(MPU_endereco, 0x6B, 2, 3, 0x01);//setClockSource(MPU6050_CLOCK_PLL_XGYRO);
+  writeBits(MPU_endereco, 0x1B, 4, 2, 0x00);//setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+  writeBits(MPU_endereco, 0x1C, 4, 2, 0x00);//setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
   writeBit(MPU_endereco, 0x6B, 6, false); //setSleepEnabled(false);
 }
 
 bool testConnection(void){
-    //return getDeviceID() == 0x34;
-    // getDeviceID:
-    /*
-        I2Cdev::readBits(devAddr, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
-        I2Cdev::readBits(devAddr,  0x75, 6, 6, buffer);
-                         devAddr, regAddr, bit start,length,  *data_ptr, timeout
-        return buffer[0];
-    */
-    //TODO: otimizar para nao ser necessario o uso do buffer
     readBits(MPU_endereco, 0x75, 6, 6, buffer);
     return buffer[0] == 0x34;
 }
 
+//BUG:
 void dmpInitialize(void){
   /* Paços:
       - Reset device
@@ -272,6 +259,7 @@ void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
     if (prefetchEnabled) bank |= 0x40;
     writeByte(MPU_endereco, 0x6D, bank);
 }
+
 int8_t getXGyroOffsetTC(void) {
     readBits(MPU_endereco, 0x00, 6, 6, buffer);
     return buffer[0];
@@ -284,7 +272,9 @@ int8_t getZGyroOffsetTC(void) {
     readBits(MPU_endereco, 0x02, 6, 6, buffer);
     return buffer[0];
 }
-bool MPU6050::writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
+
+//BUG:
+bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
     setMemoryBank(bank);
     //setMemoryStartAddress(address);
     writeByte(MPU_endereco, 0x6E, address);
@@ -348,8 +338,7 @@ bool MPU6050::writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8
 bool writeProgMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify) {
     return writeMemoryBlock(data_prt, dataSize, bank, address, verify, true);
 }
-//TODO: doing
-bool MPU6050::writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
+bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
     uint8_t *progBuffer = 0;
 	uint8_t success, special;
     uint16_t i, j;
@@ -429,41 +418,23 @@ bool writeProgDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize) {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
 
-/*************/
-//setOffsets
 
 void setDMPEnabled(bool enabled){
-    //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
-    //I2Cdev::writeBit(devAddr, 0x6A, 7, true);
-    //                 devAddr, regAddr,Bit, value
     writeBit(MPU_endereco, 0x6A, 7, enabled);
 }
-
 uint8_t getIntStatus(void){
-    //I2Cdev::i2c_mpu_readByte(devAddr, MPU6050_RA_INT_STATUS, buffer);
-    //I2Cdev::i2c_mpu_readByte(devAddr, 0x3A, buffer);
-    //                 devAddr, regAddr, data timeout
     i2c_mpu_readByte(MPU_endereco, 0x3A, buffer)
     return buffer[0];
 }
-
 uint16_t dmpGetFIFOPacketSize(void) {
     return dmpPacketSize;
 }
-
 uint16_t getFIFOCount(void) {
-    // I2Cdev::i2c_mpu_readBytes(devAddr, MPU6050_RA_FIFO_COUNTH, 2, buffer);
-    // I2Cdev::i2c_mpu_readBytes(devAddr, 0x72, 2, buffer);
-    //                   devAddr, regAddr, length, *data_ptr timeout
-    // return (((uint16_t)buffer[0]) << 8) | buffer[1];
     i2c_mpu_readBytes(MPU_endereco, 0x72, 2, buffer);
     return (((uint16_t)buffer[0]) << 8) | buffer[1];
 }
 
 void resetFIFO(void) {
-    //I2Cdev::writeBit(devAddr, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
-    //I2Cdev::writeBit(devAddr, 0x6A, 2, true);
-    //                  devAddr, regAddr, bit, value
     writeBit(MPU_endereco, 0x6A, 2, true);
 }
 
@@ -484,19 +455,6 @@ uint8_t dmpGetQuaternion(int16_t *data_ptr, const uint8_t* packet) {
     return 0;
 }
 
-uint8_t dmpGetQuaternion(Quaternion *q, const uint8_t* packet) {
-    int16_t qI[4];
-    uint8_t status = dmpGetQuaternion(qI, packet);
-    if (status == 0) {
-        q -> w = (float)qI[0] / 16384.0f;
-        q -> x = (float)qI[1] / 16384.0f;
-        q -> y = (float)qI[2] / 16384.0f;
-        q -> z = (float)qI[3] / 16384.0f;
-        return 0;
-    }
-    return status; // int16 return value, indicates error if this line is reached
-}
-
 void getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy, int16_t* gz) {
     i2c_mpu_readBytes(MPU_endereco, 0x3B, 14, buffer);
     *ax = (((int16_t)buffer[0]) << 8) | buffer[1];
@@ -507,8 +465,6 @@ void getMotion6(int16_t* ax, int16_t* ay, int16_t* az, int16_t* gx, int16_t* gy,
     *gz = (((int16_t)buffer[12]) << 8) | buffer[13];
 }
 
-/**********************NOTE: OFFSETS*********************/
-//Set
 void setXAccelOffset(int16_t offset) {
     writeWord(MPU_endereco,  0x06, offset);
 }
@@ -552,4 +508,3 @@ int16_t getZGyroOffset(void) {
     i2c_mpu_readBytes(MPU_endereco, 0x17, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-/************************FIM dos OFFSETS****************/
