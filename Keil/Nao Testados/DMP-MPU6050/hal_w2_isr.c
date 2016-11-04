@@ -391,5 +391,5 @@ bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
 
 //*************NOTE: doing
 bool i2c_mpu_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data_to_write){
-    
+
 }
