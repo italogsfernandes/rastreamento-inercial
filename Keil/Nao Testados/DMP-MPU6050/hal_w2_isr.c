@@ -348,7 +348,6 @@ bool i2c_mpu_readByte(uint8_t devAddr, uint8_t regAddr, uint8_t *data_ptr) {
     return i2c_mpu_readBytes(devAddr, regAddr, 1, data_ptr);
 }
 
-
 bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8_t *data_ptr) {
 
     uint8_t w2_status;
@@ -387,4 +386,10 @@ bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
     }
 
     return ack_received;
+}
+
+
+//*************NOTE: doing
+bool i2c_mpu_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data_to_write){
+    
 }
