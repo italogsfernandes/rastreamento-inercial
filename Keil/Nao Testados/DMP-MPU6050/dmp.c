@@ -3,14 +3,14 @@
 #include "stdbool.h"
 
 void mpu_initialize(void){
-  writeBits(MPU_endereco, 0x6B, 2, 3, 0x01);//setClockSource(MPU6050_CLOCK_PLL_XGYRO);
-  writeBits(MPU_endereco, 0x1B, 4, 2, 0x00);//setFullScaleGyroRange(MPU6050_GYRO_FS_250);
-  writeBits(MPU_endereco, 0x1C, 4, 2, 0x00);//setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
-  writeBit(MPU_endereco, 0x6B, 6, false); //setSleepEnabled(false);
+  i2c_mpu_writeBits(MPU_endereco, 0x6B, 2, 3, 0x01);//setClockSource(MPU6050_CLOCK_PLL_XGYRO);
+  i2c_mpu_writeBits(MPU_endereco, 0x1B, 4, 2, 0x00);//setFullScaleGyroRange(MPU6050_GYRO_FS_250);
+  i2c_mpu_writeBits(MPU_endereco, 0x1C, 4, 2, 0x00);//setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
+  i2c_mpu_writeBit(MPU_endereco, 0x6B, 6, false); //setSleepEnabled(false);
 }
 
 bool mpu_testConnection(void){
-    readBits(MPU_endereco, 0x75, 6, 6, buffer);
+    i2c_mpu_readBits(MPU_endereco, 0x75, 6, 6, buffer);
     return buffer[0] == 0x34;
 }
 
@@ -32,7 +32,7 @@ void getMotion6_packet(uint8_t *packet6){
 
 //Set offset
 void setXAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco,  0x06, offset);
+    i2c_mpu_writeWord(MPU_endereco,  0x06, offset);
 }
 void setYAccelOffset(int16_t offset) {
     writeWord(MPU_endereco, 0x08, offset);
