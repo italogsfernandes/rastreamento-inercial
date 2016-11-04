@@ -1,0 +1,394 @@
+AAAA-MM-DD HH-MM-SS.ssssss	Xac	Yac	Zac	Xgi	Ygi	Zgi	Xma	Yma	Zma	Wq	Iq	Jq	Kq	
+2016-11-03 16:23:03.452087	2016-11-03 16:23:04.453359	2016-11-03 16:23:05.784320	GY87 1 disconnected 2016-11-03 16:23:06.785642	2016-11-03 16:23:07.089179	DMP 1 ERROR (code 1)
+2016-11-03 16:23:09.052137	GY87 2 disconnected 2016-11-03 16:23:10.053434	2016-11-03 16:23:10.357869	DMP 2 ERROR (code 1)
+2016-11-03 16:23:11.359096	2016-11-03 16:23:13.066617	GY87 1 disconnected 2016-11-03 16:23:14.067874	2016-11-03 16:23:14.372086	DMP 1 ERROR (code 1)
+2016-11-03 16:23:16.335266	GY87 2 disconnected 2016-11-03 16:23:17.336528	2016-11-03 16:23:17.640773	DMP 2 ERROR (code 1)
+2016-11-03 16:23:19.604373	GY87 3 disconnected 2016-11-03 16:23:21.132162	GY87 1 disconnected 2016-11-03 16:23:22.133454	2016-11-03 16:23:22.437420	DMP 1 ERROR (code 1)
+2016-11-03 16:23:22.957659	GY87 2 connected DMP 2 ready
+2016-11-03 16:23:23.474001	GY87 3 connected DMP 3 ready
+2016-11-03 16:23:25.018516	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	raw	rawùGY87 1 connected DMP 1 ready
+2016-11-03 16:23:25.538236	GY87 2 connected DMP 2 ready
+2016-11-03 16:23:26.054205	GY87 3 connected DMP 3 ready
+2016-11-03 16:23:26.054678	raw	FIFO overflow!
+2016-11-03 16:23:26.066752	0.99	-0.00	-0.00	-0.16	FIFO overflow!
+2016-11-03 16:23:26.082748	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.095118	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.107346	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.124176	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.136309	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.148398	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.164686	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.177114	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.189599	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.205500	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.217990	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.230417	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.246375	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.259169	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.271196	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.287248	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.299966	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.312205	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.328190	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.340772	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.353264	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.365474	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.381883	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.394137	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.5	0.95	0.16	0.00	
+2016-11-03 16:23:26.406486	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.422746	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.435191	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.447326	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.463718	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.476017	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.488428	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.504668	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.517012	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.529290	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.545702	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.557863	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.570318	raw	0.99	-0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.586314	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.598811	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.611469	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.627278	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.639672	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.652140	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.5	0.95	0.16	0.00	
+2016-11-03 16:23:26.668100	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.680740	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.692964	raw	0.99	0.00	-0.00	-0.16	1.0	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.705375	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.721864	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.734098	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.746349	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.00	
+2016-11-03 16:23:26.762785	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.01	
+2016-11-03 16:23:26.774964	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.25	0.95	0.16	0.01	
+2016-11-03 16:23:26.787247	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.803707	raw	0.99	0.00	-0.00	-0.16	1.0	0.02	-0.00	0.00	0.6	0.95	0.16	0.01	
+2016-11-03 16:23:26.816091	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.828596	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.844664	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.856981	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.869277	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.885600	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.898037	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.910188	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.922452	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	FIFO overflow!
+2016-11-03 16:23:26.934873	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.935298	raw	FIFO overflow!
+2016-11-03 16:23:26.947341	0.99	0.00	-0.00	-0.16	FIFO overflow!
+2016-11-03 16:23:26.963240	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.975684	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:26.988041	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.003992	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.017004	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.029129	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.044900	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.057565	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.070024	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.082181	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.098641	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.110812	raw	0.9	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.123612	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.139628	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.151898	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.164339	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.180534	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.192891	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.205168	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.00	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.221489	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.233900	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.246015	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.262250	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.274630	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.286911	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.303277	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.315604	raw	0.99	0.00	-0.00	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.327905	raw	0.99	0.00	-0.01	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.344007	raw	0.99	0.00	-0.01	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.356705	raw	0.99	0.00	-0.01	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.368997	raw	0.99	0.00	-0.01	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.384997	raw	0.99	0.00	-0.01	-0.16	1.00	0.02	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.397632	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.410007	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.425883	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.438565	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.450862	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.463099	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.479541	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.491884	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.504106	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.520558	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.532766	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.545022	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.561486	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.573958	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.585969	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.602298	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.614647	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.626896	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.643200	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.655574	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.667846	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.684253	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.696660	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.708999	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.725035	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.737734	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.750114	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.766003	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.778413	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.790828	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.33	1.64	-1.52	0.36	
+2016-11-03 16:23:27.802969	raw	0.99	0.00	-0.01	-0.16	1.00	0.03	-0.01	0.00	FIFO overflow!
+2016-11-03 16:23:27.811581	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.814916	raw	FIFO overflow!
+2016-11-03 16:23:27.827270	0.99	0.01	-0.01	-0.16	FIFO overflow!
+2016-11-03 16:23:27.840023	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.856364	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.868711	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.880934	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.897275	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.909547	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.922074	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.938217	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.950462	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.962880	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.979209	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:27.991639	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.004094	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.020045	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.032439	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.044717	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.060834	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.073521	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.085874	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.101751	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.114359	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.126674	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.142699	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.155150	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.167815	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.180149	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.196412	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.208688	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.221013	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.237415	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.249545	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.261859	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.278194	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.290426	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.302807	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.319031	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.331450	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.343820	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.360047	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.372628	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.384753	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.401063	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.413384	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.425659	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.441804	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.454375	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.466645	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.482731	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.495250	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.507716	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.523622	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.536474	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.548670	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.560966	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.577372	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.589756	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.601744	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.618153	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.630423	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.642744	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.659316	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.668357	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	FIFO overflow!
+2016-11-03 16:23:28.679847	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.683410	raw	FIFO overflow!
+2016-11-03 16:23:28.695971	0.99	0.01	-0.01	-0.16	FIFO overflow!
+2016-11-03 16:23:28.712445	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.724839	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.737128	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.753581	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.765710	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.778093	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.794163	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.806704	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.818895	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.835020	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.847592	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.859847	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.875927	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.888650	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.900896	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.916972	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.929591	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.941941	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.954547	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.970527	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.982776	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:28.995101	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.011832	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.024029	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.036076	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.052403	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.064724	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.077070	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.093515	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.105749	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.117850	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.134259	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.146564	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.158924	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.175219	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.187480	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.199817	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.216101	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.228716	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.241034	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.257025	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.269599	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.281760	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.297918	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.310419	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.322676	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.338721	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.351351	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.363649	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.376011	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.392317	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.404680	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.416964	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.433549	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.01	
+2016-11-03 16:23:29.445553	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.457742	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.474268	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.486523	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.498675	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.515346	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.527620	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.539385	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	FIFO overflow!
+2016-11-03 16:23:29.548068	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.551922	raw	FIFO overflow!
+2016-11-03 16:23:29.572678	0.99	0.01	-0.01	-0.16	0.17	0.14	1.04	0.13	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.577085	raw	0.99	0.01	-0.01	-0.16	FIFO overflow!
+2016-11-03 16:23:29.592664	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.605375	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.617611	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.629964	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.646234	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.658556	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.6	0.95	0.16	0.02	
+2016-11-03 16:23:29.670786	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.687212	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.699704	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.712140	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.728376	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.740838	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.752925	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.769071	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.781613	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.793931	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.810160	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.822466	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.834747	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.850946	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.863439	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.875713	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.891843	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.904450	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.916945	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.932844	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.945888	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.957750	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.973789	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.986461	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:29.998578	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:30.014464	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:30.027074	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:30.039515	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.051736	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.068154	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.080429	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.092677	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.26	0.95	0.16	0.02	
+2016-11-03 16:23:30.109279	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.121670	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.133850	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.150162	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.162409	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.174744	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.191152	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.203530	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.215829	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.232146	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.244444	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.256935	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.272814	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.285260	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.297715	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.313882	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.326314	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.338665	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.354716	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.367305	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.379920	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.395567	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.408278	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	1.40	-1.81	1.85	1.35	
+2016-11-03 16:23:30.416782	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	FIFO overflow!
+2016-11-03 16:23:30.428754	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.429162	raw	FIFO overflow!
+2016-11-03 16:23:30.449312	0.99	0.01	-0.01	-0.16	0.00	1.39	0.78	1.73	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.457132	raw	0.99	0.01	-0.01	-0.16	FIFO overflow!
+2016-11-03 16:23:30.469709	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.486006	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.498652	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.510568	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.526833	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.539336	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.551595	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.567671	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.580279	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.592516	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.608610	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.621306	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.633605	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.649581	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.662169	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.674605	raw	0.99	0.01	-0.01	-0.16	1.0	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.686812	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.703241	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.715517	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.727792	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.744309	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.756481	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.768745	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.785349	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.797431	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.809625	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.826133	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.838334	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.850788	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.867056	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.879360	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.891627	raw	0.99	0.01	-0.01	-0.16	1.0	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.907810	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.920391	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.932799	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.948857	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.961294	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.973534	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:30.989912	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.002309	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.014385	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.030459	raw	0.9	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.043077	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.055343	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.071449	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.084155	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.096487	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.108694	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:31.125136	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0.16	0.02	
+2016-11-03 16:23:33.277143	raw	0.99	0.01	-0.01	-0.16	1.00	0.03	-0.01	-0.00	0.27	0.95	0þGY87 1 disconnected 2016-11-03 16:23:34.278476	2016-11-03 16:23:34.586709	DMP 1 ERROR (code 1)
+2016-11-03 16:23:36.546031	GY87 2 disconnected 2016-11-03 16:23:37.547297	2016-11-03 16:23:37.854968	DMP 2 ERROR (code 1)
+2016-11-03 16:23:39.814721	GY87 3 disconnected 2016-11-03 16:23:40.816088	

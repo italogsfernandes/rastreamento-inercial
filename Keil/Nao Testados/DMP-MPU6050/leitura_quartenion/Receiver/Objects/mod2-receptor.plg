@@ -1,0 +1,64 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+D:\BIOLAB\rastreamento-inercial\Keil\I2C_Testes\leitura_minima_sensores\Receiver\mod2-receptor.uvproj
+Project File Date:  09/28/2016
+
+<h2>Output:</h2>
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+mod2-receptor.c(76): error C141: syntax error near 'unsigned'
+mod2-receptor.c(76): error C202: 'i': undefined identifier
+mod2-receptor.c(108): error C202: 'i': undefined identifier
+mod2-receptor.c(109): error C202: 'i': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+mod2-receptor.c(76): error C141: syntax error near 'uint8_t'
+mod2-receptor.c(76): error C202: 'i': undefined identifier
+mod2-receptor.c(108): error C202: 'i': undefined identifier
+mod2-receptor.c(109): error C202: 'i': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+mod2-receptor.c(76): error C141: syntax error near 'unsigned'
+mod2-receptor.c(76): error C202: 'i': undefined identifier
+mod2-receptor.c(108): error C202: 'i': undefined identifier
+mod2-receptor.c(109): error C202: 'i': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+mod2-receptor.c(106): error C141: syntax error near 'unsigned'
+mod2-receptor.c(106): error C202: 'i': undefined identifier
+mod2-receptor.c(107): error C202: 'i': undefined identifier
+mod2-receptor.c(108): error C202: 'i': undefined identifier
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+mod2-receptor.c(107): error C141: syntax error near 'int'
+mod2-receptor.c(107): error C202: 'i': undefined identifier
+mod2-receptor.c(107): error C202: 'i': undefined identifier
+mod2-receptor.c(107): error C202: 'i': undefined identifier
+mod2-receptor.c(107): error C141: syntax error near ')'
+Target not created
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+linking...
+Program Size: data=84.1 xdata=0 code=1019
+creating hex file from ".\Objects\mod2-receptor"...
+".\Objects\mod2-receptor" - 0 Error(s), 0 Warning(s).
+Build target 'Target 1'
+assembling STARTUP.A51...
+compiling mod2-receptor.c...
+linking...
+Program Size: data=84.1 xdata=0 code=1019
+creating hex file from ".\Objects\mod2-receptor"...
+".\Objects\mod2-receptor" - 0 Error(s), 0 Warning(s).

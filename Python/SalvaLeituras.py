@@ -3,7 +3,7 @@ from datetime import datetime
 
 arduinoData = serial.Serial()
 arduinoData.port = '/dev/ttyACM0'
-arduinoData.baudrate = 38400
+arduinoData.baudrate = 250000
 arduinoData.timeout = 1
 arduinoData.open()
 

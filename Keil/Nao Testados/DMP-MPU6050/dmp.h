@@ -1,8 +1,8 @@
-#ifndef MPU_H
+#ifndef DMP_H
 /* Se a biblioteca mpu.h não for definida, defina-a.
 Verificar é preciso para que não haja varias chamadas da
 mesma biblioteca. */
-#define MPU_H
+#define DMP_H
 
 
 #ifndef MPU_endereco
@@ -215,14 +215,15 @@ const unsigned char dmpUpdates[MPU6050_DMP_UPDATES_SIZE] PROGMEM = {
     0x00,   0x60,   0x04,   0x00, 0x40, 0x00, 0x00
 };
 
-void initialize();
-bool testConnection();
-void dmpInitialize();
+void delay_i2c(unsigned int x);
+void initialize(void);
+bool testConnection(void);
+void dmpInitialize(void);
 void setDMPEnabled(bool enabled);
-uint8_t getIntStatus();
-uint16_t dmpGetFIFOPacketSize();
-uint16_t getFIFOCount();
-void resetFIFO();
+uint8_t getIntStatus(void);
+uint16_t dmpGetFIFOPacketSize(void);
+uint16_t getFIFOCount(void);
+void resetFIFO(void);
 void getFIFOBytes(uint8_t *data, uint8_t length);
 uint8_t dmpGetQuaternion(int16_t *data, const uint8_t* packet);
 uint8_t dmpGetQuaternion(Quaternion *q, const uint8_t* packet);
@@ -237,12 +238,12 @@ void setXGyroOffset(int16_t offset);
 void setYGyroOffset(int16_t offset);
 void setZGyroOffset(int16_t offset);
 //Get
-int16_t getXAccelOffset();
-int16_t getYAccelOffset();
-int16_t getZAccelOffset();
-int16_t getXGyroOffset();
-int16_t getYGyroOffset();
-int16_t getZGyroOffset();
+int16_t getXAccelOffset(void);
+int16_t getYAccelOffset(void);
+int16_t getZAccelOffset(void);
+int16_t getXGyroOffset(void);
+int16_t getYGyroOffset(void);
+int16_t getZGyroOffset(void);
 /************************FIM dos OFFSETS****************/
 
 #endif
