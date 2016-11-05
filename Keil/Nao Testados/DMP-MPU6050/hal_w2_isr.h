@@ -188,9 +188,9 @@ int8_t i2c_mpu_readBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t
 int8_t i2c_mpu_readBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint8_t data_length, uint8_t *data_ptr);
 
 bool i2c_mpu_writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data_to_write);
-int8_t readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr);
+bool i2c_mpu_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr);
 int8_t i2c_mpu_readWord(uint8_t devAddr, uint8_t regAddr, uint16_t *data_ptr);
-int8_t readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr);
+int8_t i2c_mpu_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr);
 
 
 void I2C_IRQ_handler (void);

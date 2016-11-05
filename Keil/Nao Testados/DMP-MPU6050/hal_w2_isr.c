@@ -388,8 +388,7 @@ bool i2c_mpu_readBytes(uint8_t devAddr, uint8_t regAddr, uint8_t data_len, uint8
     return ack_received;
 }
 
-
-//*************NOTE: doing
+//NOTE: part 2 - done
 bool i2c_mpu_writeBit(uint8_t devAddr, uint8_t regAddr, uint8_t bitNum, uint8_t data_to_write){
     uint8_t b;
     i2c_mpu_readByte(devAddr, regAddr, &b);
@@ -436,4 +435,34 @@ int8_t i2c_mpu_readBits(uint8_t devAddr, uint8_t regAddr, uint8_t bitStart, uint
         *data_ptr = b;
     }
     return count;
+}
+
+//NOTE: part 3 - doing
+bool i2c_mpu_writeWord(uint8_t devAddr, uint8_t regAddr, uint16_t data_to_write){
+    return i2c_mpu_writeWords(devAddr, regAddr, 1, &data_to_write);
+}
+bool i2c_mpu_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr){
+    //TODO: Start Bit + Adress Write
+    //TODO: Registrador
+    //TODO: write Msb, (colocar >> 8)
+    //TODO: Write Lsb
+    //TODO: next position and repeat
+    //TODO: End Bit
+    //TODO: return status
+}
+
+int8_t i2c_mpu_readWord(uint8_t devAddr, uint8_t regAddr, uint16_t *data_ptr) {
+    return i2c_mpu_readWords(devAddr, regAddr, 1, data_ptr);
+}
+
+int8_t i2c_mpu_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr){
+
+    //TODO: Start Bit + Adress Write
+    //TODO: Registrador
+    //TODO: Start Bit + Adress Read
+    //TODO: Read Msb, e colocar << 8
+    //TODO: Read Lsb e jogar na parte LSB
+    //TODO: next position and repeat
+    //TODO: End Bit
+    //TODO: return status
 }
