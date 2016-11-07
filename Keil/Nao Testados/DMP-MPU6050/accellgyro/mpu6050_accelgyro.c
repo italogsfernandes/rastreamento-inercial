@@ -43,7 +43,7 @@ void iniciarIO(void){
     P1CON |= 0x53;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 }
-void iniciarRF(){
+void iniciarRF(void){
     // Radio + SPI setup
     RFCE = 0;       // Radio chip enable low
     RFCKEN = 1;     // Radio clk enable
@@ -55,7 +55,7 @@ void setup() {
     iniciarIO(); //IO
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
-    EA=1; luzes_iniciais(); //Confirma configurações e pisca luzes
+    EA=1; luzes_iniciais(); //\Enable All interrupts, e pisca luzes
     mpu_initialize(); //inicia dispositivo
     LEDVM = !mpu_testConnection(); //se deu errado acende led
     //XXX, testar get and setters de offset
@@ -95,8 +95,7 @@ void main(void) {
         }
     }
 }
-void italo_delay_ms(unsigned int x)
-{
+void italo_delay_ms(unsigned int x){
     unsigned int i,j;
     i=0;
     for(i=0;i<x;i++)
@@ -127,8 +126,8 @@ void enviar_motion6(void){
     RX_Mode();
 }
 
-void I2C_IRQ (void) interrupt INTERRUPT_SERIAL
-{
+//interrupção o I2C
+void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
 
 	I2C_IRQ_handler();
 }
