@@ -1,13 +1,14 @@
-#include "hal_w2_isr.h"
 #include "dmp.h"
 
 #include "nrf24le1.h"
-#include "reg24le1.h"
+#include <hal_w2_isr.h>
 #include "hal_delay.h"
 #include "stdint.h"
-#include "stdbool.h"
+#include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
+#include "stdbool.h" //Booleanos
 #include "API.h"
 #include "nRF-SPIComands.h"
+
 
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
@@ -17,7 +18,7 @@
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
 
-uint8_t packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
+uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
 
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
@@ -29,7 +30,6 @@ sbit S2  = P1^4;    // 1/0=no/press
 sbit LEDVM = P0^3; // 1/0=light/dark
 #endif
 
-void italo_delay_ms(unsigned int x);
 void luzes_iniciais(void);
 void enviar_motion6(void);//Joga no buffer do radio e despacha
 
@@ -67,15 +67,15 @@ void main(void) {
         if(!S1 && LEDVM==0){ //se foi apertado o sinal e o led esta desativado
             getMotion6_packet(packet_motion6);
             enviar_motion6();
-            italo_delay_ms(100);
+            delay_ms(100);
             while(!S1);
-            italo_delay_ms(100);
+            delay_ms(100);
         }
         if(!S2){
             LEDVM = !LEDVM;
-            italo_delay_ms(100);
+            delay_ms(100);
             while(!S2);
-            italo_delay_ms(100);
+            delay_ms(100);
         }
         if(newPayload){
             //verifica se o sinal eh direficionado para mim
@@ -95,23 +95,13 @@ void main(void) {
         }
     }
 }
-void italo_delay_ms(unsigned int x){
-    unsigned int i,j;
-    i=0;
-    for(i=0;i<x;i++)
-    {
-       j=508;
-           ;
-       while(j--);
-    }
-}
 void luzes_iniciais(void){
         LEDVM = 1;
-        italo_delay_ms(1000);
+        delay_ms(1000);
         LEDVM = 0;
-        italo_delay_ms(1000);
+        delay_ms(1000);
         LEDVM = 1;
-        italo_delay_ms(1000);
+        delay_ms(1000);
         LEDVM = 0;
 }
 
