@@ -1,17 +1,17 @@
 /* ExplicaÃ§Ã£o:
     Leitor:
-    Ao se clicar no botÃ£o 1 - a configuração da mpu é feita
-    Ao se clicar no botÃ£o 2 - é realizada a leitura e envio
+    Ao se clicar no botÃ£o 1 - a configuraï¿½ï¿½o da mpu ï¿½ feita
+    Ao se clicar no botÃ£o 2 - ï¿½ realizada a leitura e envio
     Esse sinal Ã© apenas um modo de saber se o radio esta funcionando bem.
-	
+
 	Receptor:
 	Redireciona os dados lidos para uma porta serial.
-	Pode enviar sinais para acender leds(verificando assim a comunicação) ou requisitando leitura.
+	Pode enviar sinais para acender leds(verificando assim a comunicaï¿½ï¿½o) ou requisitando leitura.
 
 	Leitor Serial:
 	Recebe o pacote
 	[Start] [Size] [ADDR] [XAC_H] [XAC_L] [YAC_H] [YAC_L] [ZAC_H] [ZAC_L] [End]
-	Interpreta atraves de Start, size e End, então mostra Xac, Yac e Zac
+	Interpreta atraves de Start, size e End, entï¿½o mostra Xac, Yac e Zac
 */
 /***********************************************/
 
@@ -42,7 +42,7 @@ uint8_t readings[6] = {0,5,0,128,0,255}; //some fake data
 
 
 //Definicoes dos botoes e leds
-#define	PIN32 //módulo com 32 pinos
+#define	PIN32 //mï¿½dulo com 32 pinos
 #ifdef 	PIN32
 //Pushbuttons
 sbit S1  = P0^2;    // 1/0=no/press
@@ -51,7 +51,7 @@ sbit S2  = P1^4;    // 1/0=no/press
 sbit LEDVM = P0^3; // 1/0=light/dark
 sbit LEDVD = P0^6; // 1/0=light/dark
 #endif
-	  
+
 
 //funcoes utilizada para delay e leds indicativos
 void italo_delay_ms(unsigned int x);
@@ -88,7 +88,7 @@ void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 /**************************************************/
 
 void setup(void){
-	//*************************** Init GPIO Pins	
+	//*************************** Init GPIO Pins
 	P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6
     P1DIR = 0xFF;   // Tudo input
     P2DIR = 0xFF;
@@ -115,7 +115,7 @@ void setup(void){
 void main()
 {
 	setup();
-	while(1)	
+	while(1)
 	{
 		//Verificando Botoes
 		if(!S1){
@@ -125,7 +125,7 @@ void main()
   			italo_delay_ms(100);
 		}
 		if(!S2){
-			stop_T0();	
+			stop_T0();
 			italo_delay_ms(100);
 			while(!S2); //espera soltar o botao
   			italo_delay_ms(100);
