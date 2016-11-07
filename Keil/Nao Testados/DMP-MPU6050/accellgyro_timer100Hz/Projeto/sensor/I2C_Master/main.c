@@ -9,7 +9,7 @@
 #include "API.h"
 #include "nRF-SPIComands.h"
 
-
+#define INTERRUPT_TMR0	1 //timer
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
 #define OTHER_SUB_ADDR 0x02
@@ -32,6 +32,29 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 void luzes_iniciais(void);
 void enviar_motion6(void);//Joga no buffer do radio e despacha
+
+void start_T0(void);
+void stop_T0(void);
+
+/**************************************************/
+// Vari�veis do TMR0
+unsigned char NBT0H  = 0xCB;			// Este tempo
+unsigned char NBT0L  = 0xEA;			// equivale a
+unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 100Hz
+
+/**************************************************/
+int timer_flag = 1;
+void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
+{
+	if(!NOVT0)
+	{
+		timer_flag--;
+		TH0= NBT0H;
+		TL0= NBT0L;
+	}
+}
+/**************************************************/
+
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -65,6 +88,7 @@ void main(void) {
     setup();
     while(1){
         if(!S1 && LEDVM==0){ //se foi apertado o sinal e o led esta desativado
+            start_T0();
             getMotion6_packet(packet_motion6);
             enviar_motion6();
             delay_ms(100);
@@ -72,6 +96,7 @@ void main(void) {
             delay_ms(100);
         }
         if(!S2){
+            stop_T0();
             LEDVM = !LEDVM;
             delay_ms(100);
             while(!S2);
@@ -82,10 +107,10 @@ void main(void) {
 			if(rx_buf[0] == MY_SUB_ADDR){
 				 switch(rx_buf[1]){
 					case Sinal_request_data:
-                        getMotion6_packet(packet_motion6);
-                        enviar_motion6();
-						break;
+                        start_T0();
+                        break;
 					case Sinal_LEDS:
+                        stop_T0();
 						LEDVM = !LEDVM;
 						break;
 				}
@@ -93,6 +118,12 @@ void main(void) {
 			sta = 0;
      		newPayload = 0;
         }
+        //timer tick
+		if(timer_flag <= 0){
+            getMotion6_packet(packet_motion6);
+            enviar_motion6();
+			timer_flag = 1;
+		}
     }
 }
 void luzes_iniciais(void){
@@ -115,6 +146,30 @@ void enviar_motion6(void){
     TX_Mode_NOACK(13);
     RX_Mode();
 }
+/**************************************************/
+/****************TIMER*****************************/
+/**************************************************/
+//Timer comfigurado para freq de amostragem 30Hz
+void start_T0(void)
+{
+	TMOD=0x31;						// Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
+	TH0= NBT0H;
+	TL0= NBT0L;
+	ET0=1;								// Active interrupt on Timer 0
+	EA=1;									// Active all interrupts
+	TR0=1;								// Timer 0 --> RUN
+}
+/**************************************************/
+void stop_T0(void)
+{
+	TMOD=0x31;						// Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
+	TH0= NBT0H;
+	TL0= NBT0L;
+	ET0=0;								// Active interrupt on Timer 0
+	EA=1;									// Active all interrupts
+	TR0=0;								// Timer 0 --> RUN
+}
+/*********************************************/
 
 //interrupção o I2C
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
