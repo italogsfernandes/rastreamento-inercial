@@ -1,65 +1,53 @@
-/* Copyright (c) 2009 Nordic Semiconductor. All Rights Reserved.
- *
- * The information contained herein is confidential property of Nordic 
- * Semiconductor ASA.Terms and conditions of usage are described in detail 
- * in NORDIC SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT. 
- *
- * Licensees are granted free, non-transferable use of the information. NO
- * WARRENTY of ANY KIND is provided. This heading must NOT be removed from
- * the file.
- *              
- * $LastChangedRevision: 133 $
- */
+#define UART_START_FLAG	0x53
+#define UART_END_FLAG 0x04
+#define UART_PACKET_LENGHT 13
 
-/** @file
- * @brief Implementation of hal_flash for nRF24LU1+
- */
-
-#include "nrf24lu1p.h"
-#include "hal_flash.h"
-
-void hal_flash_page_erase(uint8_t pn)
-{
-    uint8_t ckcon_val;
-
-    //Backup CKCON value and force CKCON to 0x01. nRF24LU1p PAN 011 #2
-    ckcon_val = CKCON;
-    CKCON = 0x01;
-    // Save interrupt enable state and disable interrupts:
-    F0 = EA;
-    EA = 0;
-    // Enable flash write operation:
-    FCR = 0xAA;
-    FCR = 0x55;
-    WEN = 1;
-    //
-    // Write the page address to FCR to start the page erase operation. This
-    // operation is "self timed" when executing from the flash; the CPU will
-    // halt until the operation is finished:
-    FCR = pn;
-    //
-    // When running from XDATA RAM we need to wait for the operation to finish:
-    while(RDYN == 1)
-        ;
-    WEN = 0;
-    EA = F0; // Restore interrupt enable state
-    CKCON = ckcon_val; //Restore CKCON state
+int sensor = 2;
+int16_t Xac = 14, Yac=15, Zac=31222;
+int16_t Xgy = 14, Ygy=15, Zgy=31222;
+char leitura_1;
+char leitura_2;
+void setup() {
+    // put your setup code here, to run once:
+    Serial.begin(38400);
+    Serial1.begin(38400);
+    mostrarleituras();
 }
 
-void hal_flash_byte_write(uint16_t a, uint8_t b)
-{
-    uint8_t xdata * pb;
-    uint8_t ckcon_val;
+void loop() {
+    if (Serial1.available()) {
+        while(Serial1.available()<2){delay(1);} //aguarda 2 bytes
+        leitura_1 = Serial1.read();
+        leitura_2 = Serial1.read();
+        if (leitura_1 == UART_START_FLAG && leitura_2 == UART_PACKET_LENGHT) {
+            while(Serial1.available()<UART_PACKET_LENGHT){delay(1);} //aguarda o pacote estar completo
+            //recebendo dados:
+            sensor = Serial1.read();
+            Xac = (Serial1.read() << 8) | Serial1.read();
+            Yac = (Serial1.read() << 8) | Serial1.read();
+            Zac = (Serial1.read() << 8) | Serial1.read();
+            Xgy = (Serial1.read() << 8) | Serial1.read();
+            Ygy = (Serial1.read() << 8) | Serial1.read();
+            Zgy = (Serial1.read() << 8) | Serial1.read();
 
-    //Backup CKCON value and force CKCON to 0x01. nRF24LU1p PAN 011 #2
-    ckcon_val = CKCON;
-    CKCON = 0x01;
-    // Save interrupt enable state and disable interrupts:
-    F0 = EA;
-    EA = 0;
-    // Enable flash write operation:
-    FCR = 0xAA;
-    FCR = 0x55;
-    WEN = 1;
-    //
-    // Write 
+            while(Serial1.available()<1){delay(1);}//aguardando end_signal
+            if (Serial1.read() == UART_END_FLAG) { //se eng signal recebido entao mostra leituras
+                mostrarleituras();
+            }
+        } else {
+            Serial.print(leitura_1);
+            Serial.print(leitura_2);
+        }
+    }
+}
+
+void mostrarleituras(){
+    Serial.print(sensor);Serial.print(":\t");
+    Serial.print((float)Xac/16384); Serial.print("\t");
+    Serial.print((float)Yac/16384); Serial.print("\t");
+    Serial.print((float)Zac/16384); Serial.print("\t");
+    Serial.print((float)Xgy/262); Serial.print("\t");
+    Serial.print((float)Ygy/262); Serial.print("\t");
+    Serial.print((float)Zgy/262); Serial.print("\n");
+}
+
