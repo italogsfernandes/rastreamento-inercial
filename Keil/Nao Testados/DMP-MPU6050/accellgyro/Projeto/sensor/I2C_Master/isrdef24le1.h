@@ -1,95 +1,82 @@
-/* Copyright (c) 2009 Nordic Semiconductor. All Rights Reserved.
- *
- * The information contained herein is confidential property of Nordic 
- * Semiconductor ASA.Terms and conditions of usage are described in detail 
- * in NORDIC SEMICONDUCTOR STANDARD SOFTWARE LICENSE AGREEMENT. 
- *
- * Licensees are granted free, non-transferable use of the information. NO
- * WARRENTY of ANY KIND is provided. This heading must NOT be removed from
- * the file.
- *              
- * $LastChangedRevision: 133 $
- */
+#ifndef _ISRDEF24LE1_H_
+#define _ISRDEF24LE1_H_
 
-/** @file
-* @brief Implementation of the UART HAL module for nRF24LU1+ with data buffering
-*/
- 
-#include "nrf24lu1p.h"
-#include <stdint.h>
-#include "hal_uart.h"
+#ifdef __ICC8051__
 
-#ifndef UART_NBUF
-#define UART_NBUF   8
+#define EXT_INT0_ISR() \
+_Pragma("vector=0x0003") \
+__interrupt void ext_int0_isr(void)
+
+#define T0_ISR() \
+_Pragma("vector=0x000b") \
+__interrupt void t0_isr(void)
+
+#define AES_RDY_ISR() \
+_Pragma("vector=0x0013") \
+__interrupt void aes_rdy_isr(void)
+
+#define T1_ISR() \
+_Pragma("vector=0x001b") \
+__interrupt void t1_isr(void)
+
+#define UART0_ISR() \
+_Pragma("vector=0x0023") \
+__interrupt void uart0_isr(void)
+
+#define T2_ISR() \
+_Pragma("vector=0x002b") \
+__interrupt void t2_isr(void)
+
+#define RF_RDY_ISR() \
+_Pragma("vector=0x0043") \
+__interrupt void rf_rdy_isr(void)
+
+#define NRF_ISR() \
+_Pragma("vector=0x004b") \
+__interrupt void nrf_isr(void)
+
+#define SER_ISR() \
+_Pragma("vector=0x0053") \
+__interrupt void serial_isr(void)
+
+#define WUOP_ISR() \
+_Pragma("vector=0x005b") \
+__interrupt void wuop_isr(void)
+
+#define MISC_ISR() \
+_Pragma("vector=0x0063") \
+__interrupt void misc_isr(void)
+
+#define ADC_ISR() \
+_Pragma("vector=0x0063") \
+__interrupt void adc_isr(void)
+
+#define TICK_ISR() \
+_Pragma("vector=0x006b") \
+__interrupt void tick_isr(void)
+
+#endif /*__ICC8051__*/
+
+#ifdef __C51__
+
+#define EXT_INT0_ISR()  void ext_int0_isr(void) interrupt INTERRUPT_IPF     // External Interrupt0 (P0.3) (0x03)
+#define T0_ISR()        void t0_isr(void)       interrupt INTERRUPT_T0      // Timer0 Overflow (0x0b)
+#define AES_RDY_ISR()   void aes_rdy_isr(void)  interrupt INTERRUPT_POFIRQ  // Power failure interrupt (0x13)
+#define T1_ISR()        void t1_isr(void)       interrupt INTERRUPT_T1      // Timer1 Overflow (0x1b)
+#define UART0_ISR()     void uart0_isr(void)    interrupt INTERRUPT_UART0   // UART0, Receive & Transmitt interrupt (0x0023)
+#define T2_ISR()        void t2_isr(void)       interrupt INTERRUPT_T2      // Timer2 Overflow (0x2b)
+#define RF_RDY_ISR()    void rf_rdy_isr(void)   interrupt INTERRUPT_RFRDY   // RF SPI ready interrupt (0x43)
+#define NRF_ISR()       void nrf_isr(void)      interrupt INTERRUPT_RFIRQ   // RF interrupt (0x4b)
+#define SER_ISR()       void serial_isr(void)   interrupt INTERRUPT_SERIAL  // SERIAL / SPI interrupt (0x53)
+#define WUOP_ISR()      void wuop_isr(void)     interrupt INTERRUPT_WUOPIRQ // Wake on pin interrupt (0x5b)
+#define MISC_ISR()      void misc_isr(void)     interrupt INTERRUPT_MISCIRQ // MISC interrupt (0x63)
+#define ADC_ISR()       void adc_isr(void)      interrupt INTERRUPT_MISCIRQ // ADC interrupt (0x63)
+#define TICK_ISR()      void tick_isr(void)     interrupt INTERRUPT_TICK    // Internal wakeup interrupt (0x6b)
+
+#endif /*__C51__*/
+
 #endif
 
-#define BAUD_57K6   1015  // = Round(1024 - (2*16e6)/(64*57600))
-#define BAUD_38K4   1011  // = Round(1024 - (2*16e6)/(64*38400))
-#define BAUD_19K2    998  // = Round(1024 - (2*16e6)/(64*19200))
-#define BAUD_9K6     972  // = Round(1024 - (2*16e6)/(64*9600))
 
-static uint8_t uart_tx_wp, uart_tx_rp, uart_tx_cnt;
-static uint8_t idata uart_tx[UART_NBUF];
 
-static uint8_t uart_rx_wp, uart_rx_rp, uart_rx_cnt;
-static uint8_t idata uart_rx[UART_NBUF];
 
-UART0_ISR()
-{
-  if (RI0 == 1)
-  {
-    RI0 = 0;
-    if (uart_rx_cnt < UART_NBUF)
-    {
-      uart_rx[uart_rx_wp] = S0BUF;
-      uart_rx_wp = (uart_rx_wp + 1) % UART_NBUF;
-      uart_rx_cnt++;
-    }
-  }
-  if (TI0 == 1)
-  {
-    TI0 = 0;
-    if (uart_tx_cnt > 1)
-    {
-      S0BUF = uart_tx[uart_tx_rp];
-      uart_tx_rp = (uart_tx_rp + 1) % UART_NBUF;
-    }
-    uart_tx_cnt--;
-  }
-}
-
-void hal_uart_init(hal_uart_baudrate_t baud)
-{
-  uint16_t temp;
-
-  ES0 = 0;                      // Disable UART0 interrupt while initializing
-  uart_tx_wp = uart_tx_rp = 0;
-  uart_tx_cnt = 0;
-  uart_rx_wp = uart_rx_rp = 0;
-  uart_rx_cnt = 0;
-  REN0 = 1;                     // Enable receiver
-  SM0 = 0;                      // Mode 1..
-  SM1 = 1;                      // ..8 bit variable baud rate
-  PCON |= 0x80;                 // SMOD = 1
-  WDCON |= 0x80;                // Select internal baud rate generator
-  switch(baud)
-  {
-    case UART_BAUD_57K6:
-      temp = BAUD_57K6;
-      break;
-    case UART_BAUD_38K4:
-      temp = BAUD_38K4;
-      break;
-    case UART_BAUD_9K6:
-      temp = BAUD_9K6;
-      break;
-    case UART_BAUD_19K2:
-    default:
-      temp = BAUD_19K2;
-      break;
-  }
-  S0RELL = (uint8_t)temp;
-  S0RELH = (uint8_t)(temp >> 8);
-  P0ALT |= 0x06;                // Select alternate functions on P01 and P02
-  P0EXP &= 0xf0;                // Select RxD on P01 and TxD on P02
-  P0DIR |= 0x02;                // P01 

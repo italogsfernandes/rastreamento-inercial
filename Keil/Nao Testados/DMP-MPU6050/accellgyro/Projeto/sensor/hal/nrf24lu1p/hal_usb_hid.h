@@ -8,32 +8,35 @@
  * WARRENTY of ANY KIND is provided. This heading must NOT be removed from
  * the file.
  *              
- * $LastChangedRevision: 2182 $
+ * $LastChangedRevision: 133 $
  */
 
-/** @file
-* @brief This file contain functions to handle USB HID related requests
+ /** @file
+ * @brief Implementation of  hal_spi
  */
 
-#ifndef HAL_USB_HID_H__
-#define HAL_USB_HID_H__
+#include "nrf24le1.h"
+#include "hal_spi.h"
+#include "nordic_common.h"
 
-#include <stdint.h>
-#include <stdbool.h>
-
-#include "hal_usb.h"
-
-/**
- * Function that process a HID device request
- *
- * This function is usually called from an application that use the USB HID specification
- *
- * @param req The request from host
- * @param data_ptr  Address where this function can put data into which is sent to USB-host
- * @param size  Size of the data to send
- * @param resp The response this function send back to the USB-host
- */
-
-bool hal_usb_hid_device_req_proc(hal_usb_device_req* req, uint8_t** data_ptr, uint8_t* size, hal_usb_dev_req_resp_t* resp) large reentrant;
-
-#endif // HAL_USB_HID_H__
+void hal_spi_master_init(hal_spi_clkdivider_t ck, hal_spi_mode_t mode, hal_spi_byte_order_t bo)
+{
+  SPIMCON0 = 0;                           // Default register settings
+  switch (ck)                             // Set desired clock divider
+  {
+    case SPI_CLK_DIV2:
+      SPIMCON0 |= (0x00 << 4);
+      break;
+    case SPI_CLK_DIV4:
+      SPIMCON0 |= (0x01 << 4);
+      break;
+    case SPI_CLK_DIV8:
+      SPIMCON0 |= (0x02 << 4);
+      break;
+    case SPI_CLK_DIV16:
+      SPIMCON0 |= (0x03 << 4);
+      break;
+    case SPI_CLK_DIV32:
+      SPIMCON0 |= (0x04 << 4);
+      break;
+    case SPI_CLK_DIV64:                   // We u

@@ -3,181 +3,105 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-D:\BIOLAB\rastreamento-inercial\Keil\I2C_Testes\leitura_minima_sensores\I2C_Master(1)\I2C_Master\FProject.uvproj
-Project File Date:  10/22/2016
+C:\Users\Italo Fernandes\Documents\rastreamento-inercial\Keil\I2C_Testes\Testados\leitura_minima_sensores\leitor_accel\I2C_Master\FProject.uvproj
+Project File Date:  11/07/2016
 
 <h2>Output:</h2>
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling main.c...
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
+isrdef24le1.h(18): warning C318: can't open file 'nrf24lu1p.h'
+isrdef24le1.h(74): error C202: 'WDCON': undefined identifier
+isrdef24le1.h(93): error C202: 'P0ALT': undefined identifier
+isrdef24le1.h(94): error C202: 'P0EXP': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(65): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(66): error C202: 'HAL_W2_IDLE': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(69): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(74): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(75): error C202: 'HAL_W2_MASTER': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(77): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(82): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(83): error C202: 'HAL_W2_STOP_COND': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(86): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(91): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(92): error C202: 'HAL_W2_DIR_WRITE': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(94): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(108): error C141: syntax error near 'void'
+hal_w2_isr.h(17): warning C318: can't open file 'nrf24lu1p.h'
+nRF-SPIComands.h(10): warning C317: attempt to redefine macro 'TX_PLOAD_WIDTH'
 compiling hal_w2_isr.c...
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C173: missing return-expression
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C290: missing return value
-compiling hal_delay.c...
-..\hal\hal_delay.c(26): warning C318: can't open file 'memdefs.h'
-linking...
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_READ/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _I2C_MPU_WRITEBYTE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _I2C_MPU_READBYTE/HAL_W2_ISR
-Program Size: data=50.0 xdata=1 const=0 code=967
-creating hex file from "FProject"...
-"FProject" - 0 Error(s), 16 Warning(s).
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-compiling hal_w2_isr.c...
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C173: missing return-expression
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C290: missing return value
-compiling hal_delay.c...
-..\hal\hal_delay.c(26): warning C318: can't open file 'memdefs.h'
-linking...
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_WRITE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_READ/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _I2C_MPU_READBYTE/HAL_W2_ISR
-Program Size: data=49.0 xdata=1 const=0 code=1117
-creating hex file from "FProject"...
-"FProject" - 0 Error(s), 16 Warning(s).
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-main.c(16): error C141: syntax error near '/'
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-main.c(25): warning C318: can't open file 'API.h'
-main.c(26): warning C318: can't open file 'nRF-SPIComands.h'
-compiling hal_w2_isr.c...
-..\hal\nrf24le1.h(13): warning C318: can't open file 'isrdef24le1.h'
-..\hal\nrf24le1.h(14): warning C318: can't open file 'memdefs.h'
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C173: missing return-expression
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C290: missing return value
-compiling hal_delay.c...
-..\hal\hal_delay.c(26): warning C318: can't open file 'memdefs.h'
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-main.c(16): error C141: syntax error near '/'
-compiling hal_w2_isr.c...
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C173: missing return-expression
-..\hal\nrf24le1\hal_w2_isr.c(349): warning C290: missing return value
+isrdef24le1.h(18): warning C318: can't open file 'nrf24lu1p.h'
+isrdef24le1.h(74): error C202: 'WDCON': undefined identifier
+isrdef24le1.h(93): error C202: 'P0ALT': undefined identifier
+isrdef24le1.h(94): error C202: 'P0EXP': undefined identifier
+hal_w2_isr.h(17): warning C318: can't open file 'nrf24lu1p.h'
+..\hal\nrf24le1\hal_spi.h(41): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(43): error C202: 'SPI_CLK_DIV2': undefined identifier
+..\hal\nrf24le1\hal_spi.h(50): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(55): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(56): error C202: 'HAL_SPI_LSB_MSB': undefined identifier
+..\hal\nrf24le1\hal_spi.h(58): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(63): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(64): error C202: 'HAL_SPI_MODE_0': undefined identifier
+..\hal\nrf24le1\hal_spi.h(68): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'void'
+..\hal\nrf24le1\hal_spi.h(73): error C202: 'hal_spi_clkdivider_t': undefined identifier
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'ck'
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'bo'
+..\hal\nrf24le1\hal_spi.h(82): error C141: syntax error near 'uint8_t'
+..\hal\nrf24le1\hal_spi.h(86): error C141: syntax error near 'void'
+..\hal\nrf24le1\hal_spi.h(86): error C202: 'hal_spi_mode_t': undefined identifier
+..\hal\nrf24le1\hal_spi.h(86): error C141: syntax error near 'mode'
+..\hal\nrf24le1\hal_spi.h(95): error C141: syntax error near 'uint8_t'
+..\hal\nrf24le1\hal_spi.h(100): error C141: syntax error near 'uint8_t'
 compiling hal_delay.c...
 Target not created
 Build target 'Target 1'
 assembling STARTUP.A51...
 compiling main.c...
-main.c(16): error C141: syntax error near '/'
+isrdef24le1.h(18): warning C318: can't open file 'nrf24lu1p.h'
+isrdef24le1.h(74): error C202: 'WDCON': undefined identifier
+isrdef24le1.h(93): error C202: 'P0ALT': undefined identifier
+isrdef24le1.h(94): error C202: 'P0EXP': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(65): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(66): error C202: 'HAL_W2_IDLE': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(69): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(74): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(75): error C202: 'HAL_W2_MASTER': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(77): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(82): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(83): error C202: 'HAL_W2_STOP_COND': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(86): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(91): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_w2_isr.h(92): error C202: 'HAL_W2_DIR_WRITE': undefined identifier
+..\hal\nrf24le1\hal_w2_isr.h(94): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_w2_isr.h(108): error C141: syntax error near 'void'
+hal_w2_isr.h(17): warning C318: can't open file 'nrf24lu1p.h'
+nRF-SPIComands.h(10): warning C317: attempt to redefine macro 'TX_PLOAD_WIDTH'
 compiling hal_w2_isr.c...
+isrdef24le1.h(18): warning C318: can't open file 'nrf24lu1p.h'
+isrdef24le1.h(74): error C202: 'WDCON': undefined identifier
+isrdef24le1.h(93): error C202: 'P0ALT': undefined identifier
+isrdef24le1.h(94): error C202: 'P0EXP': undefined identifier
+hal_w2_isr.h(17): warning C318: can't open file 'nrf24lu1p.h'
+..\hal\nrf24le1\hal_spi.h(41): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(43): error C202: 'SPI_CLK_DIV2': undefined identifier
+..\hal\nrf24le1\hal_spi.h(50): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(55): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(56): error C202: 'HAL_SPI_LSB_MSB': undefined identifier
+..\hal\nrf24le1\hal_spi.h(58): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(63): error C141: syntax error near 'typedef'
+..\hal\nrf24le1\hal_spi.h(64): error C202: 'HAL_SPI_MODE_0': undefined identifier
+..\hal\nrf24le1\hal_spi.h(68): error C141: syntax error near '}'
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'void'
+..\hal\nrf24le1\hal_spi.h(73): error C202: 'hal_spi_clkdivider_t': undefined identifier
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'ck'
+..\hal\nrf24le1\hal_spi.h(73): error C141: syntax error near 'bo'
+..\hal\nrf24le1\hal_spi.h(82): error C141: syntax error near 'uint8_t'
+..\hal\nrf24le1\hal_spi.h(86): error C141: syntax error near 'void'
+..\hal\nrf24le1\hal_spi.h(86): error C202: 'hal_spi_mode_t': undefined identifier
+..\hal\nrf24le1\hal_spi.h(86): error C141: syntax error near 'mode'
+..\hal\nrf24le1\hal_spi.h(95): error C141: syntax error near 'uint8_t'
+..\hal\nrf24le1\hal_spi.h(100): error C141: syntax error near 'uint8_t'
 compiling hal_delay.c...
 Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-main.c(101): warning C206: 'enviar_pacote_inercial': missing function-prototype
-main.c(116): error C202: 'LED1': undefined identifier
-main.c(117): error C202: 'LED2': undefined identifier
-main.c(148): error C231: 'enviar_pacote_inercial': redefinition
-main.c(157): error C231: 'enviar_pacote_inercial': redefinition
-compiling hal_w2_isr.c...
-compiling hal_delay.c...
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-main.c(101): warning C206: 'enviar_pacote_inercial': missing function-prototype
-main.c(148): error C231: 'enviar_pacote_inercial': redefinition
-main.c(157): error C231: 'enviar_pacote_inercial': redefinition
-compiling hal_w2_isr.c...
-compiling hal_delay.c...
-Target not created
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-compiling hal_w2_isr.c...
-compiling hal_delay.c...
-linking...
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_WRITE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_READ/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _I2C_MPU_READBYTE/HAL_W2_ISR
-Program Size: data=115.1 xdata=0 const=0 code=1679
-creating hex file from "FProject"...
-"FProject" - 0 Error(s), 9 Warning(s).
-Build target 'Target 1'
-assembling STARTUP.A51...
-compiling main.c...
-compiling hal_w2_isr.c...
-compiling hal_delay.c...
-linking...
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_RESPOND_TO_GEN_ADR/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_ALTER_CLOCK/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_STOP_COND_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_IRQ_ADR_MATCH_ENABLE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_SET_SLAVE_ADDRESS/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    HAL_W2_WAIT_DATA_READY/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_WRITE/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _HAL_W2_READ/HAL_W2_ISR
-*** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
-    NAME:    _I2C_MPU_READBYTE/HAL_W2_ISR
-Program Size: data=115.1 xdata=0 const=0 code=1679
-creating hex file from "FProject"...
-"FProject" - 0 Error(s), 9 Warning(s).

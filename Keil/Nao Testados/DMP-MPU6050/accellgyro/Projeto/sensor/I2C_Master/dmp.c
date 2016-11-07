@@ -1,6 +1,7 @@
 #include <hal_w2_isr.h>
 #include "stdint.h"
 #include "stdbool.h"
+#include "dmp.h"
 
 void mpu_initialize(void){
   i2c_mpu_writeBits(MPU_endereco, 0x6B, 2, 3, 0x01);//setClockSource(MPU6050_CLOCK_PLL_XGYRO);
@@ -35,19 +36,19 @@ void setXAccelOffset(int16_t offset) {
     i2c_mpu_writeWord(MPU_endereco,  0x06, offset);
 }
 void setYAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x08, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x08, offset);
 }
 void setZAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x0A, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x0A, offset);
 }
 void setXGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x13, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x13, offset);
 }
 void setYGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x15, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x15, offset);
 }
 void setZGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x17, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x17, offset);
 }
 //Get offset
 int16_t getXAccelOffset(void) {

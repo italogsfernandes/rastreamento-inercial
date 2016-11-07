@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  STARTUP                                                              10/25/2016 10:44:24 PAGE     1
+A51 MACRO ASSEMBLER  STARTUP                                                              11/07/2016 11:33:34 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.5.0
@@ -123,7 +123,7 @@ LOC  OBJ            LINE     SOURCE
 
                       58     ;     <i> Stack space for reentrant functions in the SMALL model.
 
-A51 MACRO ASSEMBLER  STARTUP                                                              10/25/2016 10:44:24 PAGE     2
+A51 MACRO ASSEMBLER  STARTUP                                                              11/07/2016 11:33:34 PAGE     2
 
   0000                59     IBPSTACK        EQU     0       ; set to 1 if small reentrant is used.
 
@@ -257,7 +257,7 @@ LOC  OBJ            LINE     SOURCE
 
                      124     
 
-A51 MACRO ASSEMBLER  STARTUP                                                              10/25/2016 10:44:24 PAGE     3
+A51 MACRO ASSEMBLER  STARTUP                                                              11/07/2016 11:33:34 PAGE     3
 
 ----                 125                     CSEG    AT      0
 
@@ -391,7 +391,7 @@ LOC  OBJ            LINE     SOURCE
 
                      190     
 
-A51 MACRO ASSEMBLER  STARTUP                                                              10/25/2016 10:44:24 PAGE     4
+A51 MACRO ASSEMBLER  STARTUP                                                              11/07/2016 11:33:34 PAGE     4
 
                              
 
@@ -409,7 +409,7 @@ LOC  OBJ            LINE     SOURCE
 
                      198                     END
 
-A51 MACRO ASSEMBLER  STARTUP                                                              10/25/2016 10:44:24 PAGE     5
+A51 MACRO ASSEMBLER  STARTUP                                                              11/07/2016 11:33:34 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
