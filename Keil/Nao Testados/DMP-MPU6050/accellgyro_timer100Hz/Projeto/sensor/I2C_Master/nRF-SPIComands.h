@@ -14,8 +14,8 @@
 //Definido como endereço da pipe 0
 uint8_t const ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
 
-uint8_t data rx_buf[TX_PLOAD_WIDTH];
-uint8_t data tx_buf[TX_PLOAD_WIDTH];
+uint8_t xdata rx_buf[TX_PLOAD_WIDTH];
+uint8_t xdata tx_buf[TX_PLOAD_WIDTH];
 
 uint8_t bdata sta;
 sbit	RX_DR	= sta^6;
