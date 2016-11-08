@@ -82,6 +82,7 @@ void setup() {
     mpu_initialize(); //inicia dispositivo
     LEDVM = !mpu_testConnection(); //se deu errado acende led
     //XXX, testar get and setters de offset
+	setZAccelOffset(10000);
 }
 
 void main(void) {

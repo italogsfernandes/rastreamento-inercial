@@ -2,7 +2,7 @@
 /* Se a biblioteca mpu.h não for definida, defina-a.
 Verificar é preciso para que não haja varias chamadas da
 mesma biblioteca. */
-#define	DMP_H 
+#define	DMP_H
 
 #include <hal_w2_isr.h>
 #include "stdint.h"
@@ -38,6 +38,50 @@ void getMotion6_packet(uint8_t *packet6){
     packet6[9] = buffer[11]; //Ygy_L
     packet6[10] = buffer[12]; //Zgy_H
     packet6[11] = buffer[13]; //Zgy_L
+}
+
+void setXAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco,  0x06, offset);
+}
+void setYAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x08, offset);
+}
+void setZAccelOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x0A, offset);
+}
+void setXGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x13, offset);
+}
+void setYGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x15, offset);
+}
+void setZGyroOffset(int16_t offset) {
+    writeWord(MPU_endereco, 0x17, offset);
+}
+//Get
+int16_t getXAccelOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x06, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYAccelOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x08, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZAccelOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x0A, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getXGyroOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x13, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYGyroOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x15, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZGyroOffset(void) {
+    i2c_mpu_readBytes(MPU_endereco, 0x17, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
 #endif
