@@ -38,12 +38,12 @@ void stop_T0(void);
 
 /**************************************************/
 // Vari�veis do TMR0
-unsigned char NBT0H  = 0xCB;			// Este tempo
-unsigned char NBT0L  = 0xEA;			// equivale a
-unsigned char NOVT0  = 0x00;			// Freq. de Amostragem de 100Hz
+unsigned char xdata NBT0H  = 0xCB;			// Este tempo
+unsigned char xdata NBT0L  = 0xEA;			// equivale a
+unsigned char xdata NOVT0  = 0x00;			// Freq. de Amostragem de 100Hz
 
 /**************************************************/
-int timer_flag = 1;
+int xdata timer_flag = 1;
 void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
@@ -89,8 +89,6 @@ void main(void) {
     while(1){
         if(!S1 && LEDVM==0){ //se foi apertado o sinal e o led esta desativado
             start_T0();
-            getMotion6_packet(packet_motion6);
-            enviar_motion6();
             delay_ms(100);
             while(!S1);
             delay_ms(100);
@@ -137,7 +135,7 @@ void luzes_iniciais(void){
 }
 
 void enviar_motion6(void){
-	unsigned int i;
+	unsigned int xdata i;
     tx_buf[0] = MY_SUB_ADDR;
     for(i=1;i<13;i++){
         tx_buf[i] = packet_motion6[i-1];
