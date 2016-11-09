@@ -82,12 +82,15 @@ void setup() {
     mpu_initialize(); //inicia dispositivo
     LEDVM = !mpu_testConnection(); //se deu errado acende led
     //XXX, testar get and setters de offset
+		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
 
 void main(void) {
     setup();
     while(1){
-        if(!S1 && LEDVM==0){ //se foi apertado o sinal e o led esta desativado
+        if(!S1){ //se foi apertado o sinal e o led esta desativado
+					//Your offsets:	-2963	2073	4431	-34	12	53
             start_T0();
             delay_ms(100);
             while(!S1);
