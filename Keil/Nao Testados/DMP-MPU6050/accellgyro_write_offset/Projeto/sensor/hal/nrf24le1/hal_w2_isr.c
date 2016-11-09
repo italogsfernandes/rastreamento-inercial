@@ -469,13 +469,12 @@ bool i2c_mpu_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, u
         ack_received = false;
       }
       if(ack_received){
-          HAL_W2_WRITE((uint8_t)*data_ptr);//LSB
+          HAL_W2_WRITE((uint8_t)*data_ptr++);//LSB
           w2_status = hal_w2_wait_data_ready_ISR();
           if (w2_status & W2CON1_FLAG_NACK)
           {
             ack_received = false;
           }
-          *data_ptr++;
       } else {
           break;
       }
@@ -535,9 +534,7 @@ int8_t i2c_mpu_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, 
 
       if(ack_received){
           w2_status = hal_w2_wait_data_ready_ISR();
-
-          *data_ptr |= ((uint16_t) HAL_W2_READ(); //LSB
-          *data_ptr++;
+          *data_ptr++ |= ((uint16_t) HAL_W2_READ()); //LSB
           ack_received = !(w2_status & W2CON1_FLAG_NACK);
       } else {
           break;

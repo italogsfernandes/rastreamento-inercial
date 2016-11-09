@@ -41,22 +41,22 @@ void getMotion6_packet(uint8_t *packet6){
 }
 
 void setXAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco,  0x06, offset);
+    i2c_mpu_writeWord(MPU_endereco,  0x06, offset);
 }
 void setYAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x08, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x08, offset);
 }
 void setZAccelOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x0A, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x0A, offset);
 }
 void setXGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x13, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x13, offset);
 }
 void setYGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x15, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x15, offset);
 }
 void setZGyroOffset(int16_t offset) {
-    writeWord(MPU_endereco, 0x17, offset);
+    i2c_mpu_writeWord(MPU_endereco, 0x17, offset);
 }
 //Get
 int16_t getXAccelOffset(void) {
