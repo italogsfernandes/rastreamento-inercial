@@ -81,7 +81,7 @@ void setup() {
     EA=1; luzes_iniciais(); //\Enable All interrupts, e pisca luzes
     mpu_initialize(); //inicia dispositivo
     LEDVM = !mpu_testConnection(); //se deu errado acende led
-    //XXX, testar get and setters de offset
+    //XXX, testar get and setters
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
@@ -90,13 +90,22 @@ void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
-					//Your offsets:	-2963	2073	4431	-34	12	53
+						tx_buf[0] = MY_SUB_ADDR;
+						tx_buf[1] = 0x77;
+						tx_buf[2] = 'o';tx_buf[3] = 'n'; tx_buf[4] = '\n';
+						TX_Mode_NOACK(5);
+						RX_Mode();
             start_T0();
             delay_ms(100);
             while(!S1);
             delay_ms(100);
         }
         if(!S2){
+						tx_buf[0] = MY_SUB_ADDR;
+						tx_buf[1] = 0x77;
+						tx_buf[2] = 'o';tx_buf[3] = 'f'; tx_buf[4] = 'f'; tx_buf[5] = '\m';
+						TX_Mode_NOACK(6);
+						RX_Mode();
             stop_T0();
             LEDVM = !LEDVM;
             delay_ms(100);
