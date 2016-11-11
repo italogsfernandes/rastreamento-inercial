@@ -17,6 +17,7 @@
 //Sinais utilizados na comunicacao via RF
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
+#define SIGNAL_SENSOR_MSG 0x97
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
 
@@ -90,10 +91,9 @@ void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
-						tx_buf[0] = MY_SUB_ADDR;
-						tx_buf[1] = 0x77;
-						tx_buf[2] = 'o';tx_buf[3] = 'n'; tx_buf[4] = '\n';
-						TX_Mode_NOACK(5);
+						tx_buf[0] = SIGNAL_SENSOR_MSG;
+						tx_buf[1] = 'o';tx_buf[2] = 'n'; tx_buf[3] = '\n';
+						TX_Mode_NOACK(4);
 						RX_Mode();
             start_T0();
             delay_ms(100);
@@ -101,10 +101,9 @@ void main(void) {
             delay_ms(100);
         }
         if(!S2){
-						tx_buf[0] = MY_SUB_ADDR;
-						tx_buf[1] = 0x77;
-						tx_buf[2] = 'o';tx_buf[3] = 'f'; tx_buf[4] = 'f'; tx_buf[5] = '\m';
-						TX_Mode_NOACK(6);
+						tx_buf[0] = SIGNAL_SENSOR_MSG;
+						tx_buf[1] = 'o';tx_buf[2] = 'f'; tx_buf[3] = 'f'; tx_buf[4] = '\n';
+						TX_Mode_NOACK(5);
 						RX_Mode();
             stop_T0();
             LEDVM = !LEDVM;
@@ -117,9 +116,17 @@ void main(void) {
 					if(rx_buf[0] == MY_SUB_ADDR){
 						switch(rx_buf[1]){
 							case Sinal_request_data:
+										tx_buf[0] = SIGNAL_SENSOR_MSG;
+										tx_buf[1] = 'o';tx_buf[2] = 'n'; tx_buf[3] = '\n';
+										TX_Mode_NOACK(4);
+										RX_Mode();
 										start_T0();
 										break;
 							case Sinal_LEDS:
+										tx_buf[0] = SIGNAL_SENSOR_MSG;
+										tx_buf[1] = 'o';tx_buf[2] = 'f';tx_buf[3] = 'f'; tx_buf[4] = '\n';
+										TX_Mode_NOACK(5);
+										RX_Mode();
 										stop_T0();
 										LEDVM = !LEDVM;
 										break;

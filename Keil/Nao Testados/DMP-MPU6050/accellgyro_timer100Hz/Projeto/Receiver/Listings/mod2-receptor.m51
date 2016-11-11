@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        11/09/2016  13:21:47  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/11/2016  12:19:12  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -26,42 +26,45 @@ LINK MAP OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
             * * * * * * *   D A T A   M E M O R Y   * * * * * * *
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
             DATA    0008H     000CH     UNIT         _DATA_GROUP_
-                    0014H     000CH                  *** GAP ***
+            DATA    0014H     0008H     UNIT         ?DT?MOD2_RECEPTOR
+                    001CH     0004H                  *** GAP ***
             DATA    0020H     0001H     BIT_ADDR     ?BA?MOD2_RECEPTOR
             BIT     0021H.0   0000H.1   UNIT         ?BI?MOD2_RECEPTOR
                     0021H.1   0000H.7                *** GAP ***
-            DATA    0022H     003EH     UNIT         ?DT?MOD2_RECEPTOR
-            IDATA   0060H     0001H     UNIT         ?STACK
+            IDATA   0022H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0036H     UNIT         ?XD?MOD2_RECEPTOR
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
             CODE    0000H     0003H     ABSOLUTE     
             CODE    0003H     0046H     UNIT         ?PR?RF_INIT?MOD2_RECEPTOR
                     0049H     0002H                  *** GAP ***
             CODE    004BH     0003H     ABSOLUTE     
-            CODE    004EH     00A7H     UNIT         ?PR?MAIN?MOD2_RECEPTOR
-            CODE    00F5H     008CH     UNIT         ?C_C51STARTUP
-            CODE    0181H     0086H     UNIT         ?PR?RF_IRQ?MOD2_RECEPTOR
-            CODE    0207H     003DH     UNIT         ?PR?_SPI_WRITE_BUF?MOD2_RECEPTOR
-            CODE    0244H     003CH     UNIT         ?CO?MOD2_RECEPTOR
-            CODE    0280H     003BH     UNIT         ?C?LIB_CODE
-            CODE    02BBH     0031H     UNIT         ?PR?_SPI_READ_BUF?MOD2_RECEPTOR
-            CODE    02ECH     0027H     UNIT         ?PR?_TX_MODE_NOACK?MOD2_RECEPTOR
-            CODE    0313H     0025H     UNIT         ?PR?_PUTSTRING?MOD2_RECEPTOR
-            CODE    0338H     0025H     UNIT         ?PR?_DELAY_MS?MOD2_RECEPTOR
-            CODE    035DH     001EH     UNIT         ?PR?LUZES_INICIAIS?MOD2_RECEPTOR
-            CODE    037BH     001AH     UNIT         ?PR?UART_INIT?MOD2_RECEPTOR
-            CODE    0395H     0017H     UNIT         ?PR?SETUP?MOD2_RECEPTOR
-            CODE    03ACH     0013H     UNIT         ?PR?_SPI_RW_REG?MOD2_RECEPTOR
-            CODE    03BFH     0011H     UNIT         ?PR?RX_MODE?MOD2_RECEPTOR
-            CODE    03D0H     0011H     UNIT         ?PR?INICIARIO?MOD2_RECEPTOR
-            CODE    03E1H     000DH     UNIT         ?PR?_SPI_READ?MOD2_RECEPTOR
-            CODE    03EEH     000DH     UNIT         ?C_INITSEG
-            CODE    03FBH     000CH     UNIT         ?PR?INICIARRF?MOD2_RECEPTOR
-            CODE    0407H     000AH     UNIT         ?PR?_SPI_RW?MOD2_RECEPTOR
-            CODE    0411H     0008H     UNIT         ?PR?_UART_PUTCHAR?MOD2_RECEPTOR
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 2
+            CODE    004EH     00B5H     UNIT         ?PR?MAIN?MOD2_RECEPTOR
+            CODE    0103H     008CH     UNIT         ?C_C51STARTUP
+            CODE    018FH     0086H     UNIT         ?PR?RF_IRQ?MOD2_RECEPTOR
+            CODE    0215H     003DH     UNIT         ?PR?_SPI_WRITE_BUF?MOD2_RECEPTOR
+            CODE    0252H     003CH     UNIT         ?CO?MOD2_RECEPTOR
+            CODE    028EH     003BH     UNIT         ?C?LIB_CODE
+            CODE    02C9H     0031H     UNIT         ?PR?_SPI_READ_BUF?MOD2_RECEPTOR
+            CODE    02FAH     002DH     UNIT         ?PR?_TX_MODE_NOACK?MOD2_RECEPTOR
+            CODE    0327H     0025H     UNIT         ?PR?_PUTSTRING?MOD2_RECEPTOR
+            CODE    034CH     0025H     UNIT         ?PR?_DELAY_MS?MOD2_RECEPTOR
+            CODE    0371H     001EH     UNIT         ?PR?LUZES_INICIAIS?MOD2_RECEPTOR
+            CODE    038FH     001AH     UNIT         ?PR?UART_INIT?MOD2_RECEPTOR
+            CODE    03A9H     0017H     UNIT         ?PR?SETUP?MOD2_RECEPTOR
+            CODE    03C0H     0016H     UNIT         ?PR?_UART_PUTCHAR?MOD2_RECEPTOR
+            CODE    03D6H     0013H     UNIT         ?PR?_SPI_RW_REG?MOD2_RECEPTOR
+            CODE    03E9H     0011H     UNIT         ?PR?RX_MODE?MOD2_RECEPTOR
+            CODE    03FAH     0011H     UNIT         ?PR?INICIARIO?MOD2_RECEPTOR
+            CODE    040BH     000DH     UNIT         ?PR?_SPI_READ?MOD2_RECEPTOR
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 2
 
 
+            CODE    0418H     000DH     UNIT         ?C_INITSEG
+            CODE    0425H     000CH     UNIT         ?PR?INICIARRF?MOD2_RECEPTOR
+            CODE    0431H     000AH     UNIT         ?PR?_SPI_RW?MOD2_RECEPTOR
 
 
 
@@ -116,11 +119,11 @@ SEGMENT                                    DATA_GROUP
   +--> ?PR?_UART_PUTCHAR?MOD2_RECEPTOR
 
 ?PR?_TX_MODE_NOACK?MOD2_RECEPTOR         0008H    0002H
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 3
+
+
   +--> ?PR?_SPI_RW_REG?MOD2_RECEPTOR
   +--> ?PR?_SPI_WRITE_BUF?MOD2_RECEPTOR
-
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 3
-
 
 *** NEW ROOT ***************************************************
 
@@ -143,8 +146,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:00F5H         SEGMENT       ?C_C51STARTUP
-  I:0060H         SEGMENT       ?STACK
+  C:0103H         SEGMENT       ?C_C51STARTUP
+  I:0022H         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00E0H         SYMBOL        ACC
   D:00F0H         SYMBOL        B
@@ -153,7 +156,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:00F8H         SYMBOL        IDATALOOP
+  C:0106H         SYMBOL        IDATALOOP
   N:0000H         SYMBOL        PBPSTACK
   N:0100H         SYMBOL        PBPSTACKTOP
   N:0000H         SYMBOL        PDATALEN
@@ -162,41 +165,41 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   N:0000H         SYMBOL        PPAGEENABLE
   D:00A0H         SYMBOL        PPAGE_SFR
   D:0081H         SYMBOL        SP
-  C:00F5H         SYMBOL        STARTUP1
+  C:0103H         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
   N:0000H         SYMBOL        XDATASTART
   C:0000H         LINE#         126
-  C:00F5H         LINE#         133
-  C:00F7H         LINE#         134
-  C:00F8H         LINE#         135
-  C:00F9H         LINE#         136
-  C:00FBH         LINE#         185
-  C:00FEH         LINE#         196
+  C:0103H         LINE#         133
+  C:0105H         LINE#         134
+  C:0106H         LINE#         135
+  C:0107H         LINE#         136
+  C:0109H         LINE#         185
+  C:010CH         LINE#         196
   -------         ENDMOD        ?C_STARTUP
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 4
+
 
   -------         MODULE        MOD2_RECEPTOR
   C:0000H         SYMBOL        _ICE_DUMMY_
   D:0080H         PUBLIC        P0
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 4
-
-
   D:0090H         PUBLIC        P1
   D:00A0H         PUBLIC        P2
   D:00B0H         PUBLIC        P3
   B:0080H.2       PUBLIC        S1
   B:0090H.4       PUBLIC        S2
   B:00A8H.7       PUBLIC        EA
-  D:0022H         PUBLIC        rx_buf
-  D:003DH         PUBLIC        tx_buf
+  X:0000H         PUBLIC        rx_buf
+  X:001BH         PUBLIC        tx_buf
   D:00A8H         PUBLIC        IEN0
   D:00B8H         PUBLIC        IEN1
-  C:03BFH         PUBLIC        RX_Mode
+  C:03E9H         PUBLIC        RX_Mode
   B:0098H.4       PUBLIC        REN0
   B:00B8H.1       PUBLIC        RF
   D:00E7H         PUBLIC        SPIRDAT
-  C:0411H         PUBLIC        _uart_putchar
+  C:03CEH         PUBLIC        _uart_putchar
   B:0021H.0       PUBLIC        newPayload
   B:0020H.6       PUBLIC        RX_DR
   B:00E8H.0       PUBLIC        RFCE
@@ -204,61 +207,61 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:004EH         PUBLIC        main
   D:00BAH         PUBLIC        S0RELH
   D:0087H         PUBLIC        PCON
-  C:0395H         PUBLIC        setup
+  C:03A9H         PUBLIC        setup
   D:00AAH         PUBLIC        S0RELL
   D:0088H         PUBLIC        TCON
   B:00E8H.2       PUBLIC        RFCKEN
-  D:0058H         PUBLIC        ADDR_HOST
+  D:0014H         PUBLIC        ADDR_HOST
   B:00A8H.4       PUBLIC        ES0
   D:0020H         PUBLIC        sta
-  C:02BBH         PUBLIC        _SPI_Read_Buf
-  C:03E1H         PUBLIC        _SPI_Read
+  C:02C9H         PUBLIC        _SPI_Read_Buf
+  C:040BH         PUBLIC        _SPI_Read
   B:0098H.1       PUBLIC        TI0
   B:0098H.7       PUBLIC        SM0
   B:0098H.6       PUBLIC        SM1
-  D:005DH         PUBLIC        ii
-  C:033CH         PUBLIC        _delay_ms
-  C:037BH         PUBLIC        uart_init
-  C:0212H         PUBLIC        _SPI_Write_Buf
+  D:0019H         PUBLIC        ii
+  C:0350H         PUBLIC        _delay_ms
+  C:038FH         PUBLIC        uart_init
+  C:0220H         PUBLIC        _SPI_Write_Buf
   D:0093H         PUBLIC        P0DIR
   D:009EH         PUBLIC        P0CON
   D:0099H         PUBLIC        S0BUF
   D:0094H         PUBLIC        P1DIR
-  C:02ECH         PUBLIC        _TX_Mode_NOACK
+  C:0300H         PUBLIC        _TX_Mode_NOACK
   D:009FH         PUBLIC        P1CON
   D:0095H         PUBLIC        P2DIR
   D:0097H         PUBLIC        P2CON
   D:0098H         PUBLIC        S0CON
-  C:035DH         PUBLIC        luzes_iniciais
-  C:0181H         PUBLIC        RF_IRQ
+  C:0371H         PUBLIC        luzes_iniciais
+  C:018FH         PUBLIC        RF_IRQ
   D:00D8H         PUBLIC        ADCON
   D:00C8H         PUBLIC        T2CON
   D:00F8H         PUBLIC        FSR
   B:0020H.4       PUBLIC        MAX_RT
   C:0003H         PUBLIC        rf_init
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 5
+
+
   B:0080H.6       PUBLIC        LEDVD
-  D:005FH         PUBLIC        payloadWidth
-  C:0313H         PUBLIC        _putstring
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 5
-
-
-  C:03ACH         PUBLIC        _SPI_RW_Reg
-  C:0407H         PUBLIC        _SPI_RW
+  D:001BH         PUBLIC        payloadWidth
+  C:0327H         PUBLIC        _putstring
+  C:03D6H         PUBLIC        _SPI_RW_Reg
+  C:0431H         PUBLIC        _SPI_RW
   D:00E8H         PUBLIC        RFCON
   D:00D0H         PUBLIC        PSW
-  C:03FBH         PUBLIC        iniciarRF
-  C:03D0H         PUBLIC        iniciarIO
+  C:0425H         PUBLIC        iniciarRF
+  C:03FAH         PUBLIC        iniciarIO
   D:00C0H         PUBLIC        IRCON
   B:00E8H.1       PUBLIC        RFCSN
   D:00E6H         PUBLIC        SPIRSTAT
   -------         PROC          _SPI_RW
   D:0007H         SYMBOL        value
-  C:0407H         LINE#         29
-  C:0407H         LINE#         30
-  C:0407H         LINE#         31
-  C:0409H         LINE#         33
-  C:040EH         LINE#         35
-  C:0410H         LINE#         36
+  C:0431H         LINE#         29
+  C:0431H         LINE#         30
+  C:0431H         LINE#         31
+  C:0433H         LINE#         33
+  C:0438H         LINE#         35
+  C:043AH         LINE#         36
   -------         ENDPROC       _SPI_RW
   -------         PROC          _SPI_RW_REG
   D:0007H         SYMBOL        reg
@@ -266,28 +269,28 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   -------         DO            
   D:0005H         SYMBOL        status
   -------         ENDDO         
-  C:03ACH         LINE#         38
-  C:03AEH         LINE#         39
-  C:03AEH         LINE#         42
-  C:03B0H         LINE#         43
-  C:03B5H         LINE#         44
-  C:03BAH         LINE#         45
-  C:03BCH         LINE#         47
-  C:03BEH         LINE#         48
+  C:03D6H         LINE#         38
+  C:03D8H         LINE#         39
+  C:03D8H         LINE#         42
+  C:03DAH         LINE#         43
+  C:03DFH         LINE#         44
+  C:03E4H         LINE#         45
+  C:03E6H         LINE#         47
+  C:03E8H         LINE#         48
   -------         ENDPROC       _SPI_RW_REG
   -------         PROC          _SPI_READ
   D:0007H         SYMBOL        reg
   -------         DO            
   D:0007H         SYMBOL        reg_val
   -------         ENDDO         
-  C:03E1H         LINE#         50
-  C:03E1H         LINE#         51
-  C:03E1H         LINE#         54
-  C:03E3H         LINE#         55
-  C:03E6H         LINE#         56
-  C:03EBH         LINE#         57
-  C:03EDH         LINE#         59
-  C:03EDH         LINE#         60
+  C:040BH         LINE#         50
+  C:040BH         LINE#         51
+  C:040BH         LINE#         54
+  C:040DH         LINE#         55
+  C:0410H         LINE#         56
+  C:0415H         LINE#         57
+  C:0417H         LINE#         59
+  C:0417H         LINE#         60
   -------         ENDPROC       _SPI_READ
   -------         PROC          _SPI_READ_BUF
   D:0007H         SYMBOL        reg
@@ -296,22 +299,22 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   -------         DO            
   D:0006H         SYMBOL        status
   D:0005H         SYMBOL        byte_ctr
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 6
+
+
   -------         ENDDO         
-  C:02BBH         LINE#         62
-  C:02C1H         LINE#         63
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 6
-
-
-  C:02C1H         LINE#         66
-  C:02C3H         LINE#         67
-  C:02C8H         LINE#         69
-  C:02D0H         LINE#         70
-  C:02E7H         LINE#         72
-  C:02E9H         LINE#         74
-  C:02EBH         LINE#         75
+  C:02C9H         LINE#         62
+  C:02CFH         LINE#         63
+  C:02CFH         LINE#         66
+  C:02D1H         LINE#         67
+  C:02D6H         LINE#         69
+  C:02DEH         LINE#         70
+  C:02F5H         LINE#         72
+  C:02F7H         LINE#         74
+  C:02F9H         LINE#         75
   -------         ENDPROC       _SPI_READ_BUF
-  -------         PROC          L?0065
-  -------         ENDPROC       L?0065
+  -------         PROC          L?0070
+  -------         ENDPROC       L?0070
   -------         PROC          _SPI_WRITE_BUF
   D:0007H         SYMBOL        reg
   D:000BH         SYMBOL        pBuf
@@ -320,63 +323,65 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   D:0006H         SYMBOL        status
   D:0005H         SYMBOL        byte_ctr
   -------         ENDDO         
-  C:0212H         LINE#         77
-  C:0218H         LINE#         78
-  C:0218H         LINE#         81
-  C:021AH         LINE#         82
-  C:021FH         LINE#         83
-  C:0227H         LINE#         84
-  C:023FH         LINE#         85
-  C:0241H         LINE#         86
-  C:0243H         LINE#         87
+  C:0220H         LINE#         77
+  C:0226H         LINE#         78
+  C:0226H         LINE#         81
+  C:0228H         LINE#         82
+  C:022DH         LINE#         83
+  C:0235H         LINE#         84
+  C:024DH         LINE#         85
+  C:024FH         LINE#         86
+  C:0251H         LINE#         87
   -------         ENDPROC       _SPI_WRITE_BUF
   -------         PROC          RX_MODE
-  C:03BFH         LINE#         90
-  C:03BFH         LINE#         91
-  C:03BFH         LINE#         92
-  C:03C2H         LINE#         93
-  C:03C4H         LINE#         94
-  C:03C6H         LINE#         95
-  C:03CDH         LINE#         96
-  C:03CFH         LINE#         97
+  C:03E9H         LINE#         90
+  C:03E9H         LINE#         91
+  C:03E9H         LINE#         92
+  C:03ECH         LINE#         93
+  C:03EEH         LINE#         94
+  C:03F0H         LINE#         95
+  C:03F7H         LINE#         96
+  C:03F9H         LINE#         97
   -------         ENDPROC       RX_MODE
+  -------         PROC          L?0071
+  -------         ENDPROC       L?0071
   -------         PROC          _TX_MODE_NOACK
   D:0008H         SYMBOL        payloadLength
-  C:02ECH         LINE#         99
-  C:02F0H         LINE#         100
-  C:02F0H         LINE#         101
-  C:02F2H         LINE#         102
-  C:02F9H         LINE#         103
-  C:02FCH         LINE#         104
-  C:030AH         LINE#         106
-  C:030CH         LINE#         107
-  C:0312H         LINE#         108
+  C:0300H         LINE#         99
+  C:0304H         LINE#         100
+  C:0304H         LINE#         101
+  C:0306H         LINE#         102
+  C:030DH         LINE#         103
+  C:0310H         LINE#         104
+  C:031EH         LINE#         106
+  C:0320H         LINE#         107
+  C:0326H         LINE#         108
   -------         ENDPROC       _TX_MODE_NOACK
   -------         PROC          RF_IRQ
-  C:0181H         LINE#         111
-  C:019AH         LINE#         113
-  C:01A1H         LINE#         114
-  C:01A4H         LINE#         115
-  C:01A4H         LINE#         116
-  C:01B2H         LINE#         117
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 7
+  C:018FH         LINE#         111
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 7
 
 
-  C:01B9H         LINE#         118
-  C:01BBH         LINE#         119
-  C:01C2H         LINE#         120
-  C:01C9H         LINE#         121
-  C:01C9H         LINE#         122
-  C:01CCH         LINE#         123
-  C:01D3H         LINE#         124
-  C:01D5H         LINE#         125
-  C:01D5H         LINE#         126
-  C:01D5H         LINE#         127
-  C:01D8H         LINE#         128
-  C:01DFH         LINE#         129
-  C:01E2H         LINE#         130
-  C:01E9H         LINE#         132
-  C:01F0H         LINE#         133
+  C:01A8H         LINE#         113
+  C:01AFH         LINE#         114
+  C:01B2H         LINE#         115
+  C:01B2H         LINE#         116
+  C:01C0H         LINE#         117
+  C:01C7H         LINE#         118
+  C:01C9H         LINE#         119
+  C:01D0H         LINE#         120
+  C:01D7H         LINE#         121
+  C:01D7H         LINE#         122
+  C:01DAH         LINE#         123
+  C:01E1H         LINE#         124
+  C:01E3H         LINE#         125
+  C:01E3H         LINE#         126
+  C:01E3H         LINE#         127
+  C:01E6H         LINE#         128
+  C:01EDH         LINE#         129
+  C:01F0H         LINE#         130
+  C:01F7H         LINE#         132
+  C:01FEH         LINE#         133
   -------         ENDPROC       RF_IRQ
   -------         PROC          RF_INIT
   C:0003H         LINE#         136
@@ -394,147 +399,154 @@ SYMBOL TABLE OF MODULE:  .\Objects\mod2-receptor (?C_STARTUP)
   C:0042H         LINE#         151
   -------         ENDPROC       RF_INIT
   -------         PROC          INICIARIO
-  C:03D0H         LINE#         55
-  C:03D0H         LINE#         57
-  C:03D3H         LINE#         58
-  C:03D6H         LINE#         59
-  C:03D9H         LINE#         60
-  C:03DCH         LINE#         61
-  C:03DEH         LINE#         62
-  C:03E0H         LINE#         63
+  C:03FAH         LINE#         56
+  C:03FAH         LINE#         58
+  C:03FDH         LINE#         59
+  C:0400H         LINE#         60
+  C:0403H         LINE#         61
+  C:0406H         LINE#         62
+  C:0408H         LINE#         63
+  C:040AH         LINE#         64
   -------         ENDPROC       INICIARIO
   -------         PROC          INICIARRF
-  C:03FBH         LINE#         64
-  C:03FBH         LINE#         66
-  C:03FDH         LINE#         67
-  C:03FFH         LINE#         68
-  C:0401H         LINE#         69
-  C:0404H         LINE#         70
+  C:0425H         LINE#         65
+  C:0425H         LINE#         67
+  C:0427H         LINE#         68
+  C:0429H         LINE#         69
+  C:042BH         LINE#         70
+  C:042EH         LINE#         71
   -------         ENDPROC       INICIARRF
   -------         PROC          SETUP
-  C:0395H         LINE#         72
-  C:0395H         LINE#         73
-  C:0398H         LINE#         74
-  C:039BH         LINE#         75
-  C:039EH         LINE#         76
-  C:03A3H         LINE#         77
+  C:03A9H         LINE#         73
+  C:03A9H         LINE#         74
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 8
+
+
+  C:03ACH         LINE#         75
+  C:03AFH         LINE#         76
+  C:03B2H         LINE#         77
+  C:03B7H         LINE#         78
   -------         ENDPROC       SETUP
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 8
-
-
   -------         PROC          MAIN
-  C:004EH         LINE#         79
   C:004EH         LINE#         80
-  C:0051H         LINE#         81
+  C:004EH         LINE#         81
   C:0051H         LINE#         82
-  C:0054H         LINE#         84
-  C:0057H         LINE#         85
-  C:005AH         LINE#         87
-  C:0061H         LINE#         88
-  C:0064H         LINE#         89
-  C:006DH         LINE#         90
-  C:0070H         LINE#         91
-  C:0073H         LINE#         92
-  C:0076H         LINE#         93
-  C:0076H         LINE#         94
-  C:0079H         LINE#         96
-  C:007CH         LINE#         97
-  C:007FH         LINE#         99
-  C:0086H         LINE#         100
-  C:0089H         LINE#         101
-  C:0092H         LINE#         102
-  C:0094H         LINE#         103
-  C:0097H         LINE#         104
-  C:009AH         LINE#         105
-  C:009DH         LINE#         106
-  C:009DH         LINE#         107
-  C:00A0H         LINE#         108
-  C:00ACH         LINE#         110
-  C:00B1H         LINE#         111
-  C:00B6H         LINE#         112
-  C:00BBH         LINE#         113
-  C:00C5H         LINE#         114
-  C:00D6H         LINE#         115
-  C:00D8H         LINE#         116
-  C:00DFH         LINE#         117
-  C:00E8H         LINE#         118
-  C:00EDH         LINE#         119
-  C:00EDH         LINE#         120
-  C:00F0H         LINE#         121
-  C:00F2H         LINE#         122
-  C:00F2H         LINE#         123
+  C:0051H         LINE#         83
+  C:0054H         LINE#         85
+  C:005AH         LINE#         86
+  C:005CH         LINE#         88
+  C:005FH         LINE#         89
+  C:0062H         LINE#         90
+  C:006BH         LINE#         91
+  C:006EH         LINE#         92
+  C:0071H         LINE#         93
+  C:0074H         LINE#         94
+  C:0074H         LINE#         95
+  C:0077H         LINE#         97
+  C:007DH         LINE#         98
+  C:007FH         LINE#         100
+  C:0082H         LINE#         101
+  C:0085H         LINE#         102
+  C:008EH         LINE#         103
+  C:0090H         LINE#         104
+  C:0093H         LINE#         105
+  C:0096H         LINE#         106
+  C:0099H         LINE#         107
+  C:0099H         LINE#         108
+  C:009CH         LINE#         109
+  C:00AAH         LINE#         111
+  C:00AFH         LINE#         112
+  C:00B4H         LINE#         113
+  C:00B9H         LINE#         114
+  C:00BCH         LINE#         115
+  C:00CDH         LINE#         116
+  C:00CFH         LINE#         117
+  C:00D9H         LINE#         118
+  C:00E9H         LINE#         119
+  C:00ECH         LINE#         120
+  C:00F6H         LINE#         121
+  C:00FBH         LINE#         122
+  C:00FBH         LINE#         123
+  C:00FEH         LINE#         124
+  C:0100H         LINE#         125
+  C:0100H         LINE#         126
   -------         ENDPROC       MAIN
   -------         PROC          UART_INIT
-  C:037BH         LINE#         127
-  C:037BH         LINE#         128
-  C:037DH         LINE#         129
-  C:037FH         LINE#         130
-  C:0381H         LINE#         131
-  C:0383H         LINE#         132
-  C:0386H         LINE#         133
-  C:0389H         LINE#         135
-  C:038CH         LINE#         136
-  C:038FH         LINE#         137
-  C:0391H         LINE#         138
-  C:0394H         LINE#         139
+  C:038FH         LINE#         130
+  C:038FH         LINE#         131
+  C:0391H         LINE#         132
+  C:0393H         LINE#         133
+  C:0395H         LINE#         134
+  C:0397H         LINE#         135
+  C:039AH         LINE#         136
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 9
+
+
+  C:039DH         LINE#         138
+  C:03A0H         LINE#         139
+  C:03A3H         LINE#         140
+  C:03A5H         LINE#         141
+  C:03A8H         LINE#         142
   -------         ENDPROC       UART_INIT
+  -------         PROC          L?0067
+  -------         ENDPROC       L?0067
   -------         PROC          _UART_PUTCHAR
-BL51 BANKED LINKER/LOCATER V6.22                                                      11/09/2016  13:21:47  PAGE 9
-
-
   D:0007H         SYMBOL        x
-  C:0411H         LINE#         141
-  C:0411H         LINE#         142
-  C:0414H         LINE#         143
-  C:0416H         LINE#         144
-  C:0418H         LINE#         145
+  C:03CEH         LINE#         144
+  C:03CEH         LINE#         145
+  C:03D1H         LINE#         146
+  C:03D3H         LINE#         147
+  C:03D5H         LINE#         148
   -------         ENDPROC       _UART_PUTCHAR
   -------         PROC          _PUTSTRING
   D:0008H         SYMBOL        s
-  C:0313H         LINE#         148
-  C:0319H         LINE#         149
-  C:0324H         LINE#         150
-  C:0337H         LINE#         151
+  C:0327H         LINE#         151
+  C:032DH         LINE#         152
+  C:0338H         LINE#         153
+  C:034BH         LINE#         154
   -------         ENDPROC       _PUTSTRING
   -------         PROC          LUZES_INICIAIS
-  C:035DH         LINE#         153
-  C:035DH         LINE#         154
-  C:035FH         LINE#         155
-  C:0366H         LINE#         156
-  C:0368H         LINE#         157
-  C:036FH         LINE#         158
-  C:0371H         LINE#         159
-  C:0378H         LINE#         160
-  C:037AH         LINE#         161
+  C:0371H         LINE#         156
+  C:0371H         LINE#         157
+  C:0373H         LINE#         158
+  C:037AH         LINE#         159
+  C:037CH         LINE#         160
+  C:0383H         LINE#         161
+  C:0385H         LINE#         162
+  C:038CH         LINE#         163
+  C:038EH         LINE#         164
   -------         ENDPROC       LUZES_INICIAIS
-  C:0338H         SYMBOL        L?0064
-  -------         PROC          L?0063
-  -------         ENDPROC       L?0063
-  C:0338H         SYMBOL        L?0064
+  C:034CH         SYMBOL        L?0069
+  -------         PROC          L?0068
+  -------         ENDPROC       L?0068
+  C:034CH         SYMBOL        L?0069
   -------         PROC          _DELAY_MS
   D:0006H         SYMBOL        x
   -------         DO            
   D:0004H         SYMBOL        i
   D:0002H         SYMBOL        j
   -------         ENDDO         
-  C:033CH         LINE#         162
-  C:033CH         LINE#         164
-  C:033FH         LINE#         165
-  C:0346H         LINE#         166
-  C:0346H         LINE#         167
-  C:034AH         LINE#         169
-  C:0355H         LINE#         170
-  C:035CH         LINE#         171
+  C:0350H         LINE#         165
+  C:0350H         LINE#         167
+  C:0353H         LINE#         168
+  C:035AH         LINE#         169
+  C:035AH         LINE#         170
+  C:035EH         LINE#         172
+  C:0369H         LINE#         173
+  C:0370H         LINE#         174
   -------         ENDPROC       _DELAY_MS
   -------         ENDMOD        MOD2_RECEPTOR
 
   -------         MODULE        ?C?CLDPTR
-  C:0280H         PUBLIC        ?C?CLDPTR
+  C:028EH         PUBLIC        ?C?CLDPTR
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2016  12:19:12  PAGE 10
+
+
   -------         ENDMOD        ?C?CLDPTR
 
   -------         MODULE        ?C?CSTOPTR
-  C:0299H         PUBLIC        ?C?CSTOPTR
+  C:02A7H         PUBLIC        ?C?CSTOPTR
   -------         ENDMOD        ?C?CSTOPTR
 
-Program Size: data=84.1 xdata=0 code=1047
+Program Size: data=30.1 xdata=54 code=1081
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

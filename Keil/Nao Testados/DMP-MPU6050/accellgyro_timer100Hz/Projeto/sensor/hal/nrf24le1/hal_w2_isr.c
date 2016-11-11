@@ -490,68 +490,68 @@ bool i2c_mpu_writeWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, u
 //    return i2c_mpu_readWords(devAddr, regAddr, 1, data_ptr);
 //}
 
-int8_t i2c_mpu_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr){
-//		uint8_t xdata *superdata_ptr;
-//		unsigned char xdata malloc_mempool [0x1000];
-//		init_mempool (&malloc_mempool, sizeof(malloc_mempool));
-//		superdata_ptr = (uint8_t *) malloc(data_length*2);
-//		bool ack_received; = i2c_mpu_readBytes(devAddr,regAddr,data_length*2,superdata_ptr);
-//		int i = 0;
-//    for(i=0; i<data_length;i++){
-//			data_ptr[i] = superdata_ptr[2*i] << 8 | superdata_ptr[2*i+1];
-//		}
+//int8_t i2c_mpu_readWords(uint8_t devAddr, uint8_t regAddr, uint8_t data_length, uint16_t *data_ptr){
+////		uint8_t xdata *superdata_ptr;
+////		unsigned char xdata malloc_mempool [0x1000];
+////		init_mempool (&malloc_mempool, sizeof(malloc_mempool));
+////		superdata_ptr = (uint8_t *) malloc(data_length*2);
+////		bool ack_received; = i2c_mpu_readBytes(devAddr,regAddr,data_length*2,superdata_ptr);
+////		int i = 0;
+////    for(i=0; i<data_length;i++){
+////			data_ptr[i] = superdata_ptr[2*i] << 8 | superdata_ptr[2*i+1];
+////		}
+////    return ack_received;
+////		return true;
+//	//DONE: Start Bit + Adress Write
+//    //DONE: Registrador
+//    //DONE: Start Bit + Adress Read
+//    //DONE: Read Msb, e colocar << 8
+//    //DONE: Read Lsb e jogar na parte LSB
+//    //DONE: next position and repeat //XXX: TEST PENDING
+//    //DONE: End Bit
+//    //DNE: return status
+
+//    uint8_t w2_status;
+//    bool ack_received;
+
+//    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_WRITE);
+//    HAL_W2_WRITE(regAddr);
+//    w2_status = hal_w2_wait_data_ready_ISR();
+//    if (w2_status & W2CON1_FLAG_NACK)
+//    {
+//      ack_received = false;
+//    }
+//    //XXX: Não to usando o stop contition
+//    //De acordo com a pag 36 do datasheet
+
+//    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_READ);
+
+//    if (ack_received == false)
+//    {
+//      // This situation (NACK received on bus while trying to read from a slave) leads to a deadlock in the 2-wire interface.
+//      hal_w2_soft_reset(); // Workaround for the deadlock
+//      //XXX: depois desse reset as coisas vao dar certo? nao preciro reconfigurar o endereço do registrador ?
+//    }
+
+//    while (data_length-- && ack_received)
+//    {
+//      if (data_length == 0)
+//      {
+//        HAL_W2_ISSUE_STOP_COND;
+//      }
+
+//      w2_status = hal_w2_wait_data_ready_ISR();
+//      *data_ptr =((uint16_t) HAL_W2_READ()) << 8; //MSB
+//      ack_received = !(w2_status & W2CON1_FLAG_NACK);
+
+//      if(ack_received){
+//          w2_status = hal_w2_wait_data_ready_ISR();
+//          *data_ptr++ |= ((uint16_t) HAL_W2_READ()); //LSB
+//          ack_received = !(w2_status & W2CON1_FLAG_NACK);
+//      } else {
+//          break;
+//      }
+//    }
+
 //    return ack_received;
-//		return true;
-	//DONE: Start Bit + Adress Write
-    //DONE: Registrador
-    //DONE: Start Bit + Adress Read
-    //DONE: Read Msb, e colocar << 8
-    //DONE: Read Lsb e jogar na parte LSB
-    //DONE: next position and repeat //XXX: TEST PENDING
-    //DONE: End Bit
-    //DNE: return status
-
-    uint8_t w2_status;
-    bool ack_received;
-
-    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_WRITE);
-    HAL_W2_WRITE(regAddr);
-    w2_status = hal_w2_wait_data_ready_ISR();
-    if (w2_status & W2CON1_FLAG_NACK)
-    {
-      ack_received = false;
-    }
-    //XXX: Não to usando o stop contition
-    //De acordo com a pag 36 do datasheet
-
-    ack_received = hal_w2_init_transfer(devAddr, HAL_W2_DIR_READ);
-
-    if (ack_received == false)
-    {
-      // This situation (NACK received on bus while trying to read from a slave) leads to a deadlock in the 2-wire interface.
-      hal_w2_soft_reset(); // Workaround for the deadlock
-      //XXX: depois desse reset as coisas vao dar certo? nao preciro reconfigurar o endereço do registrador ?
-    }
-
-    while (data_length-- && ack_received)
-    {
-      if (data_length == 0)
-      {
-        HAL_W2_ISSUE_STOP_COND;
-      }
-
-      w2_status = hal_w2_wait_data_ready_ISR();
-      *data_ptr =((uint16_t) HAL_W2_READ()) << 8; //MSB
-      ack_received = !(w2_status & W2CON1_FLAG_NACK);
-
-      if(ack_received){
-          w2_status = hal_w2_wait_data_ready_ISR();
-          *data_ptr++ |= ((uint16_t) HAL_W2_READ()); //LSB
-          ack_received = !(w2_status & W2CON1_FLAG_NACK);
-      } else {
-          break;
-      }
-    }
-
-    return ack_received;
-}
+//}
