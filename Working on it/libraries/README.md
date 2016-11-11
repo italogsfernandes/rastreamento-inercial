@@ -28,8 +28,8 @@
 	* Getters:	
 	- [x] <del>getMotion6_packet</del>
 	* Offsets:
-	- [x] <del>set*AccelOffset</del>
-	- [x] <del>set*GyroOffset</del>
+	- [x] <del>set\*AccelOffset</del>
+	- [x] <del>set\*GyroOffset</del>
 	- [ ] getXAccelOffset - Depende de readWord
 	- [ ] getYAccelOffset - Depende de readWord
 	- [ ] getZAccelOffset - Depende de readWord
@@ -39,11 +39,11 @@
 	* DMP
 	- [ ] dmpInitialize - Depende de muita coisa (olhar abaixo)
 	- [ ] setDMPEnabled - Depende de **writeBit**
-	- [ ] dmpGetFIFOPacketSize - Depende de **so de boa vontade**
+	- [ ] dmpGetFIFOPacketSize - Depende de **boa vontade**
 	- [ ] dmpGetQuaternion - Depende de getFIFO
 		* dmpInitialize depende de:
 		- [ ] setMemoryBank - Depende de **writeByte**
-		- [ ] get*GyroOffsetTC - Depende de **readBits**
+		- [ ] get\*GyroOffsetTC - Depende de **readBits**
 		- [ ] pgm_read_byte - XXX: ?
 		- [ ] setDMPEnabled - Depende de **writeBit**
 		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock
