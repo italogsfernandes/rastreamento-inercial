@@ -30,12 +30,8 @@
 	* Offsets:
 	- [x] <del>set\*AccelOffset</del>
 	- [x] <del>set\*GyroOffset</del>
-	- [ ] getXAccelOffset - Depende de readWord
-	- [ ] getYAccelOffset - Depende de readWord
-	- [ ] getZAccelOffset - Depende de readWord
-	- [ ] getXGyroOffset - Depende de readWord
-	- [ ] getYGyroOffset - Depende de readWord
-	- [ ] getZGyroOffset - Depende de readWord
+	- [ ] get\*AccelOffset - Depende de readWord
+	- [ ] get\*GyroOffset - Depende de readWord
 	* DMP
 	- [ ] dmpInitialize - Depende de muita coisa (olhar abaixo)
 	- [ ] setDMPEnabled - Depende de **writeBit**
