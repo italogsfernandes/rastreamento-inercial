@@ -66,3 +66,7 @@
 ## Referências:
 * [I2CDEV - HOME](http://www.i2cdevlib.com/)
 * [I2CDEV - GITHUB - ARDUINO - MPU6050](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/MPU6050)
+* [Keil - C51 - Documentação](http://www.keil.com/support/man/docs/c51/)
+* [InvenSense - MPU6050 - DATASHEET](https://www.invensense.com/products/motion-tracking/6-axis/mpu-6050/)
+* [Nordic Semiconductor - nRF24LE1 - DATASHEET](http://www.nordicsemi.com/eng/Products/2.4GHz-RF/nRF24LE1)
+* [TeckShlok - Alguns exemplos do nRF24LE1](http://techshlok.com/blog/)
