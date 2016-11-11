@@ -22,6 +22,7 @@
 
 ## dmp.h
 * Descrição: Realiza comunicação I2C com os sensores:
+* Referências: [I2CDEV](http://www.i2cdevlib.com/);[I2CDEV - GITHUB - ARDUINO - MPU6050](https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/MPU6050)
 	* Inicialização:
 	- [x] <del>mpu_initialize</del>
 	- [x] <del>mpu_testConnection</del>
@@ -59,10 +60,10 @@
 			- [ ] setMemoryBank - Depende de **writeByte**
 			- [ ] pgm_read_byte - XXX: ?
 			- [ ] memcmp - XXX: ?
-			- [ ] malloc e free - [http://www.keil.com/support/man/docs/c51/c51_malloc.htm]()
+			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
 		- [ ] writeMemoryBlock
 			* Depende de:
 			- [ ] setMemoryBank - Depende de **writeByte**
 			- [ ] pgm_read_byte - XXX: ?
 			- [ ] memcmp - XXX: ? 
-			- [ ] malloc e free - [http://www.keil.com/support/man/docs/c51/c51_malloc.htm]()
+			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
