@@ -1,4 +1,5 @@
 #include "dmp.h"
+#include "simple_timer.h"
 
 #include "nrf24le1.h"
 #include <hal_w2_isr.h>
@@ -9,7 +10,6 @@
 #include "API.h"
 #include "nRF-SPIComands.h"
 
-#define INTERRUPT_TMR0	1 //timer
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
 #define OTHER_SUB_ADDR 0x02
@@ -20,6 +20,7 @@
 #define SIGNAL_SENSOR_MSG 0x97
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
+uint8_t counter = 1;
 
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
@@ -33,29 +34,7 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 void luzes_iniciais(void);
 void enviar_motion6(void);//Joga no buffer do radio e despacha
-
-void start_T0(void);
-void stop_T0(void);
-
-/**************************************************/
-// Variï¿½veis do TMR0
-#define NBT0H   0x52			// Este tempo
-#define NBT0L   0x63			// equivale a
-#define NOVT0   0x00			// Freq. de Amostragem de 30Hz
-
-/**************************************************/
-int timer_flag = 3;
-void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
-{
-	if(!NOVT0)
-	{
-		timer_flag--;
-		TH0= NBT0H;
-		TL0= NBT0L;
-	}
-}
-/**************************************************/
-
+int8_t enviar_msg_to_host(char *msg_to_send); //envia msg para ser mostrada no receptor
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -67,22 +46,15 @@ void iniciarIO(void){
     P1CON |= 0x53;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 }
-void iniciarRF(void){
-    // Radio + SPI setup
-    RFCE = 0;       // Radio chip enable low
-    RFCKEN = 1;     // Radio clk enable
-    RF = 1;
-    rf_init();
-    RX_Mode();
-}
 void setup() {
+		setup_T0(0x5263,1); //0x5263 -> timer de 10Hz * 1 = 10Hz
     iniciarIO(); //IO
     iniciarRF(); //RF
+		//enviar_msg_to_host("RF ligado\n");
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
-    EA=1; luzes_iniciais(); //\Enable All interrupts, e pisca luzes
+    EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
     mpu_initialize(); //inicia dispositivo
-    LEDVM = !mpu_testConnection(); //se deu errado acende led
-    //XXX, testar get and setters
+		//enviar_msg_to_host(mpu_testConnection()? "Sensor conectado\n" : "Erro com a conexão do sensor\n");
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
@@ -91,20 +63,14 @@ void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
-						tx_buf[0] = SIGNAL_SENSOR_MSG;
-						tx_buf[1] = 'o';tx_buf[2] = 'n'; tx_buf[3] = '\n';
-						TX_Mode_NOACK(4);
-						RX_Mode();
+						enviar_msg_to_host("timer iniciado\n"); 
             start_T0();
             delay_ms(100);
             while(!S1);
             delay_ms(100);
         }
         if(!S2){
-						tx_buf[0] = SIGNAL_SENSOR_MSG;
-						tx_buf[1] = 'o';tx_buf[2] = 'f'; tx_buf[3] = 'f'; tx_buf[4] = '\n';
-						TX_Mode_NOACK(5);
-						RX_Mode();
+						enviar_msg_to_host("timer desligado\n"); 
             stop_T0();
             LEDVM = !LEDVM;
             delay_ms(100);
@@ -116,17 +82,11 @@ void main(void) {
 					if(rx_buf[0] == MY_SUB_ADDR){
 						switch(rx_buf[1]){
 							case Sinal_request_data:
-										tx_buf[0] = SIGNAL_SENSOR_MSG;
-										tx_buf[1] = 'o';tx_buf[2] = 'n'; tx_buf[3] = '\n';
-										TX_Mode_NOACK(4);
-										RX_Mode();
+										enviar_msg_to_host("timer iniciado\n"); 
 										start_T0();
 										break;
 							case Sinal_LEDS:
-										tx_buf[0] = SIGNAL_SENSOR_MSG;
-										tx_buf[1] = 'o';tx_buf[2] = 'f';tx_buf[3] = 'f'; tx_buf[4] = '\n';
-										TX_Mode_NOACK(5);
-										RX_Mode();
+										enviar_msg_to_host("timer desligado\n"); 
 										stop_T0();
 										LEDVM = !LEDVM;
 										break;
@@ -139,7 +99,7 @@ void main(void) {
 				if(timer_flag <= 0){
           getMotion6_packet(packet_motion6);
           enviar_motion6();
-					timer_flag = 3;
+					timer_flag = 1;
 				}
 		}
 }
@@ -163,33 +123,23 @@ void enviar_motion6(void){
     TX_Mode_NOACK(13);
     RX_Mode();
 }
-/**************************************************/
-/****************TIMER*****************************/
-/**************************************************/
-//Timer comfigurado para freq de amostragem 30Hz
-void start_T0(void)
-{
-	TMOD=0x31;						// Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
-	TH0= NBT0H;
-	TL0= NBT0L;
-	ET0=1;								// Active interrupt on Timer 0
-	EA=1;									// Active all interrupts
-	TR0=1;								// Timer 0 --> RUN
+
+int8_t enviar_msg_to_host(char *msg_to_send){
+	tx_buf[0] = SIGNAL_SENSOR_MSG;
+	counter = 1;
+	while(*msg_to_send != 0){
+		tx_buf[counter++] = (*msg_to_send++);
+	}
+	if(counter<=TX_PLOAD_WIDTH){
+		TX_Mode_NOACK(counter);
+	} else{
+		return 1;
+	}
+	RX_Mode();
+	return 0;
 }
-/**************************************************/
-void stop_T0(void)
-{
-	TMOD=0x31;						// Select Timer 1 --> STOPPED, Timer 0 --> TIMER/16 bits
-	TH0= NBT0H;
-	TL0= NBT0L;
-	ET0=0;								// Active interrupt on Timer 0
-	EA=1;									// Active all interrupts
-	TR0=0;								// Timer 0 --> RUN
-}
-/*********************************************/
 
 //interrupção o I2C
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
-
 	I2C_IRQ_handler();
 }
