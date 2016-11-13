@@ -2,7 +2,7 @@
 #include "simple_timer.h"
 
 #include "nrf24le1.h"
-#include <hal_w2_isr.h>
+#include "hal_w2_isr.h"
 #include "hal_delay.h"
 #include "stdint.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
@@ -32,6 +32,7 @@ sbit S2  = P1^4;    // 1/0=no/press
 sbit LEDVM = P0^3; // 1/0=light/dark
 #endif
 
+
 void luzes_iniciais(void);
 void enviar_motion6(void);//Joga no buffer do radio e despacha
 int8_t enviar_msg_to_host(char *msg_to_send); //envia msg para ser mostrada no receptor
@@ -47,9 +48,9 @@ void iniciarIO(void){
     P2CON = 0x00;  	// All general I/O
 }
 void setup() {
-		setup_T0(0x5263,1); //0x5263 -> timer de 10Hz * 1 = 10Hz
     iniciarIO(); //IO
     iniciarRF(); //RF
+		setup_T0(0x5263,1); //0x5263 -> timer de 10Hz * 1 = 10Hz
 		//enviar_msg_to_host("RF ligado\n");
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
@@ -104,6 +105,8 @@ void main(void) {
 		}
 }
 void luzes_iniciais(void){
+				LEDVM = 0;
+        delay_ms(1000);
         LEDVM = 1;
         delay_ms(1000);
         LEDVM = 0;
