@@ -28,13 +28,13 @@
 //Sinais utilizados na comunicacao via RF
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
-#define SIGNAL_SENSOR_MSG 0x97
 
 //Flags para enviar no pct serial
 #define UART_START_FLAG	0x53
 #define UART_END_FLAG 0x04
 #define UART_PACKET_LENGHT 13
 #define UART_HEX_PRINT_FLAG 0x22
+#define SIGNAL_SENSOR_MSG 0x97
 
 //Defini��es dos bot�es e leds
 #define	PIN32
@@ -116,13 +116,18 @@ void main(void){
 				}
 				uart_putchar(UART_END_FLAG);
 			} else if(rx_buf[0] == SIGNAL_SENSOR_MSG){//sinal de texto sendo enviado
+				uart_putchar(SIGNAL_SENSOR_MSG);
+				uart_putchar(payloadWidth);
 				for(ii=1; ii<payloadWidth; ii++){
 					uart_putchar(rx_buf[ii]);
 				}
-				uart_putchar('\n');
-			} else {//sinal de texto sendo enviado
+			} else if(rx_buf[0] == UART_HEX_PRINT_FLAG){//sinal de texto sendo enviado
 				uart_putchar(UART_HEX_PRINT_FLAG);
 				uart_putchar(payloadWidth);
+				for(ii=0; ii<payloadWidth; ii++){
+					uart_putchar(rx_buf[ii]);
+				}
+			} else {
 				for(ii=0; ii<payloadWidth; ii++){
 					uart_putchar(rx_buf[ii]);
 				}
