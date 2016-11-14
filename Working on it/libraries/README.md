@@ -25,7 +25,7 @@
 	* Inicialização:
 	- [x] <del>mpu_initialize</del>
 	- [x] <del>mpu_testConnection</del>
-	* Getters:	
+	* Getters:
 	- [x] <del>getMotion6_packet</del>
 	* Offsets:
 	- [x] <del>set\*AccelOffset</del>
@@ -34,33 +34,33 @@
 	- [ ] get\*GyroOffset - Depende de readWord
 	* DMP
 	- [ ] dmpInitialize - Depende de muita coisa (olhar abaixo)
-	- [ ] setDMPEnabled - Depende de **writeBit**
-	- [ ] dmpGetFIFOPacketSize - Depende de **boa vontade**
+	- [x] setDMPEnabled
+	- [x] dmpGetFIFOPacketSize
 	- [ ] dmpGetQuaternion - Depende de getFIFO
 		* dmpInitialize depende de:
-		- [ ] setMemoryBank - Depende de **writeByte**
+		- [x] setMemoryBank
 		- [ ] get\*GyroOffsetTC - Depende de **readBits**
 		- [ ] pgm_read_byte - XXX: ?
-		- [ ] setDMPEnabled - Depende de **writeBit**
+		- [x] setDMPEnabled
 		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock
 		- [ ] writeProgDMPConfigurationSet - Depende de writeDMPConfigurationSet
-		- [ ] getFIFOCount - Depende de **readByte**
-		- [ ] resetFIFO - Depende de **writeBit**
-		- [ ] getFIFOBytes - Depende de **readBytes**
+		- [x] getFIFOCount
+		- [x] resetFIFO
+		- [x] getFIFOBytes
 		- [ ] readMemoryBlock - Depende das mesmas coisas de writeMemoryBlock
-		- [ ] getIntStatus - Depende de **readByte**
+		- [x] getIntStatus
 		- [ ] writeDMPConfigurationSet
 			* Depende de:
 			- [ ] writeMemoryBlock
-			- [ ] setMemoryBank - Depende de **writeByte**
+			- [x] setMemoryBank
 			- [ ] pgm_read_byte - XXX: ?
 			- [ ] memcmp - XXX: ?
 			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
 		- [ ] writeMemoryBlock
 			* Depende de:
-			- [ ] setMemoryBank - Depende de **writeByte**
+			- [x] setMemoryBank
 			- [ ] pgm_read_byte - XXX: ?
-			- [ ] memcmp - XXX: ? 
+			- [ ] memcmp - XXX: ?
 			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
 
 ## Referências:

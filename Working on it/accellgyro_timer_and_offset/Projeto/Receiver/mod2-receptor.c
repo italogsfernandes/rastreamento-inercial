@@ -34,6 +34,7 @@
 #define UART_START_FLAG	0x53
 #define UART_END_FLAG 0x04
 #define UART_PACKET_LENGHT 13
+#define UART_HEX_PRINT_FLAG 0x22
 
 //Defini��es dos bot�es e leds
 #define	PIN32
@@ -119,6 +120,12 @@ void main(void){
 					uart_putchar(rx_buf[ii]);
 				}
 				uart_putchar('\n');
+			} else {//sinal de texto sendo enviado
+				uart_putchar(UART_HEX_PRINT_FLAG);
+				uart_putchar(payloadWidth);
+				for(ii=0; ii<payloadWidth; ii++){
+					uart_putchar(rx_buf[ii]);
+				}
 			}
 			sta = 0;
 			newPayload = 0;

@@ -35,7 +35,7 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 void luzes_iniciais(void);
 void enviar_motion6(void);//Joga no buffer do radio e despacha
-int8_t enviar_msg_to_host(char *msg_to_send); //envia msg para ser mostrada no receptor
+void enviar_msg_to_host(char *msg_to_send); //envia msg para ser mostrada no receptor
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -50,11 +50,18 @@ void iniciarIO(void){
 void setup() {
     iniciarIO(); //IO
     iniciarRF(); //RF
-		//enviar_msg_to_host("RF ligado\n");
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
+		
+		enviar_msg_to_host("RF ligado\n");
     mpu_initialize(); //inicia dispositivo
-		//enviar_msg_to_host(mpu_testConnection()? "Sensor conectado\n" : "Erro com a conexão do sensor\n");
+		enviar_msg_to_host("Sensor conectado\n");
+		enviar_msg_to_host("Erro ao conectar\n");
+//		if(mpu_testConnection()){
+//			LEDVM = 0;
+//		} else {
+//			LEDVM = 1;
+//		}
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
@@ -71,6 +78,11 @@ void main(void) {
         }
         if(!S2){
 						enviar_msg_to_host("timer desligado\n"); 
+						tx_buf[0] = 0x97;
+						tx_buf[1] = 0x98;
+						tx_buf[2] = 0x99;
+						TX_Mode_NOACK(3);
+						RX_Mode();
             stop_T0();
             LEDVM = !LEDVM;
             delay_ms(100);
@@ -126,19 +138,18 @@ void enviar_motion6(void){
     RX_Mode();
 }
 
-int8_t enviar_msg_to_host(char *msg_to_send){
+void enviar_msg_to_host(char *msg_to_send){
 	tx_buf[0] = SIGNAL_SENSOR_MSG;
 	counter = 1;
 	while(*msg_to_send != 0){
 		tx_buf[counter++] = (*msg_to_send++);
+		if(counter>=TX_PLOAD_WIDTH){
+			break;
+		}
 	}
-	if(counter<=TX_PLOAD_WIDTH){
-		TX_Mode_NOACK(counter);
-	} else{
-		return 1;
-	}
+	TX_Mode_NOACK(counter);
 	RX_Mode();
-	return 0;
+	delay_ms(10);
 }
 
 
