@@ -49,7 +49,7 @@ sbit LEDVD = P0^6; // 1/0=light/dark
 
 void uart_init(void);
 void uart_putchar(uint8_t x);
-void putstring(char *s);
+void putstring(char *s, uint8_t s_len);
 void delay_ms(unsigned int x);
 void luzes_iniciais(void);
 
@@ -77,7 +77,8 @@ void setup(void){
     iniciarRF();
 	uart_init();// Initializes the UART
 	EA = 1; luzes_iniciais(); // Enable global interrupts
-	putstring("receptor ligado\n");
+
+	putstring("receptor ligado\n", 16);
 }
 void main(void){
 	setup();
@@ -89,7 +90,7 @@ void main(void){
 			//enviando e retornando ao padrao:
 			TX_Mode_NOACK(2);
 			RX_Mode();
-			putstring("sinal request enviado\n");
+			putstring("sinal request enviado\n",22);
 			delay_ms(100); //evita ruidos
 			while(!S1); //espera soltar o botao
 			delay_ms(100);
@@ -101,7 +102,7 @@ void main(void){
 			//enviando e retornando ao padrao:
 			TX_Mode_NOACK(2);
 			RX_Mode();
-			putstring("sinal leds enviado\n");
+			putstring("sinal leds enviado\n", 19);
 			LEDVD = 0;
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
@@ -166,9 +167,13 @@ void uart_putchar(uint8_t x){
 }
 /*****************************/
 // Repeated putchar to print a string
-void putstring(char *s){
+void putstring(char *s, uint8_t s_len){
+	uart_putchar(UART_START_FLAG);
+	uart_putchar(SIGNAL_SENSOR_MSG);
+	uart_putchar(s_len);
 	while(*s != 0)
-	uart_putchar(*s++);
+		uart_putchar(*s++);
+	uart_putchar(UART_END_FLAG);
 }
 /**************************************************/
 void luzes_iniciais(void){
