@@ -42,7 +42,8 @@
 	- [ ] dmpGetQuaternion - Depende de getFIFO
 		* dmpInitialize depende de:
 		- [x] setMemoryBank
-		- [ ] get\*GyroOffsetTC - Depende de **readBits**
+		- [x] get\*GyroOffsetTC - Depende de **readBits**
+		- [x] set\*GyroOffsetTC - Depende de **writeBits**
 		- [ ] pgm_read_byte - XXX: ?
 		- [x] setDMPEnabled
 		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock

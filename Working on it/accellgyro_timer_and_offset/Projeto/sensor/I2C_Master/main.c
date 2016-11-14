@@ -21,7 +21,6 @@
 #define SIGNAL_SENSOR_MSG 0x97
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
-
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
 #ifdef 	PIN32
