@@ -35,6 +35,7 @@
 #define UART_PACKET_LENGHT 13
 #define UART_HEX_PRINT_FLAG 0x22
 #define SIGNAL_SENSOR_MSG 0x97
+#define PACKET_FLAG 0x99
 
 //Defini��es dos bot�es e leds
 #define	PIN32
@@ -110,23 +111,28 @@ void main(void){
 			if(rx_buf[0] == SENSOR_SUB_ADDR && payloadWidth == UART_PACKET_LENGHT){
 				//redireciona dados lidos do sensor
 				uart_putchar(UART_START_FLAG);
+				uart_putchar(PACKET_FLAG);
 				uart_putchar(UART_PACKET_LENGHT);
 				for(ii=0;ii<UART_PACKET_LENGHT; ii++){
 					uart_putchar(rx_buf[ii]);
 				}
 				uart_putchar(UART_END_FLAG);
 			} else if(rx_buf[0] == SIGNAL_SENSOR_MSG){//sinal de texto sendo enviado
+				uart_putchar(UART_START_FLAG);
 				uart_putchar(SIGNAL_SENSOR_MSG);
 				uart_putchar(payloadWidth);
 				for(ii=1; ii<payloadWidth; ii++){
 					uart_putchar(rx_buf[ii]);
 				}
+				uart_putchar(UART_END_FLAG);
 			} else if(rx_buf[0] == UART_HEX_PRINT_FLAG){//sinal de texto sendo enviado
+				uart_putchar(UART_START_FLAG);
 				uart_putchar(UART_HEX_PRINT_FLAG);
 				uart_putchar(payloadWidth);
 				for(ii=0; ii<payloadWidth; ii++){
 					uart_putchar(rx_buf[ii]);
 				}
+				uart_putchar(UART_END_FLAG);
 			} else {
 				for(ii=0; ii<payloadWidth; ii++){
 					uart_putchar(rx_buf[ii]);

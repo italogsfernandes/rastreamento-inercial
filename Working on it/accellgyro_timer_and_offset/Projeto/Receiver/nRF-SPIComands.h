@@ -7,7 +7,7 @@
 
 
 #define TX_ADR_WIDTH    5   	// 5 bytes TX(RX) address width
-#define TX_PLOAD_WIDTH  27   //usei 27 bytes
+#define TX_PLOAD_WIDTH  32   //usei 27 bytes
 
 
 //Endereços:

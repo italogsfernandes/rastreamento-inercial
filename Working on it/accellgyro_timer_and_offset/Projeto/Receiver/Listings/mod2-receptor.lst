@@ -1,4 +1,4 @@
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/13/2016 19:39:38 PAGE 1   
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/14/2016 15:20:15 PAGE 1   
 
 
 C51 COMPILER V9.55, COMPILATION OF MODULE MOD2_RECEPTOR
@@ -38,170 +38,181 @@ line level    source
   28          //Sinais utilizados na comunicacao via RF
   29          #define Sinal_request_data 0x0A
   30          #define Sinal_LEDS 0x0B
-  31          #define SIGNAL_SENSOR_MSG 0x97
-  32          
-  33          //Flags para enviar no pct serial
-  34          #define UART_START_FLAG 0x53
-  35          #define UART_END_FLAG 0x04
-  36          #define UART_PACKET_LENGHT 13
-  37          #define UART_HEX_PRINT_FLAG 0x22
-  38          
-  39          //Defini��es dos bot�es e leds
-  40          #define PIN32
-  41          #ifdef  PIN32
-  42          //Pushbuttons
-  43          sbit S1  = P0^2;    // 1/0=no/press
-  44          sbit S2  = P1^4;    // 1/0=no/press
-  45          //LEDS
-  46          sbit LEDVD = P0^6; // 1/0=light/dark
-  47          #endif
-  48          
-  49          void uart_init(void);
-  50          void uart_putchar(uint8_t x);
-  51          void putstring(char *s);
-  52          void delay_ms(unsigned int x);
-  53          void luzes_iniciais(void);
-  54          
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/13/2016 19:39:38 PAGE 2   
+  31          
+  32          //Flags para enviar no pct serial
+  33          #define UART_START_FLAG 0x53
+  34          #define UART_END_FLAG 0x04
+  35          #define UART_PACKET_LENGHT 13
+  36          #define UART_HEX_PRINT_FLAG 0x22
+  37          #define SIGNAL_SENSOR_MSG 0x97
+  38          #define PACKET_FLAG 0x99
+  39          
+  40          //Defini��es dos bot�es e leds
+  41          #define PIN32
+  42          #ifdef  PIN32
+  43          //Pushbuttons
+  44          sbit S1  = P0^2;    // 1/0=no/press
+  45          sbit S2  = P1^4;    // 1/0=no/press
+  46          //LEDS
+  47          sbit LEDVD = P0^6; // 1/0=light/dark
+  48          #endif
+  49          
+  50          void uart_init(void);
+  51          void uart_putchar(uint8_t x);
+  52          void putstring(char *s);
+  53          void delay_ms(unsigned int x);
+  54          void luzes_iniciais(void);
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/14/2016 15:20:15 PAGE 2   
 
-  55          unsigned int ii;//contador
-  56          
-  57          void iniciarIO(void){
-  58   1          //*************************** Init GPIO Pins
-  59   1         P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
-  60   1         P1DIR = 0xFF;   // Tudo input
-  61   1         P2DIR = 0xFF;
-  62   1         P0CON = 0x00;    // All general I/O
-  63   1         P1CON = 0x00;    // All general I/O
-  64   1         P2CON = 0x00;    // All general I/O
-  65   1      }
-  66          void iniciarRF(void){
-  67   1          // Radio + SPI setup
-  68   1          RFCE = 0;       // Radio chip enable low
-  69   1          RFCKEN = 1;     // Radio clk enable
-  70   1          RF = 1;
-  71   1          rf_init();
-  72   1          RX_Mode();
-  73   1      }
-  74          void setup(void){
-  75   1          iniciarIO();
-  76   1          iniciarRF();
-  77   1        uart_init();// Initializes the UART
-  78   1        EA = 1; luzes_iniciais(); // Enable global interrupts
-  79   1        putstring("receptor ligado\n");
-  80   1      }
-  81          void main(void){
-  82   1        setup();
-  83   1        while(1){
-  84   2          if(!S1){
-  85   3            //montando o pacote:
-  86   3            tx_buf[0] = SENSOR_SUB_ADDR;
-  87   3            tx_buf[1] = Sinal_request_data;
-  88   3            //enviando e retornando ao padrao:
-  89   3            TX_Mode_NOACK(2);
-  90   3            RX_Mode();
-  91   3            putstring("sinal request enviado\n");
-  92   3            delay_ms(100); //evita ruidos
-  93   3            while(!S1); //espera soltar o botao
-  94   3            delay_ms(100);
-  95   3          }
-  96   2          if(!S2){
-  97   3            //montando o pacote:
-  98   3            tx_buf[0] = SENSOR_SUB_ADDR;
-  99   3            tx_buf[1] = Sinal_LEDS;
- 100   3            //enviando e retornando ao padrao:
- 101   3            TX_Mode_NOACK(2);
- 102   3            RX_Mode();
- 103   3            putstring("sinal leds enviado\n");
- 104   3            LEDVD = 0;
- 105   3            delay_ms(100);
- 106   3            while(!S2);//espera soltar o botao
- 107   3            delay_ms(100);
- 108   3          }
- 109   2          if(newPayload){
- 110   3            if(rx_buf[0] == SENSOR_SUB_ADDR && payloadWidth == UART_PACKET_LENGHT){
- 111   4              //redireciona dados lidos do sensor
- 112   4              uart_putchar(UART_START_FLAG);
- 113   4              uart_putchar(UART_PACKET_LENGHT);
- 114   4              for(ii=0;ii<UART_PACKET_LENGHT; ii++){
- 115   5                uart_putchar(rx_buf[ii]);
- 116   5              }
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/13/2016 19:39:38 PAGE 3   
+  55          
+  56          unsigned int ii;//contador
+  57          
+  58          void iniciarIO(void){
+  59   1          //*************************** Init GPIO Pins
+  60   1         P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
+  61   1         P1DIR = 0xFF;   // Tudo input
+  62   1         P2DIR = 0xFF;
+  63   1         P0CON = 0x00;    // All general I/O
+  64   1         P1CON = 0x00;    // All general I/O
+  65   1         P2CON = 0x00;    // All general I/O
+  66   1      }
+  67          void iniciarRF(void){
+  68   1          // Radio + SPI setup
+  69   1          RFCE = 0;       // Radio chip enable low
+  70   1          RFCKEN = 1;     // Radio clk enable
+  71   1          RF = 1;
+  72   1          rf_init();
+  73   1          RX_Mode();
+  74   1      }
+  75          void setup(void){
+  76   1          iniciarIO();
+  77   1          iniciarRF();
+  78   1        uart_init();// Initializes the UART
+  79   1        EA = 1; luzes_iniciais(); // Enable global interrupts
+  80   1        putstring("receptor ligado\n");
+  81   1      }
+  82          void main(void){
+  83   1        setup();
+  84   1        while(1){
+  85   2          if(!S1){
+  86   3            //montando o pacote:
+  87   3            tx_buf[0] = SENSOR_SUB_ADDR;
+  88   3            tx_buf[1] = Sinal_request_data;
+  89   3            //enviando e retornando ao padrao:
+  90   3            TX_Mode_NOACK(2);
+  91   3            RX_Mode();
+  92   3            putstring("sinal request enviado\n");
+  93   3            delay_ms(100); //evita ruidos
+  94   3            while(!S1); //espera soltar o botao
+  95   3            delay_ms(100);
+  96   3          }
+  97   2          if(!S2){
+  98   3            //montando o pacote:
+  99   3            tx_buf[0] = SENSOR_SUB_ADDR;
+ 100   3            tx_buf[1] = Sinal_LEDS;
+ 101   3            //enviando e retornando ao padrao:
+ 102   3            TX_Mode_NOACK(2);
+ 103   3            RX_Mode();
+ 104   3            putstring("sinal leds enviado\n");
+ 105   3            LEDVD = 0;
+ 106   3            delay_ms(100);
+ 107   3            while(!S2);//espera soltar o botao
+ 108   3            delay_ms(100);
+ 109   3          }
+ 110   2          if(newPayload){
+ 111   3            if(rx_buf[0] == SENSOR_SUB_ADDR && payloadWidth == UART_PACKET_LENGHT){
+ 112   4              //redireciona dados lidos do sensor
+ 113   4              uart_putchar(UART_START_FLAG);
+ 114   4              uart_putchar(PACKET_FLAG);
+ 115   4              uart_putchar(UART_PACKET_LENGHT);
+ 116   4              for(ii=0;ii<UART_PACKET_LENGHT; ii++){
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/14/2016 15:20:15 PAGE 3   
 
- 117   4              uart_putchar(UART_END_FLAG);
- 118   4            } else if(rx_buf[0] == SIGNAL_SENSOR_MSG){//sinal de texto sendo enviado
- 119   4              for(ii=1; ii<payloadWidth; ii++){
- 120   5                uart_putchar(rx_buf[ii]);
- 121   5              }
- 122   4              uart_putchar('\n');
- 123   4            } else {//sinal de texto sendo enviado
- 124   4              uart_putchar(UART_HEX_PRINT_FLAG);
- 125   4              uart_putchar(payloadWidth);
- 126   4              for(ii=0; ii<payloadWidth; ii++){
- 127   5                uart_putchar(rx_buf[ii]);
- 128   5              }
- 129   4            }
- 130   3            sta = 0;
- 131   3            newPayload = 0;
- 132   3          }
- 133   2        }
- 134   1      
- 135   1      }
- 136          /**************************************************/
- 137          void uart_init(void){
- 138   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
- 139   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
- 140   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
- 141   1          SM1 = 1;                      // ..8 bit variable baud rate
- 142   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
- 143   1          ADCON |= 0x80;                // Select internal baud rate generator
- 144   1                        // (ADCON??????0??????????J?????'???????????????????? )
- 145   1          S0RELL = 0xf3;                // baudrate 38400
- 146   1          S0RELH = 0x03;
- 147   1          TI0 = 0;            // S0CON^1:?????????????????????????
- 148   1        S0BUF=0x00;           //????0????????J???
- 149   1      }
- 150          /**************************************************/
- 151          void uart_putchar(uint8_t x){
- 152   1        while (!TI0);
- 153   1        TI0=0;
- 154   1        S0BUF=x;
- 155   1      }
- 156          /*****************************/
- 157          // Repeated putchar to print a string
- 158          void putstring(char *s){
- 159   1        while(*s != 0)
- 160   1        uart_putchar(*s++);
- 161   1      }
- 162          /**************************************************/
- 163          void luzes_iniciais(void){
- 164   1              LEDVD = 1;
- 165   1              delay_ms(1000);
- 166   1              LEDVD = 0;
- 167   1              delay_ms(1000);
- 168   1              LEDVD = 1;
- 169   1              delay_ms(1000);
- 170   1              LEDVD = 0;
- 171   1      }
- 172          void delay_ms(unsigned int x){
- 173   1          unsigned int i,j;
- 174   1          i=0;
- 175   1          for(i=0;i<x;i++)
- 176   1          {
- 177   2             j=508;
- 178   2                 ;
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/13/2016 19:39:38 PAGE 4   
+ 117   5                uart_putchar(rx_buf[ii]);
+ 118   5              }
+ 119   4              uart_putchar(UART_END_FLAG);
+ 120   4            } else if(rx_buf[0] == SIGNAL_SENSOR_MSG){//sinal de texto sendo enviado
+ 121   4              uart_putchar(UART_START_FLAG);
+ 122   4              uart_putchar(SIGNAL_SENSOR_MSG);
+ 123   4              uart_putchar(payloadWidth);
+ 124   4              for(ii=1; ii<payloadWidth; ii++){
+ 125   5                uart_putchar(rx_buf[ii]);
+ 126   5              }
+ 127   4              uart_putchar(UART_END_FLAG);
+ 128   4            } else if(rx_buf[0] == UART_HEX_PRINT_FLAG){//sinal de texto sendo enviado
+ 129   4              uart_putchar(UART_START_FLAG);
+ 130   4              uart_putchar(UART_HEX_PRINT_FLAG);
+ 131   4              uart_putchar(payloadWidth);
+ 132   4              for(ii=0; ii<payloadWidth; ii++){
+ 133   5                uart_putchar(rx_buf[ii]);
+ 134   5              }
+ 135   4              uart_putchar(UART_END_FLAG);
+ 136   4            } else {
+ 137   4              for(ii=0; ii<payloadWidth; ii++){
+ 138   5                uart_putchar(rx_buf[ii]);
+ 139   5              }
+ 140   4            }
+ 141   3            sta = 0;
+ 142   3            newPayload = 0;
+ 143   3          }
+ 144   2        }
+ 145   1      
+ 146   1      }
+ 147          /**************************************************/
+ 148          void uart_init(void){
+ 149   1          ES0 = 0;                      // Disable UART0 interrupt while initializing(1:??????????? INE0^4)
+ 150   1          REN0 = 1;                     // Enable receiver(1:??????????? S0CON^4)
+ 151   1          SM0 = 0;                      // Mode 1..  ??8???g? SM0 SM1??01??
+ 152   1          SM1 = 1;                      // ..8 bit variable baud rate
+ 153   1          PCON |= 0x80;                 // SMOD = 1(????0?????????)
+ 154   1          ADCON |= 0x80;                // Select internal baud rate generator
+ 155   1                        // (ADCON??????0??????????J?????'???????????????????? )
+ 156   1          S0RELL = 0xf3;                // baudrate 38400
+ 157   1          S0RELH = 0x03;
+ 158   1          TI0 = 0;            // S0CON^1:?????????????????????????
+ 159   1        S0BUF=0x00;           //????0????????J???
+ 160   1      }
+ 161          /**************************************************/
+ 162          void uart_putchar(uint8_t x){
+ 163   1        while (!TI0);
+ 164   1        TI0=0;
+ 165   1        S0BUF=x;
+ 166   1      }
+ 167          /*****************************/
+ 168          // Repeated putchar to print a string
+ 169          void putstring(char *s){
+ 170   1        while(*s != 0)
+ 171   1        uart_putchar(*s++);
+ 172   1      }
+ 173          /**************************************************/
+ 174          void luzes_iniciais(void){
+ 175   1              LEDVD = 1;
+ 176   1              delay_ms(1000);
+ 177   1              LEDVD = 0;
+ 178   1              delay_ms(1000);
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/14/2016 15:20:15 PAGE 4   
 
- 179   2             while(j--);
- 180   2          }
- 181   1      }
- 182          /**************************************************/
+ 179   1              LEDVD = 1;
+ 180   1              delay_ms(1000);
+ 181   1              LEDVD = 0;
+ 182   1      }
+ 183          void delay_ms(unsigned int x){
+ 184   1          unsigned int i,j;
+ 185   1          i=0;
+ 186   1          for(i=0;i<x;i++)
+ 187   1          {
+ 188   2             j=508;
+ 189   2                 ;
+ 190   2             while(j--);
+ 191   2          }
+ 192   1      }
+ 193          /**************************************************/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    844    ----
+   CODE SIZE        =    908    ----
    CONSTANT SIZE    =     60    ----
-   XDATA SIZE       =     54    ----
+   XDATA SIZE       =     64    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      9      15
    IDATA SIZE       =   ----    ----
