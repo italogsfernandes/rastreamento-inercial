@@ -3,7 +3,10 @@
 ## hal_w2_isr.h
 * Descrição: Realiza comunicação I2C com os sensores:
 * Funções:
-- [x] @mentions, #refs, [links](), **formatting**, and <del>tags</del> supported
+- [ ] com dependencia nao testada -  dependencia nao testada
+- [ ] com dependencia ja testada -  **dependencia testada**
+- [x] implementada
+- [x] <del>testada</del>
 	* Bytes
 	- [x] <del>i2c_mpu_writeByte</del>
 	- [x] <del>i2c_mpu_writeBytes</del>
@@ -24,7 +27,7 @@
 * Descrição: Realiza comunicação I2C com os sensores:
 	* Inicialização:
 	- [x] <del>mpu_initialize</del>
-	- [x] <del>mpu_testConnection</del>
+	- [x] mpu_testConnection
 	* Getters:
 	- [x] <del>getMotion6_packet</del>
 	* Offsets:
