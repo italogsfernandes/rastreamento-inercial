@@ -7,20 +7,21 @@
 #include "stdbool.h" //Booleanos
 #include "API.h"
 
-
+/**************************************************/
+/********************TIMER*************************/
 #define INTERRUPT_TMR0	1 //timer
-
-
 #define NOVT0   0x00 
-uint8_t NBT0L = 0x63;// Este tempo equivale a
-uint8_t NBT0H = 0x52; // Freq. de Amostragem de 30Hz			
+#define NBT0L	 	0x63 // Este tempo equivale a
+#define NBT0H	 	0x52 // Freq. de Amostragem de 10Hz			
 int timer_flag = 1;
 
 void start_T0(void);
 void stop_T0(void);
-void setup_T0(uint16_t freq_value, int flag_freq_multplier);
+/********************TIMER*************************/
+/**************************************************/
 
 /**************************************************/
+/********************TIMER*************************/
 void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
@@ -50,12 +51,6 @@ void stop_T0(void)
 	EA=1;									// Active all interrupts
 	TR0=0;								// Timer 0 --> RUN
 }
-/*********************************************/
-
-void setup_T0(uint16_t freq_value, int flag_freq_multplier){
-	timer_flag = flag_freq_multplier;
-	NBT0H = freq_value >> 8;
-	NBT0L = (uint8_t) freq_value;
-}
-
+/********************TIMER*************************/
+/**************************************************/
 #endif

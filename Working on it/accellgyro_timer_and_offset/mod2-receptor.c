@@ -28,6 +28,7 @@
 //Sinais utilizados na comunicacao via RF
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
+#define SIGNAL_SENSOR_MSG 0x97
 
 //Flags para enviar no pct serial
 #define UART_START_FLAG	0x53
@@ -104,19 +105,23 @@ void main(void){
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
 		}
-		if(newPayload && payloadWidth == UART_PACKET_LENGHT){
-			//redireciona dados lidos do sensor
-			uart_putchar(UART_START_FLAG);
-			uart_putchar(UART_PACKET_LENGHT);
-
-			for(ii=0;ii<UART_PACKET_LENGHT; ii++){
-				uart_putchar(rx_buf[ii]);
+		if(newPayload){
+			if(rx_buf[0] == SENSOR_SUB_ADDR && payloadWidth == UART_PACKET_LENGHT){
+				//redireciona dados lidos do sensor
+				uart_putchar(UART_START_FLAG);
+				uart_putchar(UART_PACKET_LENGHT);
+				for(ii=0;ii<UART_PACKET_LENGHT; ii++){
+					uart_putchar(rx_buf[ii]);
+				}
+				uart_putchar(UART_END_FLAG);
+			} else if(rx_buf[0] == SIGNAL_SENSOR_MSG){//sinal de texto sendo enviado
+				for(ii=1; ii<payloadWidth; ii++){
+					uart_putchar(rx_buf[ii]);
+				}
+				uart_putchar('\n');
 			}
-
-			uart_putchar(UART_END_FLAG);
-
 			sta = 0;
-     		newPayload = 0;
+			newPayload = 0;
 		}
 	}
 

@@ -50,7 +50,6 @@ void iniciarIO(void){
 void setup() {
     iniciarIO(); //IO
     iniciarRF(); //RF
-		setup_T0(0x5263,1); //0x5263 -> timer de 10Hz * 1 = 10Hz
 		//enviar_msg_to_host("RF ligado\n");
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
@@ -141,6 +140,7 @@ int8_t enviar_msg_to_host(char *msg_to_send){
 	RX_Mode();
 	return 0;
 }
+
 
 //interrupção o I2C
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
