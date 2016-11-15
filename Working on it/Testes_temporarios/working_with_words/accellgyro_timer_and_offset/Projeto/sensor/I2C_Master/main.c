@@ -45,29 +45,38 @@ void setup() {
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
-		//send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Inercial Ligado",22);
-		//enviar_msg_to_host("Testando o testConection");
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
 		mpu_initialize(); //inicia dispositivo
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Testando a conexao I2C",22);delay_ms(10);
+		if(mpu_testConnection()){
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"Conectado com sucesso",21);delay_ms(10);
+		} else {
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
+		}
 }
-
+bool mybyte = false;
+bool mybits = false;
 void main(void) {
     setup();
-//		enviar_msg_to_host_hex(0xA0);
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
-					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);
-					//enviar_msg_to_host("s1\n");
-//					i2c_mpu_readByte(MPU_endereco, MPU6050_RA_WHO_AM_I, &mybyte);
-					//enviar_msg_to_host_hex(&mybyte);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
+					i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
+					send_packet_to_host(UART_PACKET_TYPE_BIN,buffer,1);delay_ms(10);
+					mybits = (buffer[0] == 0x34);
+					mybyte = mpu_testConnection();
+					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybits,1);delay_ms(10);
+					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybyte,1);delay_ms(10);
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
-					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);
-					//enviar_msg_to_host("s2\n"); 
-//					i2c_mpu_readBits(MPU_endereco, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, &mybits);
-					//enviar_msg_to_host_hex(&mybits);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
+					i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
+					send_packet_to_host(UART_PACKET_TYPE_BIN,buffer,1);delay_ms(10);
+					mybits = (buffer[0] == 0x34);
+					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybits,1);delay_ms(10);
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);
@@ -78,10 +87,8 @@ void main(void) {
 					if(rx_buf[0] == MY_SUB_ADDR){
 						switch(rx_buf[1]){
 							case Sinal_request_data:
-										//enviar_msg_to_host("s1\n"); 
 										break;
 							case Sinal_LEDS:
-										//enviar_msg_to_host("w2\n"); 
 										LEDVM = !LEDVM;
 										break;
 						}

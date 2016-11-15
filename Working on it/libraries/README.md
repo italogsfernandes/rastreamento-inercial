@@ -27,7 +27,7 @@
 * Descrição: Realiza comunicação I2C com os sensores:
 	* Inicialização:
 	- [x] <del>mpu_initialize</del>
-	- [x] mpu_testConnection
+	- [x] <del>mpu_testConnection</del>
 	* Getters:
 	- [x] <del>getMotion6_packet</del>
 	* Offsets:
