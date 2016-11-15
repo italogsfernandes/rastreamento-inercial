@@ -1,4 +1,5 @@
 #include "dmp.h"
+#include <stdlib.h> //malloc e free
 
 #include "nrf24le1.h"
 #include "hal_w2_isr.h"
@@ -29,7 +30,6 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 
 void luzes_iniciais(void);
-
 void iniciarIO(void){
     //*************************** Init GPIO Pins
     P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
@@ -41,6 +41,7 @@ void iniciarIO(void){
     P2CON = 0x00;  	// All general I/O
 }
 void setup() {
+	 
     iniciarIO(); //IO
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
@@ -56,26 +57,33 @@ void setup() {
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
-int16_t xdata my_word[6] = {0,0,0,0,0,0};
+unsigned int i;
+unsigned char xdata *p;
+unsigned char xdata malloc_mempool [0x1000];
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
-					my_word[0] = getXAccelOffset();
-					my_word[1] = getYAccelOffset();
-					my_word[2] = getZAccelOffset();
-					my_word[3] = getXGyroOffset();
-					my_word[4] = getYGyroOffset();
-					my_word[5] = getZGyroOffset();
-					send_packet_to_host(UART_PACKET_TYPE_INT16,my_word,12);delay_ms(10);
+					init_mempool (&malloc_mempool, sizeof(malloc_mempool));
+					p = malloc (10); /* allocate 1000 bytes */
+					if (p == 0){
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Deu ruim",8);delay_ms(10);
+					}else{
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Alocado",7);delay_ms(10);
+					}
+					for(i=0;i<10;i++){
+						*p = i;
+					}
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-					send_packet_to_host(UART_PACKET_TYPE_INT16,my_word,12);delay_ms(10);
+					send_packet_to_host(UART_PACKET_TYPE_HEX,p,10);delay_ms(10);
+					free (p);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"free",4);delay_ms(10);
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);

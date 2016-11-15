@@ -8,6 +8,7 @@ mesma biblioteca. */
 #include "stdint.h"
 #include "stdbool.h"
 #include "mpu6050_reg.h"
+#include "stdlib.h"//malloc e free
 #define MPU_endereco MPU6050_DEFAULT_ADDRESS
 
 void mpu_initialize(void);
@@ -27,6 +28,11 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len);
 uint8_t xdata buffer[14]; //usado em testConnection e getIntStatus
 uint8_t xdata *dmpPacketBuffer;
 uint16_t xdata dmpPacketSize;
+uint8_t xdata malloc_memory_pool[500];
+
+void mpu_8051_malloc_setup(){
+    init_mempool (&malloc_memory_pool, sizeof(malloc_memory_pool));
+}
 
 void mpu_initialize(void){
   i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, MPU6050_CLOCK_PLL_XGYRO);//setClockSource(MPU6050_CLOCK_PLL_XGYRO);

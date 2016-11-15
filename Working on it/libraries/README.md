@@ -59,13 +59,13 @@
 			- [x] setMemoryBank
 			- [ ] pgm_read_byte - XXX: ?
 			- [ ] memcmp - XXX: ?
-			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
+			- [ ] <del>[malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)</del>
 		- [ ] writeMemoryBlock
 			* Depende de:
 			- [x] setMemoryBank
 			- [ ] pgm_read_byte - XXX: ?
 			- [ ] memcmp - XXX: ?
-			- [ ] [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)
+			- [x] <de> [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm) </del>
 
 ## Referências:
 * [I2CDEV - HOME](http://www.i2cdevlib.com/)
