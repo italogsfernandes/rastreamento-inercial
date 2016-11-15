@@ -380,4 +380,5 @@
 #define MPU6050_DMP_MEMORY_CHUNK_SIZE   16
 
 // note: DMP code memory blocks defined at dmp.h file
+
 #endif /* _MPU6050_REG_H_ */

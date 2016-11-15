@@ -6,8 +6,6 @@ mesma biblioteca. */
 
 #include <uart_basics.h>
 #include <nRF-SPIComands.h>
-#include <stdint.h>
-#include <stdbool.h>
 
 #define UART_START_SIGNAL  0x53
 #define UART_END_SIGNAL  0x04
@@ -28,18 +26,18 @@ mesma biblioteca. */
 #define UART_PACKET_TYPE_FLOAT16       0x0E
 
 
-#define sensor_id 0x01
+#define sensor_id 0x02
 
 
 //Packet Type | Sensor id |  ... | data | ... |
 void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
 	unsigned int i;
-    tx_buf[0] = packet_type;
+  tx_buf[0] = packet_type;
 	tx_buf[1] = sensor_id;
 	for(i=2; i<data_len+2; i++){
 		tx_buf[i] = data_to_send[i-2];
 	}
-	TX_Mode_NOACK(data_len);
+	TX_Mode_NOACK(data_len+2);
 	RX_Mode();
 }
 
@@ -50,9 +48,9 @@ void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t
     uart_putchar(UART_START_SIGNAL);
     uart_putchar(packet_type);
     uart_putchar(data_len);
-	for(i=0; i<data_len; i++){
-		uart_putchar(data_to_send[i]);
-	}
+		for(i=1; i<data_len+1; i++){
+			uart_putchar(data_to_send[i]);
+		}
 	uart_putchar(UART_END_SIGNAL);
 }
 

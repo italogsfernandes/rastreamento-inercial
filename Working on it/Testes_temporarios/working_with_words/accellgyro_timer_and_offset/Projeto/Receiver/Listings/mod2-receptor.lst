@@ -1,4 +1,4 @@
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/15/2016 15:06:34 PAGE 1   
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/15/2016 15:50:24 PAGE 1   
 
 
 C51 COMPILER V9.55, COMPILATION OF MODULE MOD2_RECEPTOR
@@ -62,7 +62,7 @@ line level    source
   52   1        setup();
   53   1        while(1){
   54   2          if(!S1){
-C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/15/2016 15:06:34 PAGE 2   
+C51 COMPILER V9.55   MOD2_RECEPTOR                                                         11/15/2016 15:50:24 PAGE 2   
 
   55   3            send_packet_from_host_to_computer(UART_PACKET_TYPE_HEX,packet_test,13);
   56   3            delay_ms(100); //evita ruidos
@@ -106,7 +106,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    881    ----
+   CODE SIZE        =    891    ----
    CONSTANT SIZE    =     16    ----
    XDATA SIZE       =     64    ----
    PDATA SIZE       =   ----    ----

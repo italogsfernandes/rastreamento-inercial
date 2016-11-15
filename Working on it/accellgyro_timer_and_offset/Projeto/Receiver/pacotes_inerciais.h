@@ -32,12 +32,12 @@ mesma biblioteca. */
 //Packet Type | Sensor id |  ... | data | ... |
 void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
 	unsigned int i;
-    tx_buf[0] = packet_type;
+  tx_buf[0] = packet_type;
 	tx_buf[1] = sensor_id;
 	for(i=2; i<data_len+2; i++){
 		tx_buf[i] = data_to_send[i-2];
 	}
-	TX_Mode_NOACK(data_len);
+	TX_Mode_NOACK(data_len+2);
 	RX_Mode();
 }
 
@@ -48,7 +48,7 @@ void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t
     uart_putchar(UART_START_SIGNAL);
     uart_putchar(packet_type);
     uart_putchar(data_len);
-		for(i=1; i<data_len; i++){
+		for(i=1; i<data_len+1; i++){
 			uart_putchar(data_to_send[i]);
 		}
 	uart_putchar(UART_END_SIGNAL);
