@@ -57,13 +57,13 @@
 			* Depende de:
 			- [ ] writeMemoryBlock
 			- [x] setMemoryBank
-			- [ ] pgm_read_byte - XXX: ?
+			- [x] <del>pgm_read_byte</del>
 			- [x] <del>memcmp </del>
 			- [x] <del>[malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)</del>
 		- [ ] writeMemoryBlock
 			* Depende de:
 			- [x] setMemoryBank
-			- [ ] pgm_read_byte - XXX: ?
+			- [x] <del>pgm_read_byte</del>
 			- [x] <del>memcmp </del>
 			- [x] <de> [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm) </del>
 

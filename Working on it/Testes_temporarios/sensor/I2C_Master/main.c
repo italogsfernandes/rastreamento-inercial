@@ -64,8 +64,8 @@ uint8_t xdata *poxa;
 int ii;
 char xdata hexchars [] = "0123456789ABCDEF";
 char xdata hexchars2 [] = "1123456789ABCDEF";
+uint8_t xdata another_randon_variable[2] = {0x00,0x00};
 
- 
 void main(void) {
     setup();
     while(1){
@@ -85,7 +85,9 @@ void main(void) {
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-			
+					another_randon_variable[0] = pgm_read_byte(&dmpUpdates[0]);
+					another_randon_variable[1] = pgm_read_byte(&dmpUpdates[1]);
+					send_packet_to_host(UART_PACKET_TYPE_HEX,another_randon_variable,2);delay_ms(10);
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);
