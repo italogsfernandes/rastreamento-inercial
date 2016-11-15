@@ -1,14 +1,14 @@
-#include "dmp.h"
-#include "simple_timer.h"
-
 #include "nrf24le1.h"
-#include "hal_w2_isr.h        "
+#include "hal_w2_isr.h"
 #include "hal_delay.h"
 #include "stdint.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
 #include "stdbool.h" //Booleanos
 #include "API.h"
-#include "nRF-SPIComands.h"
+#include <dmp.h>
+#include <simple_timer.h>
+#include <nRF-SPIComands.h>
+#include <pacotes_inerciais.h>
 
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
@@ -17,8 +17,6 @@
 //Sinais utilizados na comunicacao via RF
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
-#define UART_HEX_PRINT_FLAG 0x22
-#define SIGNAL_SENSOR_MSG 0x97
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
 //Definicoes dos botoes e leds
@@ -33,8 +31,6 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 
 void luzes_iniciais(void);
-void enviar_motion6(void);//Joga no buffer do radio e despacha
-void enviar_msg_to_host(char *msg_to_send); //envia msg para ser mostrada no receptor
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -47,58 +43,51 @@ void iniciarIO(void){
     P2CON = 0x00;  	// All general I/O
 }
 void setup() {
-    iniciarIO(); //IO
+		iniciarIO(); //IO
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
-		
-	enviar_msg_to_host("RF ligado\n");
-    mpu_initialize(); //inicia dispositivo
-	enviar_msg_to_host("Sensor conectado\n");
-	enviar_msg_to_host("Erro ao conectar\n");
-//		if(mpu_testConnection()){
-//			LEDVM = 0;
-//		} else {
-//			LEDVM = 1;
-//		}
-	setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
-	setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
+		mpu_initialize(); //inicia dispositivo
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Testando a conexao I2C",22);delay_ms(10);
+		if(mpu_testConnection()){
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"Conectado com sucesso",21);delay_ms(10);
+		} else {
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
+		}
+		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
 
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
-			enviar_msg_to_host("timer iniciado\n"); 
-            start_T0();
-            delay_ms(100);
-            while(!S1);
-            delay_ms(100);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
+					start_T0();
+					delay_ms(100);
+					while(!S1);
+					delay_ms(100);
         }
         if(!S2){
-			enviar_msg_to_host("timer desligado\n"); 
-			tx_buf[0] = 0x97;
-			tx_buf[1] = 0x98;
-			tx_buf[2] = 0x99;
-			TX_Mode_NOACK(3);
-			RX_Mode();
-            stop_T0();
-            LEDVM = !LEDVM;
-            delay_ms(100);
-            while(!S2);
-            delay_ms(100);
+					stop_T0();
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
+					LEDVM = !LEDVM;
+					delay_ms(100);
+					while(!S2);
+					delay_ms(100);
         }
         if(newPayload){
             //verifica se o sinal eh direficionado para mim
 					if(rx_buf[0] == MY_SUB_ADDR){
 						switch(rx_buf[1]){
 							case Sinal_request_data:
-										enviar_msg_to_host("timer iniciado\n"); 
+										send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
 										start_T0();
 										break;
 							case Sinal_LEDS:
-										enviar_msg_to_host("timer desligado\n"); 
 										stop_T0();
+										send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
 										LEDVM = !LEDVM;
 										break;
 						}
@@ -109,7 +98,7 @@ void main(void) {
         //timer tick
 				if(timer_flag <= 0){
           getMotion6_packet(packet_motion6);
-          enviar_motion6();
+					send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
 					timer_flag = 1;
 				}
 		}
@@ -124,47 +113,6 @@ void luzes_iniciais(void){
         LEDVM = 1;
         delay_ms(1000);
         LEDVM = 0;
-}
-
-void enviar_motion6(void){
-	unsigned int i;
-    tx_buf[0] = MY_SUB_ADDR;
-    for(i=1;i<13;i++){
-        tx_buf[i] = packet_motion6[i-1];
-    }
-    //enviando e retornando ao padrao:
-    TX_Mode_NOACK(13);
-    RX_Mode();
-}
-
-void enviar_msg_to_host(char *msg_to_send){
-	unsigned int i;
-    tx_buf[0] = SIGNAL_SENSOR_MSG;
-	i = 1;
-	while(*msg_to_send != 0){
-		tx_buf[i++] = (*msg_to_send++);
-		if(i>=TX_PLOAD_WIDTH){
-			break;
-		}
-	}
-	TX_Mode_NOACK(i);
-	RX_Mode();
-	delay_ms(10);
-}
-
-void enviar_msg_to_host_hex(char *msg_to_send){
-    unsigned int i;
-    tx_buf[0] = UART_HEX_PRINT_FLAG;
-    i = 1;
-    while(*msg_to_send != 0){
-        tx_buf[i++] = (*msg_to_send++);
-        if(i>=TX_PLOAD_WIDTH){
-            break;
-        }
-    }
-    TX_Mode_NOACK(i);
-    RX_Mode();
-    delay_ms(10);
 }
 
 //interrupção o I2C
