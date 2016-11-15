@@ -1,4 +1,4 @@
-LX51 LINKER/LOCATER V4.66.62.0                                                          11/15/2016  19:11:19  PAGE 1
+LX51 LINKER/LOCATER V4.66.62.0                                                          11/15/2016  19:25:21  PAGE 1
 
 
 LX51 LINKER/LOCATER V4.66.62.0, INVOKED BY:
@@ -49,7 +49,7 @@ BASE        START       END         USED      MEMORY CLASS
 C:000000H   C:000000H   C:00FFFFH   000EE8H   CODE
 I:000000H   I:000000H   I:0000FFH   000001H   IDATA
 I:000000H   I:000000H   I:00007FH   00005EH   DATA
-C:000000H   C:000000H   C:00FFFFH   00006EH   CONST
+C:000000H   C:000000H   C:00FFFFH   0008E6H   CONST
 X:000000H   X:000000H   X:00FFFFH   000258H   XDATA
 I:000020H.0 I:000020H.0 I:00002FH.7 000000H.1 BIT
 
@@ -67,7 +67,7 @@ START     STOP      LENGTH    ALIGN  RELOC    MEMORY CLASS   SEGMENT NAME
 00001DH   00001FH   000003H   BYTE   UNIT     DATA           ?DT?_GETFIFOBYTES?MAIN
 000020H   000020H   000001H   BYTE   BITADDR  DATA           ?BA?MAIN
 000021H.0 000021H.0 000000H.1 BIT    UNIT     BIT            ?BI?MAIN
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 2
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 2
 
 
 000021H.1 000021H   000000H.7 ---    ---      **GAP**
@@ -135,7 +135,7 @@ START     STOP      LENGTH    ALIGN  RELOC    MEMORY CLASS   SEGMENT NAME
 000D00H   000D11H   000012H   BYTE   UNIT     CODE           ?PR?INICIARIO?MAIN
 000D12H   000D23H   000012H   BYTE   UNIT     CODE           ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR
 000D24H   000D35H   000012H   BYTE   UNIT     CODE           ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 3
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 3
 
 
 000D36H   000D46H   000011H   BYTE   UNIT     CODE           ?PR?RX_MODE?MAIN
@@ -175,7 +175,7 @@ START     STOP      LENGTH    ALIGN  RELOC    MEMORY CLASS   SEGMENT NAME
 000ED8H   000EDFH   000008H   BYTE   UNIT     CODE           ?PR?_SETZACCELOFFSET?MAIN
 000EE0H   000EE7H   000008H   BYTE   UNIT     CODE           ?PR?_SETXGYROOFFSET?MAIN
 000EE8H   000EEDH   000006H   BYTE   UNIT     CODE           ?PR?_HAL_W2_SET_SLAVE_ADDRESS?HAL_W2_ISR
-000EEEH   000F5BH   00006EH   BYTE   UNIT     CONST          ?CO?MAIN
+000EEEH   0017D3H   0008E6H   BYTE   UNIT     CONST          ?CO?MAIN
 
 * * * * * * * * * * *  X D A T A   M E M O R Y  * * * * * * * * * * * * *
 000000H   00024FH   000250H   BYTE   UNIT     XDATA          ?XD?MAIN
@@ -203,7 +203,7 @@ MAIN/MAIN                                    ----- -----  ----- -----
   +--> START_T0/MAIN
   +--> STOP_T0/MAIN
   +--> _GETMOTION6_PACKET/MAIN
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 4
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 4
 
 
 
@@ -271,7 +271,7 @@ _HAL_W2_ALL_IRQ_ENABLE/HAL_W2_ISR            ----- -----  ----- -----
 LUZES_INICIAIS/MAIN                          ----- -----  ----- -----
   +--> _DELAY_MS/HAL_DELAY
 
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 5
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 5
 
 
 _DELAY_MS/HAL_DELAY                          ----- -----  ----- -----
@@ -339,7 +339,7 @@ _SEND_PACKET_TO_HOST/MAIN                    ----- -----  0022H 0026H
 _TX_MODE_NOACK/MAIN                          ----- -----  0027H 0028H
   +--> _SPI_RW_REG/MAIN
   +--> MAIN
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 6
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 6
 
 
   +--> _SPI_WRITE_BUF/MAIN
@@ -407,7 +407,7 @@ _SPI_READ/MAIN                               ----- -----  ----- -----
 _SPI_READ_BUF/MAIN                           ----- -----  0038H 003CH
   +--> MAIN
   +--> _SPI_RW/MAIN
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 7
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 7
 
 
 
@@ -475,7 +475,7 @@ PUBLIC SYMBOLS OF MODULE:  FProject (?C_STARTUP)
       0100070BH   CODE     ---       _i2c_mpu_readBytes
       010008C8H   CODE     ---       _i2c_mpu_writeBit
       010006A8H   CODE     ---       _i2c_mpu_writeBits
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 8
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 8
 
 
       01000D58H   CODE     ---       _i2c_mpu_writeByte
@@ -537,15 +537,18 @@ PUBLIC SYMBOLS OF MODULE:  FProject (?C_STARTUP)
 *SFR* 000000CAH   DATA     BYTE      CRCL
 *SFR* 000000D0H.7 DATA     BIT       CY
       0000005DH   DATA     BYTE      data_ready
+      010016E5H   CONST    ---       dmpConfig
       01000EC7H   CODE     ---       dmpGetFIFOPacketSize
+      01000F5CH   CONST    ---       dmpMemory
       00000014H   DATA     ---       dmpPacketBuffer
       02000240H   XDATA    WORD      dmpPacketSize
+      010017A5H   CONST    ---       dmpUpdates
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 9
+
+
 *SFR* 00000083H   DATA     BYTE      DPH
 *SFR* 00000085H   DATA     BYTE      DPH1
 *SFR* 00000082H   DATA     BYTE      DPL
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 9
-
-
 *SFR* 00000084H   DATA     BYTE      DPL1
 *SFR* 00000092H   DATA     BYTE      DPS
 *SFR* 000000A8H.7 DATA     BIT       EA
@@ -608,12 +611,12 @@ PUBLIC SYMBOLS OF MODULE:  FProject (?C_STARTUP)
 *SFR* 000000C0H.4 DATA     BIT       MISCF
 *SFR* 000000C9H   DATA     BYTE      MPAGE
       01000E1CH   CODE     ---       mpu_8051_malloc_setup
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 10
+
+
       01000AB4H   CODE     ---       mpu_initialize
       01000BB2H   CODE     ---       mpu_testConnection
       00000021H.0 BIT      BIT       newPayload
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 10
-
-
 *SFR* 000000AEH   DATA     BYTE      OPMCON
 *SFR* 000000D0H.2 DATA     BIT       OV
 *SFR* 000000D0H   DATA     BIT       P
@@ -676,12 +679,12 @@ PUBLIC SYMBOLS OF MODULE:  FProject (?C_STARTUP)
 *SFR* 000000F8H.2 DATA     BIT       RDIS
 *SFR* 000000F8H.4 DATA     BIT       RDYN
 *SFR* 00000098H.4 DATA     BIT       REN0
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 11
+
+
       01000E04H   CODE     ---       resetFIFO
 *SFR* 000000B8H.1 DATA     BIT       RF
       01000916H   CODE     ---       rf_init
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 11
-
-
       010005AFH   CODE     ---       RF_IRQ
 *SFR* 000000E8H   DATA     BIT       RFCE
 *SFR* 000000E8H.2 DATA     BIT       RFCKEN
@@ -744,12 +747,12 @@ PUBLIC SYMBOLS OF MODULE:  FProject (?C_STARTUP)
 *SFR* 000000C8H.3 DATA     BIT       T2R0
 *SFR* 000000C8H.4 DATA     BIT       T2R1
 *SFR* 00000098H.3 DATA     BIT       TB80
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 12
+
+
 *SFR* 00000088H   DATA     BYTE      TCON
 *SFR* 00000088H.5 DATA     BIT       TF0
 *SFR* 00000088H.7 DATA     BIT       TF1
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 12
-
-
 *SFR* 000000C0H.6 DATA     BIT       TF2
 *SFR* 0000008CH   DATA     BYTE      TH0
 *SFR* 0000008DH   DATA     BYTE      TH1
@@ -812,12 +815,12 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000000H   SYMBOL    NUMBER   ---       XDATALEN
       00000000H   SYMBOL    NUMBER   ---       XDATASTART
       01000000H   LINE      CODE     ---       #126
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 13
+
+
       0100049AH   LINE      CODE     ---       #133
       0100049CH   LINE      CODE     ---       #134
       0100049DH   LINE      CODE     ---       #135
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 13
-
-
       0100049EH   LINE      CODE     ---       #136
       010004A0H   LINE      CODE     ---       #185
       010004A3H   LINE      CODE     ---       #196
@@ -840,6 +843,9 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       02000040H   PUBLIC    XDATA    ---       malloc_memory_pool
       02000020H   PUBLIC    XDATA    ---       tx_buf
       02000000H   PUBLIC    XDATA    ---       rx_buf
+      010017A5H   PUBLIC    CONST    ---       dmpUpdates
+      010016E5H   PUBLIC    CONST    ---       dmpConfig
+      01000F5CH   PUBLIC    CONST    ---       dmpMemory
       0100099DH   PUBLIC    CODE     ---       I2C_IRQ
       01000C2FH   PUBLIC    CODE     ---       luzes_iniciais
       01000056H   PUBLIC    CODE     ---       main
@@ -877,15 +883,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000DCDH   PUBLIC    CODE     ---       getFIFOCount
       01000C9BH   PUBLIC    CODE     ---       _setMemoryBank
       01000DBFH   PUBLIC    CODE     ---       getZGyroOffset
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 14
+
+
       01000DB1H   PUBLIC    CODE     ---       getYGyroOffset
       01000DA3H   PUBLIC    CODE     ---       getXGyroOffset
       01000D95H   PUBLIC    CODE     ---       getZAccelOffset
       01000D87H   PUBLIC    CODE     ---       getYAccelOffset
       01000D79H   PUBLIC    CODE     ---       getXAccelOffset
       01000E32H   PUBLIC    CODE     ---       _setZGyroOffset
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 14
-
-
       01000E27H   PUBLIC    CODE     ---       _setYGyroOffset
       01000EE0H   PUBLIC    CODE     ---       _setXGyroOffset
       01000ED8H   PUBLIC    CODE     ---       _setZAccelOffset
@@ -945,15 +951,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       000000E1H   SFRSYM    DATA     BYTE      W2CON1
       000000FBH   SFRSYM    DATA     BYTE      FDCR
       000000E8H   SFRSYM    DATA     BIT       RFCE
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 15
+
+
       000000CBH   SFRSYM    DATA     BYTE      CRCH
       00000081H   SFRSYM    DATA     BYTE      SP
       000000D0H.2 SFRSYM    DATA     BIT       OV
       000000CAH   SFRSYM    DATA     BYTE      CRCL
       000000ADH   SFRSYM    DATA     BYTE      CLKLFCTRL
       000000B1H   SFRSYM    DATA     BYTE      RSTREAS
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 15
-
-
       000000C8H.7 SFRSYM    DATA     BIT       T2PS
       000000F9H   SFRSYM    DATA     BYTE      FPCR
       000000B8H.4 SFRSYM    DATA     BIT       MISC
@@ -1013,15 +1019,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000088H.3 SFRSYM    DATA     BIT       IE1
       000000CFH   SFRSYM    DATA     BYTE      WUOPC0
       000000F0H   SFRSYM    DATA     BYTE      B
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 16
+
+
       000000E9H   SFRSYM    DATA     BYTE      MD0
       000000CEH   SFRSYM    DATA     BYTE      WUOPC1
       000000A7H   SFRSYM    DATA     BYTE      MEMCON
       000000EAH   SFRSYM    DATA     BYTE      MD1
       000000D7H   SFRSYM    DATA     BYTE      RNGDAT
       000000EBH   SFRSYM    DATA     BYTE      MD2
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 16
-
-
       000000ECH   SFRSYM    DATA     BYTE      MD3
       000000EDH   SFRSYM    DATA     BYTE      MD4
       000000AFH   SFRSYM    DATA     BYTE      WDSV
@@ -1081,15 +1087,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000099H   SFRSYM    DATA     BYTE      S0BUF
       00000094H   SFRSYM    DATA     BYTE      P1DIR
       0000009FH   SFRSYM    DATA     BYTE      P1CON
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 17
+
+
       00000095H   SFRSYM    DATA     BYTE      P2DIR
       000000B8H.7 SFRSYM    DATA     BIT       EXEN2
       000000DAH   SFRSYM    DATA     BYTE      W2DAT
       00000097H   SFRSYM    DATA     BYTE      P2CON
       00000096H   SFRSYM    DATA     BYTE      P3DIR
       000000A4H   SFRSYM    DATA     BYTE      PWRDWN
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 17
-
-
       00000098H   SFRSYM    DATA     BYTE      S0CON
       0000008FH   SFRSYM    DATA     BYTE      P3CON
       000000B6H   SFRSYM    DATA     BYTE      RTC2CPT00
@@ -1149,15 +1155,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000401H   BLOCK     CODE     ---       LVL=0
       00000022H   SYMBOL    DATA     ---       packet6
       01000401H   LINE      CODE     ---       #47
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 18
+
+
       01000407H   LINE      CODE     ---       #48
       01000419H   LINE      CODE     ---       #49
       01000426H   LINE      CODE     ---       #50
       01000436H   LINE      CODE     ---       #51
       01000440H   LINE      CODE     ---       #52
       0100044AH   LINE      CODE     ---       #53
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 18
-
-
       01000454H   LINE      CODE     ---       #54
       0100045EH   LINE      CODE     ---       #55
       01000468H   LINE      CODE     ---       #56
@@ -1217,15 +1223,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000D94H   LINE      CODE     ---       #88
       ---         BLOCKEND  ---      ---       LVL=0
 
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 19
+
+
       01000D95H   BLOCK     CODE     ---       LVL=0
       01000D95H   LINE      CODE     ---       #89
       01000D95H   LINE      CODE     ---       #90
       01000D9FH   LINE      CODE     ---       #91
       01000DA2H   LINE      CODE     ---       #92
       ---         BLOCKEND  ---      ---       LVL=0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 19
-
-
 
       01000DA3H   BLOCK     CODE     ---       LVL=0
       01000DA3H   LINE      CODE     ---       #93
@@ -1285,15 +1291,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       ---         BLOCKEND  ---      ---       LVL=0
 
       01000EC7H   BLOCK     CODE     ---       LVL=0
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 20
+
+
       01000EC7H   LINE      CODE     ---       #131
       01000EC7H   LINE      CODE     ---       #132
       01000ECFH   LINE      CODE     ---       #133
       ---         BLOCKEND  ---      ---       LVL=0
 
       01000B3EH   BLOCK     CODE     ---       LVL=0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 20
-
-
       0000001DH   SYMBOL    DATA     ---       data_ptr
       00000007H   SYMBOL    DATA     BYTE      data_len
       01000B3EH   LINE      CODE     ---       #135
@@ -1353,15 +1359,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000CDAH   BLOCK     CODE     ---       LVL=0
       00000007H   SYMBOL    DATA     BYTE      reg
       00000006H   SYMBOL    DATA     BYTE      value
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 21
+
+
       01000CDCH   BLOCK     CODE     NEAR LAB  LVL=1
       00000005H   SYMBOL    DATA     BYTE      status
       ---         BLOCKEND  ---      ---       LVL=1
       01000CDAH   LINE      CODE     ---       #41
       01000CDCH   LINE      CODE     ---       #42
       01000CDCH   LINE      CODE     ---       #45
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 21
-
-
       01000CDEH   LINE      CODE     ---       #46
       01000CE3H   LINE      CODE     ---       #47
       01000CE8H   LINE      CODE     ---       #48
@@ -1421,15 +1427,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000C10H   LINE      CODE     ---       #89
       01000C12H   LINE      CODE     ---       #90
       ---         BLOCKEND  ---      ---       LVL=0
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 22
+
+
 
       01000D36H   BLOCK     CODE     ---       LVL=0
       01000D36H   LINE      CODE     ---       #93
       01000D36H   LINE      CODE     ---       #94
       01000D36H   LINE      CODE     ---       #95
       01000D39H   LINE      CODE     ---       #96
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 22
-
-
       01000D3BH   LINE      CODE     ---       #97
       01000D3DH   LINE      CODE     ---       #98
       01000D44H   LINE      CODE     ---       #99
@@ -1489,15 +1495,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000954H   LINE      CODE     ---       #153
       ---         BLOCKEND  ---      ---       LVL=0
 
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 23
+
+
       01000E10H   BLOCK     CODE     ---       LVL=0
       01000E10H   LINE      CODE     ---       #157
       01000E10H   LINE      CODE     ---       #159
       01000E12H   LINE      CODE     ---       #160
       01000E14H   LINE      CODE     ---       #161
       01000E16H   LINE      CODE     ---       #162
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 23
-
-
       01000E19H   LINE      CODE     ---       #163
       ---         BLOCKEND  ---      ---       LVL=0
 
@@ -1557,15 +1563,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000006H   SYMBOL    DATA     BYTE      packet_type
       00000051H   SYMBOL    DATA     ---       data_to_send
       00000054H   SYMBOL    DATA     BYTE      data_len
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 24
+
+
       01000A50H   BLOCK     CODE     NEAR LAB  LVL=1
       00000004H   SYMBOL    DATA     WORD      i
       ---         BLOCKEND  ---      ---       LVL=1
       01000A4AH   LINE      CODE     ---       #47
       01000A50H   LINE      CODE     ---       #49
       01000A50H   LINE      CODE     ---       #50
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 24
-
-
       01000A53H   LINE      CODE     ---       #51
       01000A58H   LINE      CODE     ---       #52
       01000A6BH   LINE      CODE     ---       #53
@@ -1625,15 +1631,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000056H   BLOCK     CODE     ---       LVL=0
       01000056H   LINE      CODE     ---       #64
       01000056H   LINE      CODE     ---       #65
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 25
+
+
       01000059H   LINE      CODE     ---       #66
       01000059H   LINE      CODE     ---       #67
       0100005CH   LINE      CODE     ---       #68
       01000063H   LINE      CODE     ---       #69
       0100006EH   LINE      CODE     ---       #70
       01000074H   LINE      CODE     ---       #71
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 25
-
-
       0100007BH   LINE      CODE     ---       #72
       0100007DH   LINE      CODE     ---       #73
       01000087H   LINE      CODE     ---       #74
@@ -1693,15 +1699,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000C35H   LINE      CODE     ---       #127
       01000C37H   LINE      CODE     ---       #128
       ---         BLOCKEND  ---      ---       LVL=0
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 26
+
+
 
       0100099DH   BLOCK     CODE     ---       LVL=0
       0100099DH   LINE      CODE     ---       #131
       010009BAH   LINE      CODE     ---       #132
       010009BDH   LINE      CODE     ---       #133
       ---         BLOCKEND  ---      ---       LVL=0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 26
-
-
 
       ---         MODULE    ---      ---       HAL_W2_ISR
       0000005EH   PUBLIC    DATA     BYTE      w2_status
@@ -1761,15 +1767,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       000000D8H.7 SFRSYM    DATA     BIT       BD
       000000B8H   SFRSYM    DATA     BIT       RFSPI
       000000A8H.7 SFRSYM    DATA     BIT       EA
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 27
+
+
       000000CCH   SFRSYM    DATA     WORD      T2
       000000C6H   SFRSYM    DATA     BYTE      CCL3
       000000B7H   SFRSYM    DATA     BYTE      SPISRDSZ
       000000C8H.3 SFRSYM    DATA     BIT       T2R0
       000000C8H.4 SFRSYM    DATA     BIT       T2R1
       000000A8H   SFRSYM    DATA     BYTE      IEN0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 27
-
-
       000000B8H   SFRSYM    DATA     BYTE      IEN1
       000000A5H   SFRSYM    DATA     BYTE      WUCON
       00000085H   SFRSYM    DATA     BYTE      DPH1
@@ -1829,15 +1835,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       000000A0H.3 SFRSYM    DATA     BIT       P23
       00000090H.4 SFRSYM    DATA     BIT       P14
       00000080H.5 SFRSYM    DATA     BIT       P05
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 28
+
+
       000000D9H   SFRSYM    DATA     BYTE      W2SADR
       00000089H   SFRSYM    DATA     BYTE      TMOD
       00000088H   SFRSYM    DATA     BYTE      TCON
       000000B0H.3 SFRSYM    DATA     BIT       P33
       000000A0H.4 SFRSYM    DATA     BIT       P24
       00000090H.5 SFRSYM    DATA     BIT       P15
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 28
-
-
       00000080H.6 SFRSYM    DATA     BIT       P06
       000000B0H.4 SFRSYM    DATA     BIT       P34
       000000A0H.5 SFRSYM    DATA     BIT       P25
@@ -1897,15 +1903,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       000000CDH   SFRSYM    DATA     BYTE      TH2
       000000AEH   SFRSYM    DATA     BYTE      OPMCON
       000000D0H   SFRSYM    DATA     BIT       P
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 29
+
+
       00000098H.7 SFRSYM    DATA     BIT       SM0
       0000008AH   SFRSYM    DATA     BYTE      TL0
       00000098H.6 SFRSYM    DATA     BIT       SM1
       000000E4H   SFRSYM    DATA     BYTE      SPIRCON0
       0000008BH   SFRSYM    DATA     BYTE      TL1
       000000E5H   SFRSYM    DATA     BYTE      SPIRCON1
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 29
-
-
       000000CCH   SFRSYM    DATA     BYTE      TL2
       000000BCH   SFRSYM    DATA     BYTE      SPISCON0
       000000BDH   SFRSYM    DATA     BYTE      SPISCON1
@@ -1965,15 +1971,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       000000E8H.1 SFRSYM    DATA     BIT       RFCSN
       000000E6H   SFRSYM    DATA     BYTE      SPIRSTAT
       000000B3H   SFRSYM    DATA     BYTE      RTC2CON
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 30
+
+
 
       01000DE9H   BLOCK     CODE     ---       LVL=0
       ---         BLOCKEND  ---      ---       LVL=0
 
       01000EB3H   BLOCK     CODE     ---       LVL=0
       01000EB3H   LINE      CODE     ---       #39
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 30
-
-
       01000EB3H   LINE      CODE     ---       #40
       01000EB3H   LINE      CODE     ---       #41
       01000EB6H   LINE      CODE     ---       #42
@@ -2033,15 +2039,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
 
       01000E69H   BLOCK     CODE     ---       LVL=0
       00000007H   SYMBOL    DATA     BYTE      addr_match
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 31
+
+
       01000E69H   LINE      CODE     ---       #88
       01000E69H   LINE      CODE     ---       #89
       01000E69H   LINE      CODE     ---       #90
       01000E6CH   LINE      CODE     ---       #91
       01000E6CH   LINE      CODE     ---       #92
       01000E6FH   LINE      CODE     ---       #93
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 31
-
-
       01000E70H   LINE      CODE     ---       #95
       01000E70H   LINE      CODE     ---       #96
       01000E73H   LINE      CODE     ---       #97
@@ -2101,15 +2107,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000E8DH   LINE      CODE     ---       #142
       01000E90H   LINE      CODE     ---       #143
       01000E91H   LINE      CODE     ---       #145
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 32
+
+
       01000E91H   LINE      CODE     ---       #146
       01000E94H   LINE      CODE     ---       #147
       01000E94H   LINE      CODE     ---       #148
       ---         BLOCKEND  ---      ---       LVL=0
 
       01000BD3H   BLOCK     CODE     ---       LVL=0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 32
-
-
       00000006H   SYMBOL    DATA     BYTE      mode
       01000BD3H   LINE      CODE     ---       #150
       01000BD5H   LINE      CODE     ---       #151
@@ -2169,15 +2175,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000007H   SYMBOL    DATA     BYTE      address
       00000045H   SYMBOL    DATA     ---       data_ptr
       00000048H   SYMBOL    DATA     BYTE      data_len
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 33
+
+
       01000A18H   BLOCK     CODE     NEAR LAB  LVL=1
       00000006H   SYMBOL    DATA     BYTE      ack_received
       01000A2CH   BLOCK     CODE     NEAR LAB  LVL=2
       00000049H   SYMBOL    DATA     BYTE      w2_status
       ---         BLOCKEND  ---      ---       LVL=2
       ---         BLOCKEND  ---      ---       LVL=1
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 33
-
-
       01000A12H   LINE      CODE     ---       #202
       01000A18H   LINE      CODE     ---       #203
       01000A18H   LINE      CODE     ---       #205
@@ -2237,15 +2243,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000646H   LINE      CODE     ---       #266
       01000649H   LINE      CODE     ---       #267
       0100064CH   LINE      CODE     ---       #270
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 34
+
+
       0100064FH   LINE      CODE     ---       #275
       01000655H   LINE      CODE     ---       #278
       01000655H   LINE      CODE     ---       #280
       01000655H   LINE      CODE     ---       #284
       01000658H   LINE      CODE     ---       #285
       0100065BH   LINE      CODE     ---       #286
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 34
-
-
       0100065BH   LINE      CODE     ---       #288
       01000661H   LINE      CODE     ---       #289
       01000661H   LINE      CODE     ---       #291
@@ -2305,15 +2311,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       00000007H   SYMBOL    DATA     BYTE      devAddr
       00000005H   SYMBOL    DATA     BYTE      regAddr
       0000002BH   SYMBOL    DATA     ---       data_ptr
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 35
+
+
       01000D24H   LINE      CODE     ---       #348
       01000D2AH   LINE      CODE     ---       #349
       01000D35H   LINE      CODE     ---       #350
       ---         BLOCKEND  ---      ---       LVL=0
 
       0100070BH   BLOCK     CODE     ---       LVL=0
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 35
-
-
       00000006H   SYMBOL    DATA     BYTE      devAddr
       00000004H   SYMBOL    DATA     BYTE      regAddr
       00000030H   SYMBOL    DATA     BYTE      data_len
@@ -2373,15 +2379,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       010006AEH   BLOCK     CODE     NEAR LAB  LVL=1
       00000027H   SYMBOL    DATA     BYTE      b
       010006BAH   BLOCK     CODE     NEAR LAB  LVL=2
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 36
+
+
       00000028H   SYMBOL    DATA     BYTE      mask
       ---         BLOCKEND  ---      ---       LVL=2
       ---         BLOCKEND  ---      ---       LVL=1
       010006A8H   LINE      CODE     ---       #399
       010006AEH   LINE      CODE     ---       #408
       010006BAH   LINE      CODE     ---       #409
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 36
-
-
       010006E7H   LINE      CODE     ---       #410
       010006F4H   LINE      CODE     ---       #411
       010006F8H   LINE      CODE     ---       #412
@@ -2441,15 +2447,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
       01000CF1H   LINE      CODE     ---       #443
       01000CFFH   LINE      CODE     ---       #444
       ---         BLOCKEND  ---      ---       LVL=0
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 37
+
+
 
       01000872H   BLOCK     CODE     ---       LVL=0
       00000007H   SYMBOL    DATA     BYTE      devAddr
       00000006H   SYMBOL    DATA     BYTE      regAddr
       00000004H   SYMBOL    DATA     BYTE      data_length
       00000027H   SYMBOL    DATA     ---       data_ptr
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 37
-
-
       01000876H   BLOCK     CODE     NEAR LAB  LVL=1
       00000007H   SYMBOL    DATA     BYTE      w2_status
       00000005H   SYMBOL    DATA     BYTE      ack_received
@@ -2509,15 +2515,15 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
 
       01000CB3H   BLOCK     CODE     ---       LVL=0
       00000004H   SYMBOL    DATA     WORD      ms
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 38
+
+
       01000CB3H   LINE      CODE     ---       #49
       01000CB7H   LINE      CODE     ---       #50
       01000CB7H   LINE      CODE     ---       #52
       01000CB7H   LINE      CODE     ---       #53
       01000CB7H   LINE      CODE     ---       #54
       01000CBAH   LINE      CODE     ---       #55
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 38
-
-
       01000CBAH   LINE      CODE     ---       #56
       01000CBDH   LINE      CODE     ---       #57
       01000CC6H   LINE      CODE     ---       #58
@@ -2577,14 +2583,14 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    GETZGYROOFFSET/MAIN
 
+LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:25:21  PAGE 39
+
+
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    _SETMEMORYBANK/MAIN
 
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    GETFIFOCOUNT/MAIN
-
-LX51 LINKER/LOCATER V4.66.62.0                                                        11/15/2016  19:11:19  PAGE 39
-
 
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    GETINTSTATUS/MAIN
@@ -2640,5 +2646,5 @@ SYMBOL TABLE OF MODULE:  FProject (?C_STARTUP)
 *** WARNING L57: UNCALLED FUNCTION, IGNORED FOR OVERLAY PROCESS
     NAME:    _I2C_MPU_READBIT/HAL_W2_ISR
 
-Program Size: data=95.1 xdata=600 const=110 code=3816
+Program Size: data=95.1 xdata=600 const=2278 code=3816
 LX51 RUN COMPLETE.  26 WARNING(S),  0 ERROR(S)
