@@ -9,6 +9,7 @@ mesma biblioteca. */
 #include "stdbool.h"
 #include "mpu6050_reg.h"
 #include "stdlib.h"//malloc e free
+#include <string.h> //memcmp 
 #define	MPU_endereco MPU6050_DEFAULT_ADDRESS
 
 void mpu_initialize(void);

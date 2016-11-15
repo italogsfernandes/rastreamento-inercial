@@ -10,6 +10,7 @@
 #include <nRF-SPIComands.h>
 #include <pacotes_inerciais.h>
 
+
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
 #define OTHER_SUB_ADDR 0x02
@@ -60,20 +61,23 @@ void setup() {
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
 uint8_t xdata *poxa;
-unsigned int ii;
+int ii;
+char xdata hexchars [] = "0123456789ABCDEF";
+char xdata hexchars2 [] = "1123456789ABCDEF";
+
+ 
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
-					poxa = (uint8_t *)malloc(16); /* allocate 1000 bytes */
-					if (poxa == 0){
-						send_packet_to_host(UART_PACKET_TYPE_STRING,"Deu ruim",8);delay_ms(10);
+					ii = memcmp (hexchars, hexchars2, 16);
+					if (ii < 0){
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"1<2",3);delay_ms(10);
+					}else if (ii > 0){
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"1>2",3);delay_ms(10);
 					}else{
-						send_packet_to_host(UART_PACKET_TYPE_STRING,"Alocado",7);delay_ms(10);
-					}
-					for(ii=0;ii<16;ii++){
-						poxa[ii] = ii;
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"1==2",4);delay_ms(10);
 					}
 					delay_ms(100);
 					while(!S1);
@@ -81,9 +85,7 @@ void main(void) {
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-					send_packet_to_host(UART_PACKET_TYPE_UINT8,poxa,16);delay_ms(10);
-					free (poxa);
-					send_packet_to_host(UART_PACKET_TYPE_STRING,"free",4);delay_ms(10);
+			
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);
