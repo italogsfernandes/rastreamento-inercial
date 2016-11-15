@@ -1,3 +1,6 @@
+#ifndef NRF_SPICOMANDS_H
+#define NRF_SPICOMANDS_H
+
 #define INTERRUPT_RFIRQ	9
 
 /*NOTE: Alterei do Original:
@@ -7,7 +10,7 @@
 
 
 #define TX_ADR_WIDTH    5   	// 5 bytes TX(RX) address width
-#define TX_PLOAD_WIDTH  32   //usei 27 bytes
+#define TX_PLOAD_WIDTH  32   //max
 
 
 //Endereços:
@@ -151,3 +154,14 @@ void rf_init(void)
     SPI_RW_Reg(WRITE_REG + FEATURE, 0x07);  // Ativa Payload din?mico, com ACK e comando W_TX_PAY
 }
 /**************************************************/
+
+void iniciarRF(void){
+    // Radio + SPI setup
+    RFCE = 0;       // Radio chip enable low
+    RFCKEN = 1;     // Radio clk enable
+    RF = 1;
+    rf_init();
+    RX_Mode();
+}
+/**************************************************/
+#endif

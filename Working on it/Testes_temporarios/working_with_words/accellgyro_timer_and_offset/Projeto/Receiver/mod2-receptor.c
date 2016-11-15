@@ -47,18 +47,18 @@ void setup(void){
 	EA = 1; luzes_iniciais(); // Enable global interrupts
 	send_packet_from_host_to_computer(UART_PACKET_TYPE_STRING,"receptor ligado",15);
 }
-
+uint8_t packet_test[13] = {0x01,0x00,0x01,0x00,0x02,0x00,0x03,0x00,0x01,0x00,0x02,0x00,0x03};
 void main(void){
 	setup();
 	while(1){
 		if(!S1){
-			send_packet_from_host_to_computer(UART_PACKET_TYPE_HEX,0x01,1);
+			send_packet_from_host_to_computer(UART_PACKET_TYPE_HEX,packet_test,13);
 			delay_ms(100); //evita ruidos
 			while(!S1); //espera soltar o botao
 			delay_ms(100);
 		}
 		if(!S2){
-			send_packet_from_host_to_computer(UART_PACKET_TYPE_BIN,0x01,1);
+			send_packet_to_computer(UART_PACKET_TYPE_M6,packet_test,13);
 			delay_ms(100);
 			while(!S2);//espera soltar o botao
 			delay_ms(100);
