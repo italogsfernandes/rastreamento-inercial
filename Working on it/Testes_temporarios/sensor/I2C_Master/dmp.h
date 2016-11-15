@@ -140,6 +140,70 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
     	*data_ptr = 0;
     }
 }
+void setMemoryStartAddress(uint8_t address) {
+    i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
+}
+
+//BUG: pq nao da pra colocar dentro da função?
+uint8_t chunkSize_wmb;
+uint8_t xdata *verifyBuffer_wmb;
+uint8_t xdata *progBuffer_wmb=0;
+uint16_t i_wmb;
+uint8_t j_wmb;
+bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
+    setMemoryBank(bank,false,false);
+    setMemoryStartAddress(address);
+    if (verify) verifyBuffer_wmb = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
+    if (useProgMem) progBuffer_wmb = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
+    for (i_wmb = 0; i_wmb < dataSize;) {
+        // determine correct chunk size according to bank position and data size
+        chunkSize_wmb = MPU6050_DMP_MEMORY_CHUNK_SIZE;
+
+        // make sure we don't go past the data size
+        if (i_wmb + chunkSize_wmb > dataSize) chunkSize_wmb = dataSize - i_wmb;
+
+        // make sure this chunk doesn't go past the bank boundary (256 bytes)
+        if (chunkSize_wmb > 256 - address) chunkSize_wmb = 256 - address;
+        
+        if (useProgMem) {
+            // write the chunk of data as specified
+            for (j_wmb = 0; j_wmb < chunkSize_wmb; j_wmb++) progBuffer_wmb[j_wmb] = pgm_read_byte(data_ptr + i_wmb + j_wmb);
+        } else {
+            // write the chunk of data as specified
+            progBuffer_wmb = (uint8_t *)data_ptr + i_wmb;
+        }
+
+        i2c_mpu_writeBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize_wmb, progBuffer_wmb);
+
+        // verify data if needed
+        if (verify && verifyBuffer_wmb) {
+            setMemoryBank(bank,false,false);
+            setMemoryStartAddress(address);
+            i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize_wmb, verifyBuffer_wmb);
+            if (memcmp(progBuffer_wmb, verifyBuffer_wmb, chunkSize_wmb) != 0) {
+                free(verifyBuffer_wmb);
+                if (useProgMem) free(progBuffer_wmb);
+                return false; // uh oh.
+            }
+        }
+
+        // increase byte index by [chunkSize_wmb]
+        i_wmb += chunkSize_wmb;
+
+        // uint8_t automatically wraps to 0 at 256
+        address += chunkSize_wmb;
+
+        // if we aren't done, update bank (if necessary) and address
+        if (i_wmb < dataSize) {
+            if (address == 0) bank++;
+            setMemoryBank(bank,false,false);//BUG:XXX:TODO: estou usando false e false
+            setMemoryStartAddress(address);
+        }
+    }
+    if (verify) free(verifyBuffer_wmb);
+    if (useProgMem) free(progBuffer_wmb);
+    return true;
+}
 
 
 #endif

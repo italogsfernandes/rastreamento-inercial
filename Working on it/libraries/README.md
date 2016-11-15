@@ -55,12 +55,12 @@
 		- [x] getIntStatus
 		- [ ] writeDMPConfigurationSet
 			* Depende de:
-			- [ ] writeMemoryBlock
+			- [x] writeMemoryBlock - **Não Testada**
 			- [x] setMemoryBank
 			- [x] <del>pgm_read_byte</del>
 			- [x] <del>memcmp </del>
 			- [x] <del>[malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)</del>
-		- [ ] writeMemoryBlock
+		- [x] writeMemoryBlock - **Não Testada**
 			* Depende de:
 			- [x] setMemoryBank
 			- [x] <del>pgm_read_byte</del>

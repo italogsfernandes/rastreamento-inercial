@@ -140,6 +140,68 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
     	*data_ptr = 0;
     }
 }
+void setMemoryStartAddress(uint8_t address) {
+    i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
+}
+bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
+    setMemoryBank(bank);
+    setMemoryStartAddress(address);
+    uint8_t chunkSize;
+    uint8_t xdata *verifyBuffer;
+    uint8_t xdata *progBuffer=0;
+    uint16_t i;
+    uint8_t j;
+    if (verify) verifyBuffer = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
+    if (useProgMem) progBuffer = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
+    for (i = 0; i < dataSize;) {
+        // determine correct chunk size according to bank position and data size
+        chunkSize = MPU6050_DMP_MEMORY_CHUNK_SIZE;
+
+        // make sure we don't go past the data size
+        if (i + chunkSize > dataSize) chunkSize = dataSize - i;
+
+        // make sure this chunk doesn't go past the bank boundary (256 bytes)
+        if (chunkSize > 256 - address) chunkSize = 256 - address;
+        
+        if (useProgMem) {
+            // write the chunk of data as specified
+            for (j = 0; j < chunkSize; j++) progBuffer[j] = pgm_read_byte(data_ptr + i + j);
+        } else {
+            // write the chunk of data as specified
+            progBuffer = (uint8_t *)data_ptr + i;
+        }
+
+        i2c_mpu_writeBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize, progBuffer);
+
+        // verify data if needed
+        if (verify && verifyBuffer) {
+            setMemoryBank(bank);
+            setMemoryStartAddress(address);
+            i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize, verifyBuffer);
+            if (memcmp(progBuffer, verifyBuffer, chunkSize) != 0) {
+                free(verifyBuffer);
+                if (useProgMem) free(progBuffer);
+                return false; // uh oh.
+            }
+        }
+
+        // increase byte index by [chunkSize]
+        i += chunkSize;
+
+        // uint8_t automatically wraps to 0 at 256
+        address += chunkSize;
+
+        // if we aren't done, update bank (if necessary) and address
+        if (i < dataSize) {
+            if (address == 0) bank++;
+            setMemoryBank(bank,false,false);//BUG:XXX:TODO: estou usando false e false
+            setMemoryStartAddress(address);
+        }
+    }
+    if (verify) free(verifyBuffer);
+    if (useProgMem) free(progBuffer);
+    return true;
+}
 
 
 #endif
