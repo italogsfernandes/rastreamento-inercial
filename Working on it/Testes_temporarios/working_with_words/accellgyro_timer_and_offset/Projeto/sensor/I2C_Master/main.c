@@ -53,30 +53,29 @@ void setup() {
 		} else {
 			send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
 		}
+		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
-bool mybyte = false;
-bool mybits = false;
+int16_t xdata my_word[6] = {0,0,0,0,0,0};
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
-					i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
-					send_packet_to_host(UART_PACKET_TYPE_BIN,buffer,1);delay_ms(10);
-					mybits = (buffer[0] == 0x34);
-					mybyte = mpu_testConnection();
-					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybits,1);delay_ms(10);
-					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybyte,1);delay_ms(10);
+					my_word[0] = getXAccelOffset();
+					my_word[1] = getYAccelOffset();
+					my_word[2] = getZAccelOffset();
+					my_word[3] = getXGyroOffset();
+					my_word[4] = getYGyroOffset();
+					my_word[5] = getZGyroOffset();
+					send_packet_to_host(UART_PACKET_TYPE_INT16,my_word,12);delay_ms(10);
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-					i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
-					send_packet_to_host(UART_PACKET_TYPE_BIN,buffer,1);delay_ms(10);
-					mybits = (buffer[0] == 0x34);
-					send_packet_to_host(UART_PACKET_TYPE_HEX,&mybits,1);delay_ms(10);
+					send_packet_to_host(UART_PACKET_TYPE_INT16,my_word,12);delay_ms(10);
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);

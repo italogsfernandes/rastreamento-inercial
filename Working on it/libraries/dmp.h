@@ -72,6 +72,31 @@ void setZGyroOffset(int16_t offset) {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
 
+int16_t getXAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getXGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+
 void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;

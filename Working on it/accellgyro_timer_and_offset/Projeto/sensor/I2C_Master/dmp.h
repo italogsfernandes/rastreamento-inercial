@@ -2,13 +2,13 @@
 /* Se a biblioteca mpu.h não for definida, defina-a.
 Verificar é preciso para que não haja varias chamadas da
 mesma biblioteca. */
-#define	DMP_H
+#define DMP_H
 
 #include <hal_w2_isr.h>
 #include "stdint.h"
 #include "stdbool.h"
 #include "mpu6050_reg.h"
-#define	MPU_endereco MPU6050_DEFAULT_ADDRESS
+#define MPU_endereco MPU6050_DEFAULT_ADDRESS
 
 void mpu_initialize(void);
 bool mpu_testConnection(void);
@@ -24,14 +24,8 @@ void resetFIFO();
 uint16_t dmpGetFIFOPacketSize();
 void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len);
 
-int8_t getXGyroOffsetTC();
-void setXGyroOffsetTC(int8_t offset);
-int8_t getYGyroOffsetTC();
-void setYGyroOffsetTC(int8_t offset);
-int8_t getZGyroOffsetTC();
-void setZGyroOffsetTC(int8_t offset);
-
 uint8_t xdata buffer[14]; //usado em testConnection e getIntStatus
+uint8_t xdata *dmpPacketBuffer;
 uint16_t xdata dmpPacketSize;
 
 void mpu_initialize(void){
@@ -41,9 +35,8 @@ void mpu_initialize(void){
   i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, false); //setSleepEnabled(false);
 }
 bool mpu_testConnection(void){
-	buffer[0] = 0;
-    i2c_mpu_readBits(MPU_endereco, MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
-		return (buffer[0] == 0x34);
+    i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
+    return buffer[0] == 0x34;
 }
 void getMotion6_packet(uint8_t *packet6){
     i2c_mpu_readBytes(MPU_endereco, 0x3B, 14, buffer);
@@ -79,9 +72,31 @@ void setZGyroOffset(int16_t offset) {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
 
-//Nao testadas 
-//|||||||||||||
-//vvvvvvvvvvvvv
+int16_t getXAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZAccelOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZA_OFFS_H, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getXGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getYGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+int16_t getZGyroOffset() {
+    i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, 2, buffer);
+    return (((int16_t)buffer[0]) << 8) | buffer[1];
+}
+
 void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
@@ -115,36 +130,8 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
     if(data_len > 0){
         i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_FIFO_R_W, data_len, data_ptr);
     } else {
-    	*data_ptr = 0;
+        *data_ptr = 0;
     }
-}
-
-int8_t getXGyroOffsetTC() {
-    i2c_mpu_readBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
-    return buffer[0];
-}
-void setXGyroOffsetTC(int8_t offset) {
-    i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
-}
-
-// YG_OFFS_TC register
-
-int8_t getYGyroOffsetTC() {
-    i2c_mpu_readBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
-    return buffer[0];
-}
-void setYGyroOffsetTC(int8_t offset) {
-    i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
-}
-
-// ZG_OFFS_TC register
-
-int8_t getZGyroOffsetTC() {
-    i2c_mpu_readBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
-    return buffer[0];
-}
-void setZGyroOffsetTC(int8_t offset) {
-    i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
 
