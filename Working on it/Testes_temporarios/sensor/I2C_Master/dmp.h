@@ -2,7 +2,7 @@
 /* Se a biblioteca mpu.h não for definida, defina-a.
 Verificar é preciso para que não haja varias chamadas da
 mesma biblioteca. */
-#define	DMP_H
+#define DMP_H
 
 #include <hal_w2_isr.h>
 #include "stdint.h"
@@ -10,7 +10,7 @@ mesma biblioteca. */
 #include "mpu6050_reg.h"
 #include "stdlib.h"//malloc e free
 #include <string.h> //memcmp 
-#define	MPU_endereco MPU6050_DEFAULT_ADDRESS
+#define MPU_endereco MPU6050_DEFAULT_ADDRESS
 
 void mpu_initialize(void);
 bool mpu_testConnection(void);
@@ -137,7 +137,7 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
     if(data_len > 0){
         i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_FIFO_R_W, data_len, data_ptr);
     } else {
-    	*data_ptr = 0;
+        *data_ptr = 0;
     }
 }
 void setMemoryStartAddress(uint8_t address) {
@@ -202,6 +202,78 @@ bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, 
     }
     if (verify) free(verifyBuffer_wmb);
     if (useProgMem) free(progBuffer_wmb);
+    return true;
+}
+
+uint8_t xdata *progBuffer_wdcs = 0;
+uint8_t success_wdcs, special_wdcs;
+uint16_t i_wdcs, j_wdcs;
+uint8_t bank_wdcs, offset_wdcs, length_wdcs;
+bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
+    if (useProgMem) {
+        progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
+    }
+
+    // config set data is a long string of blocks with the following structure:
+    // [bank_wdcs] [offset_wdcs] [length_wdcs] [byte[0], byte[1], ..., byte[length_wdcs]]
+    
+    for (i_wdcs = 0; i_wdcs < dataSize;) {
+        if (useProgMem) {
+            bank_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            offset_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            length_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+        } else {
+            bank_wdcs = data_ptr[i_wdcs++];
+            offset_wdcs = data_ptr[i_wdcs++];
+            length_wdcs = data_ptr[i_wdcs++];
+        }
+
+        // write data or perform special action
+        if (length_wdcs > 0) {
+            // regular block of data to write
+            if (useProgMem) {
+                if (sizeof(progBuffer_wdcs) < length_wdcs) progBuffer_wdcs = (uint8_t *)realloc(progBuffer_wdcs, length_wdcs);
+                for (j_wdcs = 0; j_wdcs < length_wdcs; j_wdcs++) progBuffer_wdcs[j_wdcs] = pgm_read_byte(data_ptr + i_wdcs + j_wdcs);
+            } else {
+                progBuffer_wdcs = (uint8_t *)data_ptr + i_wdcs;
+            }
+            success_wdcs = writeMemoryBlock(progBuffer_wdcs, length_wdcs, bank_wdcs, offset_wdcs, true,false);
+            i_wdcs += length_wdcs;
+        } else {
+            // special instruction
+            // NOTE: this kind of behavior (what and when to do certain things)
+            // is totally undocumented. This code is in here based on observed
+            // behavior only, and exactly why (or even whether) it has to be here
+            // is anybody's guess for now.
+            if (useProgMem) {
+                special_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            } else {
+                special_wdcs = data_ptr[i_wdcs++];
+            }
+            /*Serial.print("Special command code ");
+            Serial.print(special, HEX);
+            Serial.println(" found...");*/
+            if (special_wdcs == 0x01) {
+                // enable DMP-related interrupts
+                
+                //setIntZeroMotionEnabled(true);
+                //setIntFIFOBufferOverflowEnabled(true);
+                //setIntDMPEnabled(true);
+                i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
+
+                success_wdcs = true;
+            } else {
+                // unknown special command
+                success_wdcs = false;
+            }
+        }
+        
+        if (!success_wdcs) {
+            if (useProgMem) free(progBuffer_wdcs);
+            return false; // uh oh
+        }
+    }
+    if (useProgMem) free(progBuffer_wdcs);
     return true;
 }
 

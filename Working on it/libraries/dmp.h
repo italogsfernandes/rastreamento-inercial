@@ -205,5 +205,76 @@ bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, 
     return true;
 }
 
+uint8_t xdata *progBuffer_wdcs = 0;
+uint8_t success_wdcs, special_wdcs;
+uint16_t i_wdcs, j_wdcs;
+bool MPU6050::writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
+    if (useProgMem) {
+        progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
+    }
+
+    // config set data is a long string of blocks with the following structure:
+    // [bank] [offset] [length] [byte[0], byte[1], ..., byte[length]]
+    uint8_t bank, offset, length;
+    for (i_wdcs = 0; i_wdcs < dataSize;) {
+        if (useProgMem) {
+            bank = pgm_read_byte(data_ptr + i_wdcs++);
+            offset = pgm_read_byte(data_ptr + i_wdcs++);
+            length = pgm_read_byte(data_ptr + i_wdcs++);
+        } else {
+            bank = data_ptr[i_wdcs++];
+            offset = data_ptr[i_wdcs++];
+            length = data_ptr[i_wdcs++];
+        }
+
+        // write data or perform special action
+        if (length > 0) {
+            // regular block of data to write
+            if (useProgMem) {
+                if (sizeof(progBuffer_wdcs) < length) progBuffer_wdcs = (uint8_t *)realloc(progBuffer_wdcs, length);
+                for (j_wdcs = 0; j_wdcs < length; j_wdcs++) progBuffer_wdcs[j_wdcs] = pgm_read_byte(data_ptr + i_wdcs + j_wdcs);
+            } else {
+                progBuffer_wdcs = (uint8_t *)data_ptr + i_wdcs;
+            }
+            success_wdcs = writeMemoryBlock(progBuffer_wdcs, length, bank, offset, true);
+            i_wdcs += length;
+        } else {
+            // special instruction
+            // NOTE: this kind of behavior (what and when to do certain things)
+            // is totally undocumented. This code is in here based on observed
+            // behavior only, and exactly why (or even whether) it has to be here
+            // is anybody's guess for now.
+            if (useProgMem) {
+                special_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            } else {
+                special_wdcs = data_ptr[i_wdcs++];
+            }
+            /*Serial.print("Special command code ");
+            Serial.print(special, HEX);
+            Serial.println(" found...");*/
+            if (special_wdcs == 0x01) {
+                // enable DMP-related interrupts
+                
+                //setIntZeroMotionEnabled(true);
+                //setIntFIFOBufferOverflowEnabled(true);
+                //setIntDMPEnabled(true);
+                i2c_mpu_writeByte(devAddr, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
+
+                success_wdcs = true;
+            } else {
+                // unknown special command
+                success_wdcs = false;
+            }
+        }
+        
+        if (!success_wdcs) {
+            if (useProgMem) free(progBuffer_wdcs);
+            return false; // uh oh
+        }
+    }
+    if (useProgMem) free(progBuffer_wdcs);
+    return true;
+}
+
 
 #endif
