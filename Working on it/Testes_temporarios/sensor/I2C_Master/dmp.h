@@ -9,40 +9,40 @@ mesma biblioteca. */
 #include "stdbool.h"
 #include "mpu6050_reg.h"
 #include "stdlib.h"//malloc e free
-#include <string.h> //memcmp 
+#include <string.h> //memcmp
 #define MPU_endereco MPU6050_DEFAULT_ADDRESS
 
 uint8_t xdata buffer[14]; //usado em testConnection e getIntStatus
-uint8_t xdata *dmpPacketBuffer;
+uint8_t xdata * xdata dmpPacketBuffer;
 uint16_t xdata dmpPacketSize;
 uint8_t xdata malloc_memory_pool[500];
 
-void mpu_8051_malloc_setup(){
+void mpu_8051_malloc_setup() large {
     init_mempool (&malloc_memory_pool, sizeof(malloc_memory_pool));
 }
-void setClockSource(uint8_t source) {
+void setClockSource(uint8_t source) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
 }
-void setFullScaleGyroRange(uint8_t range) {
+void setFullScaleGyroRange(uint8_t range) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
 }
-void setFullScaleAccelRange(uint8_t range) {
+void setFullScaleAccelRange(uint8_t range) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
 }
-void setSleepEnabled(bool enabled) {
+void setSleepEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
 }
-void mpu_initialize(void){
+void mpu_initialize() large {
   setClockSource(MPU6050_CLOCK_PLL_XGYRO);
   setFullScaleGyroRange(MPU6050_GYRO_FS_250);
   setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
   setSleepEnabled(false);
 }
-bool mpu_testConnection(void){
+bool mpu_testConnection() large {
     i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
     return buffer[0] == 0x34;
 }
-void getMotion6_packet(uint8_t *packet6){
+void getMotion6_packet(uint8_t xdata * packet6) large {
     i2c_mpu_readBytes(MPU_endereco, 0x3B, 14, buffer);
     packet6[0] = buffer[0]; //Xac_H
     packet6[1] = buffer[1]; //Xac_L
@@ -57,97 +57,97 @@ void getMotion6_packet(uint8_t *packet6){
     packet6[10] = buffer[12]; //Zgy_H
     packet6[11] = buffer[13]; //Zgy_L
 }
-void setXAccelOffset(int16_t xdata offset) large {
+void setXAccelOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco,  MPU6050_RA_XA_OFFS_H, offset);
 }
-void setYAccelOffset(int16_t xdata offset) large {
+void setYAccelOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_YA_OFFS_H, offset);
 }
-void setZAccelOffset(int16_t xdata offset) large {
+void setZAccelOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZA_OFFS_H, offset);
 }
-void setXGyroOffset(int16_t xdata offset) large {
+void setXGyroOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_XG_OFFS_USRH, offset);
 }
-void setYGyroOffset(int16_t xdata offset) large {
+void setYGyroOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_YG_OFFS_USRH, offset);
 }
-void setZGyroOffset(int16_t xdata offset) large {
+void setZGyroOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
 
-int16_t getXAccelOffset() {
+int16_t getXAccelOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XA_OFFS_H, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-int16_t getYAccelOffset() {
+int16_t getYAccelOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YA_OFFS_H, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-int16_t getZAccelOffset() {
+int16_t getZAccelOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZA_OFFS_H, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-int16_t getXGyroOffset() {
+int16_t getXGyroOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XG_OFFS_USRH, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-int16_t getYGyroOffset() {
+int16_t getYGyroOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_YG_OFFS_USRH, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
-int16_t getZGyroOffset() {
+int16_t getZGyroOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) large {
+void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) large {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_BANK_SEL, bank);
 }
 
-uint16_t getFIFOCount() {
+uint16_t getFIFOCount() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_FIFO_COUNTH, 2, buffer);
     return (((uint16_t)buffer[0]) << 8) | buffer[1];
 }
 
-uint8_t getIntStatus() {
+uint8_t getIntStatus() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_INT_STATUS, buffer);
     return buffer[0];
 }
 
-void setDMPEnabled(bool xdata enabled) large {
+void setDMPEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
 }
 
-void resetFIFO() {
+void resetFIFO() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
 }
 
-uint16_t dmpGetFIFOPacketSize() {
+uint16_t dmpGetFIFOPacketSize() large {
     return dmpPacketSize;
 }
 
-void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
+void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) large {
     if(data_len > 0){
         i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_FIFO_R_W, data_len, data_ptr);
     } else {
         *data_ptr = 0;
     }
 }
-void setMemoryStartAddress(uint8_t xdata address) large {
+void setMemoryStartAddress(uint8_t address) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
 }
 
-//BUG: pq nao da pra colocar dentro da função?
-uint8_t xdata chunkSize_wmb;
-uint8_t xdata *verifyBuffer_wmb;
-uint8_t xdata *progBuffer_wmb=0;
-uint16_t xdata i_wmb;
-uint8_t xdata j_wmb;
-bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify, bool xdata useProgMem) large {
+bool writeMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) large {
+    //BUG: pq nao da pra colocar dentro da função?
+    uint8_t xdata chunkSize_wmb;
+    uint8_t * xdata verifyBuffer_wmb;
+    uint8_t * xdata progBuffer_wmb=0;
+    uint16_t i_wmb;
+    uint8_t j_wmb;
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
     if (verify) verifyBuffer_wmb = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
@@ -161,7 +161,7 @@ bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t 
 
         // make sure this chunk doesn't go past the bank boundary (256 bytes)
         if (chunkSize_wmb > 256 - address) chunkSize_wmb = 256 - address;
-        
+
         if (useProgMem) {
             // write the chunk of data as specified
             for (j_wmb = 0; j_wmb < chunkSize_wmb; j_wmb++) progBuffer_wmb[j_wmb] = pgm_read_byte(data_ptr + i_wmb + j_wmb);
@@ -202,18 +202,19 @@ bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t 
     return true;
 }
 
-uint8_t xdata *progBuffer_wdcs = 0;
-uint8_t xdata success_wdcs, special_wdcs;
-uint16_t xdata i_wdcs, j_wdcs;
-uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
-bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, bool xdata useProgMem) large {
+
+bool writeDMPConfigurationSet(uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) large {
+    uint8_t * xdata progBuffer_wdcs = 0;
+    uint8_t xdata success_wdcs, special_wdcs;
+    uint16_t i_wdcs, j_wdcs;
+    uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
     if (useProgMem) {
         progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
     }
 
     // config set data is a long string of blocks with the following structure:
     // [bank_wdcs] [offset_wdcs] [length_wdcs] [byte[0], byte[1], ..., byte[length_wdcs]]
-    
+
     for (i_wdcs = 0; i_wdcs < dataSize;) {
         if (useProgMem) {
             bank_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
@@ -252,7 +253,7 @@ bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, 
             Serial.println(" found...");*/
             if (special_wdcs == 0x01) {
                 // enable DMP-related interrupts
-                
+
                 //setIntZeroMotionEnabled(true);
                 //setIntFIFOBufferOverflowEnabled(true);
                 //setIntDMPEnabled(true);
@@ -264,7 +265,7 @@ bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, 
                 success_wdcs = false;
             }
         }
-        
+
         if (!success_wdcs) {
             if (useProgMem) free(progBuffer_wdcs);
             return false; // uh oh
@@ -274,9 +275,10 @@ bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, 
     return true;
 }
 
-uint8_t xdata chunkSize_rmb;
-uint16_t xdata i_rmb;
-void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address) large {
+
+void readMemoryBlock(uint8_t  *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) large {
+    uint8_t xdata chunkSize_rmb;
+    uint16_t i_rmb;
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
         for (i_rmb=0; i_rmb < dataSize;) {
@@ -291,7 +293,7 @@ void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t x
 
         // read the chunk of data_ptr as specified
         i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize_rmb, data_ptr + i_rmb);
-        
+
         // increase byte index by [chunkSize_rmb]
         i_rmb += chunkSize_rmb;
 
@@ -306,135 +308,135 @@ void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t x
         }
     }
 }
-bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) large {
+bool writeProgDMPConfigurationSet(uint8_t *data_ptr, uint16_t xdata dataSize) large {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
-bool writeProgMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify) large {
+bool writeProgMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify) large {
     return writeMemoryBlock(data_ptr, dataSize, bank, address, verify, true);
 }
-void i2c_mpu_reset() {
+void i2c_mpu_reset() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_DEVICE_RESET_BIT, true);
 }
-void setSlaveAddress(uint8_t num, uint8_t address) {
+void setSlaveAddress(uint8_t num, uint8_t address) large {
     if (num > 3) return;
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_I2C_SLV0_ADDR + num*3, address);
 }
-void setI2CMasterModeEnabled(bool enabled) {
+void setI2CMasterModeEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_EN_BIT, enabled);
 }
-void resetI2CMaster() {
+void resetI2CMaster() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_RESET_BIT, true);
 }
-void setIntEnabled(uint8_t enabled) {
+void setIntEnabled(uint8_t enabled) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_INT_ENABLE, enabled);
 }
-void setRate(uint8_t rate) {
+void setRate(uint8_t rate) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_SMPLRT_DIV, rate);
 }
-void setExternalFrameSync(uint8_t sync) {
+void setExternalFrameSync(uint8_t sync) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, sync);
 }
-void setDLPFMode(uint8_t mode) {
+void setDLPFMode(uint8_t mode) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_DLPF_CFG_BIT, MPU6050_CFG_DLPF_CFG_LENGTH, mode);
 }
 // DMP_CFG_1 register
 
-uint8_t getDMPConfig1() {
+uint8_t getDMPConfig1() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_DMP_CFG_1, buffer);
     return buffer[0];
 }
-void setDMPConfig1(uint8_t config) {
+void setDMPConfig1(uint8_t config) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_DMP_CFG_1, config);
 }
 
 // DMP_CFG_2 register
 
-uint8_t getDMPConfig2() {
+uint8_t getDMPConfig2() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_DMP_CFG_2, buffer);
     return buffer[0];
 }
-void setDMPConfig2(uint8_t config) {
+void setDMPConfig2(uint8_t config) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_DMP_CFG_2, config);
 }
-uint8_t getOTPBankValid() {
+uint8_t getOTPBankValid() large {
     i2c_mpu_readBit(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OTP_BNK_VLD_BIT, buffer);
     return buffer[0];
 }
-void setOTPBankValid(bool enabled) {
+void setOTPBankValid(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OTP_BNK_VLD_BIT, enabled);
 }
-int8_t getXGyroOffsetTC() {
+int8_t getXGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
 }
-void setXGyroOffsetTC(int8_t offset) {
+void setXGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
 // YG_OFFS_TC register
 
-int8_t getYGyroOffsetTC() {
+int8_t getYGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
 }
-void setYGyroOffsetTC(int8_t offset) {
+void setYGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
 // ZG_OFFS_TC register
 
-int8_t getZGyroOffsetTC() {
+int8_t getZGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
 }
-void setZGyroOffsetTC(int8_t offset) {
+void setZGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
-uint8_t getMotionDetectionThreshold() {
+uint8_t getMotionDetectionThreshold() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_MOT_THR, buffer);
     return buffer[0];
 }
-void setMotionDetectionThreshold(uint8_t threshold) {
+void setMotionDetectionThreshold(uint8_t threshold) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MOT_THR, threshold);
 }
-uint8_t getZeroMotionDetectionThreshold() {
+uint8_t getZeroMotionDetectionThreshold() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_ZRMOT_THR, buffer);
     return buffer[0];
 }
 
-void setZeroMotionDetectionThreshold(uint8_t threshold) {
+void setZeroMotionDetectionThreshold(uint8_t threshold) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_ZRMOT_THR, threshold);
 }
-uint8_t getMotionDetectionDuration() {
+uint8_t getMotionDetectionDuration() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_MOT_DUR, buffer);
     return buffer[0];
 }
 
-void setMotionDetectionDuration(uint8_t duration) {
+void setMotionDetectionDuration(uint8_t duration) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MOT_DUR, duration);
 }
- 
-uint8_t getZeroMotionDetectionDuration() {
+
+uint8_t getZeroMotionDetectionDuration() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_ZRMOT_DUR, buffer);
     return buffer[0];
 }
 
-void setZeroMotionDetectionDuration(uint8_t duration) {
+void setZeroMotionDetectionDuration(uint8_t duration) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_ZRMOT_DUR, duration);
 }
-bool getFIFOEnabled() {
+bool getFIFOEnabled() large {
     i2c_mpu_readBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_EN_BIT, buffer);
     return buffer[0];
 }
 
-void setFIFOEnabled(bool enabled) {
+void setFIFOEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_EN_BIT, enabled);
 }
-void resetDMP() {
+void resetDMP() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_RESET_BIT, true);
 }
-uint8_t dmpInitialize() {
+uint8_t dmpInitialize() large {
     // reset device
     //DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
     i2c_mpu_reset();
@@ -653,7 +655,7 @@ uint8_t dmpInitialize() {
     }
     return 0; // success
 }
-uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) {
+uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) large {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
     if (packet == 0) packet = dmpPacketBuffer;
     data_ptr[0] = ((packet[0] << 8) | packet[1]);

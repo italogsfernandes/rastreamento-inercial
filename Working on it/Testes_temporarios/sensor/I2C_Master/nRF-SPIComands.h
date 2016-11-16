@@ -13,8 +13,8 @@
 #define TX_PLOAD_WIDTH  32   //max
 
 
-//Endereços:
-//Definido como endereço da pipe 0
+//Endereï¿½os:
+//Definido como endereï¿½o da pipe 0
 uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
 
 uint8_t xdata rx_buf[TX_PLOAD_WIDTH];

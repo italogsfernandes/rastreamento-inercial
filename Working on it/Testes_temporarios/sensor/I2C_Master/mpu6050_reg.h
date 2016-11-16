@@ -384,7 +384,7 @@
 #define MPU6050_DMP_CONFIG_SIZE     192     // dmpConfig[]
 #define MPU6050_DMP_UPDATES_SIZE    47      // dmpUpdates[]
 #define PROGMEM
-#define pgm_read_byte(addr) (*(unsigned char *)(addr)) //BUG: this will rly work?
+#define pgm_read_byte(addr) (*(unsigned char code *)(addr)) //BUG: this will rly work?
 // note: DMP code memory blocks defined at dmp.h file
 // this block of memory gets written to the MPU on start-up, and it seems
 // to be volatile memory, so it has to be done each time (it only takes ~1

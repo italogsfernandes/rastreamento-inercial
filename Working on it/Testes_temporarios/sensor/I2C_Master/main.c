@@ -46,7 +46,7 @@ void iniciarIO(void){
 }
 
 void setup() {
-		iniciarIO(); //IO
+	iniciarIO(); //IO
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
