@@ -653,4 +653,13 @@ uint8_t dmpInitialize() {
     }
     return 0; // success
 }
+uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) {
+    // TODO: accommodate different arrangements of sent data (ONLY default supported now)
+    if (packet == 0) packet = dmpPacketBuffer;
+    data_ptr[0] = ((packet[0] << 8) | packet[1]);
+    data_ptr[1] = ((packet[4] << 8) | packet[5]);
+    data_ptr[2] = ((packet[8] << 8) | packet[9]);
+    data_ptr[3] = ((packet[12] << 8) | packet[13]);
+    return 0;
+}
 #endif

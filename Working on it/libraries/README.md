@@ -36,10 +36,10 @@
 	- [x] <del>get\*AccelOffset</del>
 	- [x] <del>get\*GyroOffset</del>
 	* DMP
-	- [ ] dmpInitialize - Depende de muita coisa (olhar abaixo)
+	- [x] dmpInitialize - **Com bugs e nao testada** 
 	- [x] setDMPEnabled
 	- [x] dmpGetFIFOPacketSize
-	- [ ] dmpGetQuaternion - Depende de getFIFO
+	- [x] dmpGetQuaternion - **Nao testada**
 		* dmpInitialize depende de:
 		- [x] setMemoryBank
 		- [x] get\*GyroOffsetTC - Depende de **readBits**
