@@ -31,6 +31,7 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 #endif
 
 
+
 void luzes_iniciais(void);
 
 void iniciarIO(void){
@@ -43,6 +44,7 @@ void iniciarIO(void){
     P1CON |= 0x53;  	// All general I/O
     P2CON = 0x00;  	// All general I/O
 }
+
 void setup() {
 		iniciarIO(); //IO
     iniciarRF(); //RF
@@ -60,34 +62,18 @@ void setup() {
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 }
-uint8_t xdata *poxa;
-int ii;
-char xdata hexchars [] = "0123456789ABCDEF";
-char xdata hexchars2 [] = "1123456789ABCDEF";
-uint8_t xdata another_randon_variable[2] = {0x00,0x00};
 
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
-					ii = memcmp (hexchars, hexchars2, 16);
-					if (ii < 0){
-						send_packet_to_host(UART_PACKET_TYPE_STRING,"1<2",3);delay_ms(10);
-					}else if (ii > 0){
-						send_packet_to_host(UART_PACKET_TYPE_STRING,"1>2",3);delay_ms(10);
-					}else{
-						send_packet_to_host(UART_PACKET_TYPE_STRING,"1==2",4);delay_ms(10);
-					}
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-					another_randon_variable[0] = pgm_read_byte(&dmpUpdates[0]);
-					another_randon_variable[1] = pgm_read_byte(&dmpUpdates[1]);
-					send_packet_to_host(UART_PACKET_TYPE_HEX,another_randon_variable,2);delay_ms(10);
 					LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);

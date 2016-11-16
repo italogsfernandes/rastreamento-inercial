@@ -145,11 +145,11 @@ void setMemoryStartAddress(uint8_t address) {
 }
 
 //BUG: pq nao da pra colocar dentro da função?
-uint8_t chunkSize_wmb;
+uint8_t xdata chunkSize_wmb;
 uint8_t xdata *verifyBuffer_wmb;
 uint8_t xdata *progBuffer_wmb=0;
-uint16_t i_wmb;
-uint8_t j_wmb;
+uint16_t xdata i_wmb;
+uint8_t xdata j_wmb;
 bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
@@ -206,38 +206,39 @@ bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, 
 }
 
 uint8_t xdata *progBuffer_wdcs = 0;
-uint8_t success_wdcs, special_wdcs;
-uint16_t i_wdcs, j_wdcs;
-bool MPU6050::writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
+uint8_t xdata success_wdcs, special_wdcs;
+uint16_t xdata i_wdcs, j_wdcs;
+uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
+bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
     if (useProgMem) {
         progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
     }
 
     // config set data is a long string of blocks with the following structure:
-    // [bank] [offset] [length] [byte[0], byte[1], ..., byte[length]]
-    uint8_t bank, offset, length;
+    // [bank_wdcs] [offset_wdcs] [length_wdcs] [byte[0], byte[1], ..., byte[length_wdcs]]
+    
     for (i_wdcs = 0; i_wdcs < dataSize;) {
         if (useProgMem) {
-            bank = pgm_read_byte(data_ptr + i_wdcs++);
-            offset = pgm_read_byte(data_ptr + i_wdcs++);
-            length = pgm_read_byte(data_ptr + i_wdcs++);
+            bank_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            offset_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
+            length_wdcs = pgm_read_byte(data_ptr + i_wdcs++);
         } else {
-            bank = data_ptr[i_wdcs++];
-            offset = data_ptr[i_wdcs++];
-            length = data_ptr[i_wdcs++];
+            bank_wdcs = data_ptr[i_wdcs++];
+            offset_wdcs = data_ptr[i_wdcs++];
+            length_wdcs = data_ptr[i_wdcs++];
         }
 
         // write data or perform special action
-        if (length > 0) {
+        if (length_wdcs > 0) {
             // regular block of data to write
             if (useProgMem) {
-                if (sizeof(progBuffer_wdcs) < length) progBuffer_wdcs = (uint8_t *)realloc(progBuffer_wdcs, length);
-                for (j_wdcs = 0; j_wdcs < length; j_wdcs++) progBuffer_wdcs[j_wdcs] = pgm_read_byte(data_ptr + i_wdcs + j_wdcs);
+                if (sizeof(progBuffer_wdcs) < length_wdcs) progBuffer_wdcs = (uint8_t *)realloc(progBuffer_wdcs, length_wdcs);
+                for (j_wdcs = 0; j_wdcs < length_wdcs; j_wdcs++) progBuffer_wdcs[j_wdcs] = pgm_read_byte(data_ptr + i_wdcs + j_wdcs);
             } else {
                 progBuffer_wdcs = (uint8_t *)data_ptr + i_wdcs;
             }
-            success_wdcs = writeMemoryBlock(progBuffer_wdcs, length, bank, offset, true);
-            i_wdcs += length;
+            success_wdcs = writeMemoryBlock(progBuffer_wdcs, length_wdcs, bank_wdcs, offset_wdcs, true,false);
+            i_wdcs += length_wdcs;
         } else {
             // special instruction
             // NOTE: this kind of behavior (what and when to do certain things)
@@ -258,7 +259,7 @@ bool MPU6050::writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSiz
                 //setIntZeroMotionEnabled(true);
                 //setIntFIFOBufferOverflowEnabled(true);
                 //setIntDMPEnabled(true);
-                i2c_mpu_writeByte(devAddr, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
+                i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_INT_ENABLE, 0x32);  // single operation
 
                 success_wdcs = true;
             } else {
