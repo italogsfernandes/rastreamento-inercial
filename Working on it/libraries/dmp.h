@@ -46,22 +46,22 @@ void getMotion6_packet(uint8_t *packet6){
     packet6[10] = buffer[12]; //Zgy_H
     packet6[11] = buffer[13]; //Zgy_L
 }
-void setXAccelOffset(int16_t offset) {
+void setXAccelOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco,  MPU6050_RA_XA_OFFS_H, offset);
 }
-void setYAccelOffset(int16_t offset) {
+void setYAccelOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_YA_OFFS_H, offset);
 }
-void setZAccelOffset(int16_t offset) {
+void setZAccelOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZA_OFFS_H, offset);
 }
-void setXGyroOffset(int16_t offset) {
+void setXGyroOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_XG_OFFS_USRH, offset);
 }
-void setYGyroOffset(int16_t offset) {
+void setYGyroOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_YG_OFFS_USRH, offset);
 }
-void setZGyroOffset(int16_t offset) {
+void setZGyroOffset(int16_t xdata offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
 
@@ -90,7 +90,7 @@ int16_t getZGyroOffset() {
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) {
+void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) large {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
@@ -107,7 +107,7 @@ uint8_t getIntStatus() {
     return buffer[0];
 }
 
-void setDMPEnabled(bool enabled) {
+void setDMPEnabled(bool xdata enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
 }
 
@@ -126,7 +126,7 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) {
         *data_ptr = 0;
     }
 }
-void setMemoryStartAddress(uint8_t address) {
+void setMemoryStartAddress(uint8_t xdata address) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
 }
 
@@ -136,7 +136,7 @@ uint8_t xdata *verifyBuffer_wmb;
 uint8_t xdata *progBuffer_wmb=0;
 uint16_t xdata i_wmb;
 uint8_t xdata j_wmb;
-bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify, bool xdata useProgMem) {
+bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify, bool xdata useProgMem) large {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
     if (verify) verifyBuffer_wmb = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
@@ -195,7 +195,7 @@ uint8_t xdata *progBuffer_wdcs = 0;
 uint8_t xdata success_wdcs, special_wdcs;
 uint16_t xdata i_wdcs, j_wdcs;
 uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
-bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, bool xdata useProgMem) {
+bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, bool xdata useProgMem) large {
     if (useProgMem) {
         progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
     }
@@ -265,7 +265,7 @@ bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, 
 
 uint8_t xdata chunkSize_rmb;
 uint16_t xdata i_rmb;
-void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address) {
+void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address) large {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
         for (i_rmb=0; i_rmb < dataSize;) {
@@ -295,10 +295,10 @@ void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t x
         }
     }
 }
-bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) {
+bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) large {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
-bool writeProgMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify) {
+bool writeProgMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify) large {
     return writeMemoryBlock(data_ptr, dataSize, bank, address, verify, true);
 }
 #endif

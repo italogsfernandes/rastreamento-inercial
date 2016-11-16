@@ -46,7 +46,7 @@
 		- [x] set\*GyroOffsetTC - Depende de **writeBits**
 		- [x] <del>pgm_read_byte</del>
 		- [x] setDMPEnabled
-		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock
+		- [x] writeProgMemoryBlock - **Não Testada**
 		- [x] writeProgDMPConfigurationSet - **Não Testada**
 		- [x] getFIFOCount
 		- [x] resetFIFO
