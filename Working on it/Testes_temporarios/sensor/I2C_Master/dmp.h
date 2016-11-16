@@ -145,11 +145,11 @@ void setMemoryStartAddress(uint8_t address) {
 }
 
 //BUG: pq nao da pra colocar dentro da função?
-uint8_t chunkSize_wmb;
+uint8_t xdata chunkSize_wmb;
 uint8_t xdata *verifyBuffer_wmb;
 uint8_t xdata *progBuffer_wmb=0;
-uint16_t i_wmb;
-uint8_t j_wmb;
+uint16_t xdata i_wmb;
+uint8_t xdata j_wmb;
 bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
@@ -206,9 +206,9 @@ bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, 
 }
 
 uint8_t xdata *progBuffer_wdcs = 0;
-uint8_t success_wdcs, special_wdcs;
-uint16_t i_wdcs, j_wdcs;
-uint8_t bank_wdcs, offset_wdcs, length_wdcs;
+uint8_t xdata success_wdcs, special_wdcs;
+uint16_t xdata i_wdcs, j_wdcs;
+uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
 bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
     if (useProgMem) {
         progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary

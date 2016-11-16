@@ -15,7 +15,7 @@
 
 //Endereços:
 //Definido como endereço da pipe 0
-uint8_t const ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
+uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
 
 uint8_t xdata rx_buf[TX_PLOAD_WIDTH];
 uint8_t xdata tx_buf[TX_PLOAD_WIDTH];
@@ -131,7 +131,6 @@ void RF_IRQ(void) interrupt INTERRUPT_RFIRQ
     SPI_RW_Reg(FLUSH_TX,0);
     if(TX_DS)
     SPI_RW_Reg(FLUSH_TX,0);
-
     SPI_RW_Reg(WRITE_REG+STATUS,0x70);								// clear RX_DR or TX_DS or MAX_RT interrupt flag
 }
 
