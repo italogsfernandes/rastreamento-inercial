@@ -277,5 +277,36 @@ bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool u
     return true;
 }
 
+uint8_t xdata chunkSize_rmb;
+uint16_t xdata i_rmb;
+void readMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) {
+    setMemoryBank(bank);
+    setMemoryStartAddress(address);
+    for (i_rmb=0; i_rmb < dataSize;) {
+        // determine correct chunk size according to bank position and data_ptr size
+        chunkSize_rmb = MPU6050_DMP_MEMORY_CHUNK_SIZE;
 
+        // make sure we don't go past the data_ptr size
+        if (i_rmb + chunkSize_rmb > dataSize) chunkSize_rmb = dataSize - i_rmb;
+
+        // make sure this chunk doesn't go past the bank boundary (256 bytes)
+        if (chunkSize_rmb > 256 - address) chunkSize_rmb = 256 - address;
+
+        // read the chunk of data_ptr as specified
+        i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_MEM_R_W, chunkSize_rmb, data_ptr + i_rmb);
+        
+        // increase byte index by [chunkSize_rmb]
+        i_rmb += chunkSize_rmb;
+
+        // uint8_t automatically wraps to 0 at 256
+        address += chunkSize_rmb;
+
+        // if we aren't done, update bank (if necessary) and address
+        if (i_rmb < data_ptrSize) {
+            if (address == 0) bank++;
+            setMemoryBank(bank);
+            setMemoryStartAddress(address);
+        }
+    }
+}
 #endif
