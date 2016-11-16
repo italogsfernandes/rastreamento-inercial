@@ -51,7 +51,7 @@
 		- [x] getFIFOCount
 		- [x] resetFIFO
 		- [x] getFIFOBytes
-		- [ ] readMemoryBlock
+		- [x] readMemoryBlock - **Não Testada**
 		- [x] getIntStatus
 		- [x] writeDMPConfigurationSet - **Não Testada**
 			* Depende de:
