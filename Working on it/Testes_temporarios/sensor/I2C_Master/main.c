@@ -20,6 +20,7 @@
 #define Sinal_LEDS 0x0B
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
+int16_t xdata packet_quat[4];
 //Definicoes dos botoes e leds
 #define	PIN32 //m�dulo com 32 pinos
 #ifdef 	PIN32
@@ -33,6 +34,33 @@ sbit LEDVM = P0^3; // 1/0=light/dark
 
 
 void luzes_iniciais(void);
+
+/***VARIAVEIS da DMP*****/
+
+volatile bool mpuInterrupt = false;
+bool dmpReady = false;  // set true if DMP init was successful
+uint8_t xdata mpuIntStatus;   // holds actual interrupt status byte from MPU
+uint8_t xdata devStatus;      // return status after each device operation (0 = success, !0 = error)
+uint16_t xdata packetSize;    // expected DMP packet size (default is 42 bytes)
+uint16_t xdata fifoCount;     // count of all bytes currently in FIFO
+uint8_t xdata fifoBuffer[64]; // FIFO storage buffer
+
+/************************/
+/***FUNCOES DA DM*******/
+void pin_isr_setup(){
+	EX0=1;
+	INTEXP = 0x10;
+	IT0 = 1;
+	EA = 1;
+}
+void ext0_irq(void) interrupt 2 
+{
+    mpuInterrupt=true;
+}
+
+/************************/
+
+
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -59,22 +87,70 @@ void setup() {
 		} else {
 			send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
 		}
+		
+}
+void configura_dmp(){
+		delay_ms(250);//esperando nao sei pq
+		devStatus = dmpInitialize();
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
+		if (devStatus == 0) {
+        setDMPEnabled(true);
+				pin_isr_setup();
+        mpuIntStatus = getIntStatus();
+        dmpReady = true;
+        packetSize = dmpGetFIFOPacketSize();
+    } else {
+        send_packet_to_host(UART_PACKET_TYPE_STRING,"Falha",5);delay_ms(10);
+    }
 }
 
+void ler_dmp(){
+	while (!mpuInterrupt && fifoCount < packetSize) {
+     LEDVM = 1;
+  }
+	LEDVM=0;
+	// reset interrupt flag and get INT_STATUS byte
+	mpuInterrupt = false;
+	mpuIntStatus = getIntStatus();
+
+	// get current FIFO count
+	fifoCount = getFIFOCount();
+
+	// check for overflow (this should never happen unless our code is too inefficient)
+	if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+			// reset so we can continue cleanly
+			resetFIFO();
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);delay_ms(10);
+    // otherwise, check for DMP data ready interrupt (this should happen frequently)
+    } else if (mpuIntStatus & 0x02) {
+        // wait for correct available data length, should be a VERY short wait
+        while (fifoCount < packetSize) fifoCount = getFIFOCount();
+
+        // read a packet from FIFO
+        getFIFOBytes(fifoBuffer, packetSize);
+        
+        // track FIFO count here in case there is > 1 packet available
+        // (this lets us immediately read more without waiting for an interrupt)
+        fifoCount -= packetSize;
+	}
+}
 void main(void) {
     setup();
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
+					configura_dmp();
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
-					LEDVM = !LEDVM;
+					ler_dmp();
+					dmpGetQuaternion_int16(packet_quat, fifoBuffer);
+					send_packet_to_host(UART_PACKET_TYPE_QUAT,(uint8_t *) packet_quat,8);
+					//LEDVM = !LEDVM;
 					delay_ms(100);
 					while(!S2);
 					delay_ms(100);

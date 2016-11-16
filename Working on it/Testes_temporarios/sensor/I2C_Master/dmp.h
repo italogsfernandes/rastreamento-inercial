@@ -101,7 +101,7 @@ int16_t getZGyroOffset() large {
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) large {
+void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) large {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
@@ -137,15 +137,16 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) large {
         *data_ptr = 0;
     }
 }
-void setMemoryStartAddress(uint8_t address) large {
+void setMemoryStartAddress(uint8_t xdata address) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
 }
 
+//memory data = 8bytes
 bool writeMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) large {
     //BUG: pq nao da pra colocar dentro da função?
-    uint8_t xdata chunkSize_wmb;
-    uint8_t * xdata verifyBuffer_wmb;
-    uint8_t * xdata progBuffer_wmb=0;
+    uint8_t chunkSize_wmb;
+    uint8_t * verifyBuffer_wmb;
+    uint8_t * progBuffer_wmb=0;
     uint16_t i_wmb;
     uint8_t j_wmb;
     setMemoryBank(bank,false,false);
@@ -203,6 +204,8 @@ bool writeMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_
 }
 
 
+
+//memory data  = 8bytes
 bool writeDMPConfigurationSet(uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) large {
     uint8_t * xdata progBuffer_wdcs = 0;
     uint8_t xdata success_wdcs, special_wdcs;
@@ -276,6 +279,7 @@ bool writeDMPConfigurationSet(uint8_t *data_ptr, uint16_t dataSize, bool useProg
 }
 
 
+
 void readMemoryBlock(uint8_t  *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) large {
     uint8_t xdata chunkSize_rmb;
     uint16_t i_rmb;
@@ -308,6 +312,8 @@ void readMemoryBlock(uint8_t  *data_ptr, uint16_t dataSize, uint8_t bank, uint8_
         }
     }
 }
+
+
 bool writeProgDMPConfigurationSet(uint8_t *data_ptr, uint16_t xdata dataSize) large {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
@@ -436,8 +442,15 @@ void setFIFOEnabled(bool enabled) large {
 void resetDMP() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_RESET_BIT, true);
 }
+
+
 uint8_t dmpInitialize() large {
-    // reset device
+    uint8_t xgOffsetTC,ygOffsetTC,zgOffsetTC;
+		uint8_t dmpUpdate[16], j;
+		uint16_t pos = 0;
+		uint16_t fifoCount;
+		uint8_t fifoBuffer[128];
+		// reset device
     //DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
     i2c_mpu_reset();
     delay_ms(30); // wait after reset
@@ -469,9 +482,10 @@ uint8_t dmpInitialize() large {
 
     // get X/Y/Z gyro offsets
     //DEBUG_PRINTLN(F("Reading gyro offset TC values..."));
-    int8_t xgOffsetTC = getXGyroOffsetTC();
-    int8_t ygOffsetTC = getYGyroOffsetTC();
-    int8_t zgOffsetTC = getZGyroOffsetTC();
+		
+		xgOffsetTC = getXGyroOffsetTC();
+		ygOffsetTC = getYGyroOffsetTC();
+		zgOffsetTC = getZGyroOffsetTC();
     //DEBUG_PRINT(F("X gyro offset = "));
     //DEBUG_PRINTLN(xgOffsetTC);
     //DEBUG_PRINT(F("Y gyro offset = "));
@@ -494,7 +508,8 @@ uint8_t dmpInitialize() large {
     //DEBUG_PRINT(F("Writing DMP code to MPU memory banks ("));
     //DEBUG_PRINT(MPU6050_DMP_CODE_SIZE);
     //DEBUG_PRINTLN(F(" bytes)"));
-    if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE)) {
+		//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
+    if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE,0,0,true)) {
         //DEBUG_PRINTLN(F("Success! DMP code written and verified."));
 
         // write DMP configuration
@@ -540,21 +555,23 @@ uint8_t dmpInitialize() large {
             //setZGyroOffset(0);
 
             //DEBUG_PRINTLN(F("Writing final memory update 1/7 (function unknown)..."));
-            uint8_t dmpUpdate[16], j;
-            uint16_t pos = 0;
+            
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+
+					//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
+						writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 2/7 (function unknown)..."));
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+						//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
+						writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Resetting FIFO..."));
             resetFIFO();
 
             //DEBUG_PRINTLN(F("Reading FIFO count..."));
-            uint16_t fifoCount = getFIFOCount();
-            uint8_t fifoBuffer[128];
+						fifoCount = getFIFOCount();
+            
 
             //DEBUG_PRINT(F("Current FIFO count="));
             //DEBUG_PRINTLN(fifoCount);
@@ -581,20 +598,20 @@ uint8_t dmpInitialize() large {
             //DEBUG_PRINTLN(F("Enabling DMP..."));
             setDMPEnabled(true);
 
-            DEBUG_PRINTLN(F("Resetting DMP..."));
+            //DEBUG_PRINTLN(F("Resetting DMP..."));
             resetDMP();
 
             //DEBUG_PRINTLN(F("Writing final memory update 3/7 (function unknown)..."));
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 4/7 (function unknown)..."));
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 5/7 (function unknown)..."));
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Waiting for FIFO count > 2..."));
             while ((fifoCount = getFIFOCount()) < 3);
@@ -629,7 +646,7 @@ uint8_t dmpInitialize() large {
 
             //DEBUG_PRINTLN(F("Writing final memory update 7/7 (function unknown)..."));
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
-            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
+            writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("DMP is good to go! Finally."));
 
@@ -664,4 +681,5 @@ uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) large {
     data_ptr[3] = ((packet[12] << 8) | packet[13]);
     return 0;
 }
+
 #endif
