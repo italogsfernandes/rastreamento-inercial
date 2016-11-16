@@ -44,7 +44,7 @@
 		- [x] setMemoryBank
 		- [x] get\*GyroOffsetTC - Depende de **readBits**
 		- [x] set\*GyroOffsetTC - Depende de **writeBits**
-		- [ ] pgm_read_byte - XXX: ?
+		- [x] <del>pgm_read_byte</del>
 		- [x] setDMPEnabled
 		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock
 		- [x] writeProgDMPConfigurationSet - **Não Testada**

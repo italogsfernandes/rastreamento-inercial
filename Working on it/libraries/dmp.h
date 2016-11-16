@@ -298,5 +298,7 @@ void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t x
 bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
-
+bool writeProgMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify) {
+    return writeMemoryBlock(data_ptr, dataSize, bank, address, verify, true);
+}
 #endif

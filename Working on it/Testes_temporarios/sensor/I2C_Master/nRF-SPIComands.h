@@ -26,7 +26,7 @@ sbit	TX_DS	= sta^5;
 sbit	MAX_RT  = sta^4;
 
 bit newPayload = 0;     // Flag to show new Payload from host
-uint8_t payloadWidth = 0;
+uint8_t xdata payloadWidth = 0;
 
 /**************************************************/
 uint8_t SPI_RW(uint8_t value)
