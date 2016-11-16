@@ -87,43 +87,63 @@ void setup() {
 		} else {
 			send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
 		}
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS",7);delay_ms(10);
+		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 		
 }
 void configura_dmp(){
 		delay_ms(250);//esperando nao sei pq
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"INICIALIZAR_DMP",15);delay_ms(10);
 		devStatus = dmpInitialize();
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS_DMP",11);delay_ms(10);
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
 		if (devStatus == 0) {
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=OK",12);delay_ms(10);
         setDMPEnabled(true);
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIG_EXT",10);delay_ms(10);
 				pin_isr_setup();
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"MPU_INTSTATUS",13);delay_ms(10);
         mpuIntStatus = getIntStatus();
+				send_packet_to_host(UART_PACKET_TYPE_INT8,&mpuIntStatus,1);delay_ms(10);
         dmpReady = true;
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"PACKET_SIZE",11);delay_ms(10);
         packetSize = dmpGetFIFOPacketSize();
+				send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&packetSize,2);delay_ms(10);
+			
     } else {
-        send_packet_to_host(UART_PACKET_TYPE_STRING,"Falha",5);delay_ms(10);
+        send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=Falha",15);delay_ms(10);
     }
 }
 
 void ler_dmp(){
+	send_packet_to_host(UART_PACKET_TYPE_STRING,"AGUARDA_INT",11);delay_ms(10);
+	LEDVM=0;
 	while (!mpuInterrupt && fifoCount < packetSize) {
      LEDVM = 1;
   }
 	LEDVM=0;
+	send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_RECEIVED",12);delay_ms(10);
 	// reset interrupt flag and get INT_STATUS byte
 	mpuInterrupt = false;
 	mpuIntStatus = getIntStatus();
 
 	// get current FIFO count
 	fifoCount = getFIFOCount();
-
+	send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO_COUNT",10);delay_ms(10);
+	send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
+	send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_STATUS",10);delay_ms(10);
+	send_packet_to_host(UART_PACKET_TYPE_HEX,&mpuIntStatus,1);delay_ms(10);
 	// check for overflow (this should never happen unless our code is too inefficient)
 	if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+			
 			// reset so we can continue cleanly
 			resetFIFO();
 			send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);delay_ms(10);
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"OK_READING",10);delay_ms(10);
         // wait for correct available data length, should be a VERY short wait
         while (fifoCount < packetSize) fifoCount = getFIFOCount();
 
@@ -140,14 +160,18 @@ void main(void) {
     while(1){
         if(!S1){ //se foi apertado o sinal e o led esta desativado
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);delay_ms(10);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURAR",10);delay_ms(10);
 					configura_dmp();
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURADO",11);delay_ms(10);
 					delay_ms(100);
 					while(!S1);
 					delay_ms(100);
         }
         if(!S2){
 					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);delay_ms(10);
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"LER",3);delay_ms(10);
 					ler_dmp();
+					send_packet_to_host(UART_PACKET_TYPE_STRING,"ENVIAR",6);delay_ms(10);
 					dmpGetQuaternion_int16(packet_quat, fifoBuffer);
 					send_packet_to_host(UART_PACKET_TYPE_QUAT,(uint8_t *) packet_quat,8);
 					//LEDVM = !LEDVM;
