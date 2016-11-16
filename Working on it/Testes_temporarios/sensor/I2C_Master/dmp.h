@@ -90,7 +90,7 @@ int16_t getZGyroOffset() {
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
+void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
@@ -268,7 +268,7 @@ uint16_t xdata i_rmb;
 void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address) {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
-		for (i_rmb=0; i_rmb < dataSize;) {
+        for (i_rmb=0; i_rmb < dataSize;) {
         // determine correct chunk size according to bank position and data_ptr size
         chunkSize_rmb = MPU6050_DMP_MEMORY_CHUNK_SIZE;
 
@@ -295,7 +295,8 @@ void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t x
         }
     }
 }
-
-
+bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) {
+    return writeDMPConfigurationSet(data_ptr, dataSize, true);
+}
 
 #endif

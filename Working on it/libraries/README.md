@@ -47,7 +47,7 @@
 		- [ ] pgm_read_byte - XXX: ?
 		- [x] setDMPEnabled
 		- [ ] writeProgMemoryBlock - Depende de writeMemoryBlock
-		- [ ] writeProgDMPConfigurationSet - Depende de writeDMPConfigurationSet
+		- [x] writeProgDMPConfigurationSet - **Não Testada**
 		- [x] getFIFOCount
 		- [x] resetFIFO
 		- [x] getFIFOBytes

@@ -12,20 +12,6 @@ mesma biblioteca. */
 #include <string.h> //memcmp 
 #define MPU_endereco MPU6050_DEFAULT_ADDRESS
 
-void mpu_initialize(void);
-bool mpu_testConnection(void);
-void getMotion6_packet(uint8_t *packet6);
-void setXAccelOffset(int16_t offset); void setYAccelOffset(int16_t offset); void setZAccelOffset(int16_t offset);
-void setXGyroOffset(int16_t offset); void setYGyroOffset(int16_t offset); void setZGyroOffset(int16_t offset);
-
-void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank);
-uint16_t getFIFOCount();
-uint8_t getIntStatus();
-void setDMPEnabled(bool enabled);
-void resetFIFO();
-uint16_t dmpGetFIFOPacketSize();
-void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len);
-
 uint8_t xdata buffer[14]; //usado em testConnection e getIntStatus
 uint8_t xdata *dmpPacketBuffer;
 uint16_t xdata dmpPacketSize;
@@ -104,7 +90,7 @@ int16_t getZGyroOffset() {
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-void setMemoryBank(uint8_t bank, bool prefetchEnabled, bool userBank) {
+void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
     if (prefetchEnabled) bank |= 0x40;
@@ -150,7 +136,7 @@ uint8_t xdata *verifyBuffer_wmb;
 uint8_t xdata *progBuffer_wmb=0;
 uint16_t xdata i_wmb;
 uint8_t xdata j_wmb;
-bool writeMemoryBlock(const uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify, bool useProgMem) {
+bool writeMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address, bool xdata verify, bool xdata useProgMem) {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
     if (verify) verifyBuffer_wmb = (uint8_t *)malloc(MPU6050_DMP_MEMORY_CHUNK_SIZE);
@@ -209,7 +195,7 @@ uint8_t xdata *progBuffer_wdcs = 0;
 uint8_t xdata success_wdcs, special_wdcs;
 uint16_t xdata i_wdcs, j_wdcs;
 uint8_t xdata bank_wdcs, offset_wdcs, length_wdcs;
-bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) {
+bool writeDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize, bool xdata useProgMem) {
     if (useProgMem) {
         progBuffer_wdcs = (uint8_t *)malloc(8); // assume 8-byte blocks, realloc later if necessary
     }
@@ -279,10 +265,10 @@ bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool u
 
 uint8_t xdata chunkSize_rmb;
 uint16_t xdata i_rmb;
-void readMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) {
+void readMemoryBlock(uint8_t xdata *data_ptr, uint16_t xdata dataSize, uint8_t xdata bank, uint8_t xdata address) {
     setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
-    for (i_rmb=0; i_rmb < dataSize;) {
+        for (i_rmb=0; i_rmb < dataSize;) {
         // determine correct chunk size according to bank position and data_ptr size
         chunkSize_rmb = MPU6050_DMP_MEMORY_CHUNK_SIZE;
 
@@ -309,4 +295,8 @@ void readMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t
         }
     }
 }
+bool writeProgDMPConfigurationSet(uint8_t xdata *data_ptr, uint16_t xdata dataSize) {
+    return writeDMPConfigurationSet(data_ptr, dataSize, true);
+}
+
 #endif
