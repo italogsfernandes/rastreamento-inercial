@@ -280,7 +280,7 @@ bool writeDMPConfigurationSet(const uint8_t *data_ptr, uint16_t dataSize, bool u
 uint8_t xdata chunkSize_rmb;
 uint16_t xdata i_rmb;
 void readMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) {
-    setMemoryBank(bank);
+    setMemoryBank(bank,false,false);
     setMemoryStartAddress(address);
     for (i_rmb=0; i_rmb < dataSize;) {
         // determine correct chunk size according to bank position and data_ptr size
@@ -302,9 +302,9 @@ void readMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t
         address += chunkSize_rmb;
 
         // if we aren't done, update bank (if necessary) and address
-        if (i_rmb < data_ptrSize) {
+        if (i_rmb < dataSize) {
             if (address == 0) bank++;
-            setMemoryBank(bank);
+            setMemoryBank(bank,false,false);
             setMemoryStartAddress(address);
         }
     }
