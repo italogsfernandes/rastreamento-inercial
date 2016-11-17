@@ -339,8 +339,8 @@ void setIntEnabled(uint8_t enabled) large {
 void setRate(uint8_t rate) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_SMPLRT_DIV, rate);
 }
-void setExternalFrameSync(uint8_t sync) large {
-    i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, sync);
+void setExternalFrameSync(uint8_t sync_ext) large {
+    i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, sync_ext);
 }
 void setDLPFMode(uint8_t mode) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_DLPF_CFG_BIT, MPU6050_CFG_DLPF_CFG_LENGTH, mode);
@@ -452,6 +452,7 @@ uint8_t dmpInitialize() large {
 		uint8_t fifoBuffer[128];
 		// reset device
     //DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Resetting MPU6050",17);delay_ms(10);
     i2c_mpu_reset();
     delay_ms(30); // wait after reset
 
@@ -463,16 +464,20 @@ uint8_t dmpInitialize() large {
 
     // disable sleep mode
     //DEBUG_PRINTLN(F("Disabling sleep mode..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Disabling sleep mode",20);delay_ms(10);
     setSleepEnabled(false);
     // get MPU hardware revision
     //DEBUG_PRINTLN(F("Selecting user bank 16..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Selecting user bank 16",22);delay_ms(10);
     setMemoryBank(0x10, true, true);
     //DEBUG_PRINTLN(F("Selecting memory byte 6..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Selecting memory byte 6",23);delay_ms(10);
     setMemoryStartAddress(0x06);
     //DEBUG_PRINTLN(F("Checking hardware revision..."));
     //DEBUG_PRINT(F("Revision @ user[16][6] = "));
     //DEBUG_PRINTLNF(readMemoryByte(), HEX);
     //DEBUG_PRINTLN(F("Resetting memory bank selection to 0..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Resetting memory bank",21);delay_ms(10);
     setMemoryBank(0, false, false);
 
     // check OTP bank valid
@@ -482,7 +487,7 @@ uint8_t dmpInitialize() large {
 
     // get X/Y/Z gyro offsets
     //DEBUG_PRINTLN(F("Reading gyro offset TC values..."));
-		
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Reading gyro offset TC",22);delay_ms(10);
 		xgOffsetTC = getXGyroOffsetTC();
 		ygOffsetTC = getYGyroOffsetTC();
 		zgOffsetTC = getZGyroOffsetTC();
@@ -495,8 +500,10 @@ uint8_t dmpInitialize() large {
 
     // setup weird slave stuff (?)
     //DEBUG_PRINTLN(F("Setting slave 0 address to 0x7F..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Setting slave 0",15);delay_ms(10);
     setSlaveAddress(0, 0x7F);
     //DEBUG_PRINTLN(F("Disabling I2C Master mode..."));
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Disabling I2C Master",20);delay_ms(10);
     setI2CMasterModeEnabled(false);
     //DEBUG_PRINTLN(F("Setting slave 0 address to 0x68 (self)..."));
     setSlaveAddress(0, 0x68);
@@ -509,45 +516,58 @@ uint8_t dmpInitialize() large {
     //DEBUG_PRINT(MPU6050_DMP_CODE_SIZE);
     //DEBUG_PRINTLN(F(" bytes)"));
 		//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
-    if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE,0,0,true)) {
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing DMP code",16);delay_ms(10);
+		if (writeProgMemoryBlock(dmpMemory, MPU6050_DMP_CODE_SIZE,0,0,true)) {
         //DEBUG_PRINTLN(F("Success! DMP code written and verified."));
-
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP code",17);delay_ms(10);
         // write DMP configuration
         //DEBUG_PRINT(F("Writing DMP configuration to MPU memory banks ("));
         //DEBUG_PRINT(MPU6050_DMP_CONFIG_SIZE);
         //DEBUG_PRINTLN(F(" bytes in config def)"));
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing DMP code2",17);delay_ms(10);
         if (writeProgDMPConfigurationSet(dmpConfig, MPU6050_DMP_CONFIG_SIZE)) {
             //DEBUG_PRINTLN(F("Success! DMP configuration written and verified."));
-
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP code2",18);delay_ms(10);
             //DEBUG_PRINTLN(F("Setting clock source to Z Gyro..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Setting clock source to Z",25);delay_ms(10);
             setClockSource(MPU6050_CLOCK_PLL_ZGYRO);
 
             //DEBUG_PRINTLN(F("Setting DMP and FIFO_OFLOW interrupts enabled..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"DMP and FIFO_OFLOW int",22);delay_ms(10);
             setIntEnabled(0x12);
 
             //DEBUG_PRINTLN(F("Setting sample rate to 200Hz..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"rate to 200Hz",13);delay_ms(10);
             setRate(4); // 1khz / (1 + 4) = 200 Hz
 
             //DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
-            setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
-
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame sync",19);delay_ms(10);
+						//BUG: software travando aqui 
+						//setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
+						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, MPU6050_EXT_SYNC_TEMP_OUT_L);
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame ok",17);delay_ms(10);
             //DEBUG_PRINTLN(F("Setting DLPF bandwidth to 42Hz..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"DLPF bandwidth to 42Hz",22);delay_ms(10);
             setDLPFMode(MPU6050_DLPF_BW_42);
 
             //DEBUG_PRINTLN(F("Setting gyro sensitivity to +/- 2000 deg/sec..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"gyro sen..ity to 2000",21);delay_ms(10);
             setFullScaleGyroRange(MPU6050_GYRO_FS_2000);
 
             //DEBUG_PRINTLN(F("Setting DMP configuration bytes (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"function unknown",16);delay_ms(10);
             setDMPConfig1(0x03);
             setDMPConfig2(0x00);
 
             //DEBUG_PRINTLN(F("Clearing OTP Bank flag..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Clearing OTP Bank",17);delay_ms(10);
             setOTPBankValid(false);
 
             //DEBUG_PRINTLN(F("Setting X/Y/Z gyro offset TCs to previous values..."));
-            setXGyroOffsetTC(xgOffsetTC);
-            setYGyroOffsetTC(ygOffsetTC);
-            setZGyroOffsetTC(zgOffsetTC);
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"previous offsets",16);delay_ms(10);
+            setXGyroOffsetTC((int8_t) xgOffsetTC);
+            setYGyroOffsetTC((int8_t) ygOffsetTC);
+            setZGyroOffsetTC((int8_t) zgOffsetTC);
 
             //DEBUG_PRINTLN(F("Setting X/Y/Z gyro user offsets to zero..."));
             //setXGyroOffset(0);
@@ -555,13 +575,14 @@ uint8_t dmpInitialize() large {
             //setZGyroOffset(0);
 
             //DEBUG_PRINTLN(F("Writing final memory update 1/7 (function unknown)..."));
-            
+            send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 1/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 
 					//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
 						writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 2/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 2/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
 						//bool writeProgMemoryBlock(const uint8_t *data, uint16_t dataSize, uint8_t bank=0, uint8_t address=0, bool verify=true);
 						writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
@@ -602,19 +623,28 @@ uint8_t dmpInitialize() large {
             resetDMP();
 
             //DEBUG_PRINTLN(F("Writing final memory update 3/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 3/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
             writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 4/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 4/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
             writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Writing final memory update 5/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 5/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
             writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
             //DEBUG_PRINTLN(F("Waiting for FIFO count > 2..."));
-            while ((fifoCount = getFIFOCount()) < 3);
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Waiting for FIFO count > 2",26);delay_ms(10);
+            send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO count =",12);delay_ms(10);
+						send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *) &fifoCount,2);delay_ms(1);
+						while ((fifoCount) < 3){
+							fifoCount = getFIFOCount();
+							send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *) &fifoCount,2);delay_ms(1);
+						}
 
             //DEBUG_PRINT(F("Current FIFO count="));
             //DEBUG_PRINTLN(fifoCount);
@@ -627,11 +657,15 @@ uint8_t dmpInitialize() large {
             //DEBUG_PRINTLNF(getIntStatus(), HEX);
 
             //DEBUG_PRINTLN(F("Reading final memory update 6/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 6/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
             readMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1]);
 
             //DEBUG_PRINTLN(F("Waiting for FIFO count > 2..."));
-            while ((fifoCount = getFIFOCount()) < 3);
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Waiting for FIFO count > 2",26);delay_ms(10);
+						while ((fifoCount) < 3){
+							fifoCount = getFIFOCount();
+						}
 
             //DEBUG_PRINT(F("Current FIFO count="));
             //DEBUG_PRINTLN(fifoCount);
@@ -645,6 +679,7 @@ uint8_t dmpInitialize() large {
             //DEBUG_PRINTLNF(getIntStatus(), HEX);
 
             //DEBUG_PRINTLN(F("Writing final memory update 7/7 (function unknown)..."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Writing 7/7",11);delay_ms(10);
             for (j = 0; j < 4 || j < dmpUpdate[2] + 3; j++, pos++) dmpUpdate[j] = pgm_read_byte(&dmpUpdates[pos]);
             writeMemoryBlock(dmpUpdate + 3, dmpUpdate[2], dmpUpdate[0], dmpUpdate[1],0,true);
 
@@ -664,12 +699,15 @@ uint8_t dmpInitialize() large {
             getIntStatus();
         } else {
             //DEBUG_PRINTLN(F("ERROR! DMP configuration verification failed."));
+						send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP not2",17);delay_ms(10);
             return 2; // configuration block loading failed
         }
     } else {
         //DEBUG_PRINTLN(F("ERROR! DMP code verification failed."));
+				send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP not1",17);delay_ms(10);
         return 1; // main binary block loading failed
     }
+		send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP init",17);delay_ms(10);
     return 0; // success
 }
 uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) large {

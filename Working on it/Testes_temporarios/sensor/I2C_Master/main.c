@@ -5,11 +5,10 @@
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
 #include "stdbool.h" //Booleanos
 #include "API.h"
-#include <dmp.h>
 #include <simple_timer.h>
 #include <nRF-SPIComands.h>
 #include <pacotes_inerciais.h>
-
+#include <dmp.h>
 
 //Subendere?os usados no sistema
 #define MY_SUB_ADDR 0x01
@@ -51,9 +50,8 @@ void pin_isr_setup(){
 	EX0=1;
 	INTEXP = 0x10;
 	IT0 = 1;
-	EA = 1;
 }
-void ext0_irq(void) interrupt 2 
+void ext0_irq(void) interrupt 0 
 {
     mpuInterrupt=true;
 }
@@ -77,6 +75,7 @@ void setup() {
 	iniciarIO(); //IO
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
+		//pin_isr_setup();
     EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
 		mpu_8051_malloc_setup();
@@ -90,6 +89,7 @@ void setup() {
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS",7);delay_ms(10);
 		setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
 		setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
+		//send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIG_EXT",10);delay_ms(10);
 		
 }
 void configura_dmp(){
@@ -102,8 +102,6 @@ void configura_dmp(){
 		if (devStatus == 0) {
 				send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=OK",12);delay_ms(10);
         setDMPEnabled(true);
-				send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIG_EXT",10);delay_ms(10);
-				pin_isr_setup();
 				send_packet_to_host(UART_PACKET_TYPE_STRING,"MPU_INTSTATUS",13);delay_ms(10);
         mpuIntStatus = getIntStatus();
 				send_packet_to_host(UART_PACKET_TYPE_INT8,&mpuIntStatus,1);delay_ms(10);
@@ -120,13 +118,14 @@ void configura_dmp(){
 void ler_dmp(){
 	send_packet_to_host(UART_PACKET_TYPE_STRING,"AGUARDA_INT",11);delay_ms(10);
 	LEDVM=0;
+	mpuInterrupt = true;
 	while (!mpuInterrupt && fifoCount < packetSize) {
      LEDVM = 1;
   }
 	LEDVM=0;
 	send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_RECEIVED",12);delay_ms(10);
 	// reset interrupt flag and get INT_STATUS byte
-	mpuInterrupt = false;
+	mpuInterrupt = true;
 	mpuIntStatus = getIntStatus();
 
 	// get current FIFO count
@@ -199,8 +198,13 @@ void main(void) {
         }
         //timer tick
 				if(timer_flag <= 0){
-          getMotion6_packet(packet_motion6);
-					send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
+          //getMotion6_packet(packet_motion6);
+					//send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
+	
+					dmpGetQuaternion_int16(packet_quat, fifoBuffer);
+					//send_packet_to_host(UART_PACKET_TYPE_QUAT,(uint8_t *) packet_quat,8);
+					send_packet_to_host(UART_PACKET_TYPE_HEX,(uint8_t *) packet_quat,8);
+					
 					timer_flag = 1;
 				}
 		}
