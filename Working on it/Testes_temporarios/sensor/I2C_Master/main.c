@@ -154,7 +154,17 @@ void ler_dmp(){
         //send_packet_to_host(UART_PACKET_TYPE_HEX,fifoBuffer,14);
 			
 				dmpGetPacket16bits(packet_16bits,fifoBuffer);
+				getMotion6_packet(packet_motion6);
+				packet_16bits[8] = packet_motion6[6];packet_16bits[9] = packet_motion6[7];
+				packet_16bits[10] = packet_motion6[8];packet_16bits[11] = packet_motion6[9];
+				packet_16bits[12] = packet_motion6[10];packet_16bits[13] = packet_motion6[11];
+			
+				packet_16bits[14] = packet_motion6[0];packet_16bits[15] = packet_motion6[1];
+				packet_16bits[16] = packet_motion6[2];packet_16bits[17] = packet_motion6[3];
+				packet_16bits[18] = packet_motion6[4];packet_16bits[19] = packet_motion6[5];
 				send_packet_to_host(UART_PACKET_TYPE_FIFO_NO_MAG,packet_16bits,20);
+				
+			
         // track FIFO count here in case there is > 1 packet available
         // (this lets us immediately read more without waiting for an interrupt)
         fifoCount -= packetSize;
