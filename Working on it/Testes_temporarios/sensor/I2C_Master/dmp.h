@@ -450,6 +450,10 @@ uint8_t dmpInitialize() large {
 		uint16_t pos = 0;
 		uint16_t fifoCount;
 		uint8_t fifoBuffer[128];
+	
+		uint8_t b;
+		uint8_t data_to_write;
+		uint8_t mask;
 		// reset device
     //DEBUG_PRINTLN(F("\n\nResetting MPU6050..."));
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"Resetting MPU6050",17);delay_ms(10);
@@ -544,7 +548,33 @@ uint8_t dmpInitialize() large {
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame sync",19);delay_ms(10);
 						//BUG: software travando aqui 
 						//setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
-						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, MPU6050_EXT_SYNC_TEMP_OUT_L);
+						//i2c_mpu_writeBits(MPU_endereco, 0x1A, 5, 3, 0x1);
+					
+						data_to_write = 0x1;
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&data_to_write,1);delay_ms(10);
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&data_to_write,1);delay_ms(10);
+						if(i2c_mpu_readByte(MPU_endereco, 0x1A, &b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read success!",13);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
+						}
+						
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						mask = ((1 << 5) - 1) << (5 - 3 + 1);
+						data_to_write <<= (5 - 3 + 1); // shift data into correct position
+						data_to_write &= mask; // zero all non-important bits in data
+						b &= ~(mask); // zero all important bits in existing byte
+						b |= data_to_write; // combine data with existing byte
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						
+						if(i2c_mpu_writeByte(MPU_endereco, 0x1A, b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
+						}
+						
+					
+					
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame ok",17);delay_ms(10);
             //DEBUG_PRINTLN(F("Setting DLPF bandwidth to 42Hz..."));
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"DLPF bandwidth to 42Hz",22);delay_ms(10);
@@ -565,9 +595,76 @@ uint8_t dmpInitialize() large {
 
             //DEBUG_PRINTLN(F("Setting X/Y/Z gyro offset TCs to previous values..."));
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"previous offsets",16);delay_ms(10);
-            setXGyroOffsetTC((int8_t) xgOffsetTC);
-            setYGyroOffsetTC((int8_t) ygOffsetTC);
-            setZGyroOffsetTC((int8_t) zgOffsetTC);
+            //setXGyroOffsetTC(xgOffsetTC);
+						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, xgOffsetTC);
+
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&xgOffsetTC,1);delay_ms(10);
+						if(i2c_mpu_readByte(MPU_endereco, 0x00, &b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read success!",13);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
+						}
+						
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						mask = ((1 << 6) - 1) << (6 - 6 + 1);
+						xgOffsetTC <<= (6 - 6 + 1); // shift data into correct position
+						xgOffsetTC &= mask; // zero all non-important bits in data
+						b &= ~(mask); // zero all important bits in existing byte
+						b |= xgOffsetTC; // combine data with existing byte
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						
+						if(i2c_mpu_writeByte(MPU_endereco, 0x00, b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
+						}
+						
+						//setYGyroOffsetTC(ygOffsetTC);
+						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, ygOffsetTC);
+            send_packet_to_host(UART_PACKET_TYPE_HEX,&ygOffsetTC,1);delay_ms(10);
+						if(i2c_mpu_readByte(MPU_endereco, 0x01, &b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read success!",13);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
+						}
+						
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						mask = ((1 << 6) - 1) << (6 - 6 + 1);
+						ygOffsetTC <<= (6 - 6 + 1); // shift data into correct position
+						ygOffsetTC &= mask; // zero all non-important bits in data
+						b &= ~(mask); // zero all important bits in existing byte
+						b |= ygOffsetTC; // combine data with existing byte
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						
+						if(i2c_mpu_writeByte(MPU_endereco, 0x01, b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
+						}
+						
+						//setZGyroOffsetTC(zgOffsetTC);
+						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, zgOffsetTC);
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&zgOffsetTC,1);delay_ms(10);
+						if(i2c_mpu_readByte(MPU_endereco, 0x02, &b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read success!",13);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
+						}
+						
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						mask = ((1 << 6) - 1) << (6 - 6 + 1);
+						zgOffsetTC <<= (6 - 6 + 1); // shift data into correct position
+						zgOffsetTC &= mask; // zero all non-important bits in data
+						b &= ~(mask); // zero all important bits in existing byte
+						b |= ygOffsetTC; // combine data with existing byte
+						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
+						
+						if(i2c_mpu_writeByte(MPU_endereco, 0x02, b)!= 0){
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
+						} else {
+							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
+						}
+						
 
             //DEBUG_PRINTLN(F("Setting X/Y/Z gyro user offsets to zero..."));
             //setXGyroOffset(0);
@@ -719,5 +816,21 @@ uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) large {
     data_ptr[3] = ((packet[12] << 8) | packet[13]);
     return 0;
 }
-
+uint8_t dmpGetPacket16bits(uint8_t *data_ptr, uint8_t *packet) large {
+    // TODO: accommodate different arrangements of sent data (ONLY default supported now)
+    //if (packet == 0) packet = dmpPacketBuffer;
+		data_ptr[0] = packet[0]; data_ptr[1] = packet[1];
+		data_ptr[2] = packet[4];data_ptr[3] = packet[5];
+		data_ptr[4] = packet[8];data_ptr[5] = packet[9];
+		data_ptr[6] = packet[12];data_ptr[7] = packet[13];
+	
+		data_ptr[8] = packet[16];data_ptr[9] = packet[17];
+		data_ptr[10] = packet[20];data_ptr[11] = packet[21];
+		data_ptr[12] = packet[24];data_ptr[13] = packet[25];
+	
+		data_ptr[14] = packet[28];data_ptr[15] = packet[29];
+		data_ptr[16] = packet[32];data_ptr[17] = packet[33];
+		data_ptr[18] = packet[36];data_ptr[19] = packet[37];
+    return 0;
+}
 #endif
