@@ -3,10 +3,6 @@
 ## hal_w2_isr.h
 * Descrição: Realiza comunicação I2C com os sensores:
 * Funções:
-- [ ] com dependencia nao testada -  dependencia nao testada
-- [ ] com dependencia ja testada -  **dependencia testada**
-- [x] implementada
-- [x] <del>testada</del>
 	* Bytes
 	- [x] <del>i2c_mpu_writeByte</del>
 	- [x] <del>i2c_mpu_writeBytes</del>
@@ -20,8 +16,8 @@
 	* Words (16 bit variable)
 	- [x] <del>i2c_mpu_writeWord</del>
 	- [x] <del>i2c_mpu_writeWords</del>
-	- [ ] i2c_mpu_readWord - Depende de readWords
-	- [ ] i2c_mpu_readWords
+	- [ ] i2c_mpu_readWord - Depende de readWords - Não utilizada
+	- [ ] i2c_mpu_readWords - Não utilizada
 
 ## dmp.h
 * Descrição: Realiza comunicação I2C com os sensores:
@@ -36,36 +32,36 @@
 	- [x] <del>get\*AccelOffset</del>
 	- [x] <del>get\*GyroOffset</del>
 	* DMP
-	- [x] dmpInitialize - **Com bugs e nao testada** 
-	- [x] setDMPEnabled
-	- [x] dmpGetFIFOPacketSize
-	- [x] dmpGetQuaternion - **Nao testada**
+	- [x] <del>dmpInitialize</del>
+	- [x] <del>setDMPEnabled</del>
+	- [x] <del>dmpGetFIFOPacketSize</del>
+	- [x] <del>dmpGetQuaternion</del>
 		* dmpInitialize depende de:
-		- [x] setMemoryBank
-		- [x] get\*GyroOffsetTC - Depende de **readBits**
-		- [x] set\*GyroOffsetTC - Depende de **writeBits**
+		- [x] <del>setMemoryBank</del>
+		- [x] <del>get\*GyroOffsetTC </del>
+		- [x] <del>set\*GyroOffsetTC</del> - Mal implementada
 		- [x] <del>pgm_read_byte</del>
-		- [x] setDMPEnabled
-		- [x] writeProgMemoryBlock - **Não Testada**
-		- [x] writeProgDMPConfigurationSet - **Não Testada**
-		- [x] getFIFOCount
-		- [x] resetFIFO
-		- [x] getFIFOBytes
-		- [x] readMemoryBlock - **Não Testada**
-		- [x] getIntStatus
-		- [x] writeDMPConfigurationSet - **Não Testada**
+		- [x] <del>setDMPEnabled</del>
+		- [x] <del>writeProgMemoryBlock</del>
+		- [x] <del>writeProgDMPConfigurationSet</del>
+		- [x] <del>getFIFOCount</del>
+		- [x] <del>resetFIFO</del>
+		- [x] <del>getFIFOBytes</del>
+		- [x] <del>readMemoryBlock</del>
+		- [x] <del>getIntStatus</del>
+		- [x] <del>writeDMPConfigurationSet</del>
 			* Depende de:
-			- [x] writeMemoryBlock - **Não Testada**
-			- [x] setMemoryBank
+			- [x] <del>writeMemoryBlock</del>
+			- [x] <del>setMemoryBank</del>
 			- [x] <del>pgm_read_byte</del>
 			- [x] <del>memcmp </del>
 			- [x] <del>[malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm)</del>
-		- [x] writeMemoryBlock - **Não Testada**
+		- [x] <del>writeMemoryBlock</del>
 			* Depende de:
-			- [x] setMemoryBank
+			- [x] <del>setMemoryBank</del>
 			- [x] <del>pgm_read_byte</del>
 			- [x] <del>memcmp </del>
-			- [x] <de> [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm) </del>
+			- [x] <del> [malloc e free](http://www.keil.com/support/man/docs/c51/c51_malloc.htm) </del>
 
 ## Referências:
 * [I2CDEV - HOME](http://www.i2cdevlib.com/)
