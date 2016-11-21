@@ -11,8 +11,8 @@
 /********************TIMER*************************/
 #define INTERRUPT_TMR0	1 //timer
 #define NOVT0   0x00 
-#define NBT0L	 	0x63 // Este tempo equivale a
-#define NBT0H	 	0x52 // Freq. de Amostragem de 10Hz			
+#define NBT0L	 	0xEA // Este tempo equivale a
+#define NBT0H	 	0xCB // Freq. de Amostragem de 100Hz			
 int timer_flag = 1;
 
 void start_T0(void);

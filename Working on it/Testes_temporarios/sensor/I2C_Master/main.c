@@ -141,7 +141,7 @@ void ler_dmp(){
 			
 			// reset so we can continue cleanly
 			resetFIFO();
-			//send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);//delay_ms(10);
+			send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);//delay_ms(10);
     // otherwise, check for DMP data ready interrupt (this should happen frequently)
     } else if (mpuIntStatus & 0x02) {
 				//send_packet_to_host(UART_PACKET_TYPE_STRING,"OK_READING",10);delay_ms(10);
