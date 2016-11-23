@@ -6,7 +6,7 @@ We have to write ISR for INT0.
 */
 /*Portas usadas
 P0.2 = btn 1 - pull up
-P0.4 = btn 2 - pull up
+P1.4 = btn 2 - pull up
 P0.3 = LED vermelho
 P0.6 = Interrupt ...
 P0.5 = W2SDA
