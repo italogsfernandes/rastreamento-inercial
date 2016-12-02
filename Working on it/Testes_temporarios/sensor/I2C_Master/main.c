@@ -21,15 +21,6 @@
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
 int16_t xdata packet_quat[4];
 uint8_t xdata packet_16bits[20];
-//Definicoes dos botoes e leds
-#define	PIN32 //m�dulo com 32 pinos
-#ifdef 	PIN32
-//Pushbuttons
-sbit S1  = P0^2;    // 1/0=no/press
-sbit S2  = P1^4;    // 1/0=no/press
-//LEDS
-sbit LEDVM = P0^3; // 1/0=light/dark
-#endif
 
 
 
@@ -98,7 +89,7 @@ void setup() {
 		IT0 = 1;
     iniciarRF(); //RF
     hal_w2_configure_master(HAL_W2_100KHZ); //I2C
-    EA=1; luzes_iniciais(); //Enable All interrupts, e pisca luzes
+    EA=1; //Enable All interrupts, e pisca luzes
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
 		mpu_8051_malloc_setup();
 		mpu_initialize(); //inicia dispositivo
@@ -174,22 +165,22 @@ void ler_dmp(){
 void main(void) {
     setup();
     while(1){
-        if(!S1){ //se foi apertado o sinal e o led esta desativado
-					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);
-					getMotion6_packet(packet_motion6);
-					send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
-					delay_ms(100);
-					while(!S1);
-					delay_ms(100);
-        }
-        if(!S2){
-					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);
-					ler_dmp();
-					LEDVM = !LEDVM;
-					delay_ms(100);
-					while(!S2);
-					delay_ms(100);
-        }
+//        if(!S1){ //se foi apertado o sinal e o led esta desativado
+//					send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);
+//					getMotion6_packet(packet_motion6);
+//					send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
+//					delay_ms(100);
+//					while(!S1);
+//					delay_ms(100);
+//        }
+//        if(!S2){
+//					send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);
+//					ler_dmp();
+//					LEDVM = !LEDVM;
+//					delay_ms(100);
+//					while(!S2);
+//					delay_ms(100);
+//        }
         if(newPayload){
             //verifica se o sinal eh direficionado para mim
 					if(rx_buf[0] == MY_SUB_ADDR){
@@ -201,7 +192,6 @@ void main(void) {
 							case Sinal_LEDS:
 										stop_T0();
 										send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
-										LEDVM = !LEDVM;
 										break;
 						}
 					}
@@ -214,17 +204,6 @@ void main(void) {
 					timer_flag = 1;
 				}
 		}
-}
-void luzes_iniciais(void){
-				LEDVM = 0;
-        delay_ms(1000);
-        LEDVM = 1;
-        delay_ms(1000);
-        LEDVM = 0;
-        delay_ms(1000);
-        LEDVM = 1;
-        delay_ms(1000);
-        LEDVM = 0;
 }
 
 //interrupção o I2C
