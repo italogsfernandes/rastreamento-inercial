@@ -1,5 +1,13 @@
 # Bibliotecas
 
+* dmg.h: implementação de MotionApps, principal para manipular o sensors
+* hal_w2_isr: comunicação I2C com funções Adicionadas
+* mpu6050reg: registradores da mpu6050
+* nRF-SpiComands: O sergio que fez, procura documentação com ele, mas nos testes do keil tem uns exemplos de como usar.
+* pacotes_inerciais.h: definição dos pacotes que serao enviados, verifique raspberry codes para melhor explicação
+* simple-timer.h: timer implementado de forma bem resumida, verifique arquivo .doc de explicação do italo.
+* uart_basics: comunicação uart bem simples.
+
 ## hal_w2_isr.h
 * Descrição: Realiza comunicação I2C com os sensores:
 * Funções:
