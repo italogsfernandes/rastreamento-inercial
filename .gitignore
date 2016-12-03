@@ -1,11 +1,9 @@
 #uvision
 *.uvopt
-*.xml
 *.uvgui*
 *.map
 *.lst
 *.lnp
-*.htm
 *.SBR
 
 
