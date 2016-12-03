@@ -1,4 +1,0 @@
-"STARTUP.obj",
-"MOD1.obj" 
-TO "btn_and_led_MOD1" 
-RAMSIZE(256) 

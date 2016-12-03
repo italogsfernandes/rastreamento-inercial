@@ -1,7 +1,0 @@
-"STARTUP.obj",
-"main.obj",
-".\hal_w2_isr.obj",
-".\hal_delay.obj" 
-TO "FProject" 
-
-DISABLEWARNING (16) 

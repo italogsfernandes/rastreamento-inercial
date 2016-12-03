@@ -1,7 +1,0 @@
-"STARTUP.obj",
-"main.obj",
-".\hal_delay.obj",
-".\hal_w2.obj" 
-TO "FProject" 
-RAMSIZE(256) 
-DISABLEWARNING (16) 

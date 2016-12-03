@@ -1,4 +1,0 @@
-"STARTUP.obj",
-"blink.obj" 
-TO "blink-project" 
-RAMSIZE(256) 

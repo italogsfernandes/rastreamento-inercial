@@ -1,4 +1,0 @@
-"..\Objects\STARTUP.obj",
-"..\Objects\MOD2.obj" 
-TO "..\Objects\btn_and_led_MOD2" 
-PRINT(".\Listings\btn_and_led_MOD2.m51") RAMSIZE(256) 

@@ -1,4 +1,0 @@
-".\Objects\STARTUP.obj",
-".\Objects\write_teste_IIC.obj" 
-TO ".\Objects\write_teste_IIC" 
-PRINT(".\write_teste_IIC.m51") RAMSIZE(256) 

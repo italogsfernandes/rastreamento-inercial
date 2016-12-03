@@ -1,5 +1,0 @@
-"STARTUP.obj",
-"IICBUS_test.obj",
-"IIC_app.obj" 
-TO "IICBUS" 
-RAMSIZE(256) 

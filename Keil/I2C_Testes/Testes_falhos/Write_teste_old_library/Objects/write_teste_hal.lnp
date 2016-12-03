@@ -1,4 +1,0 @@
-".\Objects\STARTUP.obj",
-".\Objects\write_teste_hal.obj" 
-TO ".\Objects\write_teste_hal" 
-PRINT(".\write_teste_hal.m51") RAMSIZE(256) 

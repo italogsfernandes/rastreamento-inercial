@@ -1,4 +1,0 @@
-"STARTUP.obj",
-"write_teste_IIC.obj" 
-TO "write_teste_IIC" 
-RAMSIZE(256) 
