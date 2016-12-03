@@ -13,8 +13,8 @@
 #define TX_PLOAD_WIDTH  32   //max
 
 
-//Endereços:
-//Definido como endereço da pipe 0
+//Endereï¿½os:
+//Definido como endereï¿½o da pipe 0
 uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
 
 uint8_t xdata rx_buf[TX_PLOAD_WIDTH];
@@ -26,7 +26,7 @@ sbit	TX_DS	= sta^5;
 sbit	MAX_RT  = sta^4;
 
 bit newPayload = 0;     // Flag to show new Payload from host
-uint8_t payloadWidth = 0;
+uint8_t xdata payloadWidth = 0;
 
 /**************************************************/
 uint8_t SPI_RW(uint8_t value)

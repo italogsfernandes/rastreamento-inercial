@@ -23,8 +23,9 @@ mesma biblioteca. */
 #define UART_PACKET_TYPE_BIN       0x0B
 #define UART_PACKET_TYPE_UINT16    0x0C
 #define UART_PACKET_TYPE_INT16     0x0D
-#define UART_PACKET_TYPE_FLOAT16       0x0E
-
+#define UART_PACKET_TYPE_FLOAT16		0x0E
+#define UART_PACKET_TYPE_UINT8		0x0F
+#define UART_PACKET_TYPE_INT8			0x10
 
 #define sensor_id 0x02
 
