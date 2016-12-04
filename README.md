@@ -33,7 +33,8 @@ This project is about the development of a tracking system, based on the use of 
 * UNITY: Projeto no unity para o rastreamento por angulos de um braço. Devido a um problema com o computador os códigos foram perdidos, é necessário que seja refeito.
 
 ## UNITY
-![](UNITY/jogo.jpg)
+![](UNITY/jogo.JPG)
+
 ## Resultado do teste do send false packet
 
 Frequência de amostragem X amostras
