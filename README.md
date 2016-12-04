@@ -88,9 +88,9 @@ Frequência de amostragem X amostras
 
 ## Authors
 
-* **serginho**
 * eu
 * eduardo
+* serginho
 
 ## License
 Não compartilhe esse projeto pois ele possui coisas na licença.
