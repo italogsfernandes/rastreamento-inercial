@@ -1,7 +1,6 @@
 #python 3
 import serial
 from time import sleep
-from datetime import datetime
 #Start signal | Packet Type | Packet Length | ... | data | ... | End signal
 UART_START_SIGNAL = 0x53
 UART_END_SIGNAL = 0x04
@@ -196,10 +195,7 @@ def ler():
     wait_serial_bytes(1);
     end_byte = ord(porta.read());
     if end_byte == UART_END_SIGNAL:
-        horario = datetime.now()
-        loggerstr= str(horario)+"\t"+output
-        arq.write(loggerstr)
-        print(loggerstr,end=" ")
+        print(output,end=" ")
     else:
         descarta_str(UART_START_SIGNAL, packet_type, packet_len, dados, end_byte)
         descarta_hex(UART_START_SIGNAL, packet_type, packet_len, dados, end_byte)
@@ -207,8 +203,6 @@ def ler():
 #setup:
 porta = serial.Serial('/dev/ttyAMA0',38400)
 porta.timeout = 1
-horario = datetime.now()
-arq = open(str(horario) + "-dados.log", 'w')
 #mostrarleituras()
 print('iniciado')
 while 1:
