@@ -24,7 +24,7 @@
       HMC5883 no endereço 0x1E
       MPU6050 no endereço 0x68
     Estes endereço é o "default" da biblioteca usada
-    Caso alimente a MPU6050 com 5V ao inves de 3.3V o endereço
+    Caso entre com um sinal na MPU6050 de 3.3V no pino ADDR o endereço
   sera alterado para 0x69 e devera ser usado como argumento na
   contruçcao do objeto mpu6050. De acordo com a linha abaixo:
    //MPU6050 mpu(0x69);
