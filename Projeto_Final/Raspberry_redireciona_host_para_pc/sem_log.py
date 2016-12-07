@@ -30,7 +30,7 @@ UART_PACKET_TYPE_INT8    =   0x10
 
 def wait_serial_bytes(how_many):
     while porta.inWaiting()<how_many:
-        sleep(0.001)
+        pass
 
 def wait_start_signal():
     start_signal = 0
