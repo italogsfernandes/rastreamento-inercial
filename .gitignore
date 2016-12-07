@@ -1,3 +1,7 @@
+#python
+*.py~
+#logs de leituras
+*-dados.log
 #uvision
 *.uvopt
 *.uvgui*
