@@ -17,6 +17,7 @@
 //Sinais utilizados na comunicacao via RF
 #define Sinal_request_data 0x0A
 #define Sinal_LEDS 0x0B
+sbit LED = P0^3; // 1/0=light/dark
 
 uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
 int16_t xdata packet_quat[4];
@@ -48,7 +49,15 @@ void ext0_irq(void) interrupt 0
 
 /************************/
 
-
+void luzes_iniciais(void){
+        LED = 1;
+        delay_ms(1000);
+        LED = 0;
+        delay_ms(1000);
+        LED = 1;
+        delay_ms(1000);
+        LED = 0;
+}
 
 void iniciarIO(void){
     //*************************** Init GPIO Pins
@@ -105,7 +114,7 @@ void setup() {
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURAR",10);delay_ms(10);
 		configura_dmp();
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURADO",11);delay_ms(10);
-		
+		luzes_iniciais();
 }
 
 
@@ -187,10 +196,12 @@ void main(void) {
 						switch(rx_buf[1]){
 							case Sinal_request_data:
 										send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
+										LED = 1;
 										start_T0();
 										break;
 							case Sinal_LEDS:
 										stop_T0();
+										LED = 0;
 										send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
 										break;
 						}
