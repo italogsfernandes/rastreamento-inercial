@@ -1,0 +1,12 @@
+﻿using System;
+
+public enum packetTypes
+{
+	UART_START_BYTE=0x53,
+	UART_END_BYTE=0x04,
+	UART_PACKET_TYPE_QUAT=0x00,
+	UART_PACKET_TYPE_STR=0x01,
+	UART_PACKET_TYPE_INT8=0x00
+}
+
+
