@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-class CircularBuffer<T>  //<T> = tipo de dado
+public class CircularBuffer<T>  //<T> = tipo de dado
 {
     T[] _buffer;
     private int _head; //fim do buffer

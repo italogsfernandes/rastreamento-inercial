@@ -8,33 +8,48 @@ using System.Threading;
 public class GM : MonoBehaviour {
 
 	public PacketHandle leitor;
-	public Mutex mymutex;
-	public CircularBuffer<rfPacket> pacotesFIFO;
-	public SerialPort HostModule;
+	public Mutex mymutex = new Mutex ();
+	public CircularBuffer<rfPacket> pacotesFIFO  = new CircularBuffer<rfPacket>(512);
+	public CircularBuffer<Quaternion> pacotesQuat = new CircularBuffer<Quaternion> (512);
+	public SerialPort HostModule = new SerialPort ();
 	public Dropdown availablePorts;
 	public float tempoatual = 0;
 	public GameObject ModuleMao;
+	public string[] portasSeriais;
 	void Start () {
 		//Configuracoes da porta serial
-		HostModule = new SerialPort ();
-		mymutex = new Mutex ();
-		leitor = new PacketHandle (mymutex, pacotesFIFO, HostModule);
+		leitor = new PacketHandle (mymutex, pacotesFIFO,pacotesQuat, HostModule);
 		setupSerialPort ();
 		popularPortasSeriais ();
 	}
 
 	void Update () {
-		
+		tempoatual = tempoatual + Time.deltaTime;
+		if (tempoatual >= 0.05) {
+			mymutex.WaitOne ();
+			while (!pacotesQuat.IsEmpty) {
+				ModuleMao.transform.rotation = pacotesQuat.Dequeue ();
+			}
+			while (!pacotesFIFO.IsEmpty) {
+				Debug.Log (pacotesFIFO.Dequeue ().dados);
+			}
+			mymutex.ReleaseMutex ();
+			tempoatual = 0;
+		}
+
 	}
 	void setupSerialPort(){
 		HostModule.BaudRate = 38400;
 		HostModule.ReadTimeout = 1;
 		HostModule.WriteTimeout = 1;
 		HostModule.Parity = Parity.None;
+		Debug.Log ("Porta Serial preparada.");
 	}
 	void popularPortasSeriais(){
+		Debug.Log ("Populando portas seriais");
 		availablePorts.options.Clear ();
-		foreach (string porta in SerialPort.GetPortNames ()) {
+		portasSeriais = SerialPort.GetPortNames ();
+		foreach (string porta in portasSeriais) {
 			availablePorts.options.Add (new Dropdown.OptionData () { text = porta });
 		}
 		availablePorts.value = 1;
@@ -42,21 +57,25 @@ public class GM : MonoBehaviour {
 			
 	}
 
-	void btnIniciarRastreamentoClicked(){
-		HostModule.PortName = availablePorts.value;
-		if (!HostModule.IsOpen ()) {
-			Debug.Log ("Ligado");
+	public void btnIniciarRastreamentoClicked(){
+		HostModule.PortName = portasSeriais [availablePorts.value];
+		Debug.Log ("Porta Selecionada= " + portasSeriais[availablePorts.value]);
+
+		if (!HostModule.IsOpen) {
 			HostModule.Open ();
 			leitor.StartThread ();
 			leitor.RodarThread ();
+			Debug.Log ("Porta aberta e Thread Rodando");
 		} else {
-			Debug.Log ("Desligado");
 			leitor.PauseThread ();
 			HostModule.Close ();
+			Debug.Log ("Porta Fechada e Thread pausada");
 		}
 	}
-	void OnExit(){ //is it correct?
+
+	void OnApplicationQuit() {
 		leitor.StopThread();
 		HostModule.Close ();
+		Debug.Log("Application ending after " + Time.time + " seconds");
 	}
 }
