@@ -1,4 +1,4 @@
-C51 COMPILER V9.55   MAIN                                                                  12/05/2016 09:38:33 PAGE 1   
+C51 COMPILER V9.55   MAIN                                                                  12/09/2016 09:53:02 PAGE 1   
 
 
 C51 COMPILER V9.55, COMPILATION OF MODULE MAIN
@@ -27,209 +27,220 @@ line level    source
   17          //Sinais utilizados na comunicacao via RF
   18          #define Sinal_request_data 0x0A
   19          #define Sinal_LEDS 0x0B
-  20          
-  21          uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
-  22          int16_t xdata packet_quat[4];
-  23          uint8_t xdata packet_16bits[20];
-  24          
+  20          sbit LED = P0^3; // 1/0=light/dark
+  21          
+  22          uint8_t xdata packet_motion6[12]; //xac,yac,zac,xgy,ygy,zgy
+  23          int16_t xdata packet_quat[4];
+  24          uint8_t xdata packet_16bits[20];
   25          
   26          
-  27          void luzes_iniciais(void);
-  28          
-  29          /***VARIAVEIS da DMP*****/
-  30          
-  31          volatile bool mpuInterrupt = false;
-  32          bool dmpReady = false;  // set true if DMP init was successful
-  33          uint8_t xdata mpuIntStatus;   // holds actual interrupt status byte from MPU
-  34          uint8_t xdata devStatus;      // return status after each device operation (0 = success, !0 = error)
-  35          uint16_t xdata packetSize;    // expected DMP packet size (default is 42 bytes)
-  36          uint16_t xdata fifoCount;     // count of all bytes currently in FIFO
-  37          uint8_t xdata fifoBuffer[64]; // FIFO storage buffer
-  38          uint8_t xdata packet_16bits[20];
-  39          
+  27          
+  28          void luzes_iniciais(void);
+  29          
+  30          /***VARIAVEIS da DMP*****/
+  31          
+  32          volatile bool mpuInterrupt = false;
+  33          bool dmpReady = false;  // set true if DMP init was successful
+  34          uint8_t xdata mpuIntStatus;   // holds actual interrupt status byte from MPU
+  35          uint8_t xdata devStatus;      // return status after each device operation (0 = success, !0 = error)
+  36          uint16_t xdata packetSize;    // expected DMP packet size (default is 42 bytes)
+  37          uint16_t xdata fifoCount;     // count of all bytes currently in FIFO
+  38          uint8_t xdata fifoBuffer[64]; // FIFO storage buffer
+  39          uint8_t xdata packet_16bits[20];
   40          
-  41          /************************/
-  42          /***FUNCOES DA DM*******/
-  43          
-  44          void ext0_irq(void) interrupt 0 
-  45          {
-  46   1          mpuInterrupt=true;
-  47   1      }
-  48          
-  49          /************************/
-  50          
+  41          
+  42          /************************/
+  43          /***FUNCOES DA DM*******/
+  44          
+  45          void ext0_irq(void) interrupt 0 
+  46          {
+  47   1          mpuInterrupt=true;
+  48   1      }
+  49          
+  50          /************************/
   51          
-  52          
-  53          void iniciarIO(void){
-  54   1          //*************************** Init GPIO Pins
-C51 COMPILER V9.55   MAIN                                                                  12/05/2016 09:38:33 PAGE 2   
+  52          void luzes_iniciais(void){
+  53   1              LED = 1;
+  54   1              delay_ms(1000);
+C51 COMPILER V9.55   MAIN                                                                  12/09/2016 09:53:02 PAGE 2   
 
-  55   1          P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
-  56   1          P1DIR = 0xFF;   // Tudo input
-  57   1          P2DIR = 0xFF;
-  58   1          P0CON = 0x00;   // All general I/O
-  59   1          //PQ p1com?
-  60   1          P1CON |= 0x53;    // All general I/O
-  61   1          P2CON = 0x00;   // All general I/O
-  62   1      }
-  63          void configura_dmp(){
-  64   1          delay_ms(250);//esperando nao sei pq
-  65   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"INICIALIZAR_DMP",15);delay_ms(10);
-  66   1          devStatus = dmpInitialize();
-  67   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS_DMP",11);delay_ms(10);
-  68   1          setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
-  69   1          setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
-  70   1          if (devStatus == 0) {
-  71   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=OK",12);delay_ms(10);
-  72   2              setDMPEnabled(true);
-  73   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"MPU_INTSTATUS",13);delay_ms(10);
-  74   2              mpuIntStatus = getIntStatus();
-  75   2              send_packet_to_host(UART_PACKET_TYPE_INT8,&mpuIntStatus,1);delay_ms(10);
-  76   2              dmpReady = true;
-  77   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"PACKET_SIZE",11);delay_ms(10);
-  78   2              packetSize = dmpGetFIFOPacketSize();
-  79   2              send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&packetSize,2);delay_ms(10);
-  80   2            
-  81   2          } else {
-  82   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=Falha",15);delay_ms(10);
-  83   2          }
-  84   1      }
-  85          void setup() {
-  86   1          iniciarIO(); //IO
-  87   1          EX0=1;
-  88   1          INTEXP = 0x10;
-  89   1          IT0 = 1;
-  90   1          iniciarRF(); //RF
-  91   1          hal_w2_configure_master(HAL_W2_100KHZ); //I2C
-  92   1          EA=1; //Enable All interrupts, e pisca luzes
-  93   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
-  94   1          mpu_8051_malloc_setup();
-  95   1          mpu_initialize(); //inicia dispositivo
-  96   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"Testando a conexao I2C",22);delay_ms(10);
-  97   1          if(mpu_testConnection()){
-  98   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"Conectado com sucesso",21);delay_ms(10);
-  99   2          } else {
- 100   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
- 101   2          }
- 102   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS",7);delay_ms(10);
- 103   1          setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
- 104   1          setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
- 105   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURAR",10);delay_ms(10);
- 106   1          configura_dmp();
- 107   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURADO",11);delay_ms(10);
- 108   1          
- 109   1      }
- 110          
- 111          
- 112          void ler_dmp(){
- 113   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"AGUARDA_INT",11);delay_ms(10);
- 114   1        //send_packet_to_host(UART_PACKET_TYPE_HEX,(uint8_t *) &mpuInterrupt,1);delay_ms(10);
- 115   1        //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
- 116   1        while (!mpuInterrupt || fifoCount < packetSize){
-C51 COMPILER V9.55   MAIN                                                                  12/05/2016 09:38:33 PAGE 3   
+  55   1              LED = 0;
+  56   1              delay_ms(1000);
+  57   1              LED = 1;
+  58   1              delay_ms(1000);
+  59   1              LED = 0;
+  60   1      }
+  61          
+  62          void iniciarIO(void){
+  63   1          //*************************** Init GPIO Pins
+  64   1          P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
+  65   1          P1DIR = 0xFF;   // Tudo input
+  66   1          P2DIR = 0xFF;
+  67   1          P0CON = 0x00;   // All general I/O
+  68   1          //PQ p1com?
+  69   1          P1CON |= 0x53;    // All general I/O
+  70   1          P2CON = 0x00;   // All general I/O
+  71   1      }
+  72          void configura_dmp(){
+  73   1          delay_ms(250);//esperando nao sei pq
+  74   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"INICIALIZAR_DMP",15);delay_ms(10);
+  75   1          devStatus = dmpInitialize();
+  76   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS_DMP",11);delay_ms(10);
+  77   1          setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+  78   1          setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
+  79   1          if (devStatus == 0) {
+  80   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=OK",12);delay_ms(10);
+  81   2              setDMPEnabled(true);
+  82   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"MPU_INTSTATUS",13);delay_ms(10);
+  83   2              mpuIntStatus = getIntStatus();
+  84   2              send_packet_to_host(UART_PACKET_TYPE_INT8,&mpuIntStatus,1);delay_ms(10);
+  85   2              dmpReady = true;
+  86   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"PACKET_SIZE",11);delay_ms(10);
+  87   2              packetSize = dmpGetFIFOPacketSize();
+  88   2              send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&packetSize,2);delay_ms(10);
+  89   2            
+  90   2          } else {
+  91   2              send_packet_to_host(UART_PACKET_TYPE_STRING,"devStatus=Falha",15);delay_ms(10);
+  92   2          }
+  93   1      }
+  94          void setup() {
+  95   1          iniciarIO(); //IO
+  96   1          EX0=1;
+  97   1          INTEXP = 0x10;
+  98   1          IT0 = 1;
+  99   1          iniciarRF(); //RF
+ 100   1          hal_w2_configure_master(HAL_W2_100KHZ); //I2C
+ 101   1          EA=1; //Enable All interrupts, e pisca luzes
+ 102   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"Sensor Ligado",13);delay_ms(10);
+ 103   1          mpu_8051_malloc_setup();
+ 104   1          mpu_initialize(); //inicia dispositivo
+ 105   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"Testando a conexao I2C",22);delay_ms(10);
+ 106   1          if(mpu_testConnection()){
+ 107   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"Conectado com sucesso",21);delay_ms(10);
+ 108   2          } else {
+ 109   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"Erro na conexao",15);delay_ms(10);
+ 110   2          }
+ 111   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"OFFSETS",7);delay_ms(10);
+ 112   1          setXAccelOffset(-3100);setYAccelOffset(392);setZAccelOffset(1551);
+ 113   1          setXGyroOffset(-28);setYGyroOffset(6);setZGyroOffset(60);
+ 114   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURAR",10);delay_ms(10);
+ 115   1          configura_dmp();
+ 116   1          send_packet_to_host(UART_PACKET_TYPE_STRING,"CONFIGURADO",11);delay_ms(10);
+C51 COMPILER V9.55   MAIN                                                                  12/09/2016 09:53:02 PAGE 3   
 
- 117   2          fifoCount = getFIFOCount();
- 118   2        }
- 119   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_RECEIVED",12);delay_ms(10);
- 120   1        // reset interrupt flag and get INT_STATUS byte
- 121   1        mpuInterrupt = false;
- 122   1        mpuIntStatus = getIntStatus();
- 123   1      
- 124   1        // get current FIFO count
- 125   1        fifoCount = getFIFOCount();
- 126   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO_COUNT",10);delay_ms(10);
- 127   1        //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
- 128   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_STATUS",10);delay_ms(10);
- 129   1        //send_packet_to_host(UART_PACKET_TYPE_HEX,&mpuIntStatus,1);delay_ms(10);
- 130   1        // check for overflow (this should never happen unless our code is too inefficient)
- 131   1        if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
- 132   2            
- 133   2            // reset so we can continue cleanly
- 134   2            resetFIFO();
- 135   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);//delay_ms(10);
- 136   2          // otherwise, check for DMP data ready interrupt (this should happen frequently)
- 137   2          } else if (mpuIntStatus & 0x02) {
- 138   2              //send_packet_to_host(UART_PACKET_TYPE_STRING,"OK_READING",10);delay_ms(10);
- 139   2              // wait for correct available data length, should be a VERY short wait
- 140   2              while (fifoCount < packetSize) fifoCount = getFIFOCount();
- 141   2      
- 142   2              // read a packet from FIFO
- 143   2              getFIFOBytes(fifoBuffer, packetSize);
- 144   2      
- 145   2              //send_packet_to_host(UART_PACKET_TYPE_HEX,fifoBuffer,14);
- 146   2            
- 147   2              dmpGetPacket16bits(packet_16bits,fifoBuffer);
- 148   2              getMotion6_packet(packet_motion6);
- 149   2              packet_16bits[8] = packet_motion6[6];packet_16bits[9] = packet_motion6[7];
- 150   2              packet_16bits[10] = packet_motion6[8];packet_16bits[11] = packet_motion6[9];
- 151   2              packet_16bits[12] = packet_motion6[10];packet_16bits[13] = packet_motion6[11];
- 152   2            
- 153   2              packet_16bits[14] = packet_motion6[0];packet_16bits[15] = packet_motion6[1];
- 154   2              packet_16bits[16] = packet_motion6[2];packet_16bits[17] = packet_motion6[3];
- 155   2              packet_16bits[18] = packet_motion6[4];packet_16bits[19] = packet_motion6[5];
- 156   2              send_packet_to_host(UART_PACKET_TYPE_FIFO_NO_MAG,packet_16bits,20);
- 157   2              
- 158   2            
- 159   2              // track FIFO count here in case there is > 1 packet available
- 160   2              // (this lets us immediately read more without waiting for an interrupt)
- 161   2              fifoCount -= packetSize;
- 162   2        }
- 163   1      }
- 164          
- 165          void main(void) {
- 166   1          setup();
- 167   1          while(1){
- 168   2      //        if(!S1){ //se foi apertado o sinal e o led esta desativado
- 169   2      //          send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);
- 170   2      //          getMotion6_packet(packet_motion6);
- 171   2      //          send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
- 172   2      //          delay_ms(100);
- 173   2      //          while(!S1);
- 174   2      //          delay_ms(100);
- 175   2      //        }
- 176   2      //        if(!S2){
- 177   2      //          send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);
- 178   2      //          ler_dmp();
-C51 COMPILER V9.55   MAIN                                                                  12/05/2016 09:38:33 PAGE 4   
+ 117   1          luzes_iniciais();
+ 118   1      }
+ 119          
+ 120          
+ 121          void ler_dmp(){
+ 122   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"AGUARDA_INT",11);delay_ms(10);
+ 123   1        //send_packet_to_host(UART_PACKET_TYPE_HEX,(uint8_t *) &mpuInterrupt,1);delay_ms(10);
+ 124   1        //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
+ 125   1        while (!mpuInterrupt || fifoCount < packetSize){
+ 126   2          fifoCount = getFIFOCount();
+ 127   2        }
+ 128   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_RECEIVED",12);delay_ms(10);
+ 129   1        // reset interrupt flag and get INT_STATUS byte
+ 130   1        mpuInterrupt = false;
+ 131   1        mpuIntStatus = getIntStatus();
+ 132   1      
+ 133   1        // get current FIFO count
+ 134   1        fifoCount = getFIFOCount();
+ 135   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO_COUNT",10);delay_ms(10);
+ 136   1        //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
+ 137   1        //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_STATUS",10);delay_ms(10);
+ 138   1        //send_packet_to_host(UART_PACKET_TYPE_HEX,&mpuIntStatus,1);delay_ms(10);
+ 139   1        // check for overflow (this should never happen unless our code is too inefficient)
+ 140   1        if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
+ 141   2            
+ 142   2            // reset so we can continue cleanly
+ 143   2            resetFIFO();
+ 144   2            send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);//delay_ms(10);
+ 145   2          // otherwise, check for DMP data ready interrupt (this should happen frequently)
+ 146   2          } else if (mpuIntStatus & 0x02) {
+ 147   2              //send_packet_to_host(UART_PACKET_TYPE_STRING,"OK_READING",10);delay_ms(10);
+ 148   2              // wait for correct available data length, should be a VERY short wait
+ 149   2              while (fifoCount < packetSize) fifoCount = getFIFOCount();
+ 150   2      
+ 151   2              // read a packet from FIFO
+ 152   2              getFIFOBytes(fifoBuffer, packetSize);
+ 153   2      
+ 154   2              //send_packet_to_host(UART_PACKET_TYPE_HEX,fifoBuffer,14);
+ 155   2            
+ 156   2              dmpGetPacket16bits(packet_16bits,fifoBuffer);
+ 157   2              getMotion6_packet(packet_motion6);
+ 158   2              packet_16bits[8] = packet_motion6[6];packet_16bits[9] = packet_motion6[7];
+ 159   2              packet_16bits[10] = packet_motion6[8];packet_16bits[11] = packet_motion6[9];
+ 160   2              packet_16bits[12] = packet_motion6[10];packet_16bits[13] = packet_motion6[11];
+ 161   2            
+ 162   2              packet_16bits[14] = packet_motion6[0];packet_16bits[15] = packet_motion6[1];
+ 163   2              packet_16bits[16] = packet_motion6[2];packet_16bits[17] = packet_motion6[3];
+ 164   2              packet_16bits[18] = packet_motion6[4];packet_16bits[19] = packet_motion6[5];
+ 165   2              send_packet_to_host(UART_PACKET_TYPE_FIFO_NO_MAG,packet_16bits,20);
+ 166   2              
+ 167   2            
+ 168   2              // track FIFO count here in case there is > 1 packet available
+ 169   2              // (this lets us immediately read more without waiting for an interrupt)
+ 170   2              fifoCount -= packetSize;
+ 171   2        }
+ 172   1      }
+ 173          
+ 174          void main(void) {
+ 175   1          setup();
+ 176   1          while(1){
+ 177   2      //        if(!S1){ //se foi apertado o sinal e o led esta desativado
+ 178   2      //          send_packet_to_host(UART_PACKET_TYPE_STRING,"B1",2);
+C51 COMPILER V9.55   MAIN                                                                  12/09/2016 09:53:02 PAGE 4   
 
- 179   2      //          LEDVM = !LEDVM;
- 180   2      //          delay_ms(100);
- 181   2      //          while(!S2);
- 182   2      //          delay_ms(100);
- 183   2      //        }
- 184   2              if(newPayload){
- 185   3                  //verifica se o sinal eh direficionado para mim
- 186   3                if(rx_buf[0] == MY_SUB_ADDR){
- 187   4                  switch(rx_buf[1]){
- 188   5                    case Sinal_request_data:
- 189   5                          send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
- 190   5                          start_T0();
- 191   5                          break;
- 192   5                    case Sinal_LEDS:
- 193   5                          stop_T0();
- 194   5                          send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
- 195   5                          break;
- 196   5                  }
- 197   4                }
- 198   3                sta = 0;
- 199   3                newPayload = 0;
- 200   3              }
- 201   2              //timer tick
- 202   2              if(timer_flag <= 0){  
- 203   3                ler_dmp();
- 204   3                timer_flag = 1;
- 205   3              }
- 206   2          }
- 207   1      }
- 208          
- 209          //interrupção o I2C
- 210          void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
- 211   1        I2C_IRQ_handler();
- 212   1      }
+ 179   2      //          getMotion6_packet(packet_motion6);
+ 180   2      //          send_packet_to_host(UART_PACKET_TYPE_M6,packet_motion6,12);
+ 181   2      //          delay_ms(100);
+ 182   2      //          while(!S1);
+ 183   2      //          delay_ms(100);
+ 184   2      //        }
+ 185   2      //        if(!S2){
+ 186   2      //          send_packet_to_host(UART_PACKET_TYPE_STRING,"B2",2);
+ 187   2      //          ler_dmp();
+ 188   2      //          LEDVM = !LEDVM;
+ 189   2      //          delay_ms(100);
+ 190   2      //          while(!S2);
+ 191   2      //          delay_ms(100);
+ 192   2      //        }
+ 193   2              if(newPayload){
+ 194   3                  //verifica se o sinal eh direficionado para mim
+ 195   3                if(rx_buf[0] == MY_SUB_ADDR){
+ 196   4                  switch(rx_buf[1]){
+ 197   5                    case Sinal_request_data:
+ 198   5                          send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
+ 199   5                          LED = 1;
+ 200   5                          start_T0();
+ 201   5                          break;
+ 202   5                    case Sinal_LEDS:
+ 203   5                          stop_T0();
+ 204   5                          LED = 0;
+ 205   5                          send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
+ 206   5                          break;
+ 207   5                  }
+ 208   4                }
+ 209   3                sta = 0;
+ 210   3                newPayload = 0;
+ 211   3              }
+ 212   2              //timer tick
+ 213   2              if(timer_flag <= 0){  
+ 214   3                ler_dmp();
+ 215   3                timer_flag = 1;
+ 216   3              }
+ 217   2          }
+ 218   1      }
+ 219          
+ 220          //interrupção o I2C
+ 221          void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
+ 222   1        I2C_IRQ_handler();
+ 223   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   6321    ----
+   CODE SIZE        =   6350    ----
    CONSTANT SIZE    =   3066    ----
    XDATA SIZE       =    693     224
    PDATA SIZE       =   ----    ----
