@@ -26,7 +26,7 @@ UART Packet: Start Signal - Command
 //TODO: verify
 void iniciarIO(void){
    P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
-   P1DIR = 0xFF;   // Tudo input
+   P1DIR = 0x00;   // Tudo output
    P2DIR = 0xFF;
    P0CON = 0x00;  	// All general I/O
    P1CON = 0x00;  	// All general I/O
@@ -35,6 +35,7 @@ void iniciarIO(void){
 
 void setup(){
   iniciarIO();
+
   hal_uart_init(UART_BAUD_115K2);
 }
 

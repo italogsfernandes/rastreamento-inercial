@@ -13,6 +13,27 @@
 #define TX_PLOAD_WIDTH  32   //max
 
 
+/** Available data rates
+ * The input argument of rf_init must be defined in this @c enum
+ */
+typedef enum
+{
+    RF_DATA_RATE_1Mbps,
+    RF_DATA_RATE_2Mbps,
+    RF_DATA_RATE_250kbps
+} rf_data_rate_t;
+
+/** Available tx power modes
+ * The input argument of rf_init must be defined in this @c enum
+ */
+typedef enum
+{
+    RF_TX_POWER_NEGATIVE_18dBm,
+    RF_TX_POWER_NEGATIVE_12dBm,
+    RF_TX_POWER_NEGATIVE_6dBm,
+    RF_TX_POWER_0dBm
+} rf_tx_power_t;
+
 //Endere�os:
 //Definido como endere�o da pipe 0
 uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
@@ -134,32 +155,36 @@ void RF_IRQ(void) interrupt INTERRUPT_RFIRQ
     SPI_RW_Reg(WRITE_REG+STATUS,0x70);								// clear RX_DR or TX_DS or MAX_RT interrupt flag
 }
 
+//TODO: implement method of configuration
 /**************************************************/
-void rf_init(void)
+void rf_init(uint8_t *rx_addr,uint8_t *tx_addr,uint8_t, uint8_t rf_channel,
+  uint8_t rf_data_rate, uint8_t rf_pwr)
 {
-    RFCE = 0;                                   // Radio chip enable low
-    RFCKEN = 1;                                 // Radio clk enable
-
-    SPI_Write_Buf(WRITE_REG + TX_ADDR, ADDR_HOST, TX_ADR_WIDTH);    //Transmit Address.
-    SPI_Write_Buf(WRITE_REG + RX_ADDR_P0, ADDR_HOST, TX_ADR_WIDTH);
-    SPI_RW_Reg(WRITE_REG + EN_RXADDR, 0x01);  	// Enable Pipe0 (only pipe0)
-
-    SPI_RW_Reg(WRITE_REG + EN_AA, 0x00);      	// Disable Auto.Ack
-    SPI_RW_Reg(WRITE_REG + SETUP_RETR, 0x00); 	// Time to automatic retransmition selected: 250us, retransmition disabled
-    SPI_RW_Reg(WRITE_REG + RF_CH, 40);        	// Select RF channel 40
-    SPI_RW_Reg(WRITE_REG + RF_SETUP, 0x07);   	// TX_PWR:0dBm, Datarate:1Mbps, LNA:HCURR
-
-    SPI_RW_Reg(WRITE_REG + DYNPD, 0x01);    // Ativa Payload din?mico em data pipe 0
-    SPI_RW_Reg(WRITE_REG + FEATURE, 0x07);  // Ativa Payload din?mico, com ACK e comando W_TX_PAY
-}
-/**************************************************/
-
-void iniciarRF(void){
-    // Radio + SPI setup
-    RFCE = 0;       // Radio chip enable low
-    RFCKEN = 1;     // Radio clk enable
+    RFCE = 0; // Radio chip enable low
+    RFCKEN = 1; // Radio clk enable
     RF = 1;
-    rf_init();
+    RFCE = 0; // Radio chip enable low
+    RFCKEN = 1; // Radio clk enable
+
+    //Transmit Address.
+    SPI_Write_Buf(WRITE_REG + TX_ADDR, ADDR_HOST, TX_ADR_WIDTH);
+    //Receive Address
+    SPI_Write_Buf(WRITE_REG + RX_ADDR_P0, ADDR_HOST, TX_ADR_WIDTH);
+    // Enable Pipe0 (only pipe0)
+    SPI_RW_Reg(WRITE_REG + EN_RXADDR, 0x01);
+    // Disable Auto.Ack
+    SPI_RW_Reg(WRITE_REG + EN_AA, 0x00);
+    // Time to automatic retransmition selected: 250us, retransmition disabled
+    SPI_RW_Reg(WRITE_REG + SETUP_RETR, 0x00);
+    // Select RF channel 40
+    SPI_RW_Reg(WRITE_REG + RF_CH, 40);
+    // TX_PWR:0dBm, Datarate:1Mbps, LNA:HCURR
+    SPI_RW_Reg(WRITE_REG + RF_SETUP, 0x07);//0 0 0 0 0 11 1
+    // Ativa Payload din?mico em data pipe 0
+    SPI_RW_Reg(WRITE_REG + DYNPD, 0x01);
+    // Ativa Payload din?mico, com ACK e comando W_TX_PAY
+    SPI_RW_Reg(WRITE_REG + FEATURE, 0x07);
+    //Stay in RX Mode waiting for command
     RX_Mode();
 }
 /**************************************************/
