@@ -23,7 +23,6 @@ UART Packet: Start Signal - Command
 #define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
 
 
-
 //TODO: verify
 void iniciarIO(void){
    P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
@@ -38,14 +37,13 @@ void setup(){
   iniciarIO();
   hal_uart_init(UART_BAUD_115K2);
 }
-uint8_t received_command;
+
 void main(){
   setup();
   while(1){
     if(hal_uart_chars_available()){
       if(hal_uart_getchar() == UART_START){ //first byte should be start
-        received_command = hal_uart_getchar();
-        switch (received_command) {
+        switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           //do something
           break;
@@ -61,8 +59,8 @@ void main(){
           default:
           //do something
           break;
-        }
-      }
-    }
-  }
-}
+        } /*END SWITCH*/
+      } /*END IF START COMMAND*/
+    } /*END IF UART AVAILABLE*/
+  } /*END INFINITE LOOP*/
+} /*END MAIN FUNCTION*/
