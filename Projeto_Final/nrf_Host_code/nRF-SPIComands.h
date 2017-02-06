@@ -2,7 +2,9 @@
 #define NRF_SPICOMANDS_H
 
 #define INTERRUPT_RFIRQ	9
-
+#include "stdint.h" //inteiros uint8_t, int8_t, uint16_t....
+#include "stdbool.h" //Booleanos
+#include "API.h"
 /*NOTE: Alterei do Original:
 *   - Apaguei NRO_SENSOR
 *   - Apaguei ADDR_SENSOR[NRO_SENSOR]
@@ -13,8 +15,8 @@
 #define TX_PLOAD_WIDTH  32   //max
 
 
-//Endereços:
-//Definido como endereço da pipe 0
+//Endereï¿½os:
+//Definido como endereï¿½o da pipe 0
 uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
 
 uint8_t xdata rx_buf[TX_PLOAD_WIDTH];

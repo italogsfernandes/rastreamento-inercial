@@ -153,26 +153,4 @@ void calibrationStepTwo(){
   }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #endif /*MPU_CALIBRATION_H*/
