@@ -3,13 +3,12 @@
 #ifndef MPU_CALIBRATION_H
 #define MPU_CALIBRATION_H
 
-
 #define sampFreq 100 //Sampling frequency
 
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
-int16_t ax, ay, az; //Accel
-int16_t gx, gy, gz; //Gyro
-int16_t mx, my, mz; //Mag
+int16_t xdata ax, ay, az; //Accel
+int16_t xdata gx, gy, gz; //Gyro
+int16_t xdata mx, my, mz; //Mag
 //Calibration variables
 uint8_t xdata calibIt = 0; //Counter for the number of iterations in calibration
 uint8_t xdata calibCounter = 0; //Counter for the number of samples read during calibration
@@ -19,6 +18,8 @@ uint8_t xdata gyroTol = 0; //Error tolerance for gyroscope readings
 uint8_t xdata timeTol = 10; //Maximum duration of the calibration process (seconds)
 int16_t xdata accelBuffer[3] = {0,0,0}; //Buffer to store the mean values from accel
 int16_t xdata gyroBuffer[3] = {0,0,0};  //Buffer to store the mean values from gyro
+uint8_t xdata calibOk = 0; //Variable for checking if every sensor is calibrated
+
 /**
  * [calibrationRoutine description]
  * Everything should happen inside the timer
@@ -41,6 +42,9 @@ void calibrationRoutine() {
   }
 }
 
+/**
+ * 1st step: Measuring data to estimate the first offsets
+ */
 void calibrationStepOne(){
   //First readings to measure the mean raw values from accel and gyro
   //Measures during 2 seconds
@@ -80,8 +84,73 @@ void calibrationStepOne(){
   }
 }
 
+/**
+ * Retorna o modulo de um numero inteiro. Necessaria para calibration step2
+ * @param  test_value numero para ser avaliado (int16_t)
+ * @return            modulo do numero
+ */
+int16_t MATH_ABS(int16_t test_value){  test_value<0?return (-test_value):return test_value;}
+/**
+ * 2nd step: Iteratively update the offsets for accurate readings
+ */
 void calibrationStepTwo(){
+  //Reads the sensors during 1 second
+  if(calibCounter <= sampFreq)
+  {
+    //Reads the imu sensors
+    getMotion6_variables(&ax, &ay, &az, &gx, &gy, &gz);
+    //Iteratively updating the mean value for each sensor
+    accelBuffer[0] = (calibCounter*accelBuffer[0] + ax)/(calibCounter+1);
+    accelBuffer[1] = (calibCounter*accelBuffer[1] + ay)/(calibCounter+1);
+    accelBuffer[2] = (calibCounter*accelBuffer[2] + az)/(calibCounter+1);
+    gyroBuffer[0] = (calibCounter*gyroBuffer[0] + gx)/(calibCounter+1);
+    gyroBuffer[1] = (calibCounter*gyroBuffer[1] + gy)/(calibCounter+1);
+    gyroBuffer[2] = (calibCounter*gyroBuffer[2] + gz)/(calibCounter+1);
+    //Increments the sample counter
+    calibCounter++;
+  }
+  else
+  {
+    //Variable for checking if every sensor is calibrated
+    //A sensor is calibrated if its mean value is below the tolerance
+    calibok = 0;
 
+    //Accel-X
+    if(MATH_ABS(accelBuffer[0]) < accelTol) calibOk++;
+    else setXAccelOffset(getXAccelOffset() - (accelBuffer[0]/accelTol));
+    //Accel-Y
+    if(MATH_ABS(accelBuffer[1]) < accelTol) calibOk++;
+    else setYAccelOffset(getYAccelOffset() - (accelBuffer[1]/accelTol));
+    //Accel-Z
+    if(MATH_ABS(accelBuffer[2]) < accelTol) calibOk++;
+    else setZAccelOffset(getZAccelOffset() + ((16384-accelBuffer[2])/accelTol));
+    //Gyro-X
+    if(MATH_ABS(gyroBuffer[0]) < gyroTol) calibOk++;
+    else setXGyroOffset(getXGyroOffset() - (gyroBuffer[0]/(gyroTol+1)));
+    //Gyro-Y
+    if(MATH_ABS(gyroBuffer[1]) < gyroTol) calibOk++;
+    else setYGyroOffset(getYGyroOffset() - (gyroBuffer[1]/(gyroTol+1)));
+    //Gyro-Z
+    if(MATH_ABS(gyroBuffer[2]) < gyroTol) calibOk++;
+    else setZGyroOffset(getZGyroOffset() - (gyroBuffer[2]/(gyroTol+1)));
+
+    //Check if the calibration process can be finished
+    if(calibOk == 6 || calibIt == timeTol)
+    {
+      Timer3.stop(); //TODO: implement
+    }
+    else
+    {
+      accelBuffer[0] = 0;
+      accelBuffer[1] = 0;
+      accelBuffer[2] = 0;
+      gyroBuffer[0] = 0;
+      gyroBuffer[1] = 0;
+      gyroBuffer[2] = 0;
+      calibIt++;
+      calibCounter=0;
+    }
+  }
 }
 
 
