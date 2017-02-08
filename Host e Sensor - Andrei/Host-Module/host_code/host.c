@@ -1,5 +1,5 @@
 #include "reg24le1.h" //definicoes basicas de pinos
-#include "nRF-SPIComands.h" //Comunicacao RF
+#include <nRF-SPIComands.h> //Comunicacao RF
 #include "hal_uart.h" //Comunicacao Serial Uart
 
 //Subenderecos usados na rede
@@ -35,7 +35,7 @@ void iniciarIO(void){
 
 void setup(){
   iniciarIO();
-
+  rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
   hal_uart_init(UART_BAUD_115K2);
 }
 
@@ -46,22 +46,33 @@ void main(){
       if(hal_uart_getchar() == UART_START){ //first byte should be start
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
-          //do something
+          //Return Ok command and activate led
+          //Reset FIFO and wait 5ms
+          //Start Timer Aquisition
           break;
           case CMD_STOP:
-          //do something
+          //Stop Timer
+          //Return ok and reset led
           break;
           case CMD_CONNECTION:
-          //do something
+          //scan rf web for available sensors
+          //return list of sensors numbers
           break;
           case CMD_CALIBRATE:
-          //do something else, break
+          //send confimation command
+          //run callibration routine
+          //send flag that all is done
           break;
           default:
-          //do something
+          //i don't know what to do here
           break;
         } /*END SWITCH*/
       } /*END IF START COMMAND*/
     } /*END IF UART AVAILABLE*/
+    if(newPayload){
+      send_packet_to_computer(rx_buf[0], rx_buf, payloadWidth-1);
+      sta = 0;
+      newPayload = 0;
+    }
   } /*END INFINITE LOOP*/
 } /*END MAIN FUNCTION*/
