@@ -37,7 +37,10 @@ void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count);
  * @param flag_count Numero de vezes para o multiplicar este tempo
  */
 //BUG: sei la oq to fazendo
-void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){}
+//TODO:
+//XXX:
+//NOTE:
+void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){
   uint16_t qnt_ticks = (4 000 000 / (3 * Freq_Hz));
   setup_T0_ticks(qnt_ticks, flag_count);
 }
