@@ -17,31 +17,83 @@ uint8_t xdata * xdata dmpPacketBuffer;
 uint16_t xdata dmpPacketSize;
 uint8_t xdata malloc_memory_pool[500];
 
+/**
+ * Reserva um espaco de memoria para ser utilizado pela funcao malloc e free
+ * essas funcoes sao utilizadas durante o setup do sensor mpu6050
+ * sao necessarias para a inicializacao e devem ser chamadas antes de qualquer
+ * outra funcao da mpu
+ */
 void mpu_8051_malloc_setup() large {
     init_mempool (&malloc_memory_pool, sizeof(malloc_memory_pool));
 }
+/**
+ * Set clock source setting. An internal 8MHz oscillator, gyroscope based clock, or external sources can be selected as the MPU-60X0 clock source. When the internal 8 MHz oscillator or an external source is chosen as the clock source, the MPU-60X0 can operate in low power modes with the gyroscopes disabled.
+ * Upon power up, the MPU-60X0 clock source defaults to the internal oscillator. However, it is highly recommended that the device be configured to use one of the gyroscopes (or an external clock source) as the clock reference for improved stability. The clock source can be selected according to the following table:
+ * CLK_SEL | Clock Source
+ *  --------+--------------------------------------
+ *  0       | Internal oscillator
+ *  1       | PLL with X Gyro reference
+ *  2       | PLL with Y Gyro reference
+ *  3       | PLL with Z Gyro reference
+ *  4       | PLL with external 32.768kHz reference
+ *  5       | PLL with external 19.2MHz reference
+ *  6       | Reserved
+ *  7       | Stops the clock and keeps the timing generator in reset
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param source New clock source setting
+ */
 void setClockSource(uint8_t source) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_CLKSEL_BIT, MPU6050_PWR1_CLKSEL_LENGTH, source);
 }
+
+/**
+ * Set full-scale gyroscope range.
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param range New full-scale gyroscope range value
+ */
 void setFullScaleGyroRange(uint8_t range) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_GYRO_CONFIG, MPU6050_GCONFIG_FS_SEL_BIT, MPU6050_GCONFIG_FS_SEL_LENGTH, range);
 }
+
+/**
+ * Set full-scale accelerometer range.
+ * @param range New full-scale accelerometer range settin
+ */
 void setFullScaleAccelRange(uint8_t range) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
 }
+/**
+ * Set sleep mode status.
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param enabled New sleep mode enabled status
+ */
 void setSleepEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
 }
+/**
+ * Power on and prepare for general usage. This will activate the device and take it out of sleep mode (which must be done after start-up). This function also sets both the accelerometer and the gyroscope to their most sensitive settings, namely +/- 2g and +/- 250 degrees/sec, and sets the clock source to use the X Gyro for reference, which is slightly better than the default internal clock source.
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ */
 void mpu_initialize() large {
   setClockSource(MPU6050_CLOCK_PLL_XGYRO);
   setFullScaleGyroRange(MPU6050_GYRO_FS_250);
   setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
   setSleepEnabled(false);
 }
+/**
+ * Verify the I2C connection. Make sure the device is connected and responds as expected.
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return True if connection is valid, false otherwise
+ */
 bool mpu_testConnection() large {
     i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
     return buffer[0] == 0x34;
 }
+/**
+ * Get raw 6-axis motion sensor readings (accel/gyro). Retrieves all currently available motion sensor values.
+ * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param packet6 8bit vector [X_AC_H][X_AC_L][Y_AC_H][Y_AC_L][Z_AC_H][Z_AC_L][X_GY_H][X_GY_L][Y_GY_H][Y_GY_L][Z_GY_H][Z_GY_L]
+ */
 void getMotion6_packet(uint8_t xdata * packet6) large {
     i2c_mpu_readBytes(MPU_endereco, 0x3B, 14, buffer);
     packet6[0] = buffer[0]; //Xac_H
@@ -57,6 +109,8 @@ void getMotion6_packet(uint8_t xdata * packet6) large {
     packet6[10] = buffer[12]; //Zgy_H
     packet6[11] = buffer[13]; //Zgy_L
 }
+
+//TODO: Document all this functions
 void setXAccelOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco,  MPU6050_RA_XA_OFFS_H, offset);
 }
@@ -75,6 +129,7 @@ void setYGyroOffset(int16_t offset) large {
 void setZGyroOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
+
 
 int16_t getXAccelOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XA_OFFS_H, 2, buffer);
@@ -100,6 +155,7 @@ int16_t getZGyroOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
+
 
 void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) large {
     bank &= 0x1F;
@@ -450,7 +506,7 @@ uint8_t dmpInitialize() large {
 		uint16_t pos = 0;
 		uint16_t fifoCount;
 		uint8_t fifoBuffer[128];
-	
+
 		uint8_t b;
 		uint8_t data_to_write;
 		uint8_t mask;
@@ -546,10 +602,10 @@ uint8_t dmpInitialize() large {
 
             //DEBUG_PRINTLN(F("Setting external frame sync to TEMP_OUT_L[0]..."));
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame sync",19);delay_ms(10);
-						//BUG: software travando aqui 
+						//BUG: software travando aqui
 						//setExternalFrameSync(MPU6050_EXT_SYNC_TEMP_OUT_L);
 						//i2c_mpu_writeBits(MPU_endereco, 0x1A, 5, 3, 0x1);
-					
+
 						data_to_write = 0x1;
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&data_to_write,1);delay_ms(10);
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&data_to_write,1);delay_ms(10);
@@ -558,7 +614,7 @@ uint8_t dmpInitialize() large {
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
 						}
-						
+
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
 						mask = ((1 << 5) - 1) << (5 - 3 + 1);
 						data_to_write <<= (5 - 3 + 1); // shift data into correct position
@@ -566,15 +622,15 @@ uint8_t dmpInitialize() large {
 						b &= ~(mask); // zero all important bits in existing byte
 						b |= data_to_write; // combine data with existing byte
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
-						
+
 						if(i2c_mpu_writeByte(MPU_endereco, 0x1A, b)!= 0){
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
 						}
-						
-					
-					
+
+
+
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"external frame ok",17);delay_ms(10);
             //DEBUG_PRINTLN(F("Setting DLPF bandwidth to 42Hz..."));
 						send_packet_to_host(UART_PACKET_TYPE_STRING,"DLPF bandwidth to 42Hz",22);delay_ms(10);
@@ -604,7 +660,7 @@ uint8_t dmpInitialize() large {
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
 						}
-						
+
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
 						mask = ((1 << 6) - 1) << (6 - 6 + 1);
 						xgOffsetTC <<= (6 - 6 + 1); // shift data into correct position
@@ -612,13 +668,13 @@ uint8_t dmpInitialize() large {
 						b &= ~(mask); // zero all important bits in existing byte
 						b |= xgOffsetTC; // combine data with existing byte
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
-						
+
 						if(i2c_mpu_writeByte(MPU_endereco, 0x00, b)!= 0){
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
 						}
-						
+
 						//setYGyroOffsetTC(ygOffsetTC);
 						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, ygOffsetTC);
             send_packet_to_host(UART_PACKET_TYPE_HEX,&ygOffsetTC,1);delay_ms(10);
@@ -627,7 +683,7 @@ uint8_t dmpInitialize() large {
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
 						}
-						
+
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
 						mask = ((1 << 6) - 1) << (6 - 6 + 1);
 						ygOffsetTC <<= (6 - 6 + 1); // shift data into correct position
@@ -635,13 +691,13 @@ uint8_t dmpInitialize() large {
 						b &= ~(mask); // zero all important bits in existing byte
 						b |= ygOffsetTC; // combine data with existing byte
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
-						
+
 						if(i2c_mpu_writeByte(MPU_endereco, 0x01, b)!= 0){
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
 						}
-						
+
 						//setZGyroOffsetTC(zgOffsetTC);
 						//i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, zgOffsetTC);
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&zgOffsetTC,1);delay_ms(10);
@@ -650,7 +706,7 @@ uint8_t dmpInitialize() large {
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"read not success!",17);delay_ms(10);
 						}
-						
+
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
 						mask = ((1 << 6) - 1) << (6 - 6 + 1);
 						zgOffsetTC <<= (6 - 6 + 1); // shift data into correct position
@@ -658,13 +714,13 @@ uint8_t dmpInitialize() large {
 						b &= ~(mask); // zero all important bits in existing byte
 						b |= ygOffsetTC; // combine data with existing byte
 						send_packet_to_host(UART_PACKET_TYPE_HEX,&b,1);delay_ms(10);
-						
+
 						if(i2c_mpu_writeByte(MPU_endereco, 0x02, b)!= 0){
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write success!",14);delay_ms(10);
 						} else {
 							send_packet_to_host(UART_PACKET_TYPE_STRING,"write not success!",18);delay_ms(10);
 						}
-						
+
 
             //DEBUG_PRINTLN(F("Setting X/Y/Z gyro user offsets to zero..."));
             //setXGyroOffset(0);
@@ -689,7 +745,7 @@ uint8_t dmpInitialize() large {
 
             //DEBUG_PRINTLN(F("Reading FIFO count..."));
 						fifoCount = getFIFOCount();
-            
+
 
             //DEBUG_PRINT(F("Current FIFO count="));
             //DEBUG_PRINTLN(fifoCount);
@@ -823,11 +879,11 @@ uint8_t dmpGetPacket16bits(uint8_t *data_ptr, uint8_t *packet) large {
 		data_ptr[2] = packet[4];data_ptr[3] = packet[5];
 		data_ptr[4] = packet[8];data_ptr[5] = packet[9];
 		data_ptr[6] = packet[12];data_ptr[7] = packet[13];
-	
+
 		data_ptr[8] = packet[16];data_ptr[9] = packet[17];
 		data_ptr[10] = packet[20];data_ptr[11] = packet[21];
 		data_ptr[12] = packet[24];data_ptr[13] = packet[25];
-	
+
 		data_ptr[14] = packet[28];data_ptr[15] = packet[29];
 		data_ptr[16] = packet[32];data_ptr[17] = packet[33];
 		data_ptr[18] = packet[36];data_ptr[19] = packet[37];

@@ -72,7 +72,6 @@ void initial_setup_dmp(){
       setXGyroOffset(36);
       setYGyroOffset(-37);
       setZGyroOffset(-1);
-
     }
     else
     {
@@ -135,6 +134,7 @@ void main(void) {
   }/*END LOOP*/
 }/*END MAIN*/
 
+//TODO: document
 void DataAcq(){
   uint8_t i = 0;
   numbPackets = getFIFOCount()/PSDMP;//floor
@@ -143,7 +143,6 @@ void DataAcq(){
     send_inertial_packet_by_rf(packet_type,fifoBuffer);
   }/*END for every packet*/
 }/*End of DataAcq*/
-
 
 //interrupção o I2C
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL {
