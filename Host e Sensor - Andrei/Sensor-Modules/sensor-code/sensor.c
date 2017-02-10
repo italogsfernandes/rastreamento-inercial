@@ -261,18 +261,41 @@ void DataAcq(){
       tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
       tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
       tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+      tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[14] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[15] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      tx_buf[16] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[17] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[18] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[19] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[20] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[21] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
       break;
       case PACKET_FIFO_M9://FIFO_Motion9 [Quat][Motion9]
-      tx_buf[2] = fifoBuffer[];tx_buf[3] = fifoBuffer[];//W_quat
-      tx_buf[4] = fifoBuffer[];tx_buf[5] = fifoBuffer[];//X_quat
-      tx_buf[6] = fifoBuffer[];tx_buf[7] = fifoBuffer[];//Y_quat
-      tx_buf[8] = fifoBuffer[];tx_buf[9] = fifoBuffer[];//Z_quat
-      tx_buf[10] = fifoBuffer[];tx_buf[11] = fifoBuffer[];//X_AC
-      tx_buf[12] = fifoBuffer[];tx_buf[13] = fifoBuffer[];//Y_AC
-      tx_buf[14] = fifoBuffer[];tx_buf[15] = fifoBuffer[];//Z_AC
-      tx_buf[16] = fifoBuffer[];tx_buf[17] = fifoBuffer[];//X_GY
-      tx_buf[18] = fifoBuffer[];tx_buf[19] = fifoBuffer[];//Y_GY
-      tx_buf[20] = fifoBuffer[];tx_buf[21] = fifoBuffer[];//Z_GY
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+      tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[14] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[15] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      tx_buf[16] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[17] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[18] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[19] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[20] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[21] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+      //TODO: MAG
       tx_buf[22] = fifoBuffer[];tx_buf[23] = fifoBuffer[];//X_Mag
       tx_buf[24] = fifoBuffer[];tx_buf[25] = fifoBuffer[];//Y_Mag
       tx_buf[26] = fifoBuffer[];tx_buf[27] = fifoBuffer[];//Z_Mag
