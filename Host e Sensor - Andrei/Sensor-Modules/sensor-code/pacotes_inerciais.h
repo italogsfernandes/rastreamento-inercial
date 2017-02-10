@@ -4,7 +4,6 @@ Verificar é preciso para que não haja varias chamadas da
 mesma biblioteca. */
 #define	PACOTES_INERCIAIS_H
 
-#include <uart_basics.h>
 #include <nRF-SPIComands.h>
 
 #define UART_START_SIGNAL  0x53
@@ -18,6 +17,7 @@ mesma biblioteca. */
 #define PACKET_TYPE_QUAT      0x06
 #define PACKET_TYPE_FIFO_NO_MAG       0x07
 #define PACKET_TYPE_FIFO_ALL_READINGS     0x08
+
 #define PACKET_TYPE_STRING    0x09
 #define PACKET_TYPE_HEX       0x0A
 #define PACKET_TYPE_BIN       0x0B

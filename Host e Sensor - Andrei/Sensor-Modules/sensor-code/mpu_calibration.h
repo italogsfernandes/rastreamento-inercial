@@ -3,7 +3,6 @@
 #ifndef MPU_CALIBRATION_H
 #define MPU_CALIBRATION_H
 
-#define sampFreq 100 //Sampling frequency
 
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
 int16_t xdata ax, ay, az; //Accel
@@ -137,7 +136,8 @@ void calibrationStepTwo(){
     //Check if the calibration process can be finished
     if(calibOk == 6 || calibIt == timeTol)
     {
-      Timer3.stop(); //TODO: implement
+      stop_T0();
+      EN_MPU_CALIBRATED_FLAG;
     }
     else
     {

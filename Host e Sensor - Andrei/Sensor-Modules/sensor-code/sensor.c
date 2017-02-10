@@ -10,6 +10,10 @@
 #include <nRF-SPIComands.h>
 #include <dmp.h>
 
+//Size of DMP packages
+#define PSDMP 42
+#define PS 20
+
 //Subenderecos usados no sistema
 #define HOST_SUB_ADDR 0xFF //Sub addr do host
 #define MY_SUB_ADDR 0x00 //Id do sensor
@@ -22,6 +26,7 @@
 #define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
 #define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
 #define CMD_GET_SENSOR_FIFO 0x07
+#define CMD_SET_PACKET_TYPE 0x08
 
 #define  STATUS_LED  P03
 
@@ -34,6 +39,7 @@
 #define EN_SENSOR_ON_FLAG sensor_status &= 0x01
 #define DIS_SENSOR_ON_FLAG sensor_status |= ~0x01
 uint8_t sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
+uint8_t packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
 
 //TODO: Document
 void iniciarIO(void){
@@ -85,92 +91,200 @@ void setup() {
   luzes_iniciais();
 }
 
-//TODO: thing again
-void ler_dmp(){
-  //send_packet_to_host(UART_PACKET_TYPE_STRING,"AGUARDA_INT",11);delay_ms(10);
-  //send_packet_to_host(UART_PACKET_TYPE_HEX,(uint8_t *) &mpuInterrupt,1);delay_ms(10);
-  //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
-  while (!mpuInterrupt || fifoCount < packetSize){
-    fifoCount = getFIFOCount();
-  }
-  //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_RECEIVED",12);delay_ms(10);
-  // reset interrupt flag and get INT_STATUS byte
-  mpuInterrupt = false;
-  mpuIntStatus = getIntStatus();
-
-  // get current FIFO count
-  fifoCount = getFIFOCount();
-  //send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO_COUNT",10);delay_ms(10);
-  //send_packet_to_host(UART_PACKET_TYPE_UINT16,(uint8_t *)&fifoCount,2);delay_ms(10);
-  //send_packet_to_host(UART_PACKET_TYPE_STRING,"INT_STATUS",10);delay_ms(10);
-  //send_packet_to_host(UART_PACKET_TYPE_HEX,&mpuIntStatus,1);delay_ms(10);
-  // check for overflow (this should never happen unless our code is too inefficient)
-  if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-
-    // reset so we can continue cleanly
-    resetFIFO();
-    send_packet_to_host(UART_PACKET_TYPE_STRING,"FIFO overflow!",14);//delay_ms(10);
-    // otherwise, check for DMP data ready interrupt (this should happen frequently)
-  } else if (mpuIntStatus & 0x02) {
-    //send_packet_to_host(UART_PACKET_TYPE_STRING,"OK_READING",10);delay_ms(10);
-    // wait for correct available data length, should be a VERY short wait
-    while (fifoCount < packetSize) fifoCount = getFIFOCount();
-
-    // read a packet from FIFO
-    getFIFOBytes(fifoBuffer, packetSize);
-
-    //send_packet_to_host(UART_PACKET_TYPE_HEX,fifoBuffer,14);
-
-    dmpGetPacket16bits(packet_16bits,fifoBuffer);
-    getMotion6_packet(packet_motion6);
-    packet_16bits[8] = packet_motion6[6];packet_16bits[9] = packet_motion6[7];
-    packet_16bits[10] = packet_motion6[8];packet_16bits[11] = packet_motion6[9];
-    packet_16bits[12] = packet_motion6[10];packet_16bits[13] = packet_motion6[11];
-
-    packet_16bits[14] = packet_motion6[0];packet_16bits[15] = packet_motion6[1];
-    packet_16bits[16] = packet_motion6[2];packet_16bits[17] = packet_motion6[3];
-    packet_16bits[18] = packet_motion6[4];packet_16bits[19] = packet_motion6[5];
-    send_packet_to_host(UART_PACKET_TYPE_FIFO_NO_MAG,packet_16bits,20);
-
-
-    // track FIFO count here in case there is > 1 packet available
-    // (this lets us immediately read more without waiting for an interrupt)
-    fifoCount -= packetSize;
-  }
-}
-
 void main(void) {
   setup();
-  while(1){
-
+  while(1){ //Loop
+    ////////////////////
+    //Comunicacao RF //
+    ////////////////////
     if(newPayload){
       //verifica se o sinal eh direficionado para mim
       if(rx_buf[0] == MY_SUB_ADDR){
         switch(rx_buf[1]){
-          case Sinal_request_data:
-          send_packet_to_host(UART_PACKET_TYPE_STRING,"On",2);delay_ms(10);
-          LED = 1;
-          start_T0();
+          case CMD_GET_SENSOR_FIFO:
+          DataAcq();
           break;
-          case Sinal_LEDS:
-          stop_T0();
-          LED = 0;
-          send_packet_to_host(UART_PACKET_TYPE_STRING,"Off",3);delay_ms(10);
+          case CMD_START:
+          resetFIFO();//Reset the sensor fifo
+          delay_ms(5);//wait reseting fifo
           break;
-        }
-      }
+          case CMD_STOP:
+          // '-'
+          break;
+          case CMD_CALIBRATE:
+          start_T0();//Timer calibration
+          break;
+          case CMD_SET_PACKET_TYPE:
+          packet_type = rx_buf[2]; //Seta o tipo de pacote
+          default:
+          //i don't know what to do here
+          break;
+        }/*END SWITCH*/
+      }/*END IF MY SUB ADDR*/
       sta = 0;
       newPayload = 0;
+    } /* END Comunicacao RF */
+
+    //////////////////////////
+    //TIMER for Calibration //
+    //////////////////////////
+    if(timer_elapsed){
+      calibrationRoutine();
+      timer_elapsed = 0;
     }
-    //timer tick
-    if(timer_flag <= 0){
-      ler_dmp();
-      timer_flag = 1;
-    }
-  }
-}
+  }/*END LOOP*/
+}/*END MAIN*/
+
+/*
+v -> x = (packet[28] << 8) | packet[29];
+v -> y = (packet[32] << 8) | packet[33];
+v -> z = (packet[36] << 8) | packet[37];
+
+
+uint8_t MPU6050::dmpGetGyro(int16_t *data, const uint8_t* packet) {
+    // TODO: accommodate different arrangements of sent data (ONLY default supported now)
+    if (packet == 0) packet = dmpPacketBuffer;
+    data[0] = (packet[16] << 8) | packet[17];
+    data[1] = (packet[20] << 8) | packet[21];
+    data[2] = (packet[24] << 8) | packet[25];
+    return 0;
+}*/
+/* ================================================================================================ *
+ | Default MotionApps v2.0 42-byte FIFO packet structure:                                           |
+ |                                                                                                  |
+ | [QUAT W][      ][QUAT X][      ][QUAT Y][      ][QUAT Z][      ][GYRO X][      ][GYRO Y][      ] |
+ |   0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18  19  20  21  22  23  |
+ |                                                                                                  |
+ | [GYRO Z][      ][ACC X ][      ][ACC Y ][      ][ACC Z ][      ][      ]                         |
+ |  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41                          |
+ * ================================================================================================ */
+#define MOTIONAPPS_FIFO_I_QUAT_WH 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_WL 1 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_XH 4 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_XL 5 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_YH 8 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_YL 9 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_ZH 12 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_QUAT_ZL 13 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_XH  28 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_XL  29 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_YH  32 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_YL  33 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_ZH  36 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_ACCEL_ZL  37 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_XH 16 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_XL 17 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_YH 20 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_YL 21 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_ZH 24 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_GYRO_ZL 25 //Index of it in FIFO from DMP
+
+void DataAcq(){
+  uint8_t i = 0;
+  numbPackets = getFIFOCount()/PSDMP;//floor
+  for (size_t i = 0; i < numbPackets; i++) {
+    getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+
+    tx_buf[0] = MY_SUB_ADDR;
+    tx_buf[1] = packet_type;
+    switch (packet_type) {
+      case PACKET_TYPE_ACEL://Acelerometer [X][Y][Z]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      break;
+      case PACKET_TYPE_GIRO://Gyroscope [X][Y][Z]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+      break;
+      case PACKET_TYPE_MAG://Magnetometer [X][Y][Z]
+      //TODO: MAG
+      tx_buf[2] = fifoBuffer[];tx_buf[3] = fifoBuffer[];//X
+      tx_buf[4] = fifoBuffer[];tx_buf[5] = fifoBuffer[];//Y
+      tx_buf[6] = fifoBuffer[];tx_buf[7] = fifoBuffer[];//Z
+      break;
+      case PACKET_TYPE_M6://Motion6 [Acel][Gyro]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+      break;
+      case PACKET_TYPE_M9://Motion9 [Acel][Gyro][Mag]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+      //TODO: MAG
+      tx_buf[14] = fifoBuffer[];tx_buf[15] = fifoBuffer[];//X_Mag
+      tx_buf[16] = fifoBuffer[];tx_buf[17] = fifoBuffer[];//Y_Mag
+      tx_buf[18] = fifoBuffer[];tx_buf[19] = fifoBuffer[];//Z_Mag
+      break;
+      case PACKET_TYPE_QUAT://Quaternion [W][X][Y][Z]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+      break;
+      case PACKET_FIFO_M6://FIFO_Motion6 [Quat][Motion6]
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+      break;
+      case PACKET_FIFO_M9://FIFO_Motion9 [Quat][Motion9]
+      tx_buf[2] = fifoBuffer[];tx_buf[3] = fifoBuffer[];//W_quat
+      tx_buf[4] = fifoBuffer[];tx_buf[5] = fifoBuffer[];//X_quat
+      tx_buf[6] = fifoBuffer[];tx_buf[7] = fifoBuffer[];//Y_quat
+      tx_buf[8] = fifoBuffer[];tx_buf[9] = fifoBuffer[];//Z_quat
+      tx_buf[10] = fifoBuffer[];tx_buf[11] = fifoBuffer[];//X_AC
+      tx_buf[12] = fifoBuffer[];tx_buf[13] = fifoBuffer[];//Y_AC
+      tx_buf[14] = fifoBuffer[];tx_buf[15] = fifoBuffer[];//Z_AC
+      tx_buf[16] = fifoBuffer[];tx_buf[17] = fifoBuffer[];//X_GY
+      tx_buf[18] = fifoBuffer[];tx_buf[19] = fifoBuffer[];//Y_GY
+      tx_buf[20] = fifoBuffer[];tx_buf[21] = fifoBuffer[];//Z_GY
+      tx_buf[22] = fifoBuffer[];tx_buf[23] = fifoBuffer[];//X_Mag
+      tx_buf[24] = fifoBuffer[];tx_buf[25] = fifoBuffer[];//Y_Mag
+      tx_buf[26] = fifoBuffer[];tx_buf[27] = fifoBuffer[];//Z_Mag
+      break;
+      default:
+      //ãanh,sorry?
+      break;
+    }/*END of Switch packet type*/
+  }/*END for every packet*/
+}/*End of DataAcq*/
 
 //interrupção o I2C
-void I2C_IRQ (void) interrupt INTERRUPT_SERIAL{
+void I2C_IRQ (void) interrupt INTERRUPT_SERIAL {
   I2C_IRQ_handler();
 }

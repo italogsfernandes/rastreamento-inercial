@@ -20,11 +20,13 @@ UART Packet: Start Signal - Command
 #define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
 #define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
 #define CMD_GET_SENSOR_FIFO 0x07
+#define CMD_SET_PACKET_TYPE 0x08
 
 uint8_t body_sensors[16] = {
   0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,
   0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
 uint16_t active_sensors = 0x00;//0000 0000 0000 0000
+
 
 //TODO: verify
 void iniciarIO(void){
@@ -54,7 +56,7 @@ void main(){
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
-          send_start_to_sensors();//TODO: Reset FIFO inside sensor
+          send_start_to_sensors();//Reset FIFO inside sensors
           delay_ms(5); //Wait 5 miliseconds
           start_T0();//Start Timer Aquisition
           break;
@@ -120,7 +122,7 @@ void burst_rf_read(){
   uint8_t i = 0;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(CMD_GET_SENSOR_FIFO,body_sensors[i]);//requisita o pacote de dados
+      send_rf_command(packet_type,body_sensors[i]);//requisita o pacote de dados
     }
   }
 }
