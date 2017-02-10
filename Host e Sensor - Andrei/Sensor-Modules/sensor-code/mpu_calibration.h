@@ -12,7 +12,7 @@ int16_t xdata mx, my, mz; //Mag
 //Calibration variables
 uint8_t xdata calibIt = 0; //Counter for the number of iterations in calibration
 uint8_t xdata calibCounter = 0; //Counter for the number of samples read during calibration
-uint8_t xdata calibStep = 1; //Determines which step of the calibration should be performed
+uint8_t xdata calibStep = 1; //Determines whichs step of the calibration should be performed
 uint8_t xdata accelTol = 0; //Error tolerance for accelerometer readings
 uint8_t xdata gyroTol = 0; //Error tolerance for gyroscope readings
 uint8_t xdata timeTol = 10; //Maximum duration of the calibration process (seconds)

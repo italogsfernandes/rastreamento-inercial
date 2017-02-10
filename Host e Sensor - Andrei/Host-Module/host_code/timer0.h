@@ -3,8 +3,7 @@
 
 #include "nrf24le1.h"
 #include "stdint.h"
-#include "reg24le1.h" //Defini��es de muitos endere�os de registradores.
-#include "stdbool.h" //Booleanos
+#include "stdbool.h"
 #include "API.h"
 
 /**************************************************/
@@ -19,7 +18,6 @@ uint8_t timer_count = 0;
 
 uint8_t timer_elapsed = 0; //flag of timer elapsed
 
-void setup_T0(void);
 void start_T0(void);
 void stop_T0(void);
 void setup_T0_ticks(uint16_t number_beats,uint8_t flag_count);
@@ -34,14 +32,10 @@ void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count);
  * A frequencia minima é de 21 Hz
  * A frequencia maxima é de 1333333 Hz
  * @param Freq_Hz    Frequencia em Hertz para configurar o timer
- * @param flag_count Numero de vezes para o multiplicar este tempo
+ * @param flag_count Numero de vezes para dividir essa frequencia
  */
-//BUG: sei la oq to fazendo
-//TODO:
-//XXX:
-//NOTE:
 void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){
-  uint16_t qnt_ticks = (4 000 000 / (3 * Freq_Hz));
+  uint16_t qnt_ticks = (4000000 / (3 * Freq_Hz));
   setup_T0_ticks(qnt_ticks, flag_count);
 }
 /**
