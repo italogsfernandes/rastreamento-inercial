@@ -28,14 +28,14 @@ uint8_t body_sensors[16] = {
 uint16_t active_sensors = 0x00;//0000 0000 0000 0000
 
 
-//TODO: verify
+//TODO: test
 void iniciarIO(void){
-   P0DIR = 0xB7;   // 1011 0111 - 1/0 = In/Out - Output: P0.3 e P0.6 - Input: P0.4 e outros
+   P0DIR = 0x00;   // Tudo output
    P1DIR = 0x00;   // Tudo output
-   P2DIR = 0xFF;
-   P0CON = 0x00;  	// All general I/O
-   P1CON = 0x00;  	// All general I/O
-   P2CON = 0x00;  	// All general I/O
+   P0CON = 0x00; P1CON = 0x00; //Reseting PxCON registers
+
+   P0DIR &= ~(1<<3);//P03 = Uart tx = output
+   P0DIR |= 1<<4;//P04 = UART Rx = input
 }
 
 void setup(){

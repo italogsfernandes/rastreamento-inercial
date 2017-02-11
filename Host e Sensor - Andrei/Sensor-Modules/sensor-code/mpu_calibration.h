@@ -137,6 +137,7 @@ void calibrationStepTwo(){
     if(calibOk == 6 || calibIt == timeTol)
     {
       stop_T0();
+      //TODO: send some signal that calibration is done and the values
       EN_MPU_CALIBRATED_FLAG;
     }
     else

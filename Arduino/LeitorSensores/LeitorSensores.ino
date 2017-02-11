@@ -72,14 +72,11 @@ void setup() {
   //Defini como 38400 mas tlvz seja necessario maior ou menor velocidade
   //Estimando de maneira rapida cada linha de dados tera 680 bits
   //Isso da uma frequencia maxima de cerca de 55Hz (ESTIMADA)
-  //TODO: Calcular isso de forma correta
   Serial.begin(38400);
   while (!Serial); // No arduino Leonardo é necessário aguardar o serial ser enumerado, em outras seguira em frente imediatamente
 
   //Inicializando os dispositivos
   Serial.println(F("Inicializando os dispositivos I2C..."));
-  /************TODO: Verificar se funciona a inicialização da mpu e do mpu********/
-  //TODO: Refactor Delete para a variavel accel giro
   mpu.initialize();
   mag.initialize();
   pinMode(INTERRUPT_PIN, INPUT);

@@ -43,13 +43,14 @@ uint8_t packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
 
 //TODO: Document
 void iniciarIO(void){
-  P0DIR = 0xF7;   // 1111 0111 - 1/0 = In/Out - Output: P0.3
-  P1DIR = 0xFF;   // Tudo input
-  P2DIR = 0xFF;
-  P0CON = 0x00;  	// All general I/O
+  P0DIR = 0x00;   // Tudo output
+  P1DIR = 0x00;   // Tudo output
+  P0CON = 0x00; P1CON = 0x00; //Reseting PxCON registers
+
+  P0DIR &= ~(1<<4);//P04 = w2scl = output
+  P0DIR &= ~(1<<3);//P03 = Status led = output
   //NOTE: PQ p1com?
-  P1CON |= 0x53;  	// All general I/O
-  P2CON = 0x00;  	// All general I/O
+  P1CON |= 0x53; // All general I/O 0101 0011
 }
 
 //TODO:Document
