@@ -26,6 +26,7 @@ uint8_t xdata malloc_memory_pool[500];
 void mpu_8051_malloc_setup() large {
     init_mempool (&malloc_memory_pool, sizeof(malloc_memory_pool));
 }
+
 /**
  * Set clock source setting. An internal 8MHz oscillator, gyroscope based clock, or external sources can be selected as the MPU-60X0 clock source. When the internal 8 MHz oscillator or an external source is chosen as the clock source, the MPU-60X0 can operate in low power modes with the gyroscopes disabled.
  * Upon power up, the MPU-60X0 clock source defaults to the internal oscillator. However, it is highly recommended that the device be configured to use one of the gyroscopes (or an external clock source) as the clock reference for improved stability. The clock source can be selected according to the following table:
@@ -39,7 +40,7 @@ void mpu_8051_malloc_setup() large {
  *  5       | PLL with external 19.2MHz reference
  *  6       | Reserved
  *  7       | Stops the clock and keeps the timing generator in reset
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  * @param source New clock source setting
  */
 void setClockSource(uint8_t source) large {
@@ -48,7 +49,7 @@ void setClockSource(uint8_t source) large {
 
 /**
  * Set full-scale gyroscope range.
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  * @param range New full-scale gyroscope range value
  */
 void setFullScaleGyroRange(uint8_t range) large {
@@ -62,17 +63,19 @@ void setFullScaleGyroRange(uint8_t range) large {
 void setFullScaleAccelRange(uint8_t range) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ACCEL_CONFIG, MPU6050_ACONFIG_AFS_SEL_BIT, MPU6050_ACONFIG_AFS_SEL_LENGTH, range);
 }
+
 /**
  * Set sleep mode status.
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  * @param enabled New sleep mode enabled status
  */
 void setSleepEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_SLEEP_BIT, enabled);
 }
+
 /**
  * Power on and prepare for general usage. This will activate the device and take it out of sleep mode (which must be done after start-up). This function also sets both the accelerometer and the gyroscope to their most sensitive settings, namely +/- 2g and +/- 250 degrees/sec, and sets the clock source to use the X Gyro for reference, which is slightly better than the default internal clock source.
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  */
 void mpu_initialize() large {
   setClockSource(MPU6050_CLOCK_PLL_XGYRO);
@@ -80,18 +83,20 @@ void mpu_initialize() large {
   setFullScaleAccelRange(MPU6050_ACCEL_FS_2);
   setSleepEnabled(false);
 }
+
 /**
  * Verify the I2C connection. Make sure the device is connected and responds as expected.
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  * @return True if connection is valid, false otherwise
  */
 bool mpu_testConnection() large {
     i2c_mpu_readBits(MPU_endereco,MPU6050_RA_WHO_AM_I, MPU6050_WHO_AM_I_BIT, MPU6050_WHO_AM_I_LENGTH, buffer);
     return buffer[0] == 0x34;
 }
+
 /**
  * Get raw 6-axis motion sensor readings (accel/gyro). Retrieves all currently available motion sensor values.
- * See more: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
  * @param packet6 8bit vector [X_AC_H][X_AC_L][Y_AC_H][Y_AC_L][Z_AC_H][Z_AC_L][X_GY_H][X_GY_L][Y_GY_H][Y_GY_L][Z_GY_H][Z_GY_L]
  */
 void getMotion6_packet(uint8_t xdata * packet6) large {
@@ -110,7 +115,9 @@ void getMotion6_packet(uint8_t xdata * packet6) large {
     packet6[11] = buffer[13]; //Zgy_L
 }
 
-//TODO: Document all this functions
+/////////////////////
+//OFFSETS funcions //
+/////////////////////
 void setXAccelOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco,  MPU6050_RA_XA_OFFS_H, offset);
 }
@@ -129,8 +136,6 @@ void setYGyroOffset(int16_t offset) large {
 void setZGyroOffset(int16_t offset) large {
     i2c_mpu_writeWord(MPU_endereco, MPU6050_RA_ZG_OFFS_USRH, offset);
 }
-
-
 int16_t getXAccelOffset() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_XA_OFFS_H, 2, buffer);
     return (((int16_t)buffer[0]) << 8) | buffer[1];
@@ -156,7 +161,6 @@ int16_t getZGyroOffset() large {
     return (((int16_t)buffer[0]) << 8) | buffer[1];
 }
 
-
 void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata userBank) large {
     bank &= 0x1F;
     if (userBank) bank |= 0x20;
@@ -164,6 +168,11 @@ void setMemoryBank(uint8_t xdata bank, bool xdata prefetchEnabled, bool xdata us
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_BANK_SEL, bank);
 }
 
+/**
+ * Get current FIFO buffer size. This value indicates the number of bytes stored in the FIFO buffer. This number is in turn the number of bytes that can be read from the FIFO buffer and it is directly proportional to the number of samples available given the set of sensor data bound to be stored in the FIFO (register 35 and 36).
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return     Current FIFO buffer size
+ */
 uint16_t getFIFOCount() large {
     i2c_mpu_readBytes(MPU_endereco, MPU6050_RA_FIFO_COUNTH, 2, buffer);
     return (((uint16_t)buffer[0]) << 8) | buffer[1];
@@ -178,6 +187,10 @@ void setDMPEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_EN_BIT, enabled);
 }
 
+/**
+ * Reset the FIFO. This bit resets the FIFO buffer when set to 1 while FIFO_EN equals 0. This bit automatically clears to 0 after the reset has been triggered.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ */
 void resetFIFO() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_RESET_BIT, true);
 }
@@ -193,6 +206,7 @@ void getFIFOBytes(uint8_t *data_ptr, uint8_t data_len) large {
         *data_ptr = 0;
     }
 }
+
 void setMemoryStartAddress(uint8_t xdata address) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MEM_START_ADDR, address);
 }
@@ -258,8 +272,6 @@ bool writeMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_
     if (useProgMem) free(progBuffer_wmb);
     return true;
 }
-
-
 
 //memory data  = 8bytes
 bool writeDMPConfigurationSet(uint8_t *data_ptr, uint16_t dataSize, bool useProgMem) large {
@@ -334,8 +346,6 @@ bool writeDMPConfigurationSet(uint8_t *data_ptr, uint16_t dataSize, bool useProg
     return true;
 }
 
-
-
 void readMemoryBlock(uint8_t  *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address) large {
     uint8_t xdata chunkSize_rmb;
     uint16_t i_rmb;
@@ -369,40 +379,84 @@ void readMemoryBlock(uint8_t  *data_ptr, uint16_t dataSize, uint8_t bank, uint8_
     }
 }
 
-
 bool writeProgDMPConfigurationSet(uint8_t *data_ptr, uint16_t xdata dataSize) large {
     return writeDMPConfigurationSet(data_ptr, dataSize, true);
 }
+
 bool writeProgMemoryBlock(uint8_t *data_ptr, uint16_t dataSize, uint8_t bank, uint8_t address, bool verify) large {
     return writeMemoryBlock(data_ptr, dataSize, bank, address, verify, true);
 }
+
+/**
+ * Trigger a full device reset. A small delay of ~50ms may be desirable after triggering a reset.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ */
 void i2c_mpu_reset() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_PWR_MGMT_1, MPU6050_PWR1_DEVICE_RESET_BIT, true);
 }
+
+/**
+ * Set the I2C address of the specified slave (0-3).
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param num     Slave number (0-3)
+ * @param address New address for specified slave
+ */
 void setSlaveAddress(uint8_t num, uint8_t address) large {
     if (num > 3) return;
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_I2C_SLV0_ADDR + num*3, address);
 }
+
+/**
+ * Set I2C Master Mode enabled status.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param enabled New interrupt enabled status
+ */
 void setI2CMasterModeEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_EN_BIT, enabled);
 }
+
+/**
+ * Reset the I2C Master. This bit resets the I2C Master when set to 1 while I2C_MST_EN equals 0. This bit automatically clears to 0 after the reset has been triggered.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ */
 void resetI2CMaster() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_I2C_MST_RESET_BIT, true);
 }
+
 void setIntEnabled(uint8_t enabled) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_INT_ENABLE, enabled);
 }
+
+/**
+ * Set gyroscope sample rate divider.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param rate New sample rate divider
+ */
 void setRate(uint8_t rate) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_SMPLRT_DIV, rate);
 }
+
+/**
+ * Set external FSYNC configuration.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param sync_ext New FSYNC configuration value
+ */
 void setExternalFrameSync(uint8_t sync_ext) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_EXT_SYNC_SET_BIT, MPU6050_CFG_EXT_SYNC_SET_LENGTH, sync_ext);
 }
+
+/**
+ * Set digital low-pass filter configuration.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param mode New DLFP configuration setting
+ */
 void setDLPFMode(uint8_t mode) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_CONFIG, MPU6050_CFG_DLPF_CFG_BIT, MPU6050_CFG_DLPF_CFG_LENGTH, mode);
 }
-// DMP_CFG_1 register
 
+////////////////////////
+// DMP_CFG_1 register //
+////////////////////////
 uint8_t getDMPConfig1() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_DMP_CFG_1, buffer);
     return buffer[0];
@@ -411,8 +465,9 @@ void setDMPConfig1(uint8_t config) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_DMP_CFG_1, config);
 }
 
-// DMP_CFG_2 register
-
+////////////////////////
+// DMP_CFG_2 register //
+////////////////////////
 uint8_t getDMPConfig2() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_DMP_CFG_2, buffer);
     return buffer[0];
@@ -420,6 +475,7 @@ uint8_t getDMPConfig2() large {
 void setDMPConfig2(uint8_t config) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_DMP_CFG_2, config);
 }
+
 uint8_t getOTPBankValid() large {
     i2c_mpu_readBit(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OTP_BNK_VLD_BIT, buffer);
     return buffer[0];
@@ -427,6 +483,10 @@ uint8_t getOTPBankValid() large {
 void setOTPBankValid(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OTP_BNK_VLD_BIT, enabled);
 }
+
+/////////////////////////
+// XG_OFFS_TC register //
+/////////////////////////
 int8_t getXGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
@@ -435,8 +495,9 @@ void setXGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_XG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
-// YG_OFFS_TC register
-
+/////////////////////////
+// YG_OFFS_TC register //
+/////////////////////////
 int8_t getYGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
@@ -445,8 +506,9 @@ void setYGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_YG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
-// ZG_OFFS_TC register
-
+/////////////////////////
+// ZG_OFFS_TC register //
+/////////////////////////
 int8_t getZGyroOffsetTC() large {
     i2c_mpu_readBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, buffer);
     return buffer[0];
@@ -455,50 +517,111 @@ void setZGyroOffsetTC(int8_t offset) large {
     i2c_mpu_writeBits(MPU_endereco, MPU6050_RA_ZG_OFFS_TC, MPU6050_TC_OFFSET_BIT, MPU6050_TC_OFFSET_LENGTH, offset);
 }
 
+/**
+ * Get motion detection event acceleration threshold. This register configures the detection threshold for Motion interrupt generation. The unit of MOT_THR is 1LSB = 2mg. Motion is detected when the absolute value of any of the accelerometer measurements exceeds this Motion detection threshold. This condition increments the Motion detection duration counter (Register 32). The Motion detection interrupt is triggered when the Motion Detection counter reaches the time count specified in MOT_DUR (Register 32).
+ * The Motion interrupt will indicate the axis and polarity of detected motion in MOT_DETECT_STATUS (Register 97).
+ * For more details on the Motion detection interrupt, see Section 8.3 of the MPU-6000/MPU-6050 Product Specification document as well as Registers 56 and 58 of this document.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return Current motion detection acceleration threshold value (LSB = 2mg)
+ */
 uint8_t getMotionDetectionThreshold() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_MOT_THR, buffer);
     return buffer[0];
 }
+
+/**
+ * Set free-fall event acceleration threshold.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param threshold New motion detection acceleration threshold value (LSB = 2mg)
+ */
 void setMotionDetectionThreshold(uint8_t threshold) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MOT_THR, threshold);
 }
+
+/**
+ * Get zero motion detection event acceleration threshold. This register configures the detection threshold for Zero Motion interrupt generation. The unit of ZRMOT_THR is 1LSB = 2mg. Zero Motion is detected when the absolute value of the accelerometer measurements for the 3 axes are each less than the detection threshold. This condition increments the Zero Motion duration counter (Register 34). The Zero Motion interrupt is triggered when the Zero Motion duration counter reaches the time count specified in ZRMOT_DUR (Register 34).
+ * Unlike Free Fall or Motion detection, Zero Motion detection triggers an interrupt both when Zero Motion is first detected and when Zero Motion is no longer detected.
+ * When a zero motion event is detected, a Zero Motion Status will be indicated in the MOT_DETECT_STATUS register (Register 97). When a motion-to-zero-motion condition is detected, the status bit is set to 1. When a zero-motion-to- motion condition is detected, the status bit is set to 0.
+ * For more details on the Zero Motion detection interrupt, see Section 8.4 of the MPU-6000/MPU-6050 Product Specification document as well as Registers 56 and 58 of this document.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return Current zero motion detection acceleration threshold value (LSB = 2mg)
+ */
 uint8_t getZeroMotionDetectionThreshold() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_ZRMOT_THR, buffer);
     return buffer[0];
 }
 
+/**
+ * Set zero motion detection event acceleration threshold.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param threshold New zero motion detection acceleration threshold value (LSB = 2mg)
+ */
 void setZeroMotionDetectionThreshold(uint8_t threshold) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_ZRMOT_THR, threshold);
 }
+
+/**
+ * Get motion detection event duration threshold. This register configures the duration counter threshold for Motion interrupt generation. The duration counter ticks at 1 kHz, therefore MOT_DUR has a unit of 1LSB = 1ms. The Motion detection duration counter increments when the absolute value of any of the accelerometer measurements exceeds the Motion detection threshold (Register 31). The Motion detection interrupt is triggered when the Motion detection counter reaches the time count specified in this register.
+ * For more details on the Motion detection interrupt, see Section 8.3 of the MPU-6000/MPU-6050 Product Specification document.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return Current motion detection duration threshold value (LSB = 1ms)
+ */
 uint8_t getMotionDetectionDuration() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_MOT_DUR, buffer);
     return buffer[0];
 }
 
+/**
+ * Set motion detection event duration threshold.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param duration New motion detection duration threshold value (LSB = 1ms)
+ */
 void setMotionDetectionDuration(uint8_t duration) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_MOT_DUR, duration);
 }
 
+/**
+ * Get zero motion detection event duration threshold. This register configures the duration counter threshold for Zero Motion interrupt generation. The duration counter ticks at 16 Hz, therefore ZRMOT_DUR has a unit of 1 LSB = 64 ms. The Zero Motion duration counter increments while the absolute value of the accelerometer measurements are each less than the detection threshold (Register 33). The Zero Motion interrupt is triggered when the Zero Motion duration counter reaches the time count specified in this register.
+ * For more details on the Zero Motion detection interrupt, see Section 8.4 of the MPU-6000/MPU-6050 Product Specification document, as well as Registers 56 and 58 of this document.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return Current zero motion detection duration threshold value (LSB = 64ms)
+ */
 uint8_t getZeroMotionDetectionDuration() large {
     i2c_mpu_readByte(MPU_endereco, MPU6050_RA_ZRMOT_DUR, buffer);
     return buffer[0];
 }
 
+/**
+ * Set zero motion detection event duration threshold.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param duration New zero motion detection duration threshold value (LSB = 1ms)
+ */
 void setZeroMotionDetectionDuration(uint8_t duration) large {
     i2c_mpu_writeByte(MPU_endereco, MPU6050_RA_ZRMOT_DUR, duration);
 }
+
+/**
+ * Get FIFO enabled status. When this bit is set to 0, the FIFO buffer is disabled. The FIFO buffer cannot be written to or read from while disabled. The FIFO buffer's state does not change unless the MPU-60X0 is power cycled.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @return Current FIFO enabled status
+ */
 bool getFIFOEnabled() large {
     i2c_mpu_readBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_EN_BIT, buffer);
     return buffer[0];
 }
 
+/**
+ * Set FIFO enabled status.
+ * See more at: https://www.i2cdevlib.com/docs/html/class_m_p_u6050.html
+ * @param enabled New FIFO enabled status
+ */
 void setFIFOEnabled(bool enabled) large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_FIFO_EN_BIT, enabled);
 }
+
 void resetDMP() large {
     i2c_mpu_writeBit(MPU_endereco, MPU6050_RA_USER_CTRL, MPU6050_USERCTRL_DMP_RESET_BIT, true);
 }
-
 
 uint8_t dmpInitialize() large {
     uint8_t xgOffsetTC,ygOffsetTC,zgOffsetTC;
@@ -863,6 +986,8 @@ uint8_t dmpInitialize() large {
 		send_packet_to_host(UART_PACKET_TYPE_STRING,"Success! DMP init",17);delay_ms(10);
     return 0; // success
 }
+
+//TODO: finish implementation of functions for getting all types of packets
 uint8_t dmpGetQuaternion_int16(int16_t *data_ptr, const uint8_t* packet) large {
     // TODO: accommodate different arrangements of sent data (ONLY default supported now)
     if (packet == 0) packet = dmpPacketBuffer;
