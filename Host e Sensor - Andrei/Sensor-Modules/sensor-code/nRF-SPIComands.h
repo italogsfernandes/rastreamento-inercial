@@ -42,6 +42,77 @@ sbit	MAX_RT  = sta^4;
 
 bit newPayload = 0;     // Flag to show new Payload from host
 uint8_t xdata payloadWidth = 0;
+/**
+ * TODO: perguntar o serginho
+ * [SPI_RW description]
+ * @param  value [description]
+ * @return       [description]
+ */
+uint8_t SPI_RW(uint8_t value);
+
+/**
+ * TODO: perguntar o serginho
+ * [SPI_RW_Reg description]
+ * @param  reg   [description]
+ * @param  value [description]
+ * @return       [description]
+ */
+uint8_t SPI_RW_Reg(uint8_t reg, uint8_t value);
+
+/**
+ * TODO: perguntar o serginho
+ * [SPI_Read description]
+ * @param  reg [description]
+ * @return     [description]
+ */
+uint8_t SPI_Read(uint8_t reg);
+
+/**
+ * TODO: perguntar o serginho
+ * @param  reg   [description]
+ * @param  pBuf  [description]
+ * @param  bytes [description]
+ * @return       [description]
+ */
+uint8_t SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes);
+
+/**
+ * TODO: perguntar o serginho
+ * [SPI_Write_Buf description]
+ * @param  reg   [description]
+ * @param  pBuf  [description]
+ * @param  bytes [description]
+ * @return       [description]
+ */
+uint8_t SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes);
+
+/**
+ * Inicia o estado recepcao, onde o nrf estara aguardando a interrupcao rf
+ */
+void RX_Mode(void);
+
+/**
+ * Entra no estado de transmissao, com pacote sem ACK.
+ * Transmitindo o atual valor em tx_buff
+ * RF transceiver is never in TX mode longer than 4 ms.
+ * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
+ */
+void TX_Mode_NOACK(short int payloadLength);
+
+/**
+ * Inicia a comunicacao RF, apos configura-la ativa todas as interrupcoes e aguarda em RX Mode
+ * @param rx_addr      Endereço RX de 5 bytes
+ * @param tx_addr      Endereço RX de 5 bytes
+ * @param rf_channel   Valor em MHz a ser somado a 2.4Hz como canal, entre 0 e 125.
+ * @param rf_data_rate Velocidade de transmissao nor ar que deseja utilizar
+ * @param rf_pwr       Power of the Transmission
+ */
+void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr);
+
+
+////////////
+//.C File //
+////////////
 
 /**
  * TODO: perguntar o serginho
