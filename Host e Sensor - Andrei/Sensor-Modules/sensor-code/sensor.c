@@ -1,6 +1,6 @@
 #include "nrf24le1.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
-
+#include "mpu_calibration.h"
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_w2_isr.h" //Comunicacao I2C
 #include "hal_delay.h" //delay
@@ -9,8 +9,7 @@
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
 
 //Subenderecos usados no sistema
-#define HOST_SUB_ADDR 0xFF //Sub addr do host
-#define MY_SUB_ADDR 0x00 //Id do sensor
+//TODO: think about sub addr
 
 #define  STATUS_LED  P03
 
@@ -25,6 +24,7 @@
 
 uint8_t sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
 uint8_t packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
+uint8_t xdata fifoBuffer[42] = {0};
 
 ////////////////////////
 //Functions in Sensor //
@@ -129,13 +129,15 @@ void main(void) {
 ///////////////////////
 
 void initial_setup_dmp(){
+	uint8_t ret;
   mpu_8051_malloc_setup(); //Malloc pool for mpu library
 
   if(mpu_testConnection()){
     EN_MPU_CONNECTED_FLAG;
     mpu_initialize(); //Initializes the IMU
-    uint8_t ret =  dmpInitialize();  //Initializes the DMP
-    delay(50);
+
+		ret =  dmpInitialize();  //Initializes the DMP
+    delay_ms(50);
 
     if(ret == 0)
     {
@@ -150,15 +152,17 @@ void initial_setup_dmp(){
     }
     else
     {
-      senf_rf_error_flag();
+			//TODO_implement
+			send_rf_command(CMD_ERROR,MY_SUB_ADDR);
     }
   }
 }
 
 void DataAcq(){
   uint8_t i = 0;
-  numbPackets = getFIFOCount()/PSDMP;//floor
-  for (size_t i = 0; i < numbPackets; i++) {
+  uint8_t numbPackets;
+	numbPackets = getFIFOCount()/PSDMP;//floor
+  for (i = 0; i < numbPackets; i++) {
     getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
     send_inertial_packet_by_rf(packet_type,fifoBuffer);
   }/*END for every packet*/

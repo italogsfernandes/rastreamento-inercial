@@ -11,8 +11,8 @@
 #define INTERRUPT_TMR0	1 //timer
 #define NOVT0   0x00
 
-uint8_t NBT0L	=	0xEA // Este tempo equivale a
-uint8_t NBT0H	=	0xCB // Freq. de Amostragem de 100Hz
+uint8_t NBT0L	=	0xEA;// Este tempo equivale a
+uint8_t NBT0H	=	0xCB; // Freq. de Amostragem de 100Hz
 uint8_t initial_timer_count  = 1; //valor de multiplicacao do timer
 uint8_t timer_count = 0;
 
@@ -49,7 +49,6 @@ void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){
  */
 void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count){
   setup_T0_elapsed_us(T_ms*100,flag_count);
-  setup
 }
 /**
  * Configura o tempo do timer de acordo com periodo em us.
@@ -82,10 +81,10 @@ void TMR0_IRQ(void) interrupt INTERRUPT_TMR0
 {
 	if(!NOVT0)
 	{
-		timer_flag--;
-    if(timer_flag <= 0){
+		timer_count--;
+    if(timer_count <= 0){
         timer_elapsed = 1;
-        timer_flag = initial_timer_flag;
+        timer_count = initial_timer_count;
     }
 		TH0= NBT0H;
 		TL0= NBT0L;

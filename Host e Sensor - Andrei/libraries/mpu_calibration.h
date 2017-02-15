@@ -1,8 +1,10 @@
-#include<dmp.h>
-
 #ifndef MPU_CALIBRATION_H
 #define MPU_CALIBRATION_H
 
+#include <timer0.h>
+#include <dmp.h>
+
+#define Aquire_Freq 100
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
 int16_t xdata ax, ay, az; //Accel
 int16_t xdata gx, gy, gz; //Gyro
@@ -66,7 +68,7 @@ void calibrationRoutine() {
 void calibrationStepOne(){
   //First readings to measure the mean raw values from accel and gyro
   //Measures during 2 seconds
-  if(calibCounter < sampFreq*2)
+  if(calibCounter < Aquire_Freq*2)
   {
     //Reads the imu sensors
     getMotion6_variables(&ax, &ay, &az, &gx, &gy, &gz);
@@ -102,11 +104,17 @@ void calibrationStepOne(){
   }
 }
 
-int16_t MATH_ABS(int16_t test_value){  test_value<0?return (-test_value):return test_value;}
+int16_t MATH_ABS(int16_t test_value){
+	if(test_value<0){
+		return (-test_value);
+	} else {
+		return test_value;
+	}
+}
 
 void calibrationStepTwo(){
   //Reads the sensors during 1 second
-  if(calibCounter <= sampFreq)
+  if(calibCounter <= Aquire_Freq)
   {
     //Reads the imu sensors
     getMotion6_variables(&ax, &ay, &az, &gx, &gy, &gz);
@@ -124,7 +132,7 @@ void calibrationStepTwo(){
   {
     //Variable for checking if every sensor is calibrated
     //A sensor is calibrated if its mean value is below the tolerance
-    calibok = 0;
+    calibOk = 0;
 
     //Accel-X
     if(MATH_ABS(accelBuffer[0]) < accelTol) calibOk++;
@@ -150,7 +158,7 @@ void calibrationStepTwo(){
     {
       stop_T0();
       //TODO: send some signal that calibration is done and the values
-      EN_MPU_CALIBRATED_FLAG;
+      //EN_MPU_CALIBRATED_FLAG;
     }
     else
     {

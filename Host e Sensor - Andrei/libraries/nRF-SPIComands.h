@@ -2,6 +2,8 @@
 #define NRF_SPICOMANDS_H
 
 #include "API.h"
+#include <stdint.h>
+#include <stdbool.h>
 
 #define INTERRUPT_RFIRQ	9
 
@@ -267,13 +269,13 @@ void RF_IRQ(void) interrupt INTERRUPT_RFIRQ
  * @param rf_pwr       Power of the Transmission
  */
 void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr) {
-    RFCE = 0; // Radio chip enable low
+		uint8_t rf_setup_byte = 0x07; //0000 0111
+		RFCE = 0; // Radio chip enable low
     RFCKEN = 1; // Radio clk enable
     RF = 1;
     RFCE = 0; // Radio chip enable low
     RFCKEN = 1; // Radio clk enable
 
-    uint8_t rf_setup_byte = 0x07; //0000 0111
     switch (rf_pwr) {
       case RF_TX_POWER_NEGATIVE_18dBm:
       rf_setup_byte &= 0xF9; //1111 1001
@@ -304,9 +306,9 @@ void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate
       break;
     }
     //Transmit Address.
-    SPI_Write_Buf(WRITE_REG + TX_ADDR, ADDR_HOST, TX_ADR_WIDTH);
+    SPI_Write_Buf(WRITE_REG + TX_ADDR, tx_addr, TX_ADR_WIDTH);
     //Receive Address
-    SPI_Write_Buf(WRITE_REG + RX_ADDR_P0, ADDR_HOST, TX_ADR_WIDTH);
+    SPI_Write_Buf(WRITE_REG + RX_ADDR_P0, rx_addr, TX_ADR_WIDTH);
     // Enable Pipe0 (only pipe0)
     SPI_RW_Reg(WRITE_REG + EN_RXADDR, 0x01);
     // Disable Auto.Ack

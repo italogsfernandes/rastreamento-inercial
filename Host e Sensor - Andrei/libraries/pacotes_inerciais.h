@@ -5,7 +5,11 @@ mesma biblioteca. */
 #define	PACOTES_INERCIAIS_H
 
 #include <nRF-SPIComands.h>
+#include <hal_uart.h>
 
+//Subenderecos usados no sistema
+#define HOST_SUB_ADDR 0xFF //Sub addr do host
+#define MY_SUB_ADDR 0x00 //Id do sensor
 
 //UART Packet: Start Signal - Command
 #define UART_START_SIGNAL  0x53
@@ -81,7 +85,13 @@ mesma biblioteca. */
 #define MOTIONAPPS_FIFO_I_GYRO_YL 21 //Index of it in FIFO from DMP
 #define MOTIONAPPS_FIFO_I_GYRO_ZH 24 //Index of it in FIFO from DMP
 #define MOTIONAPPS_FIFO_I_GYRO_ZL 25 //Index of it in FIFO from DMP
-
+//TODO: figure out how to put the mag in the fifo
+#define MOTIONAPPS_FIFO_I_MAG_XH 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_MAG_XL 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_MAG_YH 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_MAG_YL 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_MAG_ZH 0 //Index of it in FIFO from DMP
+#define MOTIONAPPS_FIFO_I_MAG_ZL 0 //Index of it in FIFO from DMP
 //////////////////////
 //Functions headers //
 //////////////////////
@@ -92,7 +102,7 @@ mesma biblioteca. */
  * @param pkt_type    Tipo de definido acima nesta biblioteca
  * @param fifo_buffer buffer da MPU_6050 de acordo com MotionApps library
  */
-void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer);
+void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer);
 
 /**
  * Envia um pacote rf no seguinte formato: [Destinatario ID] [comando]
@@ -105,7 +115,7 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id);
 //.C file //
 ////////////
 
-void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
+void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer){
   tx_buf[0] = MY_SUB_ADDR;
   tx_buf[1] = pkt_type;
   switch (pkt_type) {
@@ -129,9 +139,12 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
     break;
     case PACKET_TYPE_MAG://Magnetometer [X][Y][Z]
     //TODO: MAG
-    tx_buf[2] = fifo_buffer[];tx_buf[3] = fifo_buffer[];//X
-    tx_buf[4] = fifo_buffer[];tx_buf[5] = fifo_buffer[];//Y
-    tx_buf[6] = fifo_buffer[];tx_buf[7] = fifo_buffer[];//Z
+		tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
+    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
     TX_Mode_NOACK(8);
     break;
     case PACKET_TYPE_M6://Motion6 [Acel][Gyro]
@@ -162,10 +175,13 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
     tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
     tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
     tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    //TODO: MAG
-    tx_buf[14] = fifo_buffer[];tx_buf[15] = fifo_buffer[];//X_Mag
-    tx_buf[16] = fifo_buffer[];tx_buf[17] = fifo_buffer[];//Y_Mag
-    tx_buf[18] = fifo_buffer[];tx_buf[19] = fifo_buffer[];//Z_Mag
+		//TODO: MAG
+    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
+    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
+    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
+    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
+    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
+    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
     TX_Mode_NOACK(20);
     break;
     case PACKET_TYPE_QUAT://Quaternion [W][X][Y][Z]
@@ -179,59 +195,7 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
     tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
     TX_Mode_NOACK(10);
     break;
-    case PACKET_FIFO_M6://FIFO_Motion6 [Quat][Motion6]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[20] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[21] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    TX_Mode_NOACK(22);
-    break;
-    case PACKET_FIFO_M9://FIFO_Motion9 [Quat][Motion9]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[20] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[21] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    //TODO: MAG
-    tx_buf[22] = fifo_buffer[];
-    tx_buf[23] = fifo_buffer[];//X_Mag
-    tx_buf[24] = fifo_buffer[];
-    tx_buf[25] = fifo_buffer[];//Y_Mag
-    tx_buf[26] = fifo_buffer[];
-    tx_buf[27] = fifo_buffer[];//Z_Mag
-    TX_Mode_NOACK(28);
-    break;
+   
     default:
     //NOTE: ãanh,sorry?
     break;
@@ -246,6 +210,45 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
   RX_Mode();
 }
 
+//TODO: organizar e documentar
+
+//Packet Type | Sensor id |  ... | data | ... |
+void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
+	unsigned int i;
+  tx_buf[0] = packet_type;
+	tx_buf[1] = MY_SUB_ADDR;
+	for(i=2; i<data_len+2; i++){
+		tx_buf[i] = data_to_send[i-2];
+	}
+	TX_Mode_NOACK(data_len+2);
+	RX_Mode();
+}
+
+
+//Start signal | Packet Type | Packet Length | ... | data | ... | End signal
+void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
+	unsigned int i;
+    hal_uart_putchar(UART_START_SIGNAL);
+    hal_uart_putchar(packet_type);
+    hal_uart_putchar(data_len);
+		for(i=1; i<data_len+1; i++){
+			hal_uart_putchar(data_to_send[i]);
+		}
+	hal_uart_putchar(UART_END_SIGNAL);
+}
+
+//Start signal | Packet Type | Packet Length | ... | data | ... | End signal
+void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
+	unsigned int i;
+    hal_uart_putchar(UART_START_SIGNAL);
+    hal_uart_putchar(packet_type);
+    hal_uart_putchar(data_len+1);
+		hal_uart_putchar(MY_SUB_ADDR);
+	for(i=0; i<data_len; i++){
+		hal_uart_putchar(data_to_send[i]);
+	}
+	hal_uart_putchar(UART_END_SIGNAL);
+}
 
 
 #endif

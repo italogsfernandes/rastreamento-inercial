@@ -1,11 +1,11 @@
 #include "Nordic\reg24le1.h" //definicoes basicas de pinos
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_uart.h" //Comunicacao Serial Uart
+#include "hal_delay.h"
 #include "timer0.h"
+#include "pacotes_inerciais.h"
 
 #define Aquire_Freq 100
-//Subenderecos usados na rede
-#define HOST_SUB_ADDR 0xFF
 
 //Subenderecos dos sensores possiveis de existir na rede
 uint8_t body_sensors[16] = {
@@ -67,7 +67,7 @@ void main(){
     //Comunicao Serial //
     /////////////////////
     if(hal_uart_chars_available()){
-      if(hal_uart_getchar() == UART_START){ //first byte should be start
+      if(hal_uart_getchar() == UART_START_SIGNAL){ //first byte should be start
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
