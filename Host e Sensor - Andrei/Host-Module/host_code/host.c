@@ -21,12 +21,30 @@ UART Packet: Start Signal - Command
 #define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
 #define CMD_GET_SENSOR_FIFO 0x07
 #define CMD_SET_PACKET_TYPE 0x08
+#define CMD_READ 0x09 //Request a packet of readings
+#
 
 uint8_t body_sensors[16] = {
   0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,
   0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
 uint16_t active_sensors = 0x00;//0000 0000 0000 0000
 
+//////////////////////
+//Functions in Host //
+//////////////////////
+
+/**
+ * Envia um dado comando cada sensor listado como ativo.
+ * Utilize request_ack_from_sensors para listar sensores.
+ * @param cmd2send comando que se deseja enviar
+ */
+void send_cmd_to_active_sensors(uint8_t cmd2send);
+
+/**
+ * Requisita que todos os sensores possiveis retornem ack,
+ * com isso é possivel listar os sensores ativos (active_sensors)
+ */
+void request_ack_from_sensors();
 
 /**
  * Seta os pinos do nrf como saidas e entradas de acordo com as funcoes desejadas
@@ -57,13 +75,13 @@ void main(){
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
-          send_start_to_sensors();//Reset FIFO inside sensors
+          send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
           delay_ms(5); //Wait 5 miliseconds
           start_T0();//Start Timer Aquisition
           break;
           case CMD_STOP:
           stop_T0();//Stop Timer
-          send_start_to_sensors();//Send Stop to sensors
+          send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
           //TODO: reaction to stop signal in sensors
           hal_uart_putchar(CMD_OK);//Return ok
           break;
@@ -107,39 +125,28 @@ void main(){
   } /*END INFINITE LOOP*/
 } /*END MAIN FUNCTION*/
 
-//TODO: Document
+
+void burst_rf_read(){
+  uint8_t i = 0;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+    if(active_sensors & (1<<i)){//se esta ativo
+      send_rf_command(CMD_READ,body_sensors[i]);//requisita o pacote de dados
+    }
+  }
+}
+
 void request_ack_from_sensors(){
   uint8_t i = 0;
   for (i = 0; i < 16; i++) {
     send_rf_command(CMD_CONNECTION,body_sensors[i]);
   }
 }
-//TODO: implement
-void send_rf_command(){
 
-}
-//TODO: Document
-void burst_rf_read(){
-  uint8_t i = 0;
+void send_cmd_to_active_sensors(uint8_t cmd2send){
+  uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(packet_type,body_sensors[i]);//requisita o pacote de dados
-    }
-  }
-}
-//TODO: Document
-void send_start_to_sensors(){
-  for (i = 0; i < 16; i++) { //para cada sensor possivel
-    if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(CMD_START,body_sensors[i]);//inicia os sensores
-    }
-  }
-}
-//TODO: Document
-void send_start_to_sensors(){
-  for (i = 0; i < 16; i++) { //para cada sensor possivel
-    if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(CMD_STOP,body_sensors[i]);//inicia os sensores
+      send_rf_command(cmd2send,body_sensors[i]);//inicia os sensores
     }
   }
 }

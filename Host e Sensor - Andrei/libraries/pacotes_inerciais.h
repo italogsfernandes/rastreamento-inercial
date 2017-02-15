@@ -6,9 +6,29 @@ mesma biblioteca. */
 
 #include <nRF-SPIComands.h>
 
+/*
+UART Packet: Start Signal - Command
+*/
 #define UART_START_SIGNAL  0x53
 #define UART_END_SIGNAL  0x04
 
+/////////////
+//Comandos //
+/////////////
+#define CMD_OK  0x00 //Ack - Uart Command
+#define CMD_ERROR 0x01 //Error flag - Uart Command
+#define CMD_START 0x02 //Start Measuring - Uart Command
+#define CMD_STOP  0x03 //Stop Measuring - Uart Command
+#define CMD_CONNECTION  0x04 //Teste Connection - Uart Command
+#define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
+#define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
+#define CMD_GET_SENSOR_FIFO 0x07
+#define CMD_SET_PACKET_TYPE 0x08
+#define CMD_READ 0x09 //Request a packet of readings
+
+////////////////////////
+//Pacotes de leituras //
+////////////////////////
 #define PACKET_TYPE_ACEL      0x01
 #define PACKET_TYPE_GIRO      0x02
 #define PACKET_TYPE_MAG       0x03
@@ -18,6 +38,9 @@ mesma biblioteca. */
 #define PACKET_TYPE_FIFO_NO_MAG       0x07
 #define PACKET_TYPE_FIFO_ALL_READINGS     0x08
 
+///////////////////////////////////////////
+//Pacotes de Debug e comunicacao Diversa //
+///////////////////////////////////////////
 #define PACKET_TYPE_STRING    0x09
 #define PACKET_TYPE_HEX       0x0A
 #define PACKET_TYPE_BIN       0x0B
@@ -57,7 +80,12 @@ mesma biblioteca. */
 #define MOTIONAPPS_FIFO_I_GYRO_ZH 24 //Index of it in FIFO from DMP
 #define MOTIONAPPS_FIFO_I_GYRO_ZL 25 //Index of it in FIFO from DMP
 
-//TODO: Document
+/**
+ * Envia um pacote rf de acordo com os tipos definidoes em Pacotes de leituras
+ * Formato do pacote: [sensor_id] [tipo de pacote] [dados] [...]
+ * @param pkt_type    Tipo de definido acima nesta biblioteca
+ * @param fifo_buffer buffer da MPU_6050 de acordo com MotionApps library
+ */
 void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
   tx_buf[0] = MY_SUB_ADDR;
   tx_buf[1] = pkt_type;
@@ -191,5 +219,8 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
   }/*END of Switch packet type*/
 }
 
+//TODO: implement
+void send_rf_command(){
 
+}
 #endif
