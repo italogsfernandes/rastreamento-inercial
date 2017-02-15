@@ -166,7 +166,7 @@ void DataAcq(){
   }/*END for every packet*/
 }/*End of DataAcq*/
 
-//interrupção o I2C
+//interrupção do I2C
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL {
   I2C_IRQ_handler();
 }
