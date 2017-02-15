@@ -28,12 +28,13 @@ uint8_t body_sensors[16] = {
 uint16_t active_sensors = 0x00;//0000 0000 0000 0000
 
 
-//TODO: test
+/**
+ * Seta os pinos do nrf como saidas e entradas de acordo com as funcoes desejadas
+ */
 void iniciarIO(void){
    P0DIR = 0x00;   // Tudo output
    P1DIR = 0x00;   // Tudo output
    P0CON = 0x00; P1CON = 0x00; //Reseting PxCON registers
-
    P0DIR &= ~(1<<3);//P03 = Uart tx = output
    P0DIR |= 1<<4;//P04 = UART Rx = input
 }
