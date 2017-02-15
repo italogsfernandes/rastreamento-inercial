@@ -31,6 +31,11 @@ void send_cmd_to_active_sensors(uint8_t cmd2send);
  */
 void request_ack_from_sensors();
 
+/**
+ * Envia para os sensores ativos o comando para setar o tipo de pacote
+ * @param pkt_type tipo de pacote de acordo com library pacotes inerciais
+ */
+void set_packet_type(uint8_t pkt_type);
 
 ///////////////////
 //Implementation //
@@ -82,6 +87,8 @@ void main(){
           send_cmd_to_active_sensors(CMD_CALIBRATE);
           //TODO: send flag that all is done by sensors
           break;
+          case CMD_SET_PACKET_TYPE:
+          set_packet_type(hal_uart_getchar());
           default:
           //i don't know what to do here
           break;
@@ -133,6 +140,19 @@ void send_cmd_to_active_sensors(uint8_t cmd2send){
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
       send_rf_command(cmd2send,body_sensors[i]);//inicia os sensores
+    }
+  }
+}
+
+void set_packet_type(uint8_t pkt_type){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+    if(active_sensors & (1<<i)){//se esta ativo
+      tx_buf[0] = body_sensors[i];
+      tx_buf[1] = CMD_SET_PACKET_TYPE;
+      tx_buf[2] = pkt_type;
+      TX_Mode_NOACK(3);
+      RX_Mode();
     }
   }
 }

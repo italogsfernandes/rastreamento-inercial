@@ -10,23 +10,9 @@
 #include <nRF-SPIComands.h>
 #include <dmp.h>
 
-//Size of DMP packages
-#define PSDMP 42
-#define PS 20
-
 //Subenderecos usados no sistema
 #define HOST_SUB_ADDR 0xFF //Sub addr do host
 #define MY_SUB_ADDR 0x00 //Id do sensor
-
-#define CMD_OK  0x00 //Ack - Uart Command
-#define CMD_ERROR 0x01 //Error flag - Uart Command
-#define CMD_START 0x02 //Start Measuring - Uart Command
-#define CMD_STOP  0x03 //Stop Measuring - Uart Command
-#define CMD_CONNECTION  0x04 //Teste Connection - Uart Command
-#define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
-#define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
-#define CMD_GET_SENSOR_FIFO 0x07
-#define CMD_SET_PACKET_TYPE 0x08
 
 #define  STATUS_LED  P03
 
@@ -38,10 +24,31 @@
 #define DIS_MPU_CONNECTED_FLAG sensor_status |= ~0x02
 #define EN_SENSOR_ON_FLAG sensor_status &= 0x01
 #define DIS_SENSOR_ON_FLAG sensor_status |= ~0x01
+
 uint8_t sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
 uint8_t packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
 
-//TODO: Document
+////////////////////////
+//Functions in Sensor //
+////////////////////////
+
+/**
+ * Inicia a DMP, deve ser chamada durante a configuracao
+ */
+void initial_setup_dmp();
+
+/**
+ * Realiza uma leitura da fifo da dmp e envia para o host
+ */
+void DataAcq();
+
+///////////////////
+//Implementation //
+///////////////////
+
+/**
+ * Seta os pinos do nrf como saidas e entradas de acordo com as funcoes desejadas
+ */
 void iniciarIO(void){
   P0DIR = 0x00;   // Tudo output
   P1DIR = 0x00;   // Tudo output
@@ -53,7 +60,67 @@ void iniciarIO(void){
   P1CON |= 0x53; // All general I/O 0101 0011
 }
 
-//TODO:Document
+void setup() {
+  iniciarIO();
+  setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
+  rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
+  hal_w2_configure_master(HAL_W2_100KHZ); //I2C
+  initial_setup_dmp();//MPU_6050 and DPM
+  //Pisca o led 2 vezes indicando que iniciou
+  STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+  STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+}
+
+void main(void) {
+  setup();
+  while(1){ //Loop
+    ////////////////////
+    //Comunicacao RF //
+    ////////////////////
+    if(newPayload){
+      //verifica se o sinal eh direficionado para mim
+      if(rx_buf[0] == MY_SUB_ADDR){
+        switch(rx_buf[1]){
+          case CMD_READ:
+          DataAcq();
+          break;
+          case CMD_START:
+          resetFIFO();//Reset the sensor fifo
+          delay_ms(5);//wait reseting fifo
+          break;
+          case CMD_STOP:
+          //Pica o led uma vez indicando que parou
+          STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+          break;
+          case CMD_CALIBRATE:
+          start_T0();//Timer calibration
+          break;
+          case CMD_SET_PACKET_TYPE:
+          packet_type = rx_buf[2]; //Seta o tipo de pacote
+          default:
+          //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
+          STATUS_LED = !STATUS_LED;
+          break;
+        }/*END SWITCH*/
+      }/*END IF MY SUB ADDR*/
+      sta = 0;
+      newPayload = 0;
+    } /* END Comunicacao RF */
+
+    //////////////////////////
+    //TIMER for Calibration //
+    //////////////////////////
+    if(timer_elapsed){
+      calibrationRoutine();
+      timer_elapsed = 0;
+    }
+  }/*END LOOP*/
+}/*END MAIN*/
+
+///////////////////////
+//FUNCIONS in Sensor //
+///////////////////////
+
 void initial_setup_dmp(){
   mpu_8051_malloc_setup(); //Malloc pool for mpu library
 
@@ -81,61 +148,6 @@ void initial_setup_dmp(){
   }
 }
 
-//TODO: Document
-void setup() {
-  iniciarIO();
-  setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
-  rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
-  hal_w2_configure_master(HAL_W2_100KHZ); //I2C
-  initial_setup_dmp();//MPU_6050 and DPM
-  luzes_iniciais();
-}
-
-void main(void) {
-  setup();
-  while(1){ //Loop
-    ////////////////////
-    //Comunicacao RF //
-    ////////////////////
-    if(newPayload){
-      //verifica se o sinal eh direficionado para mim
-      if(rx_buf[0] == MY_SUB_ADDR){
-        switch(rx_buf[1]){
-          case CMD_GET_SENSOR_FIFO:
-          DataAcq();
-          break;
-          case CMD_START:
-          resetFIFO();//Reset the sensor fifo
-          delay_ms(5);//wait reseting fifo
-          break;
-          case CMD_STOP:
-          // '-'
-          break;
-          case CMD_CALIBRATE:
-          start_T0();//Timer calibration
-          break;
-          case CMD_SET_PACKET_TYPE:
-          packet_type = rx_buf[2]; //Seta o tipo de pacote
-          default:
-          //i don't know what to do here
-          break;
-        }/*END SWITCH*/
-      }/*END IF MY SUB ADDR*/
-      sta = 0;
-      newPayload = 0;
-    } /* END Comunicacao RF */
-
-    //////////////////////////
-    //TIMER for Calibration //
-    //////////////////////////
-    if(timer_elapsed){
-      calibrationRoutine();
-      timer_elapsed = 0;
-    }
-  }/*END LOOP*/
-}/*END MAIN*/
-
-//TODO: document
 void DataAcq(){
   uint8_t i = 0;
   numbPackets = getFIFOCount()/PSDMP;//floor

@@ -21,9 +21,8 @@ mesma biblioteca. */
 #define CMD_CONNECTION  0x04 //Teste Connection - Uart Command
 #define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
 #define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
-#define CMD_GET_SENSOR_FIFO 0x07
+#define CMD_READ 0x07 //Request a packet of readings
 #define CMD_SET_PACKET_TYPE 0x08
-#define CMD_READ 0x09 //Request a packet of readings
 
 ////////////////////////
 //Pacotes de leituras //
@@ -36,6 +35,10 @@ mesma biblioteca. */
 #define PACKET_TYPE_QUAT      0x06
 #define PACKET_TYPE_FIFO_NO_MAG       0x07
 #define PACKET_TYPE_FIFO_ALL_READINGS     0x08
+
+//Size of DMP packages
+#define PSDMP 42
+#define PS 20
 
 ///////////////////////////////////////////
 //Pacotes de Debug e comunicacao Diversa //
