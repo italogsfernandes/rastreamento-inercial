@@ -3,7 +3,6 @@
 #ifndef MPU_CALIBRATION_H
 #define MPU_CALIBRATION_H
 
-
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
 int16_t xdata ax, ay, az; //Accel
 int16_t xdata gx, gy, gz; //Gyro
@@ -29,6 +28,29 @@ uint8_t xdata calibOk = 0; //Variable for checking if every sensor is calibrated
  * 4th step: Keep looping through step 3 until the values are achieved
  * or the function runs for a specified amount of time
  */
+void calibrationRoutine();
+
+/**
+ * 1st step: Measuring data to estimate the first offsets
+ */
+void calibrationStepOne();
+
+/**
+ * Retorna o modulo de um numero inteiro. Necessaria para calibration step2
+ * @param  test_value numero para ser avaliado (int16_t)
+ * @return            modulo do numero
+ */
+int16_t MATH_ABS(int16_t test_value);
+
+/**
+ * 2nd step: Iteratively update the offsets for accurate readings
+ */
+void calibrationStepTwo();
+
+////////////
+//.C File //
+////////////
+
 void calibrationRoutine() {
   //Switch according to which step of the calibration should be performed
   switch (calibStep) {
@@ -41,9 +63,6 @@ void calibrationRoutine() {
   }
 }
 
-/**
- * 1st step: Measuring data to estimate the first offsets
- */
 void calibrationStepOne(){
   //First readings to measure the mean raw values from accel and gyro
   //Measures during 2 seconds
@@ -83,15 +102,8 @@ void calibrationStepOne(){
   }
 }
 
-/**
- * Retorna o modulo de um numero inteiro. Necessaria para calibration step2
- * @param  test_value numero para ser avaliado (int16_t)
- * @return            modulo do numero
- */
 int16_t MATH_ABS(int16_t test_value){  test_value<0?return (-test_value):return test_value;}
-/**
- * 2nd step: Iteratively update the offsets for accurate readings
- */
+
 void calibrationStepTwo(){
   //Reads the sensors during 1 second
   if(calibCounter <= sampFreq)

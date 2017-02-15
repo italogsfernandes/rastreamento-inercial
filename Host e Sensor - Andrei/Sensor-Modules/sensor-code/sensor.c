@@ -92,6 +92,15 @@ void main(void) {
           //Pica o led uma vez indicando que parou
           STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
           break;
+          case CMD_CONNECTION:
+          if(mpu_testConnection()){
+            EN_MPU_CONNECTED_FLAG;
+            send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
+          } else {
+            DIS_MPU_CONNECTED_FLAG;
+            send_rf_command(CMD_DISCONNECT,MY_SUB_ADDR);
+          }
+          break;
           case CMD_CALIBRATE:
           start_T0();//Timer calibration
           break;
