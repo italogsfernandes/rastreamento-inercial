@@ -82,6 +82,7 @@ mesma biblioteca. */
 //////////////////////
 //Functions headers //
 //////////////////////
+
 /**
  * Envia um pacote rf de acordo com os tipos definidoes em Pacotes de leituras
  * Formato do pacote: [sensor_id] [tipo de pacote] [dados] [...]
@@ -90,10 +91,17 @@ mesma biblioteca. */
  */
 void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer);
 
+/**
+ * Envia um pacote rf no seguinte formato: [Destinatario ID] [comando]
+ * @param cmd2send  Comando a ser enviado
+ * @param sensor_id Sub addr do destinatario
+ */
+void send_rf_command(uint8_t cmd2send, uint8_t sensor_id);
 
 ////////////
 //.C file //
 ////////////
+
 void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
   tx_buf[0] = MY_SUB_ADDR;
   tx_buf[1] = pkt_type;
@@ -225,10 +233,16 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
     //NOTE: ãanh,sorry?
     break;
   }/*END of Switch packet type*/
+  RX_Mode();
 }
 
-//TODO: implement
-void send_rf_command(){
-
+void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
+  tx_buf[0] = sensor_id;
+  tx_buf[1] = cmd2send;
+  TX_Mode_NOACK(2);
+  RX_Mode();
 }
+
+
+
 #endif
