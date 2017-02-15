@@ -42,8 +42,8 @@ void iniciarIO(void){
 void setup(){
   iniciarIO();
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
-  rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
   hal_uart_init(UART_BAUD_115K2);
+  rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
 }
 
 void main(){
