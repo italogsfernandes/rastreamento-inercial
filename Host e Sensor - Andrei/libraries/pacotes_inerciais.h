@@ -6,11 +6,10 @@ mesma biblioteca. */
 
 #include <nRF-SPIComands.h>
 
-/*
-UART Packet: Start Signal - Command
-*/
+
+//UART Packet: Start Signal - Command
 #define UART_START_SIGNAL  0x53
-#define UART_END_SIGNAL  0x04
+#define UART_END_SIGNAL  0x04 //TODO: figure out, it will really be used?
 
 /////////////
 //Comandos //
@@ -80,12 +79,21 @@ UART Packet: Start Signal - Command
 #define MOTIONAPPS_FIFO_I_GYRO_ZH 24 //Index of it in FIFO from DMP
 #define MOTIONAPPS_FIFO_I_GYRO_ZL 25 //Index of it in FIFO from DMP
 
+//////////////////////
+//Functions headers //
+//////////////////////
 /**
  * Envia um pacote rf de acordo com os tipos definidoes em Pacotes de leituras
  * Formato do pacote: [sensor_id] [tipo de pacote] [dados] [...]
  * @param pkt_type    Tipo de definido acima nesta biblioteca
  * @param fifo_buffer buffer da MPU_6050 de acordo com MotionApps library
  */
+void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer);
+
+
+////////////
+//.C file //
+////////////
 void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t fifo_buffer){
   tx_buf[0] = MY_SUB_ADDR;
   tx_buf[1] = pkt_type;
