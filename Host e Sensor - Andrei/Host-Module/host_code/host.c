@@ -1,4 +1,4 @@
-#include "reg24le1.h" //definicoes basicas de pinos
+#include "Nordic\reg24le1.h" //definicoes basicas de pinos
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_uart.h" //Comunicacao Serial Uart
 #include "timer0.h"
