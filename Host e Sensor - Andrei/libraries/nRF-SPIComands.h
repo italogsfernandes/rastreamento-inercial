@@ -1,6 +1,8 @@
 #ifndef NRF_SPICOMANDS_H
 #define NRF_SPICOMANDS_H
 
+#include "API.h"
+
 #define INTERRUPT_RFIRQ	9
 
 #define TX_ADR_WIDTH    5   	// 5 bytes TX(RX) address width

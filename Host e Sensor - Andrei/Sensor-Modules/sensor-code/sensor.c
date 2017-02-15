@@ -1,14 +1,12 @@
 #include "nrf24le1.h"
-#include "stdint.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
-#include "stdbool.h" //Booleanos
-#include "API.h"
-#include <pacotes_inerciais.h>
-#include "hal_w2_isr.h"
-#include "hal_delay.h"
-#include <simple_timer.h>
-#include <nRF-SPIComands.h>
-#include <dmp.h>
+
+#include "nRF-SPIComands.h" //Comunicacao RF
+#include "hal_w2_isr.h" //Comunicacao I2C
+#include "hal_delay.h" //delay
+#include "timer0.h" //timer calibracao
+#include "pacotes_inerciais.h" //pacotes para enviar
+#include "dmp.h" //configuracao e uso da dmp da mpu6050
 
 //Subenderecos usados no sistema
 #define HOST_SUB_ADDR 0xFF //Sub addr do host
