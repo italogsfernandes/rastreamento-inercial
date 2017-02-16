@@ -106,6 +106,22 @@ void main(void) {
           }
           break;
           case CMD_CALIBRATE:
+          send_rf_command(CMD_OK,MY_SUB_ADDR);
+          //Configures the accel offsets to zero
+          setXAccelOffset(0);
+          setYAccelOffset(0);
+          setZAccelOffset(0);
+          //Configures the gyro offsets to zero
+          setXGyroOffset(0);
+          setYGyroOffset(0);
+          setZGyroOffset(0);
+          //Variables that needs to be cleared for calibration
+          calibIt = 0;
+          calibCounter = 0;
+          calibStep = 1;
+          //Small delay
+          delay_ms(50);
+          //Triggers the calibration method
           start_T0();//Timer calibration
           break;
           case CMD_SET_PACKET_TYPE:

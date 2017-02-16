@@ -19,7 +19,7 @@
 
 #define rf_RX 10 //where the TX cable must be connected TX -> RX
 #define rf_TX 11 //where the RX cable must be connected RX -> TX
-#define rf_baudrate 115200 //baudrate do serial do nrf
+#define rf_baudrate 9600 //baudrate do serial do nrf
 
 SoftwareSerial rfSerial(rf_RX, rf_TX); // RX, TX
 
