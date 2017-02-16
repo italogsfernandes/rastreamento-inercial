@@ -9,7 +9,7 @@ mesma biblioteca. */
 
 //Subenderecos usados no sistema
 #define HOST_SUB_ADDR 0xFF //Sub addr do host
-#define MY_SUB_ADDR 0x00 //Id do sensor
+
 
 //UART Packet: Start Signal - Command
 #define UART_START_SIGNAL  0x53
@@ -27,6 +27,7 @@ mesma biblioteca. */
 #define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
 #define CMD_READ 0x07 //Request a packet of readings
 #define CMD_SET_PACKET_TYPE 0x08
+#define CMD_GET_ACTIVE_SENSORS 0x09 //Retorna a variavel do host active sensors
 
 ////////////////////////
 //Pacotes de leituras //
@@ -101,8 +102,9 @@ mesma biblioteca. */
  * Formato do pacote: [sensor_id] [tipo de pacote] [dados] [...]
  * @param pkt_type    Tipo de definido acima nesta biblioteca
  * @param fifo_buffer buffer da MPU_6050 de acordo com MotionApps library
+ * @param my_sub_addr Sub endereco do sensor q esta a enviar o pacote
  */
-void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer);
+void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer, uint8_t my_sub_addr);
 
 /**
  * Envia um pacote rf no seguinte formato: [Destinatario ID] [comando]
@@ -115,8 +117,8 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id);
 //.C file //
 ////////////
 
-void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer){
-  tx_buf[0] = MY_SUB_ADDR;
+void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer, uint8_t my_sub_addr){
+  tx_buf[0] = my_sub_addr;
   tx_buf[1] = pkt_type;
   switch (pkt_type) {
     case PACKET_TYPE_ACEL://Acelerometer [X][Y][Z]
@@ -195,7 +197,6 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer){
     tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
     TX_Mode_NOACK(10);
     break;
-   
     default:
     //NOTE: ãanh,sorry?
     break;
@@ -213,10 +214,10 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
 //TODO: organizar e documentar
 
 //Packet Type | Sensor id |  ... | data | ... |
-void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
+void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len, uint8_t my_sub_addr){
 	unsigned int i;
   tx_buf[0] = packet_type;
-	tx_buf[1] = MY_SUB_ADDR;
+	tx_buf[1] = my_sub_addr;
 	for(i=2; i<data_len+2; i++){
 		tx_buf[i] = data_to_send[i-2];
 	}
@@ -236,14 +237,23 @@ void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t
 		}
 	hal_uart_putchar(UART_END_SIGNAL);
 }
-
 //Start signal | Packet Type | Packet Length | ... | data | ... | End signal
-void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
+void redirect_rf_pkt_to_serial(uint8_t *data_to_send, uint8_t data_len){
+	unsigned int i;
+	hal_uart_putchar(UART_START_SIGNAL);
+	hal_uart_putchar(data_len);
+	for(i=0; i<data_len; i++){
+		hal_uart_putchar(data_to_send[i]);
+	}
+	hal_uart_putchar(UART_END_SIGNAL);//TODO: revise end
+}
+//Start signal | Packet Type | Packet Length | ... | data | ... | End signal
+void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len,uint8_t my_sub_addr){
 	unsigned int i;
     hal_uart_putchar(UART_START_SIGNAL);
     hal_uart_putchar(packet_type);
     hal_uart_putchar(data_len+1);
-		hal_uart_putchar(MY_SUB_ADDR);
+		hal_uart_putchar(my_sub_addr);
 	for(i=0; i<data_len; i++){
 		hal_uart_putchar(data_to_send[i]);
 	}
