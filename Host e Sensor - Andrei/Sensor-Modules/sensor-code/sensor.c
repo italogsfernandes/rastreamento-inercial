@@ -9,7 +9,7 @@
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
 
 //Subenderecos usados no sistema
-//TODO: think about sub addr
+#define MY_SUB_ADDR 0x01 //Sub addr do host
 
 #define  STATUS_LED  P03
 
@@ -22,8 +22,8 @@
 #define EN_SENSOR_ON_FLAG sensor_status &= 0x01
 #define DIS_SENSOR_ON_FLAG sensor_status |= ~0x01
 
-uint8_t sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
-uint8_t packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
+uint8_t xdata sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
+uint8_t xdata packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
 uint8_t xdata fifoBuffer[42] = {0};
 
 ////////////////////////
@@ -33,12 +33,12 @@ uint8_t xdata fifoBuffer[42] = {0};
 /**
  * Inicia a DMP, deve ser chamada durante a configuracao
  */
-void initial_setup_dmp();
+void initial_setup_dmp() large;
 
 /**
  * Realiza uma leitura da fifo da dmp e envia para o host
  */
-void DataAcq();
+void DataAcq() large;
 
 ///////////////////
 //Implementation //
@@ -60,6 +60,7 @@ void iniciarIO(void){
 
 void setup() {
   iniciarIO();
+	STATUS_LED = 1; delay_ms(100); STATUS_LED = 0;
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
   rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
   hal_w2_configure_master(HAL_W2_100KHZ); //I2C
@@ -67,6 +68,7 @@ void setup() {
   //Pisca o led 2 vezes indicando que iniciou
   STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
   STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+	send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
 }
 
 void main(void) {
@@ -76,42 +78,53 @@ void main(void) {
     //Comunicacao RF //
     ////////////////////
     if(newPayload){
-      //verifica se o sinal eh direficionado para mim
+			sta = 0;
+      newPayload = 0;
+		  //verifica se o sinal eh direficionado para mim
       if(rx_buf[0] == MY_SUB_ADDR){
-        switch(rx_buf[1]){
+					STATUS_LED = !STATUS_LED;
+					switch(rx_buf[1]){
           case CMD_READ:
           DataAcq();
           break;
           case CMD_START:
           resetFIFO();//Reset the sensor fifo
           delay_ms(5);//wait reseting fifo
+					STATUS_LED = 1;
           break;
           case CMD_STOP:
           //Pica o led uma vez indicando que parou
           STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
           break;
           case CMD_CONNECTION:
+					send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
+					/*
           if(mpu_testConnection()){
             EN_MPU_CONNECTED_FLAG;
             send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
           } else {
             DIS_MPU_CONNECTED_FLAG;
             send_rf_command(CMD_DISCONNECT,MY_SUB_ADDR);
-          }
+          }*/
+					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
           break;
           case CMD_CALIBRATE:
           start_T0();//Timer calibration
           break;
           case CMD_SET_PACKET_TYPE:
           packet_type = rx_buf[2]; //Seta o tipo de pacote
+					break;
           default:
           //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
           STATUS_LED = !STATUS_LED;
+					delay_ms(500);
+					STATUS_LED = !STATUS_LED;
+					delay_ms(500);
           break;
         }/*END SWITCH*/
       }/*END IF MY SUB ADDR*/
-      sta = 0;
-      newPayload = 0;
     } /* END Comunicacao RF */
 
     //////////////////////////
@@ -128,7 +141,7 @@ void main(void) {
 //FUNCIONS in Sensor //
 ///////////////////////
 
-void initial_setup_dmp(){
+void initial_setup_dmp() large {
 	uint8_t ret;
   mpu_8051_malloc_setup(); //Malloc pool for mpu library
 
@@ -158,13 +171,13 @@ void initial_setup_dmp(){
   }
 }
 
-void DataAcq(){
+void DataAcq() large {
   uint8_t i = 0;
   uint8_t numbPackets;
 	numbPackets = getFIFOCount()/PSDMP;//floor
   for (i = 0; i < numbPackets; i++) {
     getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-    send_inertial_packet_by_rf(packet_type,fifoBuffer);
+    send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
   }/*END for every packet*/
 }/*End of DataAcq*/
 

@@ -5,6 +5,7 @@
 #include "timer0.h"
 #include "pacotes_inerciais.h"
 
+#define MY_SUB_ADDR HOST_SUB_ADDR //Id do sensor
 #define Aquire_Freq 100
 
 //Subenderecos dos sensores possiveis de existir na rede
@@ -55,8 +56,21 @@ void iniciarIO(void){
 void setup(){
   iniciarIO();
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
-  hal_uart_init(UART_BAUD_115K2);
+  hal_uart_init(UART_BAUD_9K6);
   rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
+	P06 = 1;delay_ms(500);
+	P06 = 0;delay_ms(500);
+	P06 = 1;delay_ms(500);
+	P06 = 0;delay_ms(500);
+	hal_uart_putchar('i');
+	hal_uart_putchar('n');
+	hal_uart_putchar('i');
+	hal_uart_putchar('c');
+	hal_uart_putchar('i');
+	hal_uart_putchar('a');
+	hal_uart_putchar('d');
+	hal_uart_putchar('o');
+	hal_uart_putchar('\n');
 }
 
 void main(){
@@ -81,6 +95,7 @@ void main(){
           hal_uart_putchar(CMD_OK);//Return ok
           break;
           case CMD_CONNECTION:
+					P06 = !P06;
           request_ack_from_sensors();
           break;
           case CMD_CALIBRATE:
@@ -89,6 +104,10 @@ void main(){
           break;
           case CMD_SET_PACKET_TYPE:
           set_packet_type(hal_uart_getchar());
+					break;
+					case CMD_GET_ACTIVE_SENSORS:
+					hal_uart_putchar(active_sensors);
+					break;
           default:
           //i don't know what to do here
           break;
@@ -101,7 +120,7 @@ void main(){
     ///////////////////
     if(newPayload){
       //bridge, only redirect the packet to serial
-      send_packet_to_computer(rx_buf[0], rx_buf, payloadWidth-1);
+			redirect_rf_pkt_to_serial(rx_buf, payloadWidth);
       switch (rx_buf[1]) {
         case CMD_CONNECTION://sensor alive and responding
           active_sensors |= 1<<rx_buf[0];
