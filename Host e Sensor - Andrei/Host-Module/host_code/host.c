@@ -30,13 +30,17 @@ void send_cmd_to_active_sensors(uint8_t cmd2send);
  * Requisita que todos os sensores possiveis retornem ack,
  * com isso é possivel listar os sensores ativos (active_sensors)
  */
-void request_ack_from_sensors();
+//void request_ack_from_sensors();
 
 /**
  * Envia para os sensores ativos o comando para setar o tipo de pacote
  * @param pkt_type tipo de pacote de acordo com library pacotes inerciais
  */
-void set_packet_type(uint8_t pkt_type);
+//void set_packet_type(uint8_t pkt_type);
+
+void send_cmd_to_all_addrs(uint8_t cmd2send);
+//TODO: organizar
+void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send);
 
 ///////////////////
 //Implementation //
@@ -85,31 +89,51 @@ void main(){
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
-          send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
-          delay_ms(10); //Wait 5 miliseconds
+          //send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
+					send_rf_command(CMD_START,BROADCAST_ADDR);
+          delay_ms(10); //Wait for at least 5 miliseconds
           start_T0();//Start Timer Aquisition
+					P06 = 1;
           break;
           case CMD_STOP:
           stop_T0();//Stop Timer
-          send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
-          hal_uart_putchar(CMD_OK);//Return ok
+          //send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
+          send_rf_command(CMD_STOP,BROADCAST_ADDR);
+					hal_uart_putchar(CMD_OK);//Return ok
+					P06 = 0;
           break;
           case CMD_CONNECTION:
-					P06 = !P06;
-          request_ack_from_sensors();
+          //send_cmd_to_all_addrs(CMD_CONNECTION);
+					send_rf_command(CMD_CONNECTION,BROADCAST_ADDR);
           break;
           case CMD_CALIBRATE:
-          send_cmd_to_active_sensors(CMD_CALIBRATE);
-          //TODO: send flag that all is done by sensors
+          //send_cmd_to_all_addrs(CMD_CALIBRATE);
+					send_rf_command(CMD_CALIBRATE,BROADCAST_ADDR);
           break;
           case CMD_SET_PACKET_TYPE:
-          set_packet_type(hal_uart_getchar());
+          //send_cmd_to_all_addrs_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar());
+					send_rf_command_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar(),BROADCAST_ADDR);
 					break;
 					case CMD_GET_ACTIVE_SENSORS:
 					hal_uart_putchar(active_sensors);
 					break;
+					case CMD_TEST_RF_CONNECTION:
+					//send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
+					send_rf_command(CMD_TEST_RF_CONNECTION,BROADCAST_ADDR);
+					break;
+					case CMD_LIGHT_UP_LED:
+					//send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
+					send_rf_command(CMD_LIGHT_UP_LED,BROADCAST_ADDR);
+					P06 = 1;
+					break;
+					case CMD_TURN_OFF_LED:
+					//send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
+					send_rf_command(CMD_TURN_OFF_LED,BROADCAST_ADDR);
+					P06 = 0;
+					break;
           default:
-          //i don't know what to do here
+          //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
+          P06 = !P06;
           break;
         } /*END SWITCH*/
       } /*END IF START COMMAND*/
@@ -137,8 +161,10 @@ void main(){
     //TIMER //
     //////////
     if(timer_elapsed){
-      send_cmd_to_active_sensors(CMD_READ);
+      //send_cmd_to_active_sensors(CMD_READ);
+			send_rf_command(CMD_READ,BROADCAST_ADDR);
       timer_elapsed = 0;
+			P06 = !P06;
     }
   } /*END INFINITE LOOP*/
 } /*END MAIN FUNCTION*/
@@ -147,10 +173,18 @@ void main(){
 //FUNCIONS in Host //
 /////////////////////
 
-void request_ack_from_sensors(){
-  uint8_t i = 0;
-  for (i = 0; i < 16; i++) {
-    send_rf_command(CMD_CONNECTION,body_sensors[i]);
+//TODO: organizar
+void send_cmd_to_all_addrs(uint8_t cmd2send){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+		send_rf_command(cmd2send,body_sensors[i]);//asdasd
+  }
+}
+//TODO: organizar
+void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+		send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);//asdasd
   }
 }
 
@@ -163,15 +197,3 @@ void send_cmd_to_active_sensors(uint8_t cmd2send){
   }
 }
 
-void set_packet_type(uint8_t pkt_type){
-  uint8_t i;
-  for (i = 0; i < 16; i++) { //para cada sensor possivel
-    if(active_sensors & (1<<i)){//se esta ativo
-      tx_buf[0] = body_sensors[i];
-      tx_buf[1] = CMD_SET_PACKET_TYPE;
-      tx_buf[2] = pkt_type;
-      TX_Mode_NOACK(3);
-      RX_Mode();
-    }
-  }
-}

@@ -1,3 +1,6 @@
+//Subenderecos usados no sistema
+#define MY_SUB_ADDR 0x01 
+
 #include "nrf24le1.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
 #include "mpu_calibration.h"
@@ -7,9 +10,6 @@
 #include "timer0.h" //timer calibracao
 #include "pacotes_inerciais.h" //pacotes para enviar
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
-
-//Subenderecos usados no sistema
-#define MY_SUB_ADDR 0x01 //Sub addr do host
 
 #define  STATUS_LED  P03
 
@@ -68,7 +68,7 @@ void setup() {
   //Pisca o led 2 vezes indicando que iniciou
   STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
   STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-	send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
+
 }
 
 void main(void) {
@@ -81,8 +81,7 @@ void main(void) {
 			sta = 0;
       newPayload = 0;
 		  //verifica se o sinal eh direficionado para mim
-      if(rx_buf[0] == MY_SUB_ADDR){
-					STATUS_LED = !STATUS_LED;
+      if(rx_buf[0] == MY_SUB_ADDR || rx_buf[0] == BROADCAST_ADDR){
 					switch(rx_buf[1]){
           case CMD_READ:
           DataAcq();
@@ -93,22 +92,18 @@ void main(void) {
 					STATUS_LED = 1;
           break;
           case CMD_STOP:
-          //Pica o led uma vez indicando que parou
-          STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+          //Pica o led uma vez indicando que parou e termina com o led desligado
+          STATUS_LED = !STATUS_LED; delay_ms(500); STATUS_LED = !STATUS_LED; delay_ms(500);
+					STATUS_LED = 0;
           break;
           case CMD_CONNECTION:
-					send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
-					/*
           if(mpu_testConnection()){
             EN_MPU_CONNECTED_FLAG;
-            send_rf_command(CMD_CONNECTION,MY_SUB_ADDR);
+            send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
           } else {
             DIS_MPU_CONNECTED_FLAG;
-            send_rf_command(CMD_DISCONNECT,MY_SUB_ADDR);
-          }*/
-					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-					STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+            send_rf_command_with_arg(CMD_CONNECTION,CMD_ERROR,MY_SUB_ADDR);
+          }
           break;
           case CMD_CALIBRATE:
           start_T0();//Timer calibration
@@ -116,12 +111,19 @@ void main(void) {
           case CMD_SET_PACKET_TYPE:
           packet_type = rx_buf[2]; //Seta o tipo de pacote
 					break;
+					case CMD_TEST_RF_CONNECTION:
+					send_rf_command_with_arg(CMD_TEST_RF_CONNECTION,CMD_OK,MY_SUB_ADDR);
+					break;
+					case CMD_LIGHT_UP_LED:
+					STATUS_LED = 1;
+					break;
+					case CMD_TURN_OFF_LED:
+					STATUS_LED = 0;
+					break;
           default:
           //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
-          STATUS_LED = !STATUS_LED;
-					delay_ms(500);
-					STATUS_LED = !STATUS_LED;
-					delay_ms(500);
+					 STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+          //STATUS_LED = !STATUS_LED;
           break;
         }/*END SWITCH*/
       }/*END IF MY SUB ADDR*/
@@ -131,6 +133,7 @@ void main(void) {
     //TIMER for Calibration //
     //////////////////////////
     if(timer_elapsed){
+			STATUS_LED = !STATUS_LED;
       calibrationRoutine();
       timer_elapsed = 0;
     }
@@ -147,6 +150,7 @@ void initial_setup_dmp() large {
 
   if(mpu_testConnection()){
     EN_MPU_CONNECTED_FLAG;
+		send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
     mpu_initialize(); //Initializes the IMU
 
 		ret =  dmpInitialize();  //Initializes the DMP
@@ -165,8 +169,7 @@ void initial_setup_dmp() large {
     }
     else
     {
-			//TODO_implement
-			send_rf_command(CMD_ERROR,MY_SUB_ADDR);
+			send_rf_command_with_arg(CMD_CONNECTION,CMD_ERROR,MY_SUB_ADDR);
     }
   }
 }

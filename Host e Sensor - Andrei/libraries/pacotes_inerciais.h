@@ -9,7 +9,7 @@ mesma biblioteca. */
 
 //Subenderecos usados no sistema
 #define HOST_SUB_ADDR 0xFF //Sub addr do host
-
+#define BROADCAST_ADDR 0xFE //Sub addr that all sensors will respond
 
 //UART Packet: Start Signal - Command
 #define UART_START_SIGNAL  0x53
@@ -28,6 +28,9 @@ mesma biblioteca. */
 #define CMD_READ 0x07 //Request a packet of readings
 #define CMD_SET_PACKET_TYPE 0x08
 #define CMD_GET_ACTIVE_SENSORS 0x09 //Retorna a variavel do host active sensors
+#define CMD_TEST_RF_CONNECTION 0x0A
+#define CMD_LIGHT_UP_LED 0x0B
+#define CMD_TURN_OFF_LED 0x0C
 
 ////////////////////////
 //Pacotes de leituras //
@@ -208,6 +211,14 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
   tx_buf[0] = sensor_id;
   tx_buf[1] = cmd2send;
   TX_Mode_NOACK(2);
+  RX_Mode();
+}
+//TODO: document
+void send_rf_command_with_arg(uint8_t cmd2send,uint8_t agr2send, uint8_t sensor_id){
+  tx_buf[0] = sensor_id;
+  tx_buf[1] = cmd2send;
+	tx_buf[2] = agr2send;
+  TX_Mode_NOACK(3);
   RX_Mode();
 }
 

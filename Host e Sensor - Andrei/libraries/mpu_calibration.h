@@ -3,6 +3,7 @@
 
 #include <timer0.h>
 #include <dmp.h>
+#include <pacotes_inerciais.h>
 
 #define Aquire_Freq 100
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
@@ -158,6 +159,7 @@ void calibrationStepTwo(){
     {
       stop_T0();
       //TODO: send some signal that calibration is done and the values
+			send_rf_command_with_arg(CMD_CALIBRATE,CMD_OK,MY_SUB_ADDR);
       //EN_MPU_CALIBRATED_FLAG;
     }
     else
