@@ -50,9 +50,31 @@ int16_t MATH_ABS(int16_t test_value);
  */
 void calibrationStepTwo();
 
+//TODO: document
+void init_calibration();
+
 ////////////
 //.C File //
 ////////////
+
+void init_calibration(){
+	//Configures the accel offsets to zero
+	setXAccelOffset(0);
+	setYAccelOffset(0);
+	setZAccelOffset(0);
+	//Configures the gyro offsets to zero
+	setXGyroOffset(0);
+	setYGyroOffset(0);
+	setZGyroOffset(0);
+	//Variables that needs to be cleared for calibration
+	calibIt = 0;
+	calibCounter = 0;
+	calibStep = 1;
+	//Small delay
+	delay_ms(50);
+	//Triggers the calibration method
+	start_T0();//Timer calibration
+}
 
 void calibrationRoutine() {
   //Switch according to which step of the calibration should be performed

@@ -87,6 +87,9 @@ void main(){
     if(hal_uart_chars_available()){
       if(hal_uart_getchar() == UART_START_SIGNAL){ //first byte should be start
         switch (hal_uart_getchar()) { //the actual command
+					case CMD_READ:
+					send_rf_command(CMD_READ,BROADCAST_ADDR);
+					break;
           case CMD_START:
           hal_uart_putchar(CMD_OK);
           //send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
