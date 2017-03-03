@@ -1,9 +1,11 @@
-#include<dmp.h>
-
 #ifndef MPU_CALIBRATION_H
 #define MPU_CALIBRATION_H
 
+#include <timer0.h>
+#include <dmp.h>
+#include <pacotes_inerciais.h>
 
+#define Aquire_Freq 100
 //Variables for storing raw data from accelerometers gyroscope and magnetometer
 int16_t xdata ax, ay, az; //Accel
 int16_t xdata gx, gy, gz; //Gyro
@@ -12,9 +14,9 @@ int16_t xdata mx, my, mz; //Mag
 uint8_t xdata calibIt = 0; //Counter for the number of iterations in calibration
 uint8_t xdata calibCounter = 0; //Counter for the number of samples read during calibration
 uint8_t xdata calibStep = 1; //Determines whichs step of the calibration should be performed
-uint8_t xdata accelTol = 0; //Error tolerance for accelerometer readings
-uint8_t xdata gyroTol = 0; //Error tolerance for gyroscope readings
-uint8_t xdata timeTol = 10; //Maximum duration of the calibration process (seconds)
+#define accelTol  8 //Error tolerance for accelerometer readings
+#define gyroTol  2 //Error tolerance for gyroscope readings
+#define timeTol  10 //Maximum duration of the calibration process (seconds)
 int16_t xdata accelBuffer[3] = {0,0,0}; //Buffer to store the mean values from accel
 int16_t xdata gyroBuffer[3] = {0,0,0};  //Buffer to store the mean values from gyro
 uint8_t xdata calibOk = 0; //Variable for checking if every sensor is calibrated
@@ -29,6 +31,29 @@ uint8_t xdata calibOk = 0; //Variable for checking if every sensor is calibrated
  * 4th step: Keep looping through step 3 until the values are achieved
  * or the function runs for a specified amount of time
  */
+void calibrationRoutine();
+
+/**
+ * 1st step: Measuring data to estimate the first offsets
+ */
+void calibrationStepOne();
+
+/**
+ * Retorna o modulo de um numero inteiro. Necessaria para calibration step2
+ * @param  test_value numero para ser avaliado (int16_t)
+ * @return            modulo do numero
+ */
+int16_t MATH_ABS(int16_t test_value);
+
+/**
+ * 2nd step: Iteratively update the offsets for accurate readings
+ */
+void calibrationStepTwo();
+
+////////////
+//.C File //
+////////////
+
 void calibrationRoutine() {
   //Switch according to which step of the calibration should be performed
   switch (calibStep) {
@@ -41,13 +66,10 @@ void calibrationRoutine() {
   }
 }
 
-/**
- * 1st step: Measuring data to estimate the first offsets
- */
 void calibrationStepOne(){
   //First readings to measure the mean raw values from accel and gyro
   //Measures during 2 seconds
-  if(calibCounter < sampFreq*2)
+  if(calibCounter < Aquire_Freq*2)
   {
     //Reads the imu sensors
     getMotion6_variables(&ax, &ay, &az, &gx, &gy, &gz);
@@ -83,18 +105,17 @@ void calibrationStepOne(){
   }
 }
 
-/**
- * Retorna o modulo de um numero inteiro. Necessaria para calibration step2
- * @param  test_value numero para ser avaliado (int16_t)
- * @return            modulo do numero
- */
-int16_t MATH_ABS(int16_t test_value){  test_value<0?return (-test_value):return test_value;}
-/**
- * 2nd step: Iteratively update the offsets for accurate readings
- */
+int16_t MATH_ABS(int16_t test_value){
+	if(test_value<0){
+		return (-test_value);
+	} else {
+		return test_value;
+	}
+}
+
 void calibrationStepTwo(){
   //Reads the sensors during 1 second
-  if(calibCounter <= sampFreq)
+  if(calibCounter <= Aquire_Freq)
   {
     //Reads the imu sensors
     getMotion6_variables(&ax, &ay, &az, &gx, &gy, &gz);
@@ -112,7 +133,7 @@ void calibrationStepTwo(){
   {
     //Variable for checking if every sensor is calibrated
     //A sensor is calibrated if its mean value is below the tolerance
-    calibok = 0;
+    calibOk = 0;
 
     //Accel-X
     if(MATH_ABS(accelBuffer[0]) < accelTol) calibOk++;
@@ -138,7 +159,8 @@ void calibrationStepTwo(){
     {
       stop_T0();
       //TODO: send some signal that calibration is done and the values
-      EN_MPU_CALIBRATED_FLAG;
+			send_rf_command_with_arg(CMD_CALIBRATE,CMD_OK,MY_SUB_ADDR);
+      //EN_MPU_CALIBRATED_FLAG;
     }
     else
     {

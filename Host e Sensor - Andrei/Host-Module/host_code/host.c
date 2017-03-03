@@ -1,39 +1,58 @@
-#include "reg24le1.h" //definicoes basicas de pinos
+#include "Nordic\reg24le1.h" //definicoes basicas de pinos
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_uart.h" //Comunicacao Serial Uart
+#include "hal_delay.h"
 #include "timer0.h"
+#include "pacotes_inerciais.h"
 
+#define MY_SUB_ADDR HOST_SUB_ADDR //Id do sensor
 #define Aquire_Freq 100
-//Subenderecos usados na rede
-#define HOST_SUB_ADDR 0xFF
 
-/*
-UART Packet: Start Signal - Command
-*/
-#define UART_START 0x00
-
-#define CMD_OK  0x00 //Ack - Uart Command
-#define CMD_ERROR 0x01 //Error flag - Uart Command
-#define CMD_START 0x02 //Start Measuring - Uart Command
-#define CMD_STOP  0x03 //Stop Measuring - Uart Command
-#define CMD_CONNECTION  0x04 //Teste Connection - Uart Command
-#define CMD_CALIBRATE 0x05 //Calibrate Sensors Command
-#define CMD_DISCONNECT 0x06 //Some sensor has gone disconected
-#define CMD_GET_SENSOR_FIFO 0x07
-#define CMD_SET_PACKET_TYPE 0x08
-
+//Subenderecos dos sensores possiveis de existir na rede
 uint8_t body_sensors[16] = {
   0x00,0x01,0x02,0x03,0x04,0x05,0x06,0x07,
   0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F};
+//Cada bit representa se um sensor esta ativo na rede ou não
 uint16_t active_sensors = 0x00;//0000 0000 0000 0000
 
+//////////////////////
+//Functions in Host //
+//////////////////////
 
-//TODO: test
+/**
+ * Envia um dado comando cada sensor listado como ativo.
+ * Utilize request_ack_from_sensors para listar sensores.
+ * @param cmd2send comando que se deseja enviar
+ */
+void send_cmd_to_active_sensors(uint8_t cmd2send);
+
+/**
+ * Requisita que todos os sensores possiveis retornem ack,
+ * com isso é possivel listar os sensores ativos (active_sensors)
+ */
+//void request_ack_from_sensors();
+
+/**
+ * Envia para os sensores ativos o comando para setar o tipo de pacote
+ * @param pkt_type tipo de pacote de acordo com library pacotes inerciais
+ */
+//void set_packet_type(uint8_t pkt_type);
+
+void send_cmd_to_all_addrs(uint8_t cmd2send);
+//TODO: organizar
+void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send);
+
+///////////////////
+//Implementation //
+///////////////////
+
+/**
+ * Seta os pinos do nrf como saidas e entradas de acordo com as funcoes desejadas
+ */
 void iniciarIO(void){
    P0DIR = 0x00;   // Tudo output
    P1DIR = 0x00;   // Tudo output
    P0CON = 0x00; P1CON = 0x00; //Reseting PxCON registers
-
    P0DIR &= ~(1<<3);//P03 = Uart tx = output
    P0DIR |= 1<<4;//P04 = UART Rx = input
 }
@@ -41,50 +60,91 @@ void iniciarIO(void){
 void setup(){
   iniciarIO();
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
+  hal_uart_init(UART_BAUD_9K6);
   rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
-  hal_uart_init(UART_BAUD_115K2);
+	P06 = 1;delay_ms(500);
+	P06 = 0;delay_ms(500);
+	P06 = 1;delay_ms(500);
+	P06 = 0;delay_ms(500);
+	hal_uart_putchar('i');
+	hal_uart_putchar('n');
+	hal_uart_putchar('i');
+	hal_uart_putchar('c');
+	hal_uart_putchar('i');
+	hal_uart_putchar('a');
+	hal_uart_putchar('d');
+	hal_uart_putchar('o');
+	hal_uart_putchar('\n');
 }
 
 void main(){
   setup();
   while(1){ //Loop
+
     /////////////////////
     //Comunicao Serial //
     /////////////////////
     if(hal_uart_chars_available()){
-      if(hal_uart_getchar() == UART_START){ //first byte should be start
+      if(hal_uart_getchar() == UART_START_SIGNAL){ //first byte should be start
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
-          send_start_to_sensors();//Reset FIFO inside sensors
-          delay_ms(5); //Wait 5 miliseconds
+          //send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
+					send_rf_command(CMD_START,BROADCAST_ADDR);
+          delay_ms(10); //Wait for at least 5 miliseconds
           start_T0();//Start Timer Aquisition
+					P06 = 1;
           break;
           case CMD_STOP:
           stop_T0();//Stop Timer
-          send_start_to_sensors();//Send Stop to sensors
-          //TODO: reaction to stop signal in sensors
-          hal_uart_putchar(CMD_OK);//Return ok
+          //send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
+          send_rf_command(CMD_STOP,BROADCAST_ADDR);
+					hal_uart_putchar(CMD_OK);//Return ok
+					P06 = 0;
           break;
           case CMD_CONNECTION:
-          request_ack_from_sensors();
+          //send_cmd_to_all_addrs(CMD_CONNECTION);
+					send_rf_command(CMD_CONNECTION,BROADCAST_ADDR);
           break;
           case CMD_CALIBRATE:
-          send_rf_command(CMD_CALIBRATE,active_sensors);
-          //TODO: send flag that all is done by sensors
+          //send_cmd_to_all_addrs(CMD_CALIBRATE);
+					send_rf_command(CMD_CALIBRATE,BROADCAST_ADDR);
           break;
+          case CMD_SET_PACKET_TYPE:
+          //send_cmd_to_all_addrs_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar());
+					send_rf_command_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar(),BROADCAST_ADDR);
+					break;
+					case CMD_GET_ACTIVE_SENSORS:
+					hal_uart_putchar(active_sensors);
+					break;
+					case CMD_TEST_RF_CONNECTION:
+					//send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
+					send_rf_command(CMD_TEST_RF_CONNECTION,BROADCAST_ADDR);
+					break;
+					case CMD_LIGHT_UP_LED:
+					//send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
+					send_rf_command(CMD_LIGHT_UP_LED,BROADCAST_ADDR);
+					P06 = 1;
+					break;
+					case CMD_TURN_OFF_LED:
+					//send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
+					send_rf_command(CMD_TURN_OFF_LED,BROADCAST_ADDR);
+					P06 = 0;
+					break;
           default:
-          //i don't know what to do here
+          //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
+          P06 = !P06;
           break;
         } /*END SWITCH*/
       } /*END IF START COMMAND*/
     } /*END IF UART AVAILABLE*/
+
     ///////////////////
     //Comunicacao RF //
     ///////////////////
     if(newPayload){
       //bridge, only redirect the packet to serial
-      send_packet_to_computer(rx_buf[0], rx_buf, payloadWidth-1);
+			redirect_rf_pkt_to_serial(rx_buf, payloadWidth);
       switch (rx_buf[1]) {
         case CMD_CONNECTION://sensor alive and responding
           active_sensors |= 1<<rx_buf[0];
@@ -96,49 +156,44 @@ void main(){
       sta = 0;
       newPayload = 0;
     }
+
     //////////
     //TIMER //
     //////////
     if(timer_elapsed){
-      burst_read();
+      //send_cmd_to_active_sensors(CMD_READ);
+			send_rf_command(CMD_READ,BROADCAST_ADDR);
       timer_elapsed = 0;
+			P06 = !P06;
     }
   } /*END INFINITE LOOP*/
 } /*END MAIN FUNCTION*/
 
-//TODO: Document
-void request_ack_from_sensors(){
-  uint8_t i = 0;
-  for (i = 0; i < 16; i++) {
-    send_rf_command(CMD_CONNECTION,body_sensors[i]);
-  }
-}
-//TODO: implement
-void send_rf_command(){
+/////////////////////
+//FUNCIONS in Host //
+/////////////////////
 
+//TODO: organizar
+void send_cmd_to_all_addrs(uint8_t cmd2send){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+		send_rf_command(cmd2send,body_sensors[i]);//asdasd
+  }
 }
-//TODO: Document
-void burst_rf_read(){
-  uint8_t i = 0;
+//TODO: organizar
+void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+		send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);//asdasd
+  }
+}
+
+void send_cmd_to_active_sensors(uint8_t cmd2send){
+  uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(packet_type,body_sensors[i]);//requisita o pacote de dados
+      send_rf_command(cmd2send,body_sensors[i]);//inicia os sensores
     }
   }
 }
-//TODO: Document
-void send_start_to_sensors(){
-  for (i = 0; i < 16; i++) { //para cada sensor possivel
-    if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(CMD_START,body_sensors[i]);//inicia os sensores
-    }
-  }
-}
-//TODO: Document
-void send_start_to_sensors(){
-  for (i = 0; i < 16; i++) { //para cada sensor possivel
-    if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(CMD_STOP,body_sensors[i]);//inicia os sensores
-    }
-  }
-}
+
