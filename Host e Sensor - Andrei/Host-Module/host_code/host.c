@@ -89,46 +89,46 @@ void main(){
         switch (hal_uart_getchar()) { //the actual command
           case CMD_START:
           hal_uart_putchar(CMD_OK);
-          //send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
-					send_rf_command(CMD_START,BROADCAST_ADDR);
+          send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
+					//send_rf_command(CMD_START,BROADCAST_ADDR);
           delay_ms(10); //Wait for at least 5 miliseconds
           start_T0();//Start Timer Aquisition
 					P06 = 1;
           break;
           case CMD_STOP:
           stop_T0();//Stop Timer
-          //send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
-          send_rf_command(CMD_STOP,BROADCAST_ADDR);
+          send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
+          //send_rf_command(CMD_STOP,BROADCAST_ADDR);
 					hal_uart_putchar(CMD_OK);//Return ok
 					P06 = 0;
           break;
           case CMD_CONNECTION:
-          //send_cmd_to_all_addrs(CMD_CONNECTION);
-					send_rf_command(CMD_CONNECTION,BROADCAST_ADDR);
+          send_cmd_to_all_addrs(CMD_CONNECTION);
+					//send_rf_command(CMD_CONNECTION,BROADCAST_ADDR);
           break;
           case CMD_CALIBRATE:
-          //send_cmd_to_all_addrs(CMD_CALIBRATE);
-					send_rf_command(CMD_CALIBRATE,BROADCAST_ADDR);
+          send_cmd_to_active_sensors(CMD_CALIBRATE);
+					//send_rf_command(CMD_CALIBRATE,BROADCAST_ADDR);
           break;
           case CMD_SET_PACKET_TYPE:
           //send_cmd_to_all_addrs_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar());
-					send_rf_command_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar(),BROADCAST_ADDR);
+					send_cmd_to_active_sensors_with_arg(CMD_SET_PACKET_TYPE,hal_uart_getchar(),BROADCAST_ADDR);
 					break;
 					case CMD_GET_ACTIVE_SENSORS:
 					hal_uart_putchar(active_sensors);
 					break;
 					case CMD_TEST_RF_CONNECTION:
-					//send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
-					send_rf_command(CMD_TEST_RF_CONNECTION,BROADCAST_ADDR);
+					send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
+					//send_rf_command(CMD_TEST_RF_CONNECTION,BROADCAST_ADDR);
 					break;
 					case CMD_LIGHT_UP_LED:
-					//send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
-					send_rf_command(CMD_LIGHT_UP_LED,BROADCAST_ADDR);
+					send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
+					//send_rf_command(CMD_LIGHT_UP_LED,BROADCAST_ADDR);
 					P06 = 1;
 					break;
 					case CMD_TURN_OFF_LED:
-					//send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
-					send_rf_command(CMD_TURN_OFF_LED,BROADCAST_ADDR);
+					send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
+					//send_rf_command(CMD_TURN_OFF_LED,BROADCAST_ADDR);
 					P06 = 0;
 					break;
           default:
@@ -143,18 +143,7 @@ void main(){
     //Comunicacao RF //
     ///////////////////
     if(newPayload){
-      //bridge, only redirect the packet to serial
-			redirect_rf_pkt_to_serial(rx_buf, payloadWidth);
-      switch (rx_buf[1]) {
-        case CMD_CONNECTION://sensor alive and responding
-          active_sensors |= 1<<rx_buf[0];
-          break;
-        case CMD_DISCONNECT: //Some sensor has some problem
-          active_sensors &= (~(1<<rx_buf[0]));
-          break;
-      }
-      sta = 0;
-      newPayload = 0;
+      rf_communication_handler();
     }
 
     //////////
@@ -173,17 +162,35 @@ void main(){
 //FUNCIONS in Host //
 /////////////////////
 
+void rf_communication_handler(){
+  //bridge, only redirect the packet to serial
+  redirect_rf_pkt_to_serial(rx_buf, payloadWidth);
+  switch (rx_buf[1]) {
+    case CMD_CONNECTION://sensor alive and responding
+      active_sensors |= 1<<rx_buf[0];
+      break;
+    case CMD_DISCONNECT: //Some sensor has some problem
+      active_sensors &= (~(1<<rx_buf[0]));
+      break;
+  }
+  sta = 0;
+  newPayload = 0;
+}
+
 //TODO: header da funcao
 //TODO: make the sensors responsives to all types of commands
 //TODO: remove BROADCAST_ADDR e enviar um a um
 void wait_rf_response(uint8_t sensor){
   while (1) {
     if(newPayload){ //Se algum sensor respondeu,(nao especifica qual mas algum)
+      rf_communication_handler();
       break;
     }
+    //TODO: melhorar o timeout
+    /*
     if(timeout_cnt++ > 0xFFFF){//se timeout maior doq um numero grande ae -q
       break;
-    }
+    }*/
   }
 }
 
@@ -191,16 +198,14 @@ void wait_rf_response(uint8_t sensor){
 void send_cmd_to_all_addrs(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
-		send_rf_command(cmd2send,body_sensors[i]);//asdasd
-    wait_rf_response(body_sensors[i]);
+		send_rf_command(cmd2send,body_sensors[i]);
   }
 }
 //TODO: organizar
 void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
-		send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);//asdasd
-    wait_rf_response(body_sensors[i]);
+		send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);
   }
 }
 
@@ -210,7 +215,18 @@ void send_cmd_to_active_sensors(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
-      send_rf_command(cmd2send,body_sensors[i]);//inicia os sensores
+      send_rf_command(cmd2send,body_sensors[i]);
+      wait_rf_response(body_sensors[i]);
+    }
+  }
+}
+
+void send_cmd_to_active_sensors_with_arg(uint8_t cmd2send,uint8_t agr2send){
+  uint8_t i;
+  for (i = 0; i < 16; i++) { //para cada sensor possivel
+    if(active_sensors & (1<<i)){//se esta ativo
+      send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);
+      wait_rf_response(body_sensors[i]);
     }
   }
 }
