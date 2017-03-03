@@ -201,7 +201,7 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer, uint8_t m
     TX_Mode_NOACK(10);
     break;
     default:
-    //NOTE: ãanh,sorry?
+    //NOTE: sei la
     break;
   }/*END of Switch packet type*/
   RX_Mode();

@@ -173,11 +173,26 @@ void main(){
 //FUNCIONS in Host //
 /////////////////////
 
+//TODO: header da funcao
+//TODO: make the sensors responsives to all types of commands
+//TODO: remove BROADCAST_ADDR e enviar um a um
+void wait_rf_response(uint8_t sensor){
+  while (1) {
+    if(newPayload){ //Se algum sensor respondeu,(nao especifica qual mas algum)
+      break;
+    }
+    if(timeout_cnt++ > 0xFFFF){//se timeout maior doq um numero grande ae -q
+      break;
+    }
+  }
+}
+
 //TODO: organizar
 void send_cmd_to_all_addrs(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
 		send_rf_command(cmd2send,body_sensors[i]);//asdasd
+    wait_rf_response(body_sensors[i]);
   }
 }
 //TODO: organizar
@@ -185,9 +200,12 @@ void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
 		send_rf_command_with_arg(cmd2send,agr2send,body_sensors[i]);//asdasd
+    wait_rf_response(body_sensors[i]);
   }
 }
 
+//NOTE: not used yet
+//NOTE: revisar polling
 void send_cmd_to_active_sensors(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
@@ -196,4 +214,3 @@ void send_cmd_to_active_sensors(uint8_t cmd2send){
     }
   }
 }
-
