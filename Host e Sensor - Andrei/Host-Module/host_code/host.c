@@ -111,8 +111,6 @@ uint8_t body_sensors[16] = {
       active_sensors &= (~(1<<rx_buf[0]));
       break;
     }
-    sta = 0;
-    newPayload = 0;
   }
 
   //TODO: header da funcao
@@ -121,25 +119,26 @@ uint8_t body_sensors[16] = {
   void wait_rf_response(uint8_t sensor){
     while (1) {
       if(newPayload){ //Se algum sensor respondeu,(nao especifica qual mas algum)
-        rf_communication_handler();
-        break;
+        if(rx_buf[0] == sensor){
+          rf_communication_handler();
+          sta = 0;
+          newPayload = 0;
+          break;
+        } else { //se outro sensor responder ignorar
+          sta = 0;
+          newPayload = 0;
+        }
       }
-      //TODO: melhorar o timeout
-      /*
-      if(timeout_cnt++ > 0xFFFF){//se timeout maior doq um numero grande ae -q
-      break;
-    }*/
   }
 }
 
-//TODO: organizar
 void send_cmd_to_all_addrs(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     send_rf_command(cmd2send,body_sensors[i]);
   }
 }
-//TODO: organizar
+
 void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
@@ -147,8 +146,6 @@ void send_cmd_to_all_addrs_with_arg(uint8_t cmd2send,uint8_t agr2send){
   }
 }
 
-//NOTE: not used yet
-//NOTE: revisar polling
 void send_cmd_to_active_sensors(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
@@ -168,20 +165,20 @@ void send_cmd_to_active_sensors_with_arg(uint8_t cmd2send,uint8_t agr2send){
     }
   }
 }
-//TODO: cabeçalho
+
 void uart_communication_handler(){
   if(hal_uart_getchar() == UART_START_SIGNAL){ //first byte should be start
     switch (hal_uart_getchar()) { //the actual command
       case CMD_START:
       hal_uart_putchar(CMD_OK);
-      send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
+      send_cmd_to_all_addrs(CMD_START);//Reset FIFO inside sensors
       delay_ms(10); //Wait for at least 5 miliseconds
       start_T0();//Start Timer Aquisition
       P06 = 1;
       break;
       case CMD_STOP:
       stop_T0();//Stop Timer
-      send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
+      send_cmd_to_all_addrs(CMD_STOP);//Send Stop to sensors
       hal_uart_putchar(CMD_OK);//Return ok
       P06 = 0;
       break;
