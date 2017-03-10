@@ -62,19 +62,9 @@ void setup(){
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
   hal_uart_init(UART_BAUD_9K6);
   rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
-	P06 = 1;delay_ms(500);
-	P06 = 0;delay_ms(500);
-	P06 = 1;delay_ms(500);
-	P06 = 0;delay_ms(500);
-	hal_uart_putchar('i');
-	hal_uart_putchar('n');
-	hal_uart_putchar('i');
-	hal_uart_putchar('c');
-	hal_uart_putchar('i');
-	hal_uart_putchar('a');
-	hal_uart_putchar('d');
-	hal_uart_putchar('o');
-	hal_uart_putchar('\n');
+	P06 = 1;delay_ms(500);	P06 = 0;delay_ms(500);
+	P06 = 1;delay_ms(500);	P06 = 0;delay_ms(500);
+  hal_uart_putstring("Dispositivo Host Iniciado\n");
 }
 
 void main(){
@@ -90,7 +80,6 @@ void main(){
           case CMD_START:
           hal_uart_putchar(CMD_OK);
           send_cmd_to_active_sensors(CMD_START);//Reset FIFO inside sensors
-					//send_rf_command(CMD_START,BROADCAST_ADDR);
           delay_ms(10); //Wait for at least 5 miliseconds
           start_T0();//Start Timer Aquisition
 					P06 = 1;
@@ -98,13 +87,11 @@ void main(){
           case CMD_STOP:
           stop_T0();//Stop Timer
           send_cmd_to_active_sensors(CMD_STOP);//Send Stop to sensors
-          //send_rf_command(CMD_STOP,BROADCAST_ADDR);
-					hal_uart_putchar(CMD_OK);//Return ok
+        	hal_uart_putchar(CMD_OK);//Return ok
 					P06 = 0;
           break;
           case CMD_CONNECTION:
           send_cmd_to_all_addrs(CMD_CONNECTION);
-					//send_rf_command(CMD_CONNECTION,BROADCAST_ADDR);
           break;
           case CMD_CALIBRATE:
           send_cmd_to_active_sensors(CMD_CALIBRATE);
@@ -117,18 +104,19 @@ void main(){
 					case CMD_GET_ACTIVE_SENSORS:
 					hal_uart_putchar(active_sensors);
 					break;
+          case CMD_SET_ACTIVE_SENSORS:
+          active_sensors = hal_uart_getchar();
+          hal_uart_putchar(CMD_OK);
+					break;
 					case CMD_TEST_RF_CONNECTION:
 					send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
-					//send_rf_command(CMD_TEST_RF_CONNECTION,BROADCAST_ADDR);
 					break;
 					case CMD_LIGHT_UP_LED:
 					send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
-					//send_rf_command(CMD_LIGHT_UP_LED,BROADCAST_ADDR);
 					P06 = 1;
 					break;
 					case CMD_TURN_OFF_LED:
 					send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
-					//send_rf_command(CMD_TURN_OFF_LED,BROADCAST_ADDR);
 					P06 = 0;
 					break;
           default:
