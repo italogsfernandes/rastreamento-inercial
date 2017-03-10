@@ -28,9 +28,10 @@ mesma biblioteca. */
 #define CMD_READ 0x07 //Request a packet of readings
 #define CMD_SET_PACKET_TYPE 0x08
 #define CMD_GET_ACTIVE_SENSORS 0x09 //Retorna a variavel do host active sensors
-#define CMD_TEST_RF_CONNECTION 0x0A
-#define CMD_LIGHT_UP_LED 0x0B
-#define CMD_TURN_OFF_LED 0x0C
+#define CMD_SET_ACTIVE_SENSORS 0x0A //Altera a variavel do host active sensors
+#define CMD_TEST_RF_CONNECTION 0x0B
+#define CMD_LIGHT_UP_LED 0x0C
+#define CMD_TURN_OFF_LED 0x0D
 
 ////////////////////////
 //Pacotes de leituras //
