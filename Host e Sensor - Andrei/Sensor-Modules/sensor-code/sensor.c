@@ -97,6 +97,7 @@ void main(void) {
 					STATUS_LED = 0;
           break;
           case CMD_CONNECTION:
+          delay_ms(MY_SUB_ADDR*20);//cada sensor responde com um intervalo de x miliseconds between each other
           if(mpu_testConnection()){
             EN_MPU_CONNECTED_FLAG;
             send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
