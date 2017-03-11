@@ -1,4 +1,5 @@
 #include "Timer.h"
+#include "inertial_packets.h"
 
 #define Aquire_Freq 100
 #define MAX_WAIT_TIME 10 // milliseconds
