@@ -364,9 +364,9 @@
           <GroupName>Application</GroupName>
           <Files>
             <File>
-              <FileName>host.c</FileName>
+              <FileName>host-bridge.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\host.c</FilePath>
+              <FilePath>.\host-bridge.c</FilePath>
             </File>
           </Files>
         </Group>

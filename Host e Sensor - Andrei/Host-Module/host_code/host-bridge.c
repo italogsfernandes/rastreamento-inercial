@@ -2,6 +2,10 @@
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_uart.h" //Comunicacao Serial Uart
 #include "hal_delay.h"
+#include "pacotes_inerciais.h"
+
+//UART Packet: Start Signal - Command
+#define UART_START_SIGNAL  0x53
 
 //////////////////////
 //Functions in Host //

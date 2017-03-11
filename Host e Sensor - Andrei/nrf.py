@@ -4,6 +4,7 @@ from time import sleep
 
 class nrf:
     '''Comandos reconhecidos pelo host'''
+    UART_START_SIGNAL = 0x53
     CMD_OK = 0x00  # Ack - Uart Command
     CMD_ERROR = 0x01  # Error flag - Uart Command
     CMD_START = 0x02  # Start Measuring - Uart Command
@@ -36,3 +37,13 @@ class nrf:
         self.porta.write([0x53, cmd_2_send, arg_2_send])
         sleep(0.1)
         return self.readall()
+
+    def led(self, estado_led):
+        if estado_led == 1:
+            return self.sendcmd(CMD_LIGHT_UP_LED);
+        else:
+            return self.sendcmd(CMD_TURN_OFF_LED);
+
+    def readsomething():
+        return self.sendcmd(CMD_READ);
+    

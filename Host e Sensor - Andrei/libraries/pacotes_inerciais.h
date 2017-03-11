@@ -272,7 +272,7 @@ void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_sen
 	hal_uart_putchar(UART_END_SIGNAL);
 }
 //TODO: cabeçalho
-void hal_uart_putstring(char *str_2_send,uint8_t len){
+void hal_uart_putstring(char *str_2_send){
   while(*str_2_send != 0)
 	hal_uart_putchar(*str_2_send++);
 }

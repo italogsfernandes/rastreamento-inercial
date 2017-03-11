@@ -22,7 +22,7 @@ Timer aquire_timer;
 //Dados recebidos via RF:
 uint8_t rf_rx_packet_len = 0;
 uint8_t rf_data[32] = {0};
-
+uint8_t timer_id = 0;
 unsigned long timeout_init_time;
 
 void setup() {
@@ -54,7 +54,6 @@ void takeReading(){
 //NOTE: DONE! Next job: implement as a library
 
 void uart_communication_handler(){
-  uint8_t timer_id = 0;
   if(Serial.read() == UART_START_SIGNAL){ //first byte should be start
     switch (Serial.read()) { //the actual command
       case CMD_START:
@@ -98,6 +97,9 @@ void uart_communication_handler(){
       case CMD_TURN_OFF_LED:
       send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
       digitalWrite(LED_STATUS, LOW);
+      break;
+      case CMD_READ:
+      send_cmd_to_active_sensors(CMD_READ);
       break;
     } /*END SWITCH*/
   } /*END IF START COMMAND*/
