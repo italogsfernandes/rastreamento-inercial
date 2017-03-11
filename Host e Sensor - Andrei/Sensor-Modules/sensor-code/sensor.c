@@ -1,5 +1,5 @@
 //Subenderecos usados no sistema
-#define MY_SUB_ADDR 0x01 
+#define MY_SUB_ADDR 0x01
 
 #include "nrf24le1.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
@@ -81,7 +81,7 @@ void main(void) {
 			sta = 0;
       newPayload = 0;
 		  //verifica se o sinal eh direficionado para mim
-      if(rx_buf[0] == MY_SUB_ADDR || rx_buf[0] == BROADCAST_ADDR){
+      if(rx_buf[0] == MY_SUB_ADDR){
 					switch(rx_buf[1]){
           case CMD_READ:
           DataAcq();
