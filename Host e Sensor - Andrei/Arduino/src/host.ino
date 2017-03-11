@@ -1,5 +1,6 @@
 #include "Timer.h"
 #include "inertial_packets.h"
+#include "SoftwareSerial.h"
 
 #define Aquire_Freq 100
 #define MAX_WAIT_TIME 10 // milliseconds
@@ -41,9 +42,9 @@ void loop() {
     uart_communication_handler();
   }
   if(rfSerial.available()){
-    rf_communication_handler()
+    rf_communication_handler();
   }
-  //aquire_timer.update();
+  aquire_timer.update();
 }
 
 void takeReading(){
@@ -53,17 +54,18 @@ void takeReading(){
 //NOTE: DONE! Next job: implement as a library
 
 void uart_communication_handler(){
+  uint8_t timer_id = 0;
   if(Serial.read() == UART_START_SIGNAL){ //first byte should be start
     switch (Serial.read()) { //the actual command
       case CMD_START:
       Serial.write(CMD_OK);
       send_cmd_to_all_addrs(CMD_START);//Reset FIFO inside sensors
       delay(10); //Wait for at least 5 miliseconds
-      aquire_timer.every(1000/Aquire_Freq, takeReading);//Start Timer Aquisition
+      timer_id = aquire_timer.every(1000/Aquire_Freq, takeReading);//Start Timer Aquisition
       digitalWrite(LED_STATUS,HIGH);
       break;
       case CMD_STOP:
-      aquire_timer.stop();//Stop Timer
+      aquire_timer.stop(timer_id);//Stop Timer
       send_cmd_to_all_addrs(CMD_STOP);//Send Stop to sensors
       Serial.write(CMD_OK);//Return ok
       digitalWrite(LED_STATUS,LOW);
@@ -91,11 +93,11 @@ void uart_communication_handler(){
       break;
       case CMD_LIGHT_UP_LED:
       send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
-      digitalWrite(STATUS_LED, HIGH);
+      digitalWrite(LED_STATUS, HIGH);
       break;
       case CMD_TURN_OFF_LED:
       send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
-      digitalWrite(STATUS_LED, LOW);
+      digitalWrite(LED_STATUS, LOW);
       break;
     } /*END SWITCH*/
   } /*END IF START COMMAND*/
@@ -140,9 +142,10 @@ uint8_t rf_communication_handler(){
       }
       return 0;
     } else {
-      return 1; //error
+      return 1;
     }
   }
+  return 2;
 }
 
 void wait_rf_response(){
@@ -173,7 +176,6 @@ void send_rf_data(uint8_t *data2send, uint8_t data_len){
 
 void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
   uint8_t checksum = 0;
-  uint8_t i = 0;
   rfSerial.write(UART_START_SIGNAL);
   rfSerial.write(2);
   rfSerial.write(sensor_id);
@@ -185,7 +187,6 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id){
 
 void send_rf_command_with_arg(uint8_t cmd2send,uint8_t arg2send, uint8_t sensor_id){
   uint8_t checksum = 0;
-  uint8_t i = 0;
   rfSerial.write(UART_START_SIGNAL);
   rfSerial.write(2);
   rfSerial.write(sensor_id);
