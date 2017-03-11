@@ -28,9 +28,10 @@ mesma biblioteca. */
 #define CMD_READ 0x07 //Request a packet of readings
 #define CMD_SET_PACKET_TYPE 0x08
 #define CMD_GET_ACTIVE_SENSORS 0x09 //Retorna a variavel do host active sensors
-#define CMD_TEST_RF_CONNECTION 0x0A
-#define CMD_LIGHT_UP_LED 0x0B
-#define CMD_TURN_OFF_LED 0x0C
+#define CMD_SET_ACTIVE_SENSORS 0x0A //Altera a variavel do host active sensors
+#define CMD_TEST_RF_CONNECTION 0x0B
+#define CMD_LIGHT_UP_LED 0x0C
+#define CMD_TURN_OFF_LED 0x0D
 
 ////////////////////////
 //Pacotes de leituras //
@@ -201,7 +202,7 @@ void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer, uint8_t m
     TX_Mode_NOACK(10);
     break;
     default:
-    //NOTE: ãanh,sorry?
+    //NOTE: sei la
     break;
   }/*END of Switch packet type*/
   RX_Mode();
@@ -270,6 +271,10 @@ void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_sen
 	}
 	hal_uart_putchar(UART_END_SIGNAL);
 }
-
+//TODO: cabeçalho
+void hal_uart_putstring(char *str_2_send,uint8_t len){
+  while(*str_2_send != 0)
+	hal_uart_putchar(*str_2_send++);
+}
 
 #endif

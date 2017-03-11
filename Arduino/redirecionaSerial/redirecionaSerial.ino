@@ -40,6 +40,3 @@ void loop() {
       rfSerial.write(Serial.read());
   }
 }
-
-
-  
