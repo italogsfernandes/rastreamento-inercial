@@ -40,10 +40,9 @@ class nrf:
 
     def led(self, estado_led):
         if estado_led == 1:
-            return self.sendcmd(CMD_LIGHT_UP_LED);
+            return self.sendcmd(self.CMD_LIGHT_UP_LED)
         else:
-            return self.sendcmd(CMD_TURN_OFF_LED);
+            return self.sendcmd(self.CMD_TURN_OFF_LED)
 
-    def readsomething():
-        return self.sendcmd(CMD_READ);
-    
+    def readsomething(self):
+        return self.sendcmd(self.CMD_READ)
