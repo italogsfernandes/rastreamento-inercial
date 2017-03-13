@@ -87,6 +87,14 @@ void uart_communication_handler(){
     }
     checksum = (~checksum) + 1;
     if(hal_uart_getchar() == checksum){
+      switch (rx_buf[3]) {
+        case CMD_LIGHT_UP_LED:
+        P06 = 1;
+        break;
+        case CMD_TURN_OFF_LED:
+        P06 = 0;
+        break;
+      }
       TX_Mode_NOACK(packet_len);
       RX_Mode();
     }
