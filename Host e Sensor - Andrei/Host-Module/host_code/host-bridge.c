@@ -4,9 +4,6 @@
 #include "hal_delay.h"
 #include "pacotes_inerciais.h"
 
-//UART Packet: Start Signal - Command
-#define UART_START_SIGNAL  0x53
-
 //////////////////////
 //Functions in Host //
 //////////////////////
@@ -111,5 +108,5 @@ void rf_communication_handler(){
     checksum += rx_buf[i];
   }
   checksum = (~checksum) + 1;
-  hal_uart_putchar(checksum);//CC
+  hal_uart_putchar(checksum);//CS
 }
