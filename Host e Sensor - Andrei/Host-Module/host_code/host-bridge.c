@@ -63,6 +63,8 @@ void main(){
             if(rx_buf[0] == HOST_SUB_ADDR){
                 rf_communication_handler();
             }
+            sta = 0;
+            newPayload = 0;
         }
     } /*END INFINITE LOOP*/
 } /*END MAIN FUNCTION*/
@@ -77,7 +79,6 @@ void uart_communication_handler(){
     uint8_t packet_len = 0;
     uint8_t i = 0;
     uint8_t checksum = 0;
-    P06 = 1;
     if(hal_uart_getchar() == UART_START_SIGNAL){ //first byte should be start
         packet_len = hal_uart_getchar();
         checksum = 0;
@@ -86,15 +87,15 @@ void uart_communication_handler(){
             checksum += tx_buf[i];
         }
         checksum = (~checksum) + 1;
-        switch (tx_buf[1]) {
-            case CMD_LIGHT_UP_LED:
-            P06 = 1;
-            break;
-            case CMD_TURN_OFF_LED:
-            P06 = 0;
-            break;
-        }
         if(hal_uart_getchar() == checksum){
+            switch (tx_buf[1]) {
+                case CMD_LIGHT_UP_LED:
+                P06 = 1;
+                break;
+                case CMD_TURN_OFF_LED:
+                P06 = 0;
+                break;
+            }
             TX_Mode_NOACK(packet_len);
             RX_Mode();
         }
