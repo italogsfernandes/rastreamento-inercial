@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        03/14/2017  16:40:52  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        03/15/2017  13:45:29  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -59,7 +59,7 @@ LINK MAP OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
             CODE    04B2H     0068H     UNIT         ?C?LIB_CODE
             CODE    051AH     005FH     UNIT         ?PR?RF_COMMUNICATION_HANDLER?HOST_BRIDGE
             CODE    0579H     0057H     UNIT         ?PR?_SEND_PACKET_TO_HOST?HOST_BRIDGE
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 2
 
 
             CODE    05D0H     0050H     UNIT         ?PR?_SEND_PACKET_TO_COMPUTER?HOST_BRIDGE
@@ -119,7 +119,7 @@ SEGMENT                                            DATA_GROUP
   +--> ?PR?SETUP?HOST_BRIDGE
   +--> ?PR?HAL_UART_CHARS_AVAILABLE?HAL_UART
   +--> ?PR?UART_COMMUNICATION_HANDLER?HOST_B...
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 3
 
 
   +--> ?PR?RF_COMMUNICATION_HANDLER?HOST_BRIDGE
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:08C4H         PUBLIC        RX_Mode
   B:00B8H.1       PUBLIC        RF
   D:00E7H         PUBLIC        SPIRDAT
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 4
 
 
   B:0021H.0       PUBLIC        newPayload
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   D:0007H         SYMBOL        reg
   D:0006H         SYMBOL        value
   -------         DO            
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 5
 
 
   D:0005H         SYMBOL        status
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:07B9H         LINE#         207
   C:07BBH         LINE#         208
   -------         ENDPROC       _SPI_WRITE_BUF
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 6
 
 
   -------         PROC          RX_MODE
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:029BH         LINE#         275
   C:029DH         LINE#         276
   C:029FH         LINE#         277
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 7
 
 
   C:02A1H         LINE#         279
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:00AEH         LINE#         133
   C:00B8H         LINE#         134
   C:00BBH         LINE#         135
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 8
 
 
   C:00BBH         LINE#         136
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:0230H         LINE#         192
   C:0232H         LINE#         193
   C:0232H         LINE#         194
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 9
 
 
   C:023FH         LINE#         195
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   D:002EH         SYMBOL        data_len
   -------         DO            
   D:002FH         SYMBOL        i
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 10
 
 
   -------         ENDDO         
@@ -599,7 +599,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:08DEH         LINE#         36
   C:08E1H         LINE#         37
   C:08E4H         LINE#         38
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 11
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 11
 
 
   -------         ENDPROC       INICIARIO
@@ -659,7 +659,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:04B1H         LINE#         101
   C:04B1H         LINE#         102
   C:04B1H         LINE#         103
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 12
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 12
 
 
   -------         ENDPROC       UART_COMMUNICATION_HANDLER
@@ -719,7 +719,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:088FH         LINE#         54
   C:0892H         LINE#         55
   C:0892H         LINE#         56
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 13
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 13
 
 
   C:0895H         LINE#         57
@@ -779,7 +779,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:0693H         LINE#         50
   C:0695H         LINE#         51
   C:0695H         LINE#         52
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 14
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 14
 
 
   C:0695H         LINE#         53
@@ -839,7 +839,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   C:081FH         LINE#         103
   C:081FH         LINE#         105
   C:0826H         LINE#         107
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 15
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 15
 
 
   C:0828H         LINE#         108
@@ -899,7 +899,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\host_project (HOST_BRIDGE)
   -------         ENDMOD        ?C?CLDOPTR
 
   -------         MODULE        ?C?CSTOPTR
-BL51 BANKED LINKER/LOCATER V6.22                                                      03/14/2017  16:40:52  PAGE 16
+BL51 BANKED LINKER/LOCATER V6.22                                                      03/15/2017  13:45:29  PAGE 16
 
 
   C:04F8H         PUBLIC        ?C?CSTOPTR
