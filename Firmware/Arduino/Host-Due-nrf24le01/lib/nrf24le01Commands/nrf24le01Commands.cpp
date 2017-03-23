@@ -66,19 +66,21 @@ void nrf24le01::rf_init(uint8_t *rx_addr,uint8_t *tx_addr,
 
   //TODO: Add library nrf24le01
   //Transmit Address.
-  SPI_Write_Buf(W_REGISTER + TX_ADDR, ADDR_HOST, TX_ADR_WIDTH);
+  SPI_Write_Buf(W_REGISTER + TX_ADDR, tx_addr, TX_ADR_WIDTH);
   //Receive Address
-  SPI_Write_Buf(W_REGISTER + RX_ADDR_P0, ADDR_HOST, TX_ADR_WIDTH);
+  SPI_Write_Buf(W_REGISTER + RX_ADDR_P0, rx_addr, TX_ADR_WIDTH);
   // Disable Auto.Ack
   SPI_RW_Reg(W_REGISTER + EN_AA, 0x00);        // Disable Auto.Ack:Pipe0
+  // Enable Pipe0 (only pipe0)
   SPI_RW_Reg(W_REGISTER + EN_RXADDR, 0x01);    // Enable Pipe0 (only pipe0)
+
   SPI_RW_Reg(W_REGISTER + AW, 0x03);           // 5 bytes de endereço
   // Time to automatic retransmition selected: 250us, retransmition disabled
   SPI_RW_Reg(W_REGISTER + SETUP_RETR, 0x00);   // Tempo de retransmissão automática de 250us, retransmissão desabilitada
   // Select RF channel 40
-  SPI_RW_Reg(W_REGISTER + RF_CH, 90);          // Select RF channel 90. Fo = 2,490 GHz
+  SPI_RW_Reg(W_REGISTER + RF_CH, rf_channel);          // Select RF channel 90. Fo = 2,490 GHz
   // TX_PWR:0dBm, Datarate:1Mbps, LNA:HCURR
-  SPI_RW_Reg(W_REGISTER + RF_SETUP, 0x07);     // TX_PWR:0dBm, Datarate:1Mbps, LNA:HCURR
+  SPI_RW_Reg(W_REGISTER + RF_SETUP, rf_setup_byte);     // TX_PWR:0dBm, Datarate:1Mbps, LNA:HCURR
   // Ativa Payload din?mico em data pipe 0
   SPI_RW_Reg(W_REGISTER + DYNPD, 0x01);        // Ativa Payload dinâmico em data pipe 0
   // Ativa Payload din?mico, com ACK e comando W_TX_PAY

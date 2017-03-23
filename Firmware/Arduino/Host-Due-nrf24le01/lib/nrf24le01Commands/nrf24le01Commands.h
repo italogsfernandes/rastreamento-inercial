@@ -15,10 +15,32 @@
 #define PAYLOAD_WIDTH      32   // 30 bytes on TX payload
 #define TX_ADR_WIDTH        5   // 5 bytes TX(RX) address width
 
+//NOTE: Se der ruim trocar por constantes
+/** Available data rates
+ * The input argument of rf_init must be defined in this @c enum
+ */
+typedef enum
+{
+    RF_DATA_RATE_1Mbps,
+    RF_DATA_RATE_2Mbps,
+    RF_DATA_RATE_250kbps
+} rf_data_rate_t;
+
+/** Available tx power modes
+ * The input argument of rf_init must be defined in this @c enum
+ */
+typedef enum
+{
+    RF_TX_POWER_NEGATIVE_18dBm,
+    RF_TX_POWER_NEGATIVE_12dBm,
+    RF_TX_POWER_NEGATIVE_6dBm,
+    RF_TX_POWER_0dBm
+} rf_tx_power_t;
+
 class nrf24le01{
 public:
   nrf24le01(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin);
-  uint8_t ADDR_HOST[TX_ADR_WIDTH] = {0xc6,0xc2,0xc2,0xc2,0xc2};   // Define a static host adr
+  uint8_t ADDR_HOST[TX_ADR_WIDTH] =  {0xE7,0xE7,0xE7,0xE7,0xE7};   // Define a static host adr
   uint8_t rx_buf[PAYLOAD_WIDTH];    // Define lenght of rx_buf and tx_buf
   uint8_t tx_buf[PAYLOAD_WIDTH];
   uint8_t payloadWidth = 0;
