@@ -24,6 +24,7 @@ void nrf24le01::rf_init(void){
   RX_OK = 0;
   digitalWrite(RFCSN,1);                        // Set CSN low, init SPI tranaction
   digitalWrite(RFCE,0);                         // Radio chip enable low
+  //TODO: Add library nrf24le01
   SPI_Write_Buf(W_REGISTER + TX_ADDR, ADDR_HOST, TX_ADR_WIDTH);
   SPI_Write_Buf(W_REGISTER + RX_ADDR_P0, ADDR_HOST, TX_ADR_WIDTH);
   SPI_RW_Reg(W_REGISTER + EN_AA, 0x00);        // Disable Auto.Ack:Pipe0
@@ -53,20 +54,21 @@ void nrf24le01::TX_Mode_NOACK(uint8_t payloadLength){
   digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
   SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
   SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
-                                                                   // Endereço da porta P2, matrizes tx_buf (), o comprimento da matriz é enviada)
+  // Endereço da porta P2, matrizes tx_buf (), o comprimento da matriz é enviada)
   TX_OK = 0;
   digitalWrite(RFCE,1);                                            // Set CE pin high to enable TX Mode
   delayMicroseconds(12);
-  digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
+  digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
+  //TODO: understand this timeout, why? this is polling?
   tempo = micros() + 1000;
   do
   {
     tempoAtual = micros();
     if (!digitalRead(RFIRQ))
-      RF_IRQ();
+    RF_IRQ();
   }while (!((TX_OK)|(tempoAtual>tempo)));
   if((tempoAtual>tempo))
-    Serial.println("Time Out!");Serial.print('\n');Serial.print('\0');
+  Serial.println("TX_MODE Time Out!");Serial.print('\n');Serial.print('\0');
 }
 
 
@@ -85,58 +87,57 @@ uint8_t nrf24le01::SPI_RW(uint8_t value){
 /**************************************************/
 uint8_t nrf24le01::SPI_RW_Reg(uint8_t reg, uint8_t value){
   uint8_t status;
+  digitalWrite(RFCSN,0);                      // CSN low, initiate SPI transaction£
+  status = SPI_RW(reg);           // select register
+  SPI_RW(value);                  // ..and write value to it..
+  digitalWrite(RFCSN,1);                      // CSN high again  £¨rfcon^1
 
-    digitalWrite(RFCSN,0);                      // CSN low, initiate SPI transaction£
-    status = SPI_RW(reg);           // select register
-    SPI_RW(value);                  // ..and write value to it..
-    digitalWrite(RFCSN,1);                      // CSN high again  £¨rfcon^1
-
-    return(status);                 // return nRF24L01 status byte
+  return(status);                 // return nRF24L01 status byte
 }
 /**************************************************/
 uint8_t nrf24le01::SPI_Read_Status(void){
   uint8_t reg_val;
 
-    digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
-    reg_val = SPI_RW(NOP);                            // ..then read register value
-    digitalWrite(RFCSN,1);                          // CSN high, terminate SPI communication RF
-    return(reg_val);                                // return register value
+  digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
+  reg_val = SPI_RW(NOP);                            // ..then read register value
+  digitalWrite(RFCSN,1);                          // CSN high, terminate SPI communication RF
+  return(reg_val);                                // return register value
 }
 /**************************************************/
 uint8_t nrf24le01::SPI_Read(uint8_t reg){
   uint8_t reg_val;
 
-    digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
-    SPI_RW(reg);                                    // Select register to read from..
-    reg_val = SPI_RW(0);                            // ..then read register value
-    digitalWrite(RFCSN,1);                          // CSN high, terminate SPI communication RF
-    return(reg_val);                                // return register value
+  digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
+  SPI_RW(reg);                                    // Select register to read from..
+  reg_val = SPI_RW(0);                            // ..then read register value
+  digitalWrite(RFCSN,1);                          // CSN high, terminate SPI communication RF
+  return(reg_val);                                // return register value
 }
 /**************************************************/
 uint8_t nrf24le01::SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
   uint8_t status,byte_ctr;
 
-    digitalWrite(RFCSN,0);                                    // Set CSN low, init SPI tranaction
-    status = SPI_RW(reg);                         // Select register to write to and read status byte
+  digitalWrite(RFCSN,0);                                    // Set CSN low, init SPI tranaction
+  status = SPI_RW(reg);                         // Select register to write to and read status byte
 
-    for(byte_ctr=0;byte_ctr<bytes;byte_ctr++)
-      pBuf[byte_ctr] = SPI_RW(0);                 // Perform SPI_RW to read byte from nRF24L01
+  for(byte_ctr=0;byte_ctr<bytes;byte_ctr++)
+  pBuf[byte_ctr] = SPI_RW(0);                 // Perform SPI_RW to read byte from nRF24L01
 
-    digitalWrite(RFCSN,1);                                    // Set CSN high again
+  digitalWrite(RFCSN,1);                                    // Set CSN high again
 
-    return(status);                               // return nRF24L01 status byte
+  return(status);                               // return nRF24L01 status byte
 }
 /**************************************************/
 uint8_t nrf24le01::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
   uint8_t status,byte_ctr;
 
-    digitalWrite(RFCSN,0);                        // Set CSN low, init SPI tranaction
-    status = SPI_RW(reg);                         // Select register to write to and read status byte
-    for(byte_ctr=0; byte_ctr<bytes; byte_ctr++)   // then write all byte in buffer(*pBuf)
-       SPI_RW(*pBuf++);
+  digitalWrite(RFCSN,0);                        // Set CSN low, init SPI tranaction
+  status = SPI_RW(reg);                         // Select register to write to and read status byte
+  for(byte_ctr=0; byte_ctr<bytes; byte_ctr++)   // then write all byte in buffer(*pBuf)
+  SPI_RW(*pBuf++);
 
-    digitalWrite(RFCSN,1);                        // Set CSN high again
-    return(status);                               // return nRF24L01 status byte
+  digitalWrite(RFCSN,1);                        // Set CSN high again
+  return(status);                               // return nRF24L01 status byte
 }
 
 
