@@ -1,4 +1,0 @@
-nrf24le01Commands	KEYWORD1
-rf_init KEYWORD2
-RX_Mode KEYWORD2
-TX_Mode_NOACK KEYWORD2
