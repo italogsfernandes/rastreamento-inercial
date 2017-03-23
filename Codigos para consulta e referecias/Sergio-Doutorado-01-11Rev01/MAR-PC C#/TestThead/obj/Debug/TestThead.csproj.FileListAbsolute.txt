@@ -1,0 +1,10 @@
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\bin\Debug\TestThead.exe.config
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\bin\Debug\TestThead.exe
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\bin\Debug\TestThead.pdb
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.csprojResolveAssemblyReference.cache
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.Properties.Resources.resources
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.csproj.GenerateResource.Cache
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.exe
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.pdb
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.dataPck.resources
+C:\Users\FEELT\Desktop\TestThead\TestThead\TestThead\obj\Debug\TestThead.Form1.resources

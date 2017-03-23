@@ -1,0 +1,9 @@
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\bin\Debug\marpc.exe.config
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\bin\Debug\marpc.exe
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\bin\Debug\marpc.pdb
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\marpc.csprojResolveAssemblyReference.cache
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\Marpc.Form1.resources
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\marpc.Properties.Resources.resources
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\marpc.csproj.GenerateResource.Cache
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\marpc.exe
+C:\Users\FEELT\Desktop\Doutorado 01-11Rev01\MAR-PC C#\TestThead\obj\Debug\marpc.pdb
