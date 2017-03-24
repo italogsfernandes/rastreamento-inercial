@@ -1,7 +1,7 @@
 #include "nrf24le01Module.h"
 
 
-nrf24le01Module(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
+nrf24le01Module::nrf24le01Module(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
   RFIRQ = RFIRQ_pin;
   RFCE = RFCE_pin;
   RFCSN = RFCSN_pin;
@@ -10,6 +10,47 @@ nrf24le01Module(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
 ///////////
 //PUBLIC //
 ///////////
+
+
+/**
+ * Inicia o estado recepcao, onde o nrf estara aguardando a interrupcao rf
+ */
+void nrf24le01Module::RX_Mode(void){
+  newPayload = 0;
+  sta = 0;
+  RX_OK = 0;
+  digitalWrite(RFCE,0);                         // Radio chip enable low -> Standby-1
+  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1F);        // Set PWR_UP bit, enable CRC(2 bytes) & Prim:RX. RX_DR enabled..
+  digitalWrite(RFCE,1);                         // Set CE pin high to enable RX Mode
+}
+
+/**
+ * Entra no estado de transmissao, com pacote sem ACK.
+ * Transmitindo o atual valor em tx_buff
+ * RF transceiver is never in TX mode longer than 4 ms.
+ * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
+ */
+void nrf24le01Module::TX_Mode_NOACK_Polling(uint8_t payloadLength){
+  digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
+  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
+  SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
+  // Endereço da porta P2, matrizes tx_buf (), o comprimento da matriz é enviada)
+  TX_OK = 0;
+  digitalWrite(RFCE,1);                                            // Set CE pin high to enable TX Mode
+  delayMicroseconds(12);
+  digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
+  //TODO: understand this timeout, why? this is polling?
+  tempo = micros() + 1000;
+  do
+  {
+    tempoAtual = micros();
+    if (!digitalRead(RFIRQ))
+    RF_IRQ();
+  }while (!((TX_OK)|(tempoAtual>tempo)));
+  if((tempoAtual>tempo))
+  Serial.println("TX_MODE Time Out!");Serial.print('\n');Serial.print('\0');
+  RX_Mode();
+}
 
 /**
  * Inicia a comunicacao RF, apos configura-la ativa todas as interrupcoes e aguarda em RX Mode
@@ -89,48 +130,8 @@ void nrf24le01Module::rf_init(uint8_t *rx_addr,uint8_t *tx_addr,
   SPI_RW_Reg(FLUSH_TX,0);
   SPI_RW_Reg(FLUSH_RX,0);
   SPI_RW_Reg(W_REGISTER+NRF_STATUS,0x70);
-  RX_MODE();
+  RX_Mode();
 }
-
-/**
- * Inicia o estado recepcao, onde o nrf estara aguardando a interrupcao rf
- */
-void nrf24le01Module::RX_Mode(void){
-  newPayload = 0;
-  sta = 0;
-  RX_OK = 0;
-  digitalWrite(RFCE,0);                         // Radio chip enable low -> Standby-1
-  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1F);        // Set PWR_UP bit, enable CRC(2 bytes) & Prim:RX. RX_DR enabled..
-  digitalWrite(RFCE,1);                         // Set CE pin high to enable RX Mode
-}
-
-/**
- * Entra no estado de transmissao, com pacote sem ACK.
- * Transmitindo o atual valor em tx_buff
- * RF transceiver is never in TX mode longer than 4 ms.
- * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
- */
-void nrf24le01Module::TX_Mode_NOACK_Polling(uint8_t payloadLength){
-  digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
-  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
-  SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
-  // Endereço da porta P2, matrizes tx_buf (), o comprimento da matriz é enviada)
-  TX_OK = 0;
-  digitalWrite(RFCE,1);                                            // Set CE pin high to enable TX Mode
-  delayMicroseconds(12);
-  digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
-  //TODO: understand this timeout, why? this is polling?
-  tempo = micros() + 1000;
-  do
-  {
-    tempoAtual = micros();
-    if (!digitalRead(RFIRQ))
-    RF_IRQ();
-  }while (!((TX_OK)|(tempoAtual>tempo)));
-  if((tempoAtual>tempo))
-  Serial.println("TX_MODE Time Out!");Serial.print('\n');Serial.print('\0');
-}
-
 
 ////////////
 //Private //

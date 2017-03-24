@@ -1,9 +1,7 @@
 #ifndef nrf24le01Module_h
 #define nrf24le01Module_h
 
-//TODO: descobrir sobre library: #include <nRF24L01.h>
-//TODO: And change the name of this library
-
+#include <nRF24L01.h>
 #include <Arduino.h>
 #include <SPI.h>
 
@@ -45,12 +43,13 @@ public:
   uint8_t tx_buf[PAYLOAD_WIDTH];
   uint8_t payloadWidth = 0;
   bool newPayload = 0;    // Flag to indicate that there's a new payload sensor
+  uint8_t sta;
   void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr);
   void RX_Mode(void);
   void TX_Mode_NOACK_Polling(uint8_t payloadLength);
 
 private:
-  uint8_t sta;
+  unsigned long tempo, tempoAtual;
   uint8_t TX_OK = 0;
   uint8_t RX_OK = 0;
   uint8_t RFIRQ;  //Pino do arduino conectado a IRQ

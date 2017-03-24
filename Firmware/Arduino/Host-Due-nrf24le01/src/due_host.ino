@@ -21,7 +21,7 @@
  */
  #include <nrf24le01Module.h>
 
- nrf24le01 tx_nrf(2,3,4);
+ nrf24le01Module tx_nrf(2,3,4);
 
  void setup(){
    Serial.begin(9600);
@@ -30,31 +30,31 @@
  }
 
  void loop() {
-   tx_buf[0] = 0x42;
-   tx_nrf.TX_Mode_NOACK(1);
-   if(newPayload){
-     Serial.print(rx_buf[0],HEX);
-     if(rx_buf[0] == 0x00){
+   tx_nrf.tx_buf[0] = 0x42;
+   tx_nrf.TX_Mode_NOACK_Polling(1);
+   if(tx_nrf.newPayload){
+     Serial.print(tx_nrf.rx_buf[0],HEX);
+     if(tx_nrf.rx_buf[0] == 0x00){
        Serial.print(" - turn on signal received by sensor.\n");
      } else {
        Serial.print(" - Nao reconhecido.\n");
      }
-     sta = 0;
-     newPayload = 0;
+     tx_nrf.sta = 0;
+     tx_nrf.newPayload = 0;
    }
    delay(1000);
 
-   tx_buf[0] = 0x53;
-   tx_nrf.TX_Mode_NOACK(1);
-   if(newPayload){
-     Serial.print(rx_buf[0],HEX);
-     if(rx_buf[0] == 0x01){
+   tx_nrf.tx_buf[0] = 0x53;
+   tx_nrf.TX_Mode_NOACK_Polling(1);
+   if(tx_nrf.newPayload){
+     Serial.print(tx_nrf.rx_buf[0],HEX);
+     if(tx_nrf.rx_buf[0] == 0x01){
        Serial.print(" - turn off signal received by sensor.\n");
      } else {
        Serial.print(" - Nao reconhecido.\n");
      }
-     sta = 0;
-     newPayload = 0;
+     tx_nrf.sta = 0;
+     tx_nrf.newPayload = 0;
    }
    delay(1000);
  }
@@ -154,8 +154,8 @@ void uart_communication_handler(){
       case CMD_READ:
       send_cmd_to_active_sensors(CMD_READ);
       break;
-    } /*END SWITCH*/
-  } /*END IF START COMMAND*/
+    } /*END SWITCH*//*
+  } /*END IF START COMMAND*//*
 }
 
 uint8_t rf_communication_handler(){
