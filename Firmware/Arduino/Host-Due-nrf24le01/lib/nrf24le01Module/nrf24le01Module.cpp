@@ -30,7 +30,7 @@ void nrf24le01Module::RX_Mode(void){
  * RF transceiver is never in TX mode longer than 4 ms.
  * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
  */
-void nrf24le01Module::TX_Mode_NOACK_Polling(uint8_t payloadLength){
+void nrf24le01Module::TX_Mode_NOACK(uint8_t payloadLength){
   digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
   SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);  // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
   SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength); // Writes data to TX payload

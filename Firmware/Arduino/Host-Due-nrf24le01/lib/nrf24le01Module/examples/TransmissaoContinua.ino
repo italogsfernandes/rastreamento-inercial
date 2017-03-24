@@ -13,7 +13,7 @@ unsigned long timeout_init_time, timeout_actual_time;
 
 void loop() {
   tx_nrf.tx_buf[0] = 0x42;
-  tx_nrf.TX_Mode_NOACK_Polling(1);
+  tx_nrf.TX_Mode_NOACK(1);
   if(tx_nrf.newPayload){
     Serial.print(tx_nrf.rx_buf[0],HEX);
     if(tx_nrf.rx_buf[0] == 0x00){
@@ -28,7 +28,7 @@ void loop() {
   delay(1000);
 
   tx_nrf.tx_buf[0] = 0x53;
-  tx_nrf.TX_Mode_NOACK_Polling(1);
+  tx_nrf.TX_Mode_NOACK(1);
   wait_rf_response();
   if(tx_nrf.newPayload){
     Serial.print(tx_nrf.rx_buf[0],HEX);
