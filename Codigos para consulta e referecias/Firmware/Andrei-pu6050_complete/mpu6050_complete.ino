@@ -11,14 +11,14 @@
  * ------------------------------------------------------------------------------
  * Description:
  * ------------------------------------------------------------------------------
- * Acknowledgements 
+ * Acknowledgements
  *  - We would like to thank the open-source community that provided many of the
- *  source codes necessary for creating this firmware. 
+ *  source codes necessary for creating this firmware.
  *  - Jeff Rowberg as the main developer of the I2Cdevlib
  *  - Luis Ródenas: Our calibration routine is totally based on his code
  * ------------------------------------------------------------------------------
  */
- 
+
  /* ==========  LICENSE  ==================================
   I2Cdev device library code is placed under the MIT license
   Copyright (c) 2011 Jeff Rowberg
@@ -92,7 +92,7 @@ HMC5883L mag; //External magnetometer device
 //------------------------------------------------------------------------------
 //Data acquisition variables
 //Sampling period in us
-const double sampPeriod = (1.0 / sampFreq) * 1000000; 
+const double sampPeriod = (1.0 / sampFreq) * 1000000;
 //Serial variables
 String serialOp; // Variable for receiving commands from serial
 bool configOp = true; //If true, calibration. If false, acquisition
@@ -133,34 +133,34 @@ void setup() {
     #endif
 
   //Defines the LED_PIN as output
-  pinMode(LED_PIN,OUTPUT);    
+  pinMode(LED_PIN,OUTPUT);
   //Initializes serial comm with the specified baud rate
-  Serial.begin(baud);  
+  Serial.begin(baud);
 
   if(mpu.testConnection())
-  {  
-    //Initializes the IMU  
-    mpu.initialize(); 
-  
+  {
+    //Initializes the IMU
+    mpu.initialize();
+
     //Initializes the DMP
     uint8_t ret = mpu.dmpInitialize();
-    delay(50);  
-    
+    delay(50);
+
     if(ret == 0)
     {
-      mpu.setDMPEnabled(true);  
+      mpu.setDMPEnabled(true);
       mpu.setXAccelOffset(871);
       mpu.setYAccelOffset(1527);
       mpu.setZAccelOffset(1988);
       mpu.setXGyroOffset(36);
       mpu.setYGyroOffset(-37);
-      mpu.setZGyroOffset(-1);  
-    } 
+      mpu.setZGyroOffset(-1);
+    }
     else
     {
-      //Serial.println("Error!"); 
+      //Serial.println("Error!");
     }
-  }  
+  }
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -168,11 +168,11 @@ void setup() {
 //------------------------------------------------------------------------------
 void loop()
 {
-  //Menu  
+  //Menu
   if(Serial.available() > 0)
   {
-    serialOp = Serial.readString();      
-    
+    serialOp = Serial.readString();
+
     if (serialOp == "CMDSTART")
     {
       Serial.write(CMD_OK);
@@ -180,7 +180,7 @@ void loop()
       packageType = 0x23;
       digitalWrite(LED_PIN,HIGH);
       mpu.resetFIFO();
-      delay(5);      
+      delay(5);
       Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
     }
     else if (serialOp == "CMDSTOP")
@@ -189,7 +189,7 @@ void loop()
       Timer3.stop();
     }
     else if (serialOp == "CMDCONN")
-    {      
+    {
       bool resp = mpu.testConnection();
       if(resp)
         Serial.write(CMD_OK);
@@ -197,15 +197,15 @@ void loop()
         Serial.write(CMD_ERROR);
     }
     else if(serialOp == "CMDCALIB")
-    {      
+    {
       //Sends a confirmation of the command
       Serial.write(0x01);
       String sa = Serial.readStringUntil('\n'); //Accel tolerance
-      String sg = Serial.readStringUntil('\n'); //Gyro tolerance    
-      String t = Serial.readStringUntil('\n');  //Time tolerance 
+      String sg = Serial.readStringUntil('\n'); //Gyro tolerance
+      String t = Serial.readStringUntil('\n');  //Time tolerance
       accelTol = sa.toInt(); //Converts to int
       gyroTol = sg.toInt(); //Converts to int
-      timeTol = t.toInt();  //Converts to int     
+      timeTol = t.toInt();  //Converts to int
       //Configures the accel offsets to zero
       mpu.setXAccelOffset(0);
       mpu.setYAccelOffset(0);
@@ -221,7 +221,7 @@ void loop()
       //Small delay
       delay(50);
       //Triggers the calibration method
-      Timer3.attachInterrupt(timerCalibration).start(sampPeriod);      
+      Timer3.attachInterrupt(timerCalibration).start(sampPeriod);
     }
   }
 }
@@ -230,20 +230,20 @@ void loop()
 // DATA ACQUISITION
 //------------------------------------------------------------------------------
 void timerDataAcq()
-{  
+{
   int numbPackets = floor(mpu.getFIFOCount()/PSDMP);
   for(int i=0; i<numbPackets; i++)
   {
     mpu.getFIFOBytes(fifoBuffer,PSDMP);
     uint8_t buf[PS];
     //Quaternion
-    buf[0] = fifoBuffer[0];        
+    buf[0] = fifoBuffer[0];
     buf[1] = fifoBuffer[1];
-    buf[2] = fifoBuffer[4];        
+    buf[2] = fifoBuffer[4];
     buf[3] = fifoBuffer[5];
-    buf[4] = fifoBuffer[8];        
+    buf[4] = fifoBuffer[8];
     buf[5] = fifoBuffer[9];
-    buf[6] = fifoBuffer[12];        
+    buf[6] = fifoBuffer[12];
     buf[7] = fifoBuffer[13];
     //Accelerometer
     buf[8] = fifoBuffer[28];
@@ -259,17 +259,17 @@ void timerDataAcq()
     buf[17] = fifoBuffer[21];
     buf[18] = fifoBuffer[24];
     buf[19] = fifoBuffer[25];
-    Serial.write(ST);      
+    Serial.write(ST);
     Serial.write(PS);
     Serial.write(buf,sizeof(buf));
-    Serial.write(ET);        
+    Serial.write(ET);
   }
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 // CALIBRATION ROUTINE
 //------------------------------------------------------------------------------
-/* Everything should happen inside the timer 
+/* Everything should happen inside the timer
  * 1st step: Read raw sensor data for 1s to measure the mean values
  * 2nd step: Estimate the first offset values
  * 3rd step: Read 1s and check if the offsets are providing good values
@@ -284,7 +284,7 @@ void timerCalibration()
   switch(calibStep)
   {
     //1st step: Measuring data to estimate the first offsets
-    case 1:            
+    case 1:
       //First readings to measure the mean raw values from accel and gyro
       //Measures during 2 seconds
       if(calibCounter < sampFreq*2)
@@ -305,11 +305,11 @@ void timerCalibration()
         //Gyro-Z
         gyroBuffer[2] = (calibCounter*gyroBuffer[2] + gz)/(calibCounter+1);
         //Increments the sample counter
-        calibCounter++;        
+        calibCounter++;
       }
       else
-      {        
-        //Setting the new offset values 
+      {
+        //Setting the new offset values
         //Accelerometer offsets
         mpu.setXAccelOffset(-accelBuffer[0] / 8);
         mpu.setYAccelOffset(-accelBuffer[1] / 8);
@@ -319,7 +319,7 @@ void timerCalibration()
         mpu.setYGyroOffset(-gyroBuffer[1] / 4);
         mpu.setZGyroOffset(-gyroBuffer[2] / 4);
         //Goes to the next step of the calibration process
-        calibStep = 2;                
+        calibStep = 2;
       }
       break;
 
@@ -327,9 +327,9 @@ void timerCalibration()
      case 2:
       //Reads the sensors during 1 second
       if(calibCounter <= sampFreq)
-      {        
+      {
         //Reads the imu sensors
-        mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz); 
+        mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
         //Iteratively updating the mean value for each sensor
         accelBuffer[0] = (calibCounter*accelBuffer[0] + ax)/(calibCounter+1);
         accelBuffer[1] = (calibCounter*accelBuffer[1] + ay)/(calibCounter+1);
@@ -338,7 +338,7 @@ void timerCalibration()
         gyroBuffer[1] = (calibCounter*gyroBuffer[1] + gy)/(calibCounter+1);
         gyroBuffer[2] = (calibCounter*gyroBuffer[2] + gz)/(calibCounter+1);
         //Increments the sample counter
-        calibCounter++;                
+        calibCounter++;
       }
       else
       {
@@ -347,7 +347,7 @@ void timerCalibration()
         uint8_t calibOk = 0;
 
         //Accel-X
-        if(abs(accelBuffer[0]) < accelTol) calibOk++;        
+        if(abs(accelBuffer[0]) < accelTol) calibOk++;
         else mpu.setXAccelOffset(mpu.getXAccelOffset() - (accelBuffer[0]/accelTol));
         //Accel-Y
         if(abs(accelBuffer[1]) < accelTol) calibOk++;
@@ -355,23 +355,23 @@ void timerCalibration()
         //Accel-Z
         if(abs(accelBuffer[2]) < accelTol) calibOk++;
         else mpu.setZAccelOffset(mpu.getZAccelOffset() + ((16384-accelBuffer[2])/accelTol));
-        //Gyro-X  
+        //Gyro-X
         if(abs(gyroBuffer[0]) < gyroTol) calibOk++;
         else mpu.setXGyroOffset(mpu.getXGyroOffset() - (gyroBuffer[0]/(gyroTol+1)));
         //Gyro-Y
         if(abs(gyroBuffer[1]) < gyroTol) calibOk++;
         else mpu.setYGyroOffset(mpu.getYGyroOffset() - (gyroBuffer[1]/(gyroTol+1)));
-        //Gyro-Z        
+        //Gyro-Z
         if(abs(gyroBuffer[2]) < gyroTol) calibOk++;
         else mpu.setZGyroOffset(mpu.getZGyroOffset() - (gyroBuffer[2]/(gyroTol+1)));
 
         //Check if the calibration process can be finished
         if(calibOk == 6 || calibIt == timeTol)
-        {                    
+        {
           Timer3.stop();
         }
         else
-        {          
+        {
           accelBuffer[0] = 0;
           accelBuffer[1] = 0;
           accelBuffer[2] = 0;
@@ -380,11 +380,10 @@ void timerCalibration()
           gyroBuffer[2] = 0;
           calibIt++;
           calibCounter=0;
-        }          
+        }
       }
-      break;      
-  }  
+      break;
+  }
 }
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-

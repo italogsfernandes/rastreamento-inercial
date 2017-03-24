@@ -52,7 +52,7 @@ struct WBANSensors
   int     P;                                        // Priority (ms)
   boolean I;                                        // More important
   int     A;                                        // Sensor aquisition time
-  byte    S;                // 0x05 - Leitura dos dados do sensor   0x15 - reLeitura                      
+  byte    S;                // 0x05 - Leitura dos dados do sensor   0x15 - reLeitura
 }sensors[N_MAX_SENSORS];
 byte idxF, idxE, pylInf, idxEMax, pldInf, vlFIFO;
 unsigned long waitForRot;
@@ -61,7 +61,7 @@ byte vetF[SIZE_FR];                                 // Vetor to save address los
 
 byte rx_buf[PAYLOAD_WIDTH];                         // Define lenght of rx_buf and tx_buf
 byte tx_buf[PAYLOAD_WIDTH];
-byte dataToSensor[N_BYT_ADS_CFG];                   // Sensor configuration data     
+byte dataToSensor[N_BYT_ADS_CFG];                   // Sensor configuration data
 
 uint8_t sta;
 
@@ -97,8 +97,8 @@ boolean pck = 0;
 
 String msgHost = "Host running OK!";
 
-boolean aquis = 0; 
-boolean newPayload = 0;                             // Flag to indicate that there's a new payload sensor
+boolean aquis = 0;
+boolean newPayload = 0; // Flag to indicate that there's a new payload sensor
 byte TX_OK = 0;
 byte RX_OK = 0;
 
@@ -173,7 +173,7 @@ uint8_t SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes)
     status = SPI_RW(reg);                         // Select register to write to and read status byte
     for(byte_ctr=0; byte_ctr<bytes; byte_ctr++)   // then write all byte in buffer(*pBuf)
        SPI_RW(*pBuf++);
- 
+
     digitalWrite(RFCSN,1);                        // Set CSN high again
     return(status);                               // return nRF24L01 status byte
 }
@@ -185,7 +185,7 @@ void rf_init(void)
   pinMode(RFIRQ, INPUT);  // Define RFIRQ as input to receive IRQ from nRF24L01+
   pinMode(RFCE, OUTPUT);  // Define RFCE as output to control nRF24L1+ Chip Enable
   pinMode(RFCSN, OUTPUT); // Define RFCSN as output to control nRF24L1+ SPI
-  SPI.begin();            // start the SPI library: 
+  SPI.begin();            // start the SPI library:
   newPayload = 0;
   sta = 0;
   TX_OK = 0;
@@ -212,8 +212,8 @@ void pushFIFO(uint8_t dado)
 
   FIFO[index_in] = dado;
   index_in++;
-  
-  if(index_in == TAM_FIFO) 
+
+  if(index_in == TAM_FIFO)
     index_in = 0;
   if(nDataFIFO<TAM_FIFO)
     nDataFIFO++;
@@ -223,7 +223,7 @@ void pushFIFO(uint8_t dado)
 uint8_t popFIFO()
 {
   uint8_t  aux;
-  
+
   if(nDataFIFO > 0)
   {
     aux = FIFO[index_out];
@@ -248,8 +248,8 @@ void pushSerialFIFO()
   for(i=0;i<serialFromHost[1];i++)
     serialFIFO[serialIndex_in][i] = serialFromHost[i];
   serialIndex_in++;
-  
-  if(serialIndex_in == SERIAL_FIFO_WID) 
+
+  if(serialIndex_in == SERIAL_FIFO_WID)
     serialIndex_in = 0;
   if(nDataFIFO<TAM_FIFO)
     serialnDataFIFO++;
@@ -261,7 +261,7 @@ void pushSerialFIFO()
 void popSerialFIFO()
 {
   uint8_t i;
-  
+
   if(serialnDataFIFO > 0)
   {
     for(i=0;i<serialFIFO[serialIndex_in][1];i++)
@@ -276,7 +276,7 @@ void popSerialFIFO()
   {
     serialFIFOempty = 1;
     return;
-  }  
+  }
 }
 
 /***************************************************/
@@ -322,16 +322,16 @@ void TX_Mode_NOACK(uint8_t payloadLength)
 }
 
 /**************************************************/
-void RF_IRQ(void) 
+void RF_IRQ(void)
 {
-  sta=SPI_Read(NRF_STATUS);  
+  sta=SPI_Read(NRF_STATUS);
   if(bitRead(sta,RX_DR))                                  // if receive data ready (RX_DR) interrupt
-  {  
+  {
     RX_OK = 1;
     newPayload = 1;
-    SPI_Read_Buf(R_RX_PAYLOAD,rx_buf,PAYLOAD_WIDTH);     // read receive payload from RX_FIFO buffer    
+    SPI_Read_Buf(R_RX_PAYLOAD,rx_buf,PAYLOAD_WIDTH);     // read receive payload from RX_FIFO buffer
     payloadWidth = SPI_Read(R_RX_PLD_WIDTH);              // Retorna o número de bytes no payload recebido
-    if(payloadWidth > 32) 
+    if(payloadWidth > 32)
     {
       payloadWidth = 0;
       newPayload = 0;
@@ -350,7 +350,7 @@ void RF_IRQ(void)
 byte seekIdxSen(byte addrSen)
 {
   int i;
-  
+
   for(i=0;i < N_SENSORS_WBAN;i++)
   {
     if(sensors[i].E == addrSen)
@@ -362,7 +362,7 @@ byte seekIdxSen(byte addrSen)
 void configSensor(void)               // Command: 0x01
 {
   byte i, idxSenCfg;
-  
+
   tx_buf[0] = dataToSensor[0];        // Sensor address
   tx_buf[1] = 0x01;                   // Command CONFIG SENSOR
   for(i=1;i<N_BYT_ADS_CFG;i++)
@@ -398,7 +398,7 @@ void configSensor(void)               // Command: 0x01
   }
   serialPayload[0] = 0x7E;                  // Payload delimiter
   serialPayload[1] = 0x04;                  // Number of bytes
-  serialPayload[2] = dataToSensor[0];       // Sensor address  
+  serialPayload[2] = dataToSensor[0];       // Sensor address
   serialPayload[3] = 0x40;                  // Command Status
   serialPayload[4] = rx_buf[2];             // Data received = 0x10: FAIL  -  0x01: OK
   serialPayload[5] = 0x81;                  // Payload delimiter
@@ -413,7 +413,7 @@ void disparaAquis(void)               // Command: 0x02
 {
   msgHost = "POLLING";
   SerialUSB.write('P');
-  delay(100);  
+  delay(100);
   digitalWrite(LEDVM,LOW);
   for(int i = 0;i < N_MAX_SENSORS;i++)
   {
@@ -432,15 +432,15 @@ void disparaAquis(void)               // Command: 0x02
 void cancelaAquis(void)               // Command: 0x03
 {
   int i;
-  
+
   tx_buf[0] = BROADCAST; // Mensagem em Broadcast
   tx_buf[1] = 0x03;      // Comando CANCELA AQUISIÇÃO
   TX_Mode_NOACK(2);
   msgHost = "READING SENSORS!";
   Serial.println(" ");Serial.println(msgHost);
-  aquis = 0;  
+  aquis = 0;
   comando = 0x00;
-  delay(100);  
+  delay(100);
   for(i=0; i < N_SENSORS_WBAN;i++)
   {
     do
@@ -448,7 +448,7 @@ void cancelaAquis(void)               // Command: 0x03
       idxE = i;
       readSensor();
     }while(serialPayload[1]>3);
-  }  
+  }
   digitalWrite(LEDVM,LOW);
   RX_Mode();
   for(i=0;i<5;i++)                                          // Width serialPldEnd is 5
@@ -483,20 +483,20 @@ void statusHost(void)                 // Command: 0x06
 void resetSensor(void)                // Command: 0x08
 {
   byte i;
-  
+
   //SerialUSB.println("Funcao resetSensor");
-  
+
   tx_buf[0] = BROADCAST;              // Mensagem em Broadcast
   tx_buf[1] = 0x08;                   // Command RESET SENSOR
   TX_Mode_NOACK(2);
   RX_Mode();
   serialPayload[0] = 0x7E;                  // Payload delimiter
   serialPayload[1] = 0x04;                  // Number of bytes
-  serialPayload[2] = 0x00;                  // Address Broadcast  
+  serialPayload[2] = 0x00;                  // Address Broadcast
   serialPayload[3] = 0x40;                  // Command Status
-  serialPayload[4] = 0x01;                  // RESET OK!  
+  serialPayload[4] = 0x01;                  // RESET OK!
   serialPayload[5] = 0x81;                  // Payload delimiter
-  aquis = 0;  
+  aquis = 0;
   comando = 0x00;
   serialTxFlush();
   index_in = 0;
@@ -512,7 +512,7 @@ void resetSensor(void)                // Command: 0x08
   sensorAtual = 0;                            // Define o próximo sensor a ser lido pelo Host
   payloadWidth = 0;
   pck = 0;
-  aquis = 0; 
+  aquis = 0;
   newPayload = 0;                             // Flag to indicate that there's a new payload sensor
   TX_OK = 0;
   RX_OK = 0;
@@ -522,7 +522,7 @@ void resetSensor(void)                // Command: 0x08
   endSensor = 0;
   RX_Mode();
   for(i=0;i<6;i++)
-    SerialUSB.write(serialPayload[i]);    
+    SerialUSB.write(serialPayload[i]);
 }
 
 /**************************************************/
@@ -541,24 +541,24 @@ byte nextSensor()
   int i = 1, auxE, auxP;
 
   idxE++;
-  if(idxE > N_SENSORS_WBAN-1) 
+  if(idxE > N_SENSORS_WBAN-1)
     idxE=0;
   return(idxE);
 }
 /**************************************************/
-void readSensor(void)                     // Command: 0x55
-{  
+void readSensor(void){
+
   tx_buf[0] = sensors[idxE].E;            // Next sensor Address
   tx_buf[1] = sensors[idxE].S;            // Command READ/reREAD SENSOR DATA
 //    T2 = micros();
 //  DT = T2 - T1;
 //  Serial.println(DT);
 //  T1 = micros();
-  TX_Mode_NOACK(2);      
+  TX_Mode_NOACK(2);
   RX_Mode();
 
   digitalWrite(LEDVM,!digitalRead(LEDVM));
-  
+
 //  if(sensors[idxE].S == 0x15)
 //  {
 //    Serial.print(sensors[idxE].E, HEX);
@@ -572,7 +572,7 @@ void readSensor(void)                     // Command: 0x55
       RF_IRQ();
   }while (!((RX_OK)||(tempoAtual>tempo)));
   delayMicroseconds(85);
- 
+
   pldInf = sendDataHost();
 //  if(pldInf != 0x80)
 //  {
@@ -602,12 +602,12 @@ byte sendDataHost()
       serialPayload[3] = 0x10 + vlFIFO;
     if(nData != 0)
     {
-      for(j=0;j<nData;j++)         
+      for(j=0;j<nData;j++)
         serialPayload[j+4] = rx_buf[j+3];                   // Biomedical data
-    }  
-    serialPayload[j+4] = 0x81;  
-    i = j + 5;  
-    for(j=0;j<i;j++)       
+    }
+    serialPayload[j+4] = 0x81;
+    i = j + 5;
+    for(j=0;j<i;j++)
       SerialUSB.write(serialPayload[j]);
   }
   else
@@ -616,14 +616,14 @@ byte sendDataHost()
     serialPldFail[2] = tx_buf[0];
     for(j=0;j<IDX_FAIL;j++)                                          // Width serialPldFail is 6
       SerialUSB.write(serialPldFail[j]);
-    pldInf = 0x80;  
+    pldInf = 0x80;
   }
   return(pldInf);
 }
 
 /**************************************************/
 void saveVetF(byte idxSensor)
-{ 
+{
   byte flagFR;
 
   if(pldInf == 0x80)
@@ -638,7 +638,7 @@ void saveVetF(byte idxSensor)
         idxF++;
       }
     }
-  }  
+  }
 }
 
 /**************************************************/
@@ -652,7 +652,7 @@ void restoreSenLost(byte idxSensor)
   {
     if(vetF[j] == idxSensor)
     {
-      removeSenVetF(j);  
+      removeSenVetF(j);
       return;
     }
     else
@@ -706,36 +706,36 @@ void comandaWBAN(void)
           statusSensor();
           pck = 0;
           break;
-        }       
+        }
         case (0x05):
         {
           // ENVIA ATRIBUTOS DOS SENSORES
           statusSenAttributes();
           pck = 0;
           break;
-        }       
+        }
         case (0x06):
         {
           // ENVIA STATUS DO HOST
           statusHost();
           pck = 0;
           break;
-        }        
+        }
         case (0x07):
         {
           break;
-        }          
+        }
         case (0x08):
         {
           resetSensor();
           pck = 0;
           break;
-        }    
+        }
         case (0x09):
         {
           host_init();
           break;
-        }         
+        }
         case (0x24):
         {
           // MENSAGEM COMPUTADOR - STATUS ATUAL DO SENSOR
@@ -747,7 +747,7 @@ void comandaWBAN(void)
           // CONTROLA A LEITURA DOS DADOS DOS SENSORES E ENVIA PAYLOAD PARA CPU
           ctlReadSensors();
           break;
-        }         
+        }
         default:
           break;
       }
@@ -768,21 +768,21 @@ void processSerial(void)
   if(FIFOempty)
     return;
   if(!pck)
-  { 
+  {
     if(dado == 0x7E)
     {
       pck = 1;  // Indica que um novo pacote pode estar iniciando
       dado = popFIFO();
       if(FIFOempty)
         return;
-    }    
+    }
   }
   if(pck)
       switch(dado)
       {
         case(0x01):
         {
-          comando = 0x01;           // Indica que o pacote é do tipo CONFIGURA SENSOR 
+          comando = 0x01;           // Indica que o pacote é do tipo CONFIGURA SENSOR
           tempo = millis() + 10;    // 10 milliseconds to receive the rest of the command data
           do
           {
@@ -790,7 +790,7 @@ void processSerial(void)
             serialRxPC();
           }while (!(tempoAtual>tempo));
           for(i=0;i<N_BYT_ADS_CFG;i++)
-            dataToSensor[i] = popFIFO();          
+            dataToSensor[i] = popFIFO();
           break;
         }
         case(0x02):
@@ -800,19 +800,19 @@ void processSerial(void)
         }
         case(0x03):
         {
-          comando = 0x03;           // Indica que o pacote é do tipo CANCELA AQUISIÇÃO 
+          comando = 0x03;           // Indica que o pacote é do tipo CANCELA AQUISIÇÃO
           break;
         }
         case(0x04):
         {
-          comando = 0x04;           // Indica que o pacote é do tipo STATUS DOS SENSORES 
+          comando = 0x04;           // Indica que o pacote é do tipo STATUS DOS SENSORES
           break;
-        }   
+        }
         case(0x05):
         {
-          comando = 0x05;           // Indica que o pacote é do tipo ATRIBUTOS DOS SENSORES 
+          comando = 0x05;           // Indica que o pacote é do tipo ATRIBUTOS DOS SENSORES
           break;
-        }              
+        }
         case(0x06):
         {
           comando = 0x06;           // Indica que o pacote é do tipo STATUS DO HOST
@@ -820,19 +820,19 @@ void processSerial(void)
         }
         case(0x07):
         {
-          comando = 0x07;           // Indica que o pacote é do tipo 
+          comando = 0x07;           // Indica que o pacote é do tipo
           break;
-        }       
+        }
         case(0x08):
         {
-          comando = 0x08;           // Indica que o pacote é do tipo RESET SENSOR 
+          comando = 0x08;           // Indica que o pacote é do tipo RESET SENSOR
           break;
-        }  
+        }
         case(0x09):
         {
           comando = 0x09;           // Indica que o pacote é do tipo RESET HOST
           break;
-        }            
+        }
         default:
         {
           pck = 0;                  // Indica que não foi um início de pacote válido
@@ -842,7 +842,7 @@ void processSerial(void)
 }
 
 /***************************************************/
-void serialRxPC() 
+void serialRxPC()
 {
   while(SerialUSB.available()>0)
   {
@@ -861,7 +861,7 @@ void host_init()
     sensors[i].R = 0;
     sensors[i].C = 0;
     sensors[i].T = 0;
-    sensors[i].P = 10000;    
+    sensors[i].P = 10000;
     sensors[i].I = 0;
     sensors[i].A = 100;
     sensors[i].S = 0x05;    // 0x05 - Leitura dos dados do sensor   0x15 - reLeitura
@@ -871,7 +871,7 @@ void host_init()
   for(int j = 0; j < N_SENSORS_WBAN; j++)
   {
     Serial.print("<");Serial.print(j+1);Serial.print("> : sensors[x].P = ");Serial.print(sensors[j].P);Serial.print(" sensors[x].A = ");Serial.println(sensors[j].A);
-  }    
+  }
   delay(200);
   idxEMax = N_SENSORS_WBAN;
   idxE = 0;
@@ -880,7 +880,7 @@ void host_init()
   tmrSys = millis();
 }
 /***************************************************/
-void setup() 
+void setup()
 {
   pinMode(LEDVM,OUTPUT);
   SerialUSB.begin(921600);
@@ -890,12 +890,12 @@ void setup()
 }
 
 /***************************************************/
-void loop() 
-{ 
-  
+void loop()
+{
+
   while(1)
   {
-    serialRxPC(); 
+    serialRxPC();
     processSerial();
     comandaWBAN();
   }

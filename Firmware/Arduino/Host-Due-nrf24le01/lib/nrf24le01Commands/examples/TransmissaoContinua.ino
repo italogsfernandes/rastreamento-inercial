@@ -1,17 +1,14 @@
-#include <nrf24le01.h>
+#include <nrf24le01Commands.h>
 
-nrf24le01 tx_nrf(4);
-
-//Enderecos:
-//Definido como endere�o da pipe 0
-uint8_t code ADDR_HOST[TX_ADR_WIDTH] = {0xE7,0xE7,0xE7,0xE7,0xE7}; // Define a host adr
+nrf24le01 tx_nrf(2,3,4);
 
 void setup(){
-  tx_nrf.rf_init();
-  tx_nrf.RX_Mode();
+  Serial.begin(9600);
+  tx_nrf.rf_init(tx_nrf.ADDR_HOST,tx_nrf.ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
 }
 
 void loop() {
+  tx_buf[0] = 0x42;
   tx_nrf.TX_Mode_NOACK(1);
-  delay(100);
+  delay(1000);
 }

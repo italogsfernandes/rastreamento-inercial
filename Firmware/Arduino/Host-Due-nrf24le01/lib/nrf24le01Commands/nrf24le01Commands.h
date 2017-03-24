@@ -45,7 +45,7 @@ public:
   uint8_t tx_buf[PAYLOAD_WIDTH];
   uint8_t payloadWidth = 0;
   bool newPayload = 0;    // Flag to indicate that there's a new payload sensor
-  void rf_init(void);
+  void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr);
   void RX_Mode(void);
   void TX_Mode_NOACK(uint8_t payloadLength);
 
