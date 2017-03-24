@@ -5,7 +5,6 @@ nrf24le01(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
   RFIRQ = RFIRQ_pin;
   RFCE = RFCE_pin;
   RFCSN = RFCSN_pin;
-  Serial.print("oie");
 }
 
 ///////////
@@ -111,7 +110,7 @@ void nrf24le01::RX_Mode(void){
  * RF transceiver is never in TX mode longer than 4 ms.
  * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
  */
-void nrf24le01::TX_Mode_NOACK(uint8_t payloadLength){
+void nrf24le01::TX_Mode_NOACK_Polling(uint8_t payloadLength){
   digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
   SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
   SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
@@ -241,8 +240,7 @@ uint8_t nrf24le01::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
  * ativa o sinalizador newPayload
  * o tamanho da payload é armazenado em payloadWidth
  */
-void nrf24le01::RF_IRQ(void)
-{
+void nrf24le01::RF_IRQ(void) {
   sta=SPI_Read(NRF_STATUS);
   if(bitRead(sta,RX_DR))                                  // if receive data ready (RX_DR) interrupt
   {
