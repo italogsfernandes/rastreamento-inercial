@@ -1,6 +1,7 @@
-#include "Nordic\reg24le1.h" //definicoes basicas de pinos
+#include "reg24le1.h" //definicoes basicas de pinos
 #include "nRF-SPIComands.h" //Comunicacao RF
 #include "hal_delay.h"
+
 #define LED_GREEN P06
 ///////////////////
 //Implementation //
@@ -32,13 +33,13 @@ void main(){
             switch (rx_buf[0]) {
               case 0x42:
               tx_buf[0]= 0x00;
-              TX_Mode_NOACK_Polling(1);
+              TX_Mode_NOACK(1);
               RX_Mode();
               LED_GREEN = 1;
               break;
               case 0x53:
               tx_buf[0]= 0x01;
-              TX_Mode_NOACK_Polling(1);
+              TX_Mode_NOACK(1);
               RX_Mode();
               LED_GREEN = 0;
               break;
