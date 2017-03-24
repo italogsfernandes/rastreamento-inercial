@@ -1,7 +1,7 @@
-#include "nrf24le01.h"
+#include "nrf24le01Module.h"
 
 
-nrf24le01(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
+nrf24le01Module(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
   RFIRQ = RFIRQ_pin;
   RFCE = RFCE_pin;
   RFCSN = RFCSN_pin;
@@ -19,7 +19,7 @@ nrf24le01(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin){
  * @param rf_data_rate Velocidade de transmissao nor ar que deseja utilizar
  * @param rf_pwr       Power of the Transmission
  */
-void nrf24le01::rf_init(uint8_t *rx_addr,uint8_t *tx_addr,
+void nrf24le01Module::rf_init(uint8_t *rx_addr,uint8_t *tx_addr,
    uint8_t rf_channel, rf_data_rate_t rf_data_rate,
    rf_tx_power_t rf_pwr){
  uint8_t rf_setup_byte = 0x07; //0000 0111
@@ -95,7 +95,7 @@ void nrf24le01::rf_init(uint8_t *rx_addr,uint8_t *tx_addr,
 /**
  * Inicia o estado recepcao, onde o nrf estara aguardando a interrupcao rf
  */
-void nrf24le01::RX_Mode(void){
+void nrf24le01Module::RX_Mode(void){
   newPayload = 0;
   sta = 0;
   RX_OK = 0;
@@ -110,7 +110,7 @@ void nrf24le01::RX_Mode(void){
  * RF transceiver is never in TX mode longer than 4 ms.
  * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
  */
-void nrf24le01::TX_Mode_NOACK_Polling(uint8_t payloadLength){
+void nrf24le01Module::TX_Mode_NOACK_Polling(uint8_t payloadLength){
   digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
   SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
   SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
@@ -141,7 +141,7 @@ void nrf24le01::TX_Mode_NOACK_Polling(uint8_t payloadLength){
  * @param  value [description]
  * @return       [description]
  */
-uint8_t nrf24le01::SPI_RW(uint8_t value){
+uint8_t nrf24le01Module::SPI_RW(uint8_t value){
   uint8_t SPIData;
   SPIData = SPI.transfer(value);
   return SPIData;                   // return SPI read value
@@ -153,7 +153,7 @@ uint8_t nrf24le01::SPI_RW(uint8_t value){
  * @param  value [description]
  * @return       [description]
  */
-uint8_t nrf24le01::SPI_RW_Reg(uint8_t reg, uint8_t value){
+uint8_t nrf24le01Module::SPI_RW_Reg(uint8_t reg, uint8_t value){
   uint8_t status;
   digitalWrite(RFCSN,0);                      // CSN low, initiate SPI transaction£
   status = SPI_RW(reg);           // select register
@@ -163,10 +163,10 @@ uint8_t nrf24le01::SPI_RW_Reg(uint8_t reg, uint8_t value){
 }
 
 /**
- * [nrf24le01::SPI_Read_Status description]
+ * [nrf24le01Module::SPI_Read_Status description]
  * @return  [description]
  */
-uint8_t nrf24le01::SPI_Read_Status(void){
+uint8_t nrf24le01Module::SPI_Read_Status(void){
   uint8_t reg_val;
 
   digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
@@ -176,11 +176,11 @@ uint8_t nrf24le01::SPI_Read_Status(void){
 }
 
 /**
- * [nrf24le01::SPI_Read description]
+ * [nrf24le01Module::SPI_Read description]
  * @param  reg [description]
  * @return     [description]
  */
-uint8_t nrf24le01::SPI_Read(uint8_t reg){
+uint8_t nrf24le01Module::SPI_Read(uint8_t reg){
   uint8_t reg_val;
 
   digitalWrite(RFCSN,0);                          // CSN low, initialize SPI communication...
@@ -191,13 +191,13 @@ uint8_t nrf24le01::SPI_Read(uint8_t reg){
 }
 
 /**
- * [nrf24le01::SPI_Read_Buf description]
+ * [nrf24le01Module::SPI_Read_Buf description]
  * @param  reg   [description]
  * @param  pBuf  [description]
  * @param  bytes [description]
  * @return       [description]
  */
-uint8_t nrf24le01::SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
+uint8_t nrf24le01Module::SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
   uint8_t status,byte_ctr;
 
   digitalWrite(RFCSN,0);                                    // Set CSN low, init SPI tranaction
@@ -212,13 +212,13 @@ uint8_t nrf24le01::SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
 }
 
 /**
- * [nrf24le01::SPI_Write_Buf description]
+ * [nrf24le01Module::SPI_Write_Buf description]
  * @param  reg   [description]
  * @param  pBuf  [description]
  * @param  bytes [description]
  * @return       [description]
  */
-uint8_t nrf24le01::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
+uint8_t nrf24le01Module::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
   uint8_t status,byte_ctr;
 
   digitalWrite(RFCSN,0);                        // Set CSN low, init SPI tranaction
@@ -240,7 +240,7 @@ uint8_t nrf24le01::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes){
  * ativa o sinalizador newPayload
  * o tamanho da payload é armazenado em payloadWidth
  */
-void nrf24le01::RF_IRQ(void) {
+void nrf24le01Module::RF_IRQ(void) {
   sta=SPI_Read(NRF_STATUS);
   if(bitRead(sta,RX_DR))                                  // if receive data ready (RX_DR) interrupt
   {

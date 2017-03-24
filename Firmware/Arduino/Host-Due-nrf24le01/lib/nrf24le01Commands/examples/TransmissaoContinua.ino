@@ -1,4 +1,4 @@
-#include <nrf24le01Commands.h>
+#include <nrf24le01Module.h>
 
 nrf24le01 tx_nrf(2,3,4);
 

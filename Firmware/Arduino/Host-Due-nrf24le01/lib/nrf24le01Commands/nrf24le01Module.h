@@ -1,5 +1,5 @@
-#ifndef nrf24le01_commands_h
-#define nrf24le01_commands_h
+#ifndef nrf24le01Module_h
+#define nrf24le01Module_h
 
 //TODO: descobrir sobre library: #include <nRF24L01.h>
 //TODO: And change the name of this library
@@ -37,9 +37,9 @@ typedef enum
     RF_TX_POWER_0dBm
 } rf_tx_power_t;
 
-class nrf24le01{
+class nrf24le01Module{
 public:
-  nrf24le01(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin);
+  nrf24le01Module(uint8_t RFIRQ_pin, uint8_t RFCE_pin, uint8_t RFCSN_pin);
   uint8_t ADDR_HOST[TX_ADR_WIDTH] =  {0xE7,0xE7,0xE7,0xE7,0xE7};   // Define a static host adr
   uint8_t rx_buf[PAYLOAD_WIDTH];    // Define lenght of rx_buf and tx_buf
   uint8_t tx_buf[PAYLOAD_WIDTH];
