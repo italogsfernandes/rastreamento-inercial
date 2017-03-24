@@ -110,6 +110,7 @@ void uart_communication_handler(){
       digitalWrite(LED_STATUS,LOW);
       break;
       case CMD_CONNECTION:
+      //TODO: use wait response
       send_cmd_to_all_addrs(CMD_CONNECTION);
       break;
       case CMD_CALIBRATE:

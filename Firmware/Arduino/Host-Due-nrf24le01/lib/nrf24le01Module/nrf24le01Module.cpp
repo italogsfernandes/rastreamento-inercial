@@ -49,14 +49,15 @@ void nrf24le01Module::TX_Mode_NOACK(uint8_t payloadLength){
     }
     if(!digitalRead(RFIRQ)){
       RF_IRQ();
-      if(TX_OK){
-        Serial.println("Data send!");
-      }
-      if(RX_OK){
-        Serial.println("Data Received.");
-        Serial.println(payloadWidth);
-        Serial.println(rx_buf[0],HEX);
-      }
+      //Debug
+    //   if(TX_OK){
+    //     Serial.println("Data send!");
+    //   }
+    //   if(RX_OK){
+    //     Serial.println("Data Received.");
+    //     Serial.println(payloadWidth);
+    //     Serial.println(rx_buf[0],HEX);
+    //   }
       break;
     }
   }
