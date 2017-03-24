@@ -19,9 +19,9 @@ void nrf24le01Module::RX_Mode(void){
   newPayload = 0;
   sta = 0;
   RX_OK = 0;
-  digitalWrite(RFCE,0);                         // Radio chip enable low -> Standby-1
-  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1F);        // Set PWR_UP bit, enable CRC(2 bytes) & Prim:RX. RX_DR enabled..
-  digitalWrite(RFCE,1);                         // Set CE pin high to enable RX Mode
+  digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
+  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1F);  // Set PWR_UP bit, enable CRC(2 bytes) & Prim:RX. RX_DR enabled..
+  digitalWrite(RFCE,1); // Set CE pin high to enable RX Mode
 }
 
 /**
@@ -31,24 +31,35 @@ void nrf24le01Module::RX_Mode(void){
  * @param payloadLength tamanho do pacote escrito em tx buff, maximo 32
  */
 void nrf24le01Module::TX_Mode_NOACK_Polling(uint8_t payloadLength){
-  digitalWrite(RFCE,0);                                            // Radio chip enable low -> Standby-1
-  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);                           // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
-  SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength);        // Writes data to TX payload
+  digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
+  SPI_RW_Reg(W_REGISTER + CONFIG, 0x1E);  // Set PWR_UP bit, enable CRC(2 bytes) & Prim:TX. RX_DR enabled.
+  SPI_Write_Buf(W_TX_PAYLOAD_NOACK, tx_buf, payloadLength); // Writes data to TX payload
   // Endereço da porta P2, matrizes tx_buf (), o comprimento da matriz é enviada)
   TX_OK = 0;
-  digitalWrite(RFCE,1);                                            // Set CE pin high to enable TX Mode
+  digitalWrite(RFCE,1); // Set CE pin high to enable TX Mode
   delayMicroseconds(12);
   digitalWrite(RFCE,0); // Radio chip enable low -> Standby-1
-  //TODO: understand this timeout, why? this is polling?
-  tempo = micros() + 1000;
-  do
-  {
+  // RX mode?
+  tempo = micros() + 100000;
+  while (1){
     tempoAtual = micros();
-    if (!digitalRead(RFIRQ))
-    RF_IRQ();
-  }while (!((TX_OK)|(tempoAtual>tempo)));
-  if((tempoAtual>tempo))
-  Serial.println("TX_MODE Time Out!");Serial.print('\n');Serial.print('\0');
+    if(tempoAtual>tempo){
+      Serial.println("TX_MODE Polling Time Out!\n\0");
+      break;
+    }
+    if(!digitalRead(RFIRQ)){
+      RF_IRQ();
+      if(TX_OK){
+        Serial.println("Data send!");
+      }
+      if(RX_OK){
+        Serial.println("Data Received.");
+        Serial.println(payloadWidth);
+        Serial.println(rx_buf[0],HEX);
+      }
+      break;
+    }
+  }
   RX_Mode();
 }
 
@@ -243,21 +254,18 @@ uint8_t nrf24le01Module::SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes
  */
 void nrf24le01Module::RF_IRQ(void) {
   sta=SPI_Read(NRF_STATUS);
-  if(bitRead(sta,RX_DR))                                  // if receive data ready (RX_DR) interrupt
-  {
+  if(bitRead(sta,RX_DR)){ // if receive data ready (RX_DR) interrupt
     RX_OK = 1;
     newPayload = 1;
-    SPI_Read_Buf(R_RX_PAYLOAD,rx_buf,PAYLOAD_WIDTH);     // read receive payload from RX_FIFO buffer
-    payloadWidth = SPI_Read(R_RX_PLD_WIDTH);              // Retorna o número de bytes no payload recebido
-    if(payloadWidth > 32)
-    {
+    SPI_Read_Buf(R_RX_PAYLOAD,rx_buf,PAYLOAD_WIDTH);  // read receive payload from RX_FIFO buffer
+    payloadWidth = SPI_Read(R_RX_PLD_WIDTH);  // Retorna o número de bytes no payload recebido
+    if(payloadWidth > 32) {
       payloadWidth = 0;
       newPayload = 0;
     }
     SPI_RW_Reg(FLUSH_RX,0);
   }
-  if(bitRead(sta,TX_DS))
-  {
+  if(bitRead(sta,TX_DS)){
     TX_OK = 1;
     SPI_RW_Reg(FLUSH_TX,0);
   }

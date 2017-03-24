@@ -44,24 +44,24 @@ public:
   uint8_t payloadWidth = 0;
   bool newPayload = 0;    // Flag to indicate that there's a new payload sensor
   uint8_t sta;
-  void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr);
-  void RX_Mode(void);
-  void TX_Mode_NOACK_Polling(uint8_t payloadLength);
-
-private:
-  unsigned long tempo, tempoAtual;
   uint8_t TX_OK = 0;
   uint8_t RX_OK = 0;
   uint8_t RFIRQ;  //Pino do arduino conectado a IRQ
   uint8_t RFCE;  //Pino do arduino conectado a CE
   uint8_t RFCSN;  //Pino do arduino conectado a CSN
+  void rf_init(uint8_t *rx_addr,uint8_t *tx_addr, uint8_t rf_channel, rf_data_rate_t rf_data_rate, rf_tx_power_t rf_pwr);
+  void RX_Mode(void);
+  void TX_Mode_NOACK_Polling(uint8_t payloadLength);
+  void RF_IRQ(void);
+
+private:
+  unsigned long tempo, tempoAtual;
   uint8_t SPI_RW(uint8_t value);
   uint8_t SPI_RW_Reg(uint8_t reg, uint8_t value);
   uint8_t SPI_Read_Status(void);
   uint8_t SPI_Read(uint8_t reg);
   uint8_t SPI_Read_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes);
   uint8_t SPI_Write_Buf(uint8_t reg, uint8_t *pBuf, uint8_t bytes);
-  void RF_IRQ(void);
 };
 
 
