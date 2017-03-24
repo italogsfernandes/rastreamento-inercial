@@ -18,6 +18,18 @@ from Queue import Queue
 from serial import Serial
 from threading import Timer
 from threadhandler import ThreadHandler
+from time import sleep
+
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
 #------------------------------------------------------------------------------
 #NRF constants
 #Constants for handling serial communication
@@ -168,6 +180,10 @@ class nrf(SerialHandler):
 if __name__ == "__main__":
 	due_host = nrf('/dev/ttyACM0',115200)
 	due_host.open()
+	print '-------------------------------'
+	sleep(1)
+	print(bcolors.OKBLUE + "Leitura da porta serial:" + bcolors.ENDC)
+	print(due_host.serialPort.read(due_host.serialPort.in_waiting))
 	while(True):
 		print '-------------------------------'*2
 		print 'Biomedical Engineering Lab'
@@ -199,38 +215,50 @@ if __name__ == "__main__":
 			due_host.acqThread.kill()
 		elif strkey == '3':
 			due_host.calibration()
-			print("Implement")
+			print(bcolors.OKBLUE + "Implement" + bcolors.ENDC)
 		elif strkey == '4':
 			due_host.sendcmd(NRFConsts.CMD_CONNECTION)
-			print("implement")
+			print(bcolors.OKBLUE + "implement" + bcolors.ENDC)
 		elif strkey == '5':
 			#TODO: complement
-			print("Digite o codigo do tipo:")
+			print(bcolors.OKBLUE + "Digite o codigo do tipo:" + bcolors.ENDC)
 			strkey = int(raw_input())
 			due_host.sendcmd_with_arg(NRFConsts.CMD_SET_PACKET_TYPE,strkey)
 		elif strkey == '6':
+			print(bcolors.OKBLUE + "Leitura da porta serial:" + bcolors.ENDC)
+			print(due_host.serialPort.read(due_host.serialPort.in_waiting))
 			due_host.sendcmd(NRFConsts.CMD_GET_ACTIVE_SENSORS)
-			print("Active Sensors variable:")
-			print(bin(ord(due_host.serialPort.read(1))))
+			print(bcolors.OKBLUE + "Active Sensors variable:" + bcolors.ENDC)
+			ret = due_host.waitBytes(1)
+			if ret:
+				receivedByte = ord(due_host.serialPort.read(1))
+				print(bin(receivedByte))
+			else:
+				print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
 		elif strkey == '7':
 			#TODO: complement
-			print("Digite o valor da variavel binario (8bits):")
+			print(bcolors.OKBLUE + "Digite o valor da variavel binario (8bits):" + bcolors.ENDC)
 			strkey = int(raw_input(),2)
-			print("Voce inseriu %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)))
+			print(bcolors.OKBLUE + "Voce inseriu: %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)+ bcolors.ENDC))
 			due_host.sendcmd_with_arg(NRFConsts.CMD_SET_ACTIVE_SENSORS,strkey)
 		elif strkey == '8':
 			due_host.sendcmd(NRFConsts.CMD_TEST_RF_CONNECTION)
 		elif strkey == '9':
-			print("Acender LED")
+			print(bcolors.OKBLUE + "Acender LED" + bcolors.ENDC)
 			due_host.sendcmd(NRFConsts.CMD_LIGHT_UP_LED)
 		elif strkey == '10':
-			print("Apagar LED")
+			print(bcolors.OKBLUE + "Apagar LED" + bcolors.ENDC)
 			due_host.sendcmd(NRFConsts.CMD_TURN_OFF_LED)
 		elif strkey == '11':
 			due_host.sendcmd(NRFConsts.CMD_READ)
-			print(due_host.serialPort.read(due_host.serialPort.in_waiting))
+			ret = due_host.waitBytes(1)
+			if ret:
+				receivedByte = ord(due_host.serialPort.read(1))
+				print(due_host.serialPort.read(due_host.serialPort.in_waiting))
+			else:
+				print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
 		elif strkey == '12':
-			print("Leitura da porta serial:")
+			print(bcolors.OKBLUE + "Leitura da porta serial:" + bcolors.ENDC)
 			print(due_host.serialPort.read(due_host.serialPort.in_waiting))
 		elif strkey == '13':
 			due_host.close()
