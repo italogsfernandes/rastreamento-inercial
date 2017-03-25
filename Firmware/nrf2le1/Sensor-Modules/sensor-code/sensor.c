@@ -58,9 +58,9 @@ void iniciarIO(void){
   P1CON |= 0x53; // All general I/O 0101 0011
 }
 
+
 void setup() {
   iniciarIO();
-	STATUS_LED = 1; delay_ms(100); STATUS_LED = 0;
   setup_T0_freq(Aquire_Freq,1);//Time em 100.00250006250157Hz
   rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
   hal_w2_configure_master(HAL_W2_100KHZ); //I2C
@@ -97,7 +97,6 @@ void main(void) {
 					STATUS_LED = 0;
           break;
           case CMD_CONNECTION:
-          delay_ms(MY_SUB_ADDR*20);//cada sensor responde com um intervalo de x miliseconds between each other
           if(mpu_testConnection()){
             EN_MPU_CONNECTED_FLAG;
             send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
@@ -108,7 +107,7 @@ void main(void) {
           break;
           case CMD_CALIBRATE:
           send_rf_command(CMD_OK,MY_SUB_ADDR);
-					init_calibration();
+					//init_calibration();
           break;
           case CMD_SET_PACKET_TYPE:
           packet_type = rx_buf[2]; //Seta o tipo de pacote
@@ -152,7 +151,6 @@ void initial_setup_dmp() large {
 
   if(mpu_testConnection()){
     EN_MPU_CONNECTED_FLAG;
-		send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
     mpu_initialize(); //Initializes the IMU
 
 		ret =  dmpInitialize();  //Initializes the DMP
@@ -169,24 +167,22 @@ void initial_setup_dmp() large {
       setYGyroOffset(-37);
       setZGyroOffset(-1);
     }
-    else
-    {
-			send_rf_command_with_arg(CMD_CONNECTION,CMD_ERROR,MY_SUB_ADDR);
-    }
   }
 }
 
+
+
 void DataAcq() large {
-  uint8_t i = 0;
-  uint8_t numbPackets;
-	numbPackets = getFIFOCount()/PSDMP;//floor
-  for (i = 0; i < numbPackets; i++) {
+  //uint8_t i = 0;
+  //uint8_t numbPackets;
+	//numbPackets = getFIFOCount()/PSDMP;//floor
+  //for (i = 0; i < numbPackets; i++) {
     getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
     send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
-  }/*END for every packet*/
+  //}/*END for every packet*/
 }/*End of DataAcq*/
 
-//interrupção do I2C
+//interrupção do I2C - NOT USED
 void I2C_IRQ (void) interrupt INTERRUPT_SERIAL {
   I2C_IRQ_handler();
 }
