@@ -242,13 +242,24 @@ if __name__ == "__main__":
 			print(bcolors.OKBLUE + "Voce inseriu: %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)+ bcolors.ENDC))
 			due_host.sendcmd_with_arg(NRFConsts.CMD_SET_ACTIVE_SENSORS,strkey)
 		elif strkey == '8':
-			due_host.sendcmd(NRFConsts.CMD_TEST_RF_CONNECTION)
+			#TODO: complement
+			print(bcolors.OKBLUE + "Digite endereco do sensor em hex:" + bcolors.ENDC)
+			strkey = int(raw_input(),16)
+			print(bcolors.OKBLUE + "Voce inseriu: %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)+ bcolors.ENDC))
+			due_host.sendcmd_with_arg(NRFConsts.CMD_TEST_RF_CONNECTION,strkey)
 		elif strkey == '9':
 			print(bcolors.OKBLUE + "Acender LED" + bcolors.ENDC)
-			due_host.sendcmd(NRFConsts.CMD_LIGHT_UP_LED)
+			print(bcolors.OKBLUE + "Digite endereco do sensor em hex:" + bcolors.ENDC)
+			strkey = int(raw_input(),16)
+			print(bcolors.OKBLUE + "Voce inseriu: %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)+ bcolors.ENDC))
+			due_host.sendcmd_with_arg(NRFConsts.CMD_LIGHT_UP_LED,strkey)
 		elif strkey == '10':
 			print(bcolors.OKBLUE + "Apagar LED" + bcolors.ENDC)
-			due_host.sendcmd(NRFConsts.CMD_TURN_OFF_LED)
+			print(bcolors.OKBLUE + "Digite endereco do sensor em hex:" + bcolors.ENDC)
+			strkey = int(raw_input(),16)
+			print(bcolors.OKBLUE + "Voce inseriu: %d -- %s -- %s"%(strkey,hex(strkey),bin(strkey)+ bcolors.ENDC))
+			due_host.sendcmd_with_arg(NRFConsts.CMD_TURN_OFF_LED,strkey)
+
 		elif strkey == '11':
 			due_host.sendcmd(NRFConsts.CMD_READ)
 			ret = due_host.waitBytes(1)
@@ -259,7 +270,15 @@ if __name__ == "__main__":
 				print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
 		elif strkey == '12':
 			print(bcolors.OKBLUE + "Leitura da porta serial:" + bcolors.ENDC)
-			print(due_host.serialPort.read(due_host.serialPort.in_waiting))
+			str_leitura = due_host.serialPort.read(due_host.serialPort.in_waiting)
+			print(bcolors.OKGREEN + str_leitura + bcolors.ENDC)
+			print(bcolors.OKBLUE + "Leitura da porta serial em HEX:" + bcolors.ENDC)
+			stroutput = ""
+			for valor in str_leitura:
+			    stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "- " + bcolors.ENDC)
+			if len(stroutput) < 10000:
+			    print(stroutput)
+
 		elif strkey == '13':
 			due_host.close()
 			break

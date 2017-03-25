@@ -48,7 +48,7 @@
 // Defines //
 /////////////
 
-#define POLLING_TIMEOUT 1000 //1 milliseconds of maximum wait time. tempo medio: 385
+#define POLLING_TIMEOUT 10000 //10 milliseconds of maximum wait time. tempo medio: 385
 #define UART_TIMEOUT 2 //2 milliseconds of maximum wait time por byte.
 #define Aquire_Freq 100
 #define LED_STATUS 10
@@ -110,8 +110,7 @@ void uart_communication_handler(){
       digitalWrite(LED_STATUS,LOW);
       break;
       case CMD_CONNECTION:
-      //TODO: use wait response
-      send_cmd_to_all_addrs(CMD_CONNECTION);
+      test_connection();
       break;
       case CMD_CALIBRATE:
       send_cmd_to_active_sensors(CMD_CALIBRATE);
@@ -129,14 +128,20 @@ void uart_communication_handler(){
       Serial.write(CMD_OK);
       break;
       case CMD_TEST_RF_CONNECTION:
-      send_cmd_to_all_addrs(CMD_TEST_RF_CONNECTION);
+      wait_Serial_bytes(1);
+      send_rf_command(CMD_TEST_RF_CONNECTION,Serial.read()); //Requisita conexao
+      wait_rf_response();
       break;
       case CMD_LIGHT_UP_LED:
-      send_cmd_to_all_addrs(CMD_LIGHT_UP_LED);
+      wait_Serial_bytes(1);
+      send_rf_command(CMD_LIGHT_UP_LED,Serial.read()); //Requisita conexao
+      wait_rf_response();
       digitalWrite(LED_STATUS, HIGH);
       break;
       case CMD_TURN_OFF_LED:
-      send_cmd_to_all_addrs(CMD_TURN_OFF_LED);
+      wait_Serial_bytes(1);
+      send_rf_command(CMD_TURN_OFF_LED,Serial.read()); //Requisita conexao
+      wait_rf_response();
       digitalWrite(LED_STATUS, LOW);
       break;
       case CMD_READ:
@@ -150,17 +155,34 @@ void uart_communication_handler(){
 //RF High Functions //
 //////////////////////
 
+void test_connection(){
+    uint8_t i;
+    for (i = 0; i < 16; i++) { //para cada sensor possivel
+        Serial.print("Connecting to sensor ");
+        Serial.print(body_sensors[i],HEX);
+        Serial.print("... ");
+        send_rf_command(CMD_CONNECTION,body_sensors[i]); //Requisita conexao
+        wait_rf_response();
+    }
+    Serial.print("Sensores conectados: ");
+    Serial.print(active_sensors,BIN);
+    Serial.print(".\n");
+}
+
 void wait_rf_response(){
   timeout_init_time = micros() + POLLING_TIMEOUT;
   while(1){
     timeout_actual_time = micros();
     if(timeout_actual_time>timeout_init_time){
-      Serial.print("POLLING_TIMEOUT reached!");
+      Serial.print("POLLING_TIMEOUT reached!\n");
       break;
     }
     if(!digitalRead(host_nrf.RFIRQ)){
       host_nrf.RF_IRQ();
       if(host_nrf.newPayload){
+         Serial.print("Sensor response with: ");
+         Serial.print(POLLING_TIMEOUT - timeout_init_time + timeout_actual_time);
+         Serial.print(" microseconds.\n");
         rf_communication_handler();
       }
       break;
@@ -203,6 +225,9 @@ void send_cmd_to_active_sensors(uint8_t cmd2send){
   uint8_t i;
   for (i = 0; i < 16; i++) { //para cada sensor possivel
     if(active_sensors & (1<<i)){//se esta ativo
+        Serial.print("Sending cmd to sensor ");
+        Serial.print(body_sensors[i],HEX);
+        Serial.print("... ");
       send_rf_command(cmd2send,body_sensors[i]);
       wait_rf_response();
     }
