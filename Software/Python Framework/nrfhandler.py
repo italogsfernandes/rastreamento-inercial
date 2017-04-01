@@ -125,6 +125,17 @@ class SerialHandler():
 	complemet_of_two = c_ubyte(~_num + 1).value
 	return complement_of_two
 
+  def getquatfromstr(self,values_raw):
+    start_index = values_raw.rfind('S')
+    packet_len = ord(values_raw[start_index+1])
+    sensor_id = ord(values_raw[start_index+2])
+    wquat = self.to_int16(ord(values_raw[start_index+3]), ord(values_raw[start_index+4]))
+    xquat = self.to_int16(ord(values_raw[start_index+5]), ord(values_raw[start_index+6]))
+    yquat = self.to_int16(ord(values_raw[start_index+7]), ord(values_raw[start_index+8]))
+    zquat = self.to_int16(ord(values_raw[start_index+9]), ord(values_raw[start_index+10]))
+    print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
+    quat = [wquat,xquat,yquat,zquat]
+    return quat
 #------------------------------------------------------------------------------
 #Definition of the nrf class
 #Inherits from SerialHandler for using serial communication
@@ -262,10 +273,23 @@ if __name__ == "__main__":
 
 		elif strkey == '11':
 			due_host.sendcmd(NRFConsts.CMD_READ)
+			sleep(0.5)
 			ret = due_host.waitBytes(1)
 			if ret:
-				receivedByte = ord(due_host.serialPort.read(1))
-				print(due_host.serialPort.read(due_host.serialPort.in_waiting))
+			    receivedstr = due_host.serialPort.read(due_host.serialPort.in_waiting)
+			    print(receivedstr)
+			    quat = due_host.getquatfromstr(receivedstr)
+			    print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
+			    print(quat)
+			    receivedstr = receivedstr[0:len(receivedstr)-12]
+			    quat = due_host.getquatfromstr(receivedstr)
+			    print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
+			    print(quat)
+			    print(bcolors.OKBLUE + "Leitura da porta serial em HEX:" + bcolors.ENDC)
+			    stroutput = ""
+			    for valor in receivedstr:
+			        stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "- " + bcolors.ENDC)
+			    print(stroutput)
 			else:
 				print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
 		elif strkey == '12':
