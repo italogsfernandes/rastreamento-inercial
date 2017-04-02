@@ -1,5 +1,5 @@
 //Subenderecos usados no sistema
-#define MY_SUB_ADDR 0x01
+#define MY_SUB_ADDR 0x00
 
 #include "nrf24le1.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.

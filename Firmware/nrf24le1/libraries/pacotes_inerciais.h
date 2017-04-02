@@ -223,7 +223,7 @@ void send_rf_command_with_arg(uint8_t cmd2send,uint8_t agr2send, uint8_t sensor_
   TX_Mode_NOACK(3);
   RX_Mode();
 }
-void send_offset_values(uint8_t sensor_id, uint8_t cmd2send, int16_t Xac_of, int16_t Yac_of, int16_t Zac_of, int16_t Xgy_of, int16_t Yagyof, int16_t Zgy_of){
+void send_offset_values(uint8_t sensor_id, uint8_t cmd2send, int16_t Xac_of, int16_t Yac_of, int16_t Zac_of, int16_t Xgy_of, int16_t Ygy_of, int16_t Zgy_of){
   tx_buf[0] = sensor_id;
   tx_buf[1] = cmd2send;
   tx_buf[2] = (uint8_t) (Xac_of >> 8);
