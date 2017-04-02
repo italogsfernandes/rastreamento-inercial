@@ -1,5 +1,13 @@
 //Subenderecos usados no sistema
-#define MY_SUB_ADDR 0x00
+#define MY_SUB_ADDR 0x01
+/*
+Módulos GY521 - Offsets aproximados
+Id)	Xac		Yac		Zac		Xgy		Ygy		Zgy
+1)	-499	2739	1242	16		109		33
+2)	-2479	-1117	1459	42		21		60
+3)	1252	-205	1890	-339	-46		18
+4)	-365	529		1699	139		50		36
+*/
 
 #include "nrf24le1.h"
 #include "reg24le1.h" //Definiï¿½ï¿½es de muitos endereï¿½os de registradores.
@@ -158,12 +166,12 @@ void initial_setup_dmp() large {
         {
             EN_DMP_READY_FLAG;
             setDMPEnabled(true);
-            setXAccelOffset(0);
-            setYAccelOffset(0);
-            setZAccelOffset(0);
-            setXGyroOffset(0);
-            setYGyroOffset(0);
-            setZGyroOffset(0);
+            setXAccelOffset(-499);
+            setYAccelOffset(2739);
+            setZAccelOffset(1242);
+            setXGyroOffset(16);
+            setYGyroOffset(109);
+            setZGyroOffset(33);
         }
     }
 }
