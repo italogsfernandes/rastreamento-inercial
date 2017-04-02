@@ -259,7 +259,8 @@ if __name__ == "__main__":
 		print '10 - Turn off LED'
 		print '11 - Read a value'
 		print '12 - Read Serial Port'
-		print '13 - Exit'
+		print '13 - Comando 11 a cada 250 milisecundos'
+		print '14 - Exit'
 		print '-------------------------------'
 		strkey = raw_input()
 		if strkey == '1':
@@ -344,8 +345,23 @@ if __name__ == "__main__":
 			    stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "- " + bcolors.ENDC)
 			if len(stroutput) < 10000:
 			    print(stroutput)
-
 		elif strkey == '13':
+			while 1:
+			    due_host.sendcmd(NRFConsts.CMD_READ)
+			    sleep(0.25)
+			    ret = due_host.waitBytes(1)
+			    if ret:
+			        receivedstr = due_host.serialPort.read(due_host.serialPort.in_waiting)
+			        print(receivedstr)
+			        due_host.getdatafromstr(receivedstr,packet_type)
+			        print(bcolors.OKBLUE + "Leitura da porta serial em HEX:" + bcolors.ENDC)
+			        stroutput = ""
+			        for valor in receivedstr:
+			            stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "-" + bcolors.ENDC)
+			        print(stroutput)
+			    else:
+				    print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
+		elif strkey == '14':
 			due_host.close()
 			break
 
