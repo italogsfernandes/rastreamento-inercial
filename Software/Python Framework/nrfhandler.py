@@ -125,17 +125,60 @@ class SerialHandler():
 	complemet_of_two = c_ubyte(~_num + 1).value
 	return complement_of_two
 
-  def getquatfromstr(self,values_raw):
-    start_index = values_raw.rfind('S')
-    packet_len = ord(values_raw[start_index+1])
-    sensor_id = ord(values_raw[start_index+2])
-    wquat = self.to_int16(ord(values_raw[start_index+3]), ord(values_raw[start_index+4]))
-    xquat = self.to_int16(ord(values_raw[start_index+5]), ord(values_raw[start_index+6]))
-    yquat = self.to_int16(ord(values_raw[start_index+7]), ord(values_raw[start_index+8]))
-    zquat = self.to_int16(ord(values_raw[start_index+9]), ord(values_raw[start_index+10]))
-    print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
-    quat = [wquat,xquat,yquat,zquat]
-    return quat
+  def getdatafromstr(self,values_raw,packet_type):
+    values_raw  = values_raw[values_raw.find('microseconds')+14:len(values_raw)]
+    if packet_type == 0x07:
+        for leitura in values_raw.split('S'):
+            if len(leitura) > 15 and len(leitura) < 30:
+                packet_len = ord(leitura[0])
+                sensor_id = ord(leitura[1])
+                Xac = self.to_int16(ord(values_raw[2]), ord(values_raw[3]))
+                Yac = self.to_int16(ord(values_raw[4]), ord(values_raw[5]))
+                Zac = self.to_int16(ord(values_raw[6]), ord(values_raw[7]))
+                Xgy = self.to_int16(ord(values_raw[8]), ord(values_raw[9]))
+                Ygy = self.to_int16(ord(values_raw[10]), ord(values_raw[11]))
+                Zgy = self.to_int16(ord(values_raw[12]), ord(values_raw[13]))
+                wquat = self.to_int16(ord(values_raw[14]), ord(values_raw[15]))
+                xquat = self.to_int16(ord(values_raw[16]), ord(values_raw[17]))
+                yquat = self.to_int16(ord(values_raw[18]), ord(values_raw[19]))
+                zquat = self.to_int16(ord(values_raw[20]), ord(values_raw[21]))
+                print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
+                quat = [wquat,xquat,yquat,zquat]
+                packet_m6 = [Xac,Yac,Zac,Xgy,Ygy,Zgy]
+                print(packet_m6)
+                print([packet_m6[0]/18384.00,packet_m6[1]/18384.00,packet_m6[2]/18384.00,packet_m6[3]/18384.00,packet_m6[4]/18384.00,packet_m6[5]/18384.00])
+                print(quat)
+                print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
+    elif packet_type == 0x06:
+        for leitura in values_raw.split('S'):
+            if len(leitura) == 11:
+                packet_len = ord(leitura[0])
+                sensor_id = ord(leitura[1])
+                wquat = self.to_int16(ord(values_raw[2]), ord(values_raw[3]))
+                xquat = self.to_int16(ord(values_raw[4]), ord(values_raw[5]))
+                yquat = self.to_int16(ord(values_raw[6]), ord(values_raw[7]))
+                zquat = self.to_int16(ord(values_raw[8]), ord(values_raw[9]))
+                print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
+                quat = [wquat,xquat,yquat,zquat]
+                print(quat)
+                print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
+
+    elif packet_type == 0x05:
+        for leitura in values_raw.split('S'):
+            print(len(leitura))
+            if len(leitura) == 15:
+                packet_len = ord(leitura[0])
+                sensor_id = ord(leitura[1])
+                Xac = self.to_int16(ord(values_raw[2]), ord(values_raw[3]))
+                Yac = self.to_int16(ord(values_raw[4]), ord(values_raw[5]))
+                Zac = self.to_int16(ord(values_raw[6]), ord(values_raw[7]))
+                Xgy = self.to_int16(ord(values_raw[8]), ord(values_raw[9]))
+                Ygy = self.to_int16(ord(values_raw[10]), ord(values_raw[11]))
+                Zgy = self.to_int16(ord(values_raw[12]), ord(values_raw[13]))
+                print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
+                packet_m6 = [Xac,Yac,Zac,Xgy,Ygy,Zgy]
+                print(packet_m6)
+                print([packet_m6[0]/18384.00,packet_m6[1]/18384.00,packet_m6[2]/18384.00,packet_m6[3]/18384.00,packet_m6[4]/18384.00,packet_m6[5]/18384.00])
 #------------------------------------------------------------------------------
 #Definition of the nrf class
 #Inherits from SerialHandler for using serial communication
@@ -189,6 +232,7 @@ class nrf(SerialHandler):
 #------------------------------------------------------------------------------
 #Tests acquisition
 if __name__ == "__main__":
+	packet_type = 0x07
 	due_host = nrf('/dev/ttyACM0',115200)
 	due_host.open()
 	print '-------------------------------'
@@ -226,6 +270,7 @@ if __name__ == "__main__":
 			due_host.acqThread.kill()
 		elif strkey == '3':
 			due_host.calibration()
+			packet_type = 0x05
 			print(bcolors.OKBLUE + "Implement" + bcolors.ENDC)
 		elif strkey == '4':
 			due_host.sendcmd(NRFConsts.CMD_CONNECTION)
@@ -234,7 +279,8 @@ if __name__ == "__main__":
 			#TODO: complement
 			print(bcolors.OKBLUE + "Digite o codigo do tipo:" + bcolors.ENDC)
 			strkey = int(raw_input())
-			due_host.sendcmd_with_arg(NRFConsts.CMD_SET_PACKET_TYPE,strkey)
+			packet_type = strkey
+			due_host.sendcmd_with_arg(NRFConsts.CMD_SET_PACKET_TYPE,packet_type)
 		elif strkey == '6':
 			print(bcolors.OKBLUE + "Leitura da porta serial:" + bcolors.ENDC)
 			print(due_host.serialPort.read(due_host.serialPort.in_waiting))
@@ -278,13 +324,7 @@ if __name__ == "__main__":
 			if ret:
 			    receivedstr = due_host.serialPort.read(due_host.serialPort.in_waiting)
 			    print(receivedstr)
-			    quat = due_host.getquatfromstr(receivedstr)
-			    print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
-			    print(quat)
-			    receivedstr = receivedstr[0:len(receivedstr)-12]
-			    quat = due_host.getquatfromstr(receivedstr)
-			    print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
-			    print(quat)
+			    due_host.getdatafromstr(receivedstr,packet_type)
 			    print(bcolors.OKBLUE + "Leitura da porta serial em HEX:" + bcolors.ENDC)
 			    stroutput = ""
 			    for valor in receivedstr:

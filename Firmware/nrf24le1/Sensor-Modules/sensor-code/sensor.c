@@ -21,7 +21,7 @@
 #define DIS_SENSOR_ON_FLAG sensor_status |= ~0x01
 
 uint8_t xdata sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
-uint8_t xdata packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
+uint8_t xdata packet_type = PACKET_TYPE_FIFO_NO_MAG; //Tipo de pacote que o sensor obtera
 uint8_t xdata fifoBuffer[42] = {0};
 
 ////////////////////////
@@ -122,9 +122,11 @@ void main(void) {
                     break;
                     case CMD_LIGHT_UP_LED:
                     STATUS_LED = 1;
+                    send_rf_command_with_arg(CMD_LIGHT_UP_LED,CMD_OK,MY_SUB_ADDR);
                     break;
                     case CMD_TURN_OFF_LED:
                     STATUS_LED = 0;
+                    send_rf_command_with_arg(CMD_TURN_OFF_LED,CMD_OK,MY_SUB_ADDR);
                     break;
                     default:
                     //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado

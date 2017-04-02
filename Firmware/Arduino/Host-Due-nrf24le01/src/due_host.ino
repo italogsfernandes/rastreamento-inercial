@@ -60,7 +60,7 @@
 // Defines //
 /////////////
 
-#define POLLING_TIMEOUT 10000 //10 milliseconds of maximum wait time. tempo medio: 385
+#define POLLING_TIMEOUT 25000 //25 milliseconds of maximum wait time. tempo medio: 385
 #define UART_TIMEOUT 2 //2 milliseconds of maximum wait time por byte.
 #define Aquire_Freq 100
 #define LED_STATUS 10
