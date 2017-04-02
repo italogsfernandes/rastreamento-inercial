@@ -176,26 +176,26 @@ void DataAcq() large {
     //numbPackets = getFIFOCount()/PSDMP;//floor
     //for (i = 0; i < numbPackets; i++) {
     //getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH] = 0x00;
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL] = 0x01;//X_AC
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH] = 0x02;
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL] = 0x03;//Y_AC
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH] = 0x04;
-    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL] = 0x05;//Z_AC
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH]; = 0x06;
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL]; = 0x07;//X_GY
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH] = 0x08;
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL] = 0x09;//Y_GY
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH] = 0x0A;
-    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL] = 0x0B;//Z_GY
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x0C;
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL] = 0x0D;//W_quat
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH] = 0x0E;
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL] = 0x0F;//X_quat
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH] = 0x10;
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x11;//Y_quat
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x12;
-    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x13;//Z_quat
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH] = 0x00;
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL] = 0x01;//X_AC
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH] = 0x02;
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL] = 0x03;//Y_AC
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH] = 0x04;
+    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL] = 0x05;//Z_AC
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH] = 0x06;
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL] = 0x07;//X_GY
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH] = 0x08;
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL] = 0x09;//Y_GY
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH] = 0x0A;
+    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL] = 0x0B;//Z_GY
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x0C;
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL] = 0x0D;//W_quat
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH] = 0x0E;
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL] = 0x0F;//X_quat
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH] = 0x10;
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x11;//Y_quat
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x12;
+    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x13;//Z_quat
     send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
     //}/*END for every packet*/
 }/*End of DataAcq*/
