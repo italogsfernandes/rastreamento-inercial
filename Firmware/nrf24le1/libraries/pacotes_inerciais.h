@@ -32,6 +32,7 @@ mesma biblioteca. */
 #define CMD_TEST_RF_CONNECTION 0x0B
 #define CMD_LIGHT_UP_LED 0x0C
 #define CMD_TURN_OFF_LED 0x0D
+#define CMD_GET_OFFSETS 0x0E
 
 ////////////////////////
 //Pacotes de leituras //
@@ -222,7 +223,24 @@ void send_rf_command_with_arg(uint8_t cmd2send,uint8_t agr2send, uint8_t sensor_
   TX_Mode_NOACK(3);
   RX_Mode();
 }
-
+void send_offset_values(uint8_t sensor_id, uint8_t cmd2send, int16_t Xac_of, int16_t Yac_of, int16_t Zac_of, int16_t Xgy_of, int16_t Yagyof, int16_t Zgy_of){
+  tx_buf[0] = sensor_id;
+  tx_buf[1] = cmd2send;
+  tx_buf[2] = (uint8_t) (Xac_of >> 8);
+  tx_buf[3] = (uint8_t) (Xac_of && 0x00FF);
+  tx_buf[4] = (uint8_t) (Yac_of >> 8);
+  tx_buf[5] = (uint8_t) (Yac_of && 0x00FF);
+  tx_buf[6] = (uint8_t) (Zac_of >> 8);
+  tx_buf[7] = (uint8_t) (Zac_of && 0x00FF);
+  tx_buf[8] = (uint8_t) (Xgy_of >> 8);
+  tx_buf[9] = (uint8_t) (Xgy_of && 0x00FF);
+  tx_buf[10] = (uint8_t) (Ygy_of >> 8);
+  tx_buf[11] = (uint8_t) (Ygy_of && 0x00FF);
+  tx_buf[12] = (uint8_t) (Zgy_of >> 8);
+  tx_buf[13] = (uint8_t) (Zgy_of && 0x00FF);
+  TX_Mode_NOACK(14);
+  RX_Mode();
+}
 //TODO: organizar e documentar
 
 //Packet Type | Sensor id |  ... | data | ... |
