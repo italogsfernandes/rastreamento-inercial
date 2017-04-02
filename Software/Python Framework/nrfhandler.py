@@ -145,8 +145,10 @@ class SerialHandler():
                 print("packet len: %d, sensor_id: %d" %(packet_len,sensor_id))
                 quat = [wquat,xquat,yquat,zquat]
                 packet_m6 = [Xac,Yac,Zac,Xgy,Ygy,Zgy]
+                print("Accel and Gyro")
                 print(packet_m6)
                 print([packet_m6[0]/18384.00,packet_m6[1]/18384.00,packet_m6[2]/18384.00,packet_m6[3]/18384.00,packet_m6[4]/18384.00,packet_m6[5]/18384.00])
+                print("Quat")
                 print(quat)
                 print([quat[0]/18384.00,quat[1]/18384.00,quat[2]/18384.00,quat[3]/18384.00])
     elif packet_type == 0x06:
@@ -328,7 +330,7 @@ if __name__ == "__main__":
 			    print(bcolors.OKBLUE + "Leitura da porta serial em HEX:" + bcolors.ENDC)
 			    stroutput = ""
 			    for valor in receivedstr:
-			        stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "- " + bcolors.ENDC)
+			        stroutput += (bcolors.OKGREEN + ("%s "%(hex(ord(valor)))) + bcolors.OKBLUE + "-" + bcolors.ENDC)
 			    print(stroutput)
 			else:
 				print(bcolors.OKBLUE + "Resposta nao Recebida, timeout ou erro." + bcolors.ENDC)
