@@ -171,12 +171,12 @@ void initial_setup_dmp() large {
 
 
 void DataAcq() large {
-    uint8_t i = 0;
-    uint8_t numbPackets;
-    numbPackets = getFIFOCount()/PSDMP;//floor
-    for (i = 0; i < numbPackets; i++) {
-        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-    }    /*END for every packet*/
+    //uint8_t i = 0;
+    //uint8_t numbPackets;
+    //numbPackets = getFIFOCount()/PSDMP;//floor
+    //for (i = 0; i < numbPackets; i++) {
+    getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+    //}    /*END for every packet*/
     send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
 }/*End of DataAcq*/
 
