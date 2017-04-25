@@ -379,14 +379,14 @@
               <FilePath>C:\Nordic Semiconductor\nRFgo SDK 2.3.0.10040\source_code\hal\hal_delay.c</FilePath>
             </File>
             <File>
-              <FileName>hal_w2_isr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\libraries\hal_w2_isr.c</FilePath>
-            </File>
-            <File>
               <FileName>hal_uart.c</FileName>
               <FileType>1</FileType>
               <FilePath>C:\Nordic Semiconductor\nRFgo SDK 2.3.0.10040\source_code\hal\nrf24le1\hal_uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>hal_w2_isr.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\libraries\hal_w2_isr.c</FilePath>
             </File>
           </Files>
         </Group>

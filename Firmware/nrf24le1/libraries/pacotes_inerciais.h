@@ -124,106 +124,105 @@ void send_rf_command(uint8_t cmd2send, uint8_t sensor_id);
 
 void send_inertial_packet_by_rf(uint8_t pkt_type,uint8_t *fifo_buffer, uint8_t my_sub_addr){
   tx_buf[0] = my_sub_addr;
-  tx_buf[1] = pkt_type;
   switch (pkt_type) {
     case PACKET_TYPE_ACEL://Acelerometer [X][Y][Z]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    TX_Mode_NOACK(8);
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+    TX_Mode_NOACK(7);
     break;
     case PACKET_TYPE_GIRO://Gyroscope [X][Y][Z]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    TX_Mode_NOACK(8);
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+    TX_Mode_NOACK(7);
     break;
     case PACKET_TYPE_MAG://Magnetometer [X][Y][Z]
     //TODO: MAG
-		tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
-    TX_Mode_NOACK(8);
+		tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
+    TX_Mode_NOACK(7);
     break;
     case PACKET_TYPE_M6://Motion6 [Acel][Gyro]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    TX_Mode_NOACK(14);
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+    TX_Mode_NOACK(13);
     break;
     case PACKET_TYPE_M9://Motion9 [Acel][Gyro][Mag]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
 		//TODO: MAG
-    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
-    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
-    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
-    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
-    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
-    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
-    TX_Mode_NOACK(20);
+    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XH];
+    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_XL];//X_Mag
+    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YH];
+    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_YL];//Y_Mag
+    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZH];
+    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_MAG_ZL];//Z_Mag
+    TX_Mode_NOACK(19);
     break;
     case PACKET_TYPE_QUAT:
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
-    TX_Mode_NOACK(10);
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+    TX_Mode_NOACK(9);
     break;
     case PACKET_TYPE_FIFO_NO_MAG://Quaternion [W][X][Y][Z]
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[20] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[21] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
-    TX_Mode_NOACK(22);
+    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+    tx_buf[20] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+    TX_Mode_NOACK(21);
     break;
     default:
     //NOTE: sei la

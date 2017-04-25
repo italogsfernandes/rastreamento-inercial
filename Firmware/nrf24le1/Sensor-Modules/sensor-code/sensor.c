@@ -21,7 +21,7 @@ Id)	Xac		Yac		Zac		Xgy		Ygy		Zgy
 #define PSDMP 42
 
 uint8_t xdata packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
-uint8_t xdata fifoBuffer[PSDMP] = {0};
+uint8_t xdata fifoBuffer[64] = {0};
 uint8_t xdata numbPackets;
 
 ////////////////////////
@@ -59,10 +59,15 @@ void iniciarIO(void){
 
 void setup() {
     iniciarIO();
+		//Pisca o led 2 vezes indicando que iniciou
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250); //1
     rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
+		
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//2
     hal_w2_configure_master(HAL_W2_400KHZ); //I2C
+			
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//3
     initial_setup_dmp();//MPU_6050 and DPM
-
 }
 
 void main(void) {
@@ -88,7 +93,18 @@ void main(void) {
                     STATUS_LED = 0;
                     send_rf_command_with_arg(CMD_TURN_OFF_LED,CMD_OK,MY_SUB_ADDR);
                     break;
-                    default:
+										case 0xAA:
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x40;
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL] = 0x00;//W_quat
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH] = 0x20;
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL] = 0x00;//X_quat
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH] = 0x10;
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x00;//Y_quat
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x08;
+										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x00;//Z_quat
+										send_inertial_packet_by_rf(PACKET_TYPE_QUAT,fifoBuffer,MY_SUB_ADDR);
+										break;
+										default:
                     //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
                     STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
                     //STATUS_LED = !STATUS_LED;
@@ -105,28 +121,39 @@ void main(void) {
 
 void initial_setup_dmp() large {
     uint8_t ret;
-    mpu_8051_malloc_setup(); //Malloc pool for mpu library
+		
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//4
+		mpu_8051_malloc_setup(); //Malloc pool for mpu library
 
-    if(mpu_testConnection()){
-        mpu_initialize(); //Initializes the IMU
-        ret =  dmpInitialize();  //Initializes the DMP
-        delay_ms(50);
-        if(ret == 0)
-        {
-            setDMPEnabled(true);
-            setXAccelOffset(-394);
-            setYAccelOffset(553);
-            setZAccelOffset(1693);
-            setXGyroOffset(144);
-            setYGyroOffset(50);
-            setZGyroOffset(35);
-            //Pisca o led 2 vezes indicando que iniciou
-            STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-            STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-        } else {
-            //acende o led 2 vezes indicando que houve erro
-            STATUS_LED = 1;
-        }
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//5
+		ret = (uint8_t) mpu_testConnection();
+
+		STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//6
+    if(ret){
+			STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//7
+      mpu_initialize(); //Initializes the IMU
+			
+			STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//8
+      ret =  dmpInitialize();  //Initializes the DMP
+			
+			STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//9
+      delay_ms(50);
+			
+			STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//10
+      if(ret == 0)
+      {
+				STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//11
+        setDMPEnabled(true);
+				
+				STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//12
+      setXAccelOffset(-394);
+      setYAccelOffset(553);
+      setZAccelOffset(1693);
+      setXGyroOffset(144);
+      setYGyroOffset(50);
+      setZGyroOffset(35);
+				STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//13
+       }
     }
 }
 
@@ -136,7 +163,9 @@ void DataAcq() large {
     uint8_t i = 0;
     numbPackets = getFIFOCount()/PSDMP;//floor
     for (i = 0; i < numbPackets; i++) {
+				STATUS_LED = 1;
         getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+				STATUS_LED = 0;
     }/*END for every packet*/
     send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
 }/*End of DataAcq*/
