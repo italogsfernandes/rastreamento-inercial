@@ -35,6 +35,9 @@
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include "Wire.h"
+
+#define pinoaddr 7
+
 ///////////////////////////////////   CONFIGURATION   /////////////////////////////
 //Change this 3 variables if you want to fine tune the skecth to your needs.
 int buffersize = 1000;   //Amount of readings used to average, make it higher to get more precision but sketch will be slower  (default:1000)
@@ -55,6 +58,8 @@ int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
 
 ///////////////////////////////////   SETUP   ////////////////////////////////////
 void setup() {
+  pinMode(pinoaddr, OUTPUT);
+  digitalWrite(pinoaddr, LOW);
   // join I2C bus (I2Cdev library doesn't do this automatically)
   Wire.begin();
   // COMMENT NEXT LINE IF YOU ARE USING ARDUINO DUE
