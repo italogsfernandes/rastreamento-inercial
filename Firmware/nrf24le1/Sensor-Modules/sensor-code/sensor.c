@@ -18,19 +18,11 @@ Id)	Xac		Yac		Zac		Xgy		Ygy		Zgy
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
 
 #define  STATUS_LED  P03
+#define PSDMP 42
 
-#define EN_DMP_READY_FLAG sensor_status &= 0x08
-#define DIS_DMP_READY_FLAG sensor_status |= ~0x08
-#define EN_MPU_CALIBRATED_FLAG sensor_status &= 0x04
-#define DIS_MPU_CALIBRATED_FLAG sensor_status |= ~0x04
-#define EN_MPU_CONNECTED_FLAG sensor_status &= 0x02
-#define DIS_MPU_CONNECTED_FLAG sensor_status |= ~0x02
-#define EN_SENSOR_ON_FLAG sensor_status &= 0x01
-#define DIS_SENSOR_ON_FLAG sensor_status |= ~0x01
-
-uint8_t xdata sensor_status = 0x01; // [dmp_ready][mpu_calibrated][mpu_connected][On]
-uint8_t xdata packet_type = PACKET_TYPE_FIFO_NO_MAG; //Tipo de pacote que o sensor obtera
-uint8_t xdata fifoBuffer[42] = {0};
+uint8_t xdata packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
+uint8_t xdata fifoBuffer[PSDMP] = {0};
+uint8_t xdata numbPackets;
 
 ////////////////////////
 //Functions in Sensor //
@@ -68,11 +60,8 @@ void iniciarIO(void){
 void setup() {
     iniciarIO();
     rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
-    hal_w2_configure_master(HAL_W2_100KHZ); //I2C
+    hal_w2_configure_master(HAL_W2_400KHZ); //I2C
     initial_setup_dmp();//MPU_6050 and DPM
-    //Pisca o led 2 vezes indicando que iniciou
-    STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
-    STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
 
 }
 
@@ -90,43 +79,6 @@ void main(void) {
                 switch(rx_buf[1]){
                     case CMD_READ:
                     DataAcq();
-                    break;
-                    case CMD_START:
-                    resetFIFO();//Reset the sensor fifo
-                    delay_ms(5);//wait reseting fifo
-                    STATUS_LED = 1;
-                    break;
-                    case CMD_STOP:
-                    //Pica o led uma vez indicando que parou e termina com o led desligado
-                    STATUS_LED = !STATUS_LED; delay_ms(500); STATUS_LED = !STATUS_LED; delay_ms(500);
-                    STATUS_LED = 0;
-                    break;
-                    case CMD_CONNECTION:
-                    if(mpu_testConnection()){
-                        EN_MPU_CONNECTED_FLAG;
-                        send_rf_command_with_arg(CMD_CONNECTION,CMD_OK,MY_SUB_ADDR);
-                    } else {
-                        DIS_MPU_CONNECTED_FLAG;
-                        send_rf_command_with_arg(CMD_CONNECTION,CMD_ERROR,MY_SUB_ADDR);
-                    }
-                    break;
-                    case CMD_CALIBRATE:
-                    setXAccelOffset(rx_buf[2] << 8 | rx_buf[3]);
-                    setYAccelOffset(rx_buf[4] << 8 | rx_buf[5]);
-                    setZAccelOffset(rx_buf[6] << 8 | rx_buf[7]);
-                    setXGyroOffset(rx_buf[8] << 8 | rx_buf[9]);
-                    setYGyroOffset(rx_buf[10] << 8 | rx_buf[11]);
-                    setZGyroOffset(rx_buf[12] << 8 | rx_buf[13]);
-                    send_rf_command(CMD_OK,MY_SUB_ADDR);
-                    break;
-                    case CMD_GET_OFFSETS:
-                    send_offset_values(MY_SUB_ADDR,CMD_GET_OFFSETS, getXAccelOffset(), getYAccelOffset(), getZAccelOffset(), getXGyroOffset(), getYGyroOffset(), getZGyroOffset());
-                    break;
-                    case CMD_SET_PACKET_TYPE:
-                    packet_type = rx_buf[2]; //Seta o tipo de pacote
-                    break;
-                    case CMD_TEST_RF_CONNECTION:
-                    send_rf_command_with_arg(CMD_TEST_RF_CONNECTION,CMD_OK,MY_SUB_ADDR);
                     break;
                     case CMD_LIGHT_UP_LED:
                     STATUS_LED = 1;
@@ -156,22 +108,24 @@ void initial_setup_dmp() large {
     mpu_8051_malloc_setup(); //Malloc pool for mpu library
 
     if(mpu_testConnection()){
-        EN_MPU_CONNECTED_FLAG;
         mpu_initialize(); //Initializes the IMU
-
         ret =  dmpInitialize();  //Initializes the DMP
         delay_ms(50);
-
         if(ret == 0)
         {
-            EN_DMP_READY_FLAG;
             setDMPEnabled(true);
-            setXAccelOffset(-499);
-            setYAccelOffset(2739);
-            setZAccelOffset(1242);
-            setXGyroOffset(16);
-            setYGyroOffset(109);
-            setZGyroOffset(33);
+            setXAccelOffset(-394);
+            setYAccelOffset(553);
+            setZAccelOffset(1693);
+            setXGyroOffset(144);
+            setYGyroOffset(50);
+            setZGyroOffset(35);
+            //Pisca o led 2 vezes indicando que iniciou
+            STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+            STATUS_LED = 1; delay_ms(500); STATUS_LED = 0; delay_ms(500);
+        } else {
+            //acende o led 2 vezes indicando que houve erro
+            STATUS_LED = 1;
         }
     }
 }
@@ -179,12 +133,11 @@ void initial_setup_dmp() large {
 
 
 void DataAcq() large {
-    //uint8_t i = 0;
-    //uint8_t numbPackets;
-    //numbPackets = getFIFOCount()/PSDMP;//floor
-    //for (i = 0; i < numbPackets; i++) {
-    getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-    //}    /*END for every packet*/
+    uint8_t i = 0;
+    numbPackets = getFIFOCount()/PSDMP;//floor
+    for (i = 0; i < numbPackets; i++) {
+        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+    }/*END for every packet*/
     send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
 }/*End of DataAcq*/
 
