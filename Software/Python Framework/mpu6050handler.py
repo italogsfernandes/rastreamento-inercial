@@ -188,18 +188,21 @@ class MPU6050(SerialHandler):
 	Next 8 bytes, each measure is composed by two bytes (MSB first)
 	Quaternion from sensor1 (w,x,y,z)
 	...
-	End Byte = '\n
+	End Byte = 0x0A
 	'''
 	def readPackage(self):
+		#print 'readPackage called'
 		dataVector = []
 		cont = 0
 		try:
 			ret = self.waitSTByte(MPUConsts.UART_ST)
 			if ret:
+				print 'ST received'
 				ret = self.waitBytes(1)
 				if ret:
 					#self.pckgType = ord(self.serialPort.read())
 					self.qntsensor = ord(self.serialPort.read())
+					print 'qnt sensores: %d' % self.qntsensor
 					for sensor in range(0,self.qntsensor):
 						ret = self.waitBytes(8)
 						if ret:
@@ -208,7 +211,7 @@ class MPU6050(SerialHandler):
 
 							for cont in range(0,8,2):
 								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
-
+								print dataVector[cont/2]
 							ret = self.waitBytes(1)
 							if ret:
 								endByte = ord(self.serialPort.read())
