@@ -21,8 +21,8 @@ from threadhandler import ThreadHandler
 #MPU constants
 #Constants for handling serial communication
 class MPUConsts():
-	UART_ST = 0x53  			#Start transmission
-	UART_ET = 0x04  			#End transmission
+	UART_ST = 0x24  			#Start transmission
+	UART_ET = 0x0A  			#End transmission
 	UART_PT1 = 0x21 			#Package Type I: Motion and Quaternion (in float)
 	UART_PT2 = 0x22 			#Package Type I: Motion and Quaternion (in int16)
 	UART_PT3 = 0x23 			#Package Type I: Motion and Quaternion (in int16)
@@ -181,15 +181,14 @@ class MPU6050(SerialHandler):
 
 	'''
 	Summary: Method for reading packages
-	Standard MPU6050 package contains a total of 23 bytes
+	Standard MPU6050 package contains:
 	Sensor data is read from DMP
-	1st byte: Start transmission
-	2nd byte: Total of data bytes (20 bytes)
-	Next 20 bytes, each measure is composed by two bytes (MSB first)
-	First 8 bytes: Quaternion (w,x,y,z)
-	Next 6 bytes: Accelerometer (x,y,z)
-	Final 6 bytes: Gyroscope (x,y,z)
-	23th byte: End transmission
+	1st byte: Start transmission = '$'
+	2nd byte: Total of sensors connected bytes
+	Next 8 bytes, each measure is composed by two bytes (MSB first)
+	Quaternion from sensor1 (w,x,y,z)
+	...
+	End Byte = '\n
 	'''
 	def readPackage(self):
 		dataVector = []
@@ -197,32 +196,29 @@ class MPU6050(SerialHandler):
 		try:
 			ret = self.waitSTByte(MPUConsts.UART_ST)
 			if ret:
-				ret = self.waitBytes(2)
+				ret = self.waitBytes(1)
 				if ret:
 					#self.pckgType = ord(self.serialPort.read())
-					self.pckgLen = ord(self.serialPort.read())
-					ret = self.waitBytes(self.pckgLen)
-					if ret:
-						data = self.serialPort.read(self.pckgLen)
-						data = map(ord,data)
-						while True:
-							if cont < 8:
-								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.)
-							else:
-								dataVector.append(self.to_int16((data[cont]),(data[cont+1])))
-							cont += 2
-							if cont >= self.pckgLen:
-								break
-						ret = self.waitBytes(1)
+					self.qntsensor = ord(self.serialPort.read())
+					for sensor in range(0,self.qntsensor):
+						ret = self.waitBytes(8)
 						if ret:
-							endByte = ord(self.serialPort.read())
-							if endByte == MPUConsts.UART_ET:
-								self.acqThread.lock.acquire()
-								self.dataQueue.put(dataVector)
-								#print dataVector
-								self.acqThread.lock.release()
-							else:
-								print ' package error!'
+							data = self.serialPort.read(8)
+							data = map(ord,data)
+
+							for cont in range(0,8,2):
+								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
+									
+							ret = self.waitBytes(1)
+							if ret:
+								endByte = ord(self.serialPort.read())
+								if endByte == MPUConsts.UART_ET:
+									self.acqThread.lock.acquire()
+									self.dataQueue.put(dataVector)
+									#print dataVector
+									self.acqThread.lock.release()
+								else:
+									print ' package error!'
 		except:
 			print 'read error!'
 #------------------------------------------------------------------------------
