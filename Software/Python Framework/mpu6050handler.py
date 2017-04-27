@@ -208,7 +208,7 @@ class MPU6050(SerialHandler):
 
 							for cont in range(0,8,2):
 								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
-									
+
 							ret = self.waitBytes(1)
 							if ret:
 								endByte = ord(self.serialPort.read())
@@ -239,6 +239,7 @@ if __name__ == "__main__":
 		print '-------------------------------'
 		strkey = raw_input()
 		if strkey == '1':
+			print("Thread Started.")
 			imu.start()
 			imu.acqThread.start()
 		elif strkey == '2':
