@@ -279,6 +279,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	#Triggered when the "Stop" button is clicked
 	def doStop(self):
+		self.imu.pause()
 		self.imu.stop()
 		time.sleep(1)
 		#Kill the threads
@@ -301,10 +302,25 @@ class Main(QMainWindow, Ui_MainWindow):
 			n = self.imu.dataQueue.qsize()
 			for i in range(n):
 				data = self.imu.dataQueue.get()
-				quat = data[0:4]
-				print quat
-				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
-				joint.setQuaternion(quat)
+				sensor_id = data[0]
+				if sensor_id == 0.00:
+					quat = data[1:5]
+					print "Sensor 1: "
+					print quat
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+					joint.setQuaternion(quat)
+				elif sensor_id == 1.00:
+					quat = data[1:5]
+					print "Sensor 2: "
+					print quat
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
+					joint.setQuaternion(quat)
+				elif sensor_id == 2.00:
+					quat = data[1:5]
+					print "Sensor 3: "
+					print quat
+					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+					joint.setQuaternion(quat)
 				#self.updateQuaternions(joint,quat)
 		self.skeleton.rotate()
 		#self.plot()

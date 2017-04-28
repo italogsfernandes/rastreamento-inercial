@@ -197,13 +197,14 @@ class MPU6050(SerialHandler):
 		try:
 			ret = self.waitSTByte(MPUConsts.UART_ST)
 			if ret:
-				print 'ST received'
+				#print 'ST received'
 				ret = self.waitBytes(1)
 				if ret:
 					#self.pckgType = ord(self.serialPort.read())
 					self.qntsensor = ord(self.serialPort.read())
-					print 'qnt sensores: %d' % self.qntsensor
-					for sensor in range(0,self.qntsensor):
+					#print 'qnt sensores: %d' % self.qntsensor
+					for sensor_id in range(0,self.qntsensor):
+						dataVector.append(float(sensor_id));
 						ret = self.waitBytes(8)
 						if ret:
 							data = self.serialPort.read(8)
@@ -211,17 +212,17 @@ class MPU6050(SerialHandler):
 
 							for cont in range(0,8,2):
 								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
-								print dataVector[cont/2]
-							ret = self.waitBytes(1)
-							if ret:
-								endByte = ord(self.serialPort.read())
-								if endByte == MPUConsts.UART_ET:
-									self.acqThread.lock.acquire()
-									self.dataQueue.put(dataVector)
-									#print dataVector
-									self.acqThread.lock.release()
-								else:
-									print ' package error!'
+								#print dataVector[cont/2]
+					ret = self.waitBytes(1)
+					if ret:
+						endByte = ord(self.serialPort.read())
+						if endByte == MPUConsts.UART_ET:
+							self.acqThread.lock.acquire()
+							self.dataQueue.put(dataVector)
+							#print dataVector
+							self.acqThread.lock.release()
+						else:
+							print ' package error!'
 		except:
 			print 'read error!'
 #------------------------------------------------------------------------------
@@ -242,7 +243,7 @@ if __name__ == "__main__":
 		print '-------------------------------'
 		strkey = raw_input()
 		if strkey == '1':
-			print("Thread Started.")
+			#print("Thread Started.")
 			imu.start()
 			imu.acqThread.start()
 		elif strkey == '2':
