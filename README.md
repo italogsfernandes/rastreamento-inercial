@@ -40,7 +40,6 @@ This project is about the development of a tracking system, based on the use of 
 
 * Caixinhas:
 ![](caixa_aberta.jpg)
-![](caixa_fechada.jpg)
 
 * PCBS:
 ![](pcbs_unica_1.jpg)
