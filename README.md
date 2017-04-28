@@ -70,7 +70,7 @@ Verifique os arquivos de instalação no Google Drive.
 * Eduardo Morais.
 * Sergio Ricardo de Jesus.
 * Andrei Nakagawa.
-* Ana Carolina Torres.
+* Ana Carolina Torres Cresto.
 
 ## License
 
