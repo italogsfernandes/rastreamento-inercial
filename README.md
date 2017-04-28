@@ -66,11 +66,11 @@ Verifique os arquivos de instalação no Google Drive.
 
 ## Authors
 
+* Ana Carolina Torres Cresto.
 * Ítalo G S Fernandes.
 * Eduardo Morais.
 * Sergio Ricardo de Jesus.
 * Andrei Nakagawa.
-* Ana Carolina Torres Cresto.
 
 ## License
 
