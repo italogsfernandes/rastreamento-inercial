@@ -19,38 +19,38 @@ This project is about the development of a tracking system, based on the use of 
 ## Imagens do sistema
 * HOST:
     * Com fio:
-![](arduino_ligado.jpg)
+![](Imagens/arduino_ligado.jpg)
     * Sem fio:
-![](host_wireless.jpg)
+![](Imagens/host_wireless.jpg)
 
 * Sensores:
-![](comparacao_caneta.jpg)
-![](sensores_com_fio_1.jpg)
+![](Imagens/comparacao_caneta.jpg)
+![](Imagens/sensores_com_fio_1.jpg)
 
 * nrf24le1:
-![](nrf24le1.jpg)
+![](Imagens/nrf24le1.jpg)
 
 * nrf24le01:
-![](nrf24le01_frente.jpg)
-![](nrf24le01_tras.jpg)
+![](Imagens/nrf24le01_frente.jpg)
+![](Imagens/nrf24le01_tras.jpg)
 
 * mpu6050:
-![](mpu6050_module.jpg)
-![](mpu6050_wireless.jpg)
+![](Imagens/mpu6050_module.jpg)
+![](Imagens/mpu6050_wireless.jpg)
 
 * Caixinhas:
-![](caixa_aberta.jpg)
+![](Imagens/caixa_aberta.jpg)
 
 * PCBS:
-![](pcbs_unica_1.jpg)
-![](pcbs_unica_2.jpg)
-![](pcbs_varias.jpg)
+![](Imagens/pcbs_unica_1.jpg)
+![](Imagens/pcbs_unica_2.jpg)
+![](Imagens/pcbs_varias.jpg)
 
 * Python Framwork:
-![](sistema_andrei.png)
+![](Imagens/sistema_andrei.png)
 
 * Sistema de Testes:
-![](madeira_de_teste.jpg)
+![](Imagens/madeira_de_teste.jpg)
 
 ## Prerequisites
 
