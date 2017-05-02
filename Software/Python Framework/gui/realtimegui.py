@@ -302,23 +302,20 @@ class Main(QMainWindow, Ui_MainWindow):
 			n = self.imu.dataQueue.qsize()
 			for i in range(n):
 				data = self.imu.dataQueue.get()
-				sensor_id = data[0]
-				if sensor_id == 0.00:
-					quat = data[1:5]
-					print "Sensor 1: "
-					print quat
+				print 'qntsensor: %d' % (len(data)/4)
+				if len(data) >= 4:
+					quat = data[0:4]
+					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)
-				elif sensor_id == 1.00:
-					quat = data[1:5]
-					print "Sensor 2: "
-					print quat
+				if len(data) >= 8:
+					quat = data[4:8]
+					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-				elif sensor_id == 2.00:
-					quat = data[1:5]
-					print "Sensor 3: "
-					print quat
+				if len(data) >= 12:
+					quat = data[8:12]
+					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 					joint.setQuaternion(quat)
 				#self.updateQuaternions(joint,quat)

@@ -200,11 +200,11 @@ class MPU6050(SerialHandler):
 				#print 'ST received'
 				ret = self.waitBytes(1)
 				if ret:
-					#self.pckgType = ord(self.serialPort.read())
 					self.qntsensor = ord(self.serialPort.read())
 					#print 'qnt sensores: %d' % self.qntsensor
 					for sensor_id in range(0,self.qntsensor):
-						dataVector.append(float(sensor_id));
+						#dataVector.append(float(sensor_id));
+						#print 'sensor_id: %d' % sensor_id
 						ret = self.waitBytes(8)
 						if ret:
 							data = self.serialPort.read(8)
