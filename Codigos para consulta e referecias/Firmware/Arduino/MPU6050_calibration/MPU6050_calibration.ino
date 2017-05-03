@@ -37,8 +37,8 @@
 #include "Wire.h"
 
 //#define USING_SENSOR_1
-#define USING_SENSOR_2
-//#define USING_SENSOR_3
+//#define USING_SENSOR_2
+#define USING_SENSOR_3
 //#define USING_SENSOR_4
 
 #define PINO_ADDR_SENSOR1 5

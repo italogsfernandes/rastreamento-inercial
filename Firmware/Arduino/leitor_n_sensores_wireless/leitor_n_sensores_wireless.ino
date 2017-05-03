@@ -34,11 +34,11 @@
 //------------------------------------------------------------------------------
 //Comente e descomente de acordo com quais sensores estiver a usar
 #define USING_SENSOR_1
-#define USING_SENSOR_2
-#define USING_SENSOR_3
+//#define USING_SENSOR_2
+//#define USING_SENSOR_3
 //#define USING_SENSOR_4
 
-#define QNT_SENSORES 3 //numero de sensores ativos
+#define QNT_SENSORES 1 //numero de sensores ativos
 
 //#define DEBUG_PRINT_(x) Serial.print(x)
 #define DEBUG_PRINT_(x)
@@ -311,13 +311,13 @@ void inicializar_sensores() {
     uint8_t ret = mpu3.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      mpu3.setDMPEnabled(true);
-      mpu3.setXAccelOffset(-2994);
-      mpu3.setYAccelOffset(238);
-      mpu3.setZAccelOffset(1615);
-      mpu3.setXGyroOffset(-37);
-      mpu3.setYGyroOffset(0);
-      mpu3.setZGyroOffset(45);
+      mpu3.setDMPEnabled(true);/*Calibrated at 03 Mai 2017*/
+      mpu3.setXAccelOffset(-382);
+      mpu3.setYAccelOffset(682);
+      mpu3.setZAccelOffset(1706);
+      mpu3.setXGyroOffset(141);
+      mpu3.setYGyroOffset(48);
+      mpu3.setZGyroOffset(38);
       DEBUG_PRINT_("Sensor 3 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu3.testConnection()) + "\n");
 
@@ -376,7 +376,7 @@ void timerDataAcq()
     mpu1.getFIFOBytes(fifoBuffer, PSDMP);
   }
   //mpu1.getFIFOBytes(fifoBuffer, PSDMP);
-  DEBUG_PRINT_("Sensor 1: ");
+  DEBUG_PRINT_("1: ");
   show_data();
 #endif /*USING_SENSOR_1*/
 #ifdef USING_SENSOR_2
@@ -389,7 +389,7 @@ void timerDataAcq()
     mpu2.getFIFOBytes(fifoBuffer, PSDMP);
   }
   //mpu2.getFIFOBytes(fifoBuffer, PSDMP);
-  DEBUG_PRINT_("Sensor 2: ");
+  DEBUG_PRINT_("2: ");
   show_data();
 #endif /*USING_SENSOR_2*/
 #ifdef USING_SENSOR_3
@@ -403,7 +403,7 @@ void timerDataAcq()
     mpu3.getFIFOBytes(fifoBuffer, PSDMP);
   }
   //mpu3.getFIFOBytes(fifoBuffer, PSDMP);
-  DEBUG_PRINT_("Sensor 3: ");
+  DEBUG_PRINT_("3: ");
   show_data();
 #endif /*USING_SENSOR_3*/
 #ifdef USING_SENSOR_4
@@ -416,7 +416,7 @@ void timerDataAcq()
     mpu4.getFIFOBytes(fifoBuffer, PSDMP);
   }
   //mpu4.getFIFOBytes(fifoBuffer, PSDMP);
-  DEBUG_PRINT_("Sensor 4: ");
+  DEBUG_PRINT_("4: ");
   show_data();
 #endif /*USING_SENSOR_4*/ // que loucura
   Serial.write(ET); //byte End Transmission
