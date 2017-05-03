@@ -1,6 +1,9 @@
 # Rastreamento Inercial
 This project is about the development of a tracking system, based on the use of inertial sensors in a wireless network. This sensors are placed at the body segments that will be tracked and they send their data to a host computer. This computer can show the movement execution in real time and allow the usage of these data to analyzes and studies. To do that, small wearable modules are being developed, in which there will be a micro-controller an inertial sensor and a radio frequency transponder, all inside a small box made by a 3D printer. Also, an acquisition system and a user interface are being developed.
 
+
+![](sistema_andrei.png)
+
 ## Arquivos do repositório
 * **FIRMWARE**:
   * Arduino: Contém um projeto do platformIO com o código para o arduino Due que será utilizado como host. Tambem contém as bibliotecas necessárias para utiliza-lo, no caso "DueTimer" e "nrf24le01Module".
@@ -15,20 +18,39 @@ This project is about the development of a tracking system, based on the use of 
 
 ## Imagens do sistema
 * HOST:
+    * Com fio:
+![](Imagens/arduino_ligado.jpg)
+    * Sem fio:
+![](Imagens/host_wireless.jpg)
 
 * Sensores:
+![](Imagens/comparacao_caneta.jpg)
+![](Imagens/sensores_com_fio_1.jpg)
 
 * nrf24le1:
+![](Imagens/nrf24le1.jpg)
 
 * nrf24le01:
+![](Imagens/nrf24le01_frente.jpg)
+![](Imagens/nrf24le01_tras.jpg)
 
 * mpu6050:
+![](Imagens/mpu6050_module.jpg)
+![](Imagens/mpu6050_wireless.jpg)
 
 * Caixinhas:
+![](Imagens/caixa_aberta.jpg)
 
 * PCBS:
+![](Imagens/pcbs_unica_1.jpg)
+![](Imagens/pcbs_unica_2.jpg)
+![](Imagens/pcbs_varias.jpg)
 
 * Python Framwork:
+![](Imagens/sistema_andrei.png)
+
+* Sistema de Testes:
+![](Imagens/madeira_de_teste.jpg)
 
 ## Prerequisites
 
@@ -44,10 +66,12 @@ Verifique os arquivos de instalação no Google Drive.
 
 ## Authors
 
+* Ana Carolina Torres Cresto.
 * Ítalo G S Fernandes.
 * Eduardo Morais.
 * Sergio Ricardo de Jesus.
 * Andrei Nakagawa.
-* Ana Carolina Torres.
 
 ## License
+
+Este projeto esta sobre a licença MIT. Veja o aquivo license para mais informações.
