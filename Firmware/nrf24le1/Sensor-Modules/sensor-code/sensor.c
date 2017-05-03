@@ -160,14 +160,23 @@ void initial_setup_dmp() large {
 
 
 void DataAcq() large {
-    uint8_t i = 0;
-    numbPackets = getFIFOCount()/PSDMP;//floor
-    for (i = 0; i < numbPackets; i++) {
-				STATUS_LED = 1;
-        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-				STATUS_LED = 0;
-    }/*END for every packet*/
-    send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
+//    uint8_t i = 0;
+//    numbPackets = getFIFOCount()/PSDMP;//floor
+//    for (i = 0; i < numbPackets; i++) {
+//				STATUS_LED = 1;
+//        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+//				STATUS_LED = 0;
+//    }/*END for every packet*/
+//    send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x08;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x00;
+	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x00;
+	 send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
 }/*End of DataAcq*/
 
 //interrupção do I2C - NOT USED
