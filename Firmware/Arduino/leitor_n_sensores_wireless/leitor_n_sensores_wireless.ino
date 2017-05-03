@@ -255,12 +255,12 @@ void inicializar_sensores() {
     uint8_t ret = mpu1.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      mpu1.setDMPEnabled(true);
-      mpu1.setXAccelOffset(-563);
-      mpu1.setYAccelOffset(1156);
-      mpu1.setZAccelOffset(975);
-      mpu1.setXGyroOffset(23);
-      mpu1.setYGyroOffset(-6);
+      mpu1.setDMPEnabled(true); /*Calibrated at 03 Mai 2017*/
+      mpu1.setXAccelOffset(-520);
+      mpu1.setYAccelOffset(632);
+      mpu1.setZAccelOffset(914);
+      mpu1.setXGyroOffset(22);
+      mpu1.setYGyroOffset(-8);
       mpu1.setZGyroOffset(26);
       DEBUG_PRINT_("Sensor 1 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu1.testConnection()) + "\n");
@@ -284,13 +284,13 @@ void inicializar_sensores() {
     uint8_t ret = mpu2.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      mpu2.setDMPEnabled(true);
-      mpu2.setXAccelOffset(-518);
-      mpu2.setYAccelOffset(515);
-      mpu2.setZAccelOffset(1687);
-      mpu2.setXGyroOffset(143);
-      mpu2.setYGyroOffset(48);
-      mpu2.setZGyroOffset(35);
+      mpu2.setDMPEnabled(true);/*Calibrated at 03 Mai 2017*/
+      mpu2.setXAccelOffset(-3030);
+      mpu2.setYAccelOffset(318);
+      mpu2.setZAccelOffset(1624);
+      mpu2.setXGyroOffset(-37);
+      mpu2.setYGyroOffset(10);
+      mpu2.setZGyroOffset(50);
       DEBUG_PRINT_("Sensor 2 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu2.testConnection()) + "\n");
     }

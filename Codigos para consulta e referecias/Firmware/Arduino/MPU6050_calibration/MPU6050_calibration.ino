@@ -36,7 +36,15 @@
 #include "MPU6050.h"
 #include "Wire.h"
 
-#define pinoaddr 7
+//#define USING_SENSOR_1
+#define USING_SENSOR_2
+//#define USING_SENSOR_3
+//#define USING_SENSOR_4
+
+#define PINO_ADDR_SENSOR1 5
+#define PINO_ADDR_SENSOR2 6
+#define PINO_ADDR_SENSOR3 7
+#define PINO_ADDR_SENSOR4 8
 
 ///////////////////////////////////   CONFIGURATION   /////////////////////////////
 //Change this 3 variables if you want to fine tune the skecth to your needs.
@@ -58,8 +66,25 @@ int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
 
 ///////////////////////////////////   SETUP   ////////////////////////////////////
 void setup() {
-  pinMode(pinoaddr, OUTPUT);
-  digitalWrite(pinoaddr, LOW);
+  pinMode(PINO_ADDR_SENSOR1, OUTPUT);
+  pinMode(PINO_ADDR_SENSOR2, OUTPUT);
+  pinMode(PINO_ADDR_SENSOR3, OUTPUT);
+  pinMode(PINO_ADDR_SENSOR4, OUTPUT);
+
+#ifdef USING_SENSOR_1
+  select_sensor(1);
+#endif /*USING_SENSOR_1*/
+#ifdef USING_SENSOR_2
+  select_sensor(2);
+#endif /*USING_SENSOR_2*/
+#ifdef USING_SENSOR_3
+  select_sensor(3);
+#endif /*USING_SENSOR_3*/
+#ifdef USING_SENSOR_4
+  select_sensor(4);
+#endif /*USING_SENSOR_4*/
+
+
   // join I2C bus (I2Cdev library doesn't do this automatically)
   Wire.begin();
   // COMMENT NEXT LINE IF YOU ARE USING ARDUINO DUE
@@ -146,6 +171,41 @@ void loop() {
   }
 }
 
+
+void select_sensor(uint8_t sensor_id) {
+  switch (sensor_id) {
+
+    case 1:
+      digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
+      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
+      break;
+
+    case 2:
+      digitalWrite(PINO_ADDR_SENSOR2, LOW); //0x68
+      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
+      break;
+
+    case 3:
+      digitalWrite(PINO_ADDR_SENSOR3, LOW);//0x68
+      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
+      break;
+
+    case 4:
+      digitalWrite(PINO_ADDR_SENSOR4, LOW); //0x68
+      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
+      break;
+
+  }
+}
+
 ///////////////////////////////////   FUNCTIONS   ////////////////////////////////////
 void meansensors() {
 
@@ -177,7 +237,7 @@ void meansensors() {
 }
 
 void calibration() {
- 
+
   ax_offset = -mean_ax / 8;
   ay_offset = -mean_ay / 8;
   az_offset = (16384 - mean_az) / 8;
