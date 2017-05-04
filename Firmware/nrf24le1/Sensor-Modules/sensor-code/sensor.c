@@ -146,12 +146,13 @@ void initial_setup_dmp() large {
         setDMPEnabled(true);
 				
 				STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//12
-      setXAccelOffset(-394);
-      setYAccelOffset(553);
-      setZAccelOffset(1693);
-      setXGyroOffset(144);
-      setYGyroOffset(50);
-      setZGyroOffset(35);
+			/*Calibrated at 03 Mai 2017*/
+      setXAccelOffset(-520);
+      setYAccelOffset(632);
+      setZAccelOffset(914);
+      setXGyroOffset(22);
+      setYGyroOffset(-8);
+      setZGyroOffset(26);
 				STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);//13
        }
     }
@@ -160,23 +161,23 @@ void initial_setup_dmp() large {
 
 
 void DataAcq() large {
-//    uint8_t i = 0;
-//    numbPackets = getFIFOCount()/PSDMP;//floor
-//    for (i = 0; i < numbPackets; i++) {
-//				STATUS_LED = 1;
-//        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
-//				STATUS_LED = 0;
-//    }/*END for every packet*/
-//    send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x08;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x00;
-	fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x00;
-	 send_inertial_packet_by_rf(packet_type,fifoBuffer,MY_SUB_ADDR);
+    uint8_t i = 0;
+    numbPackets = getFIFOCount() / PSDMP;//floor
+    for (i = 0; i < numbPackets; i++) {
+        getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
+    }/*END for every packet*/
+		
+		tx_buf[0] = MY_SUB_ADDR;
+		tx_buf[1] = fifoBuffer[0];
+    tx_buf[2] = fifoBuffer[1];//W_quat
+    tx_buf[3] = fifoBuffer[4];
+    tx_buf[4] = fifoBuffer[5];//X_quat
+    tx_buf[5] = fifoBuffer[8];
+    tx_buf[6] = fifoBuffer[9];//Y_quat
+    tx_buf[7] = fifoBuffer[12];
+    tx_buf[8] = fifoBuffer[13];//Z_quat
+    TX_Mode_NOACK(9);
+		RX_Mode();
 }/*End of DataAcq*/
 
 //interrupção do I2C - NOT USED
