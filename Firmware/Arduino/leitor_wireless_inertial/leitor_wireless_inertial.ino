@@ -16,7 +16,7 @@
 /////////////
 // Defines //
 /////////////
-#define freq_teste 10
+#define freq_teste 5
 #define LED_STATUS 13
 #define UART_BAUDRATE 115200
 #define CMD_READ 0x07
@@ -37,8 +37,9 @@ float q[4]; // [w,x,y,z]
 int16_t ax, ay, az;
 int16_t gx, gy, gz;
 
+bool timer_active = false;
 
-nrf24le01Module host_nrf(2, 3, 4);
+nrf24le01Module host_nrf(2, 3, 4);//(uint8_t _RFIRQ_pin, uint8_t _RFCE_pin, uint8_t _RFCSN_pin)
 
 void timerDataAcq();
 
@@ -63,12 +64,14 @@ void loop() {
     serialOp = Serial.readString();
     if (serialOp == "CMDSTART") {
       digitalWrite(LED_STATUS, HIGH);
-      Timer3.attachInterrupt(takeReading).start(sampPeriod);
+      //Timer3.attachInterrupt(takeReading).start(sampPeriod);
+      timer_active = true;
     }
     else if (serialOp == "CMDSTOP")
     {
       digitalWrite(LED_STATUS, LOW);
-      Timer3.stop();
+      //Timer3.stop();
+      timer_active = false;
     }
     else if (serialOp == "CMDREAD")
     {
@@ -84,12 +87,14 @@ void loop() {
       send_rf_command_to(0xAA, 1);
     }
   }
+  
+  if(timer_active){
+    takeReading();  
+  }
 }
 
 void takeReading() {
-  Timer3.stop();
   send_rf_command_to(CMD_READ, 1);
-  Timer3.attachInterrupt(takeReading).start(sampPeriod);
 }
 
 //////////////////////
