@@ -34,14 +34,14 @@
 //------------------------------------------------------------------------------
 //Comente e descomente de acordo com quais sensores estiver a usar
 #define USING_SENSOR_1
-//#define USING_SENSOR_2
-//#define USING_SENSOR_3
+#define USING_SENSOR_2
+#define USING_SENSOR_3
 //#define USING_SENSOR_4
 
 #define QNT_SENSORES 1 //numero de sensores ativos
 
-//#define DEBUG_PRINT_(x) Serial.print(x)
-#define DEBUG_PRINT_(x)
+#define DEBUG_PRINT_(x) Serial.print(x)
+//#define DEBUG_PRINT_(x)
 //LED
 #define LED_PIN 13 //LED for signaling acquisition running 
 #define PINO_ADDR_SENSOR1 5
@@ -436,7 +436,7 @@ void show_data() {
   q[2] = q[2] > 2 ? q[2] - 4 : q[2];
   q[3] = q[3] > 2 ? q[3] - 4 : q[3];
 
-  send_packet();
+  //send_packet();
 
   DEBUG_PRINT_(q[0]);
   DEBUG_PRINT_("\t");
