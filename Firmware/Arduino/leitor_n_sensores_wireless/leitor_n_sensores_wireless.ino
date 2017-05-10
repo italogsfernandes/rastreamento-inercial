@@ -27,7 +27,7 @@
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "Timer.h"
-//#include <DueTimer.h>
+#include <DueTimer.h>
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  DEFINES
@@ -51,7 +51,7 @@
 
 
 #define baud 115200 //Default baud rate
-#define sampFreq 100 //Sampling frequency
+#define sampFreq 50 //Sampling frequency
 //Size of DMP packages
 #define PSDMP 42
 #define PS 20
@@ -73,7 +73,7 @@ MPU6050 mpu2(0x68);
 MPU6050 mpu3(0x68);
 MPU6050 mpu4(0x68);
 
-Timer t;
+//Timer t;
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  VARIABLES
@@ -104,7 +104,7 @@ void timerDataAcq(); //Data acquisition method
 //------------------------------------------------------------------------------
 void setup() {
   Wire.begin();
-  Wire.setClock(100000);
+  //Wire.setClock(100000);
   //Defines the LED_PIN as output
   pinMode(LED_PIN, OUTPUT);
   pinMode(PINO_ADDR_SENSOR1, OUTPUT);
@@ -142,13 +142,14 @@ void setup() {
 
   delay(5);
   //timerDataAcq();
-  t.every(sampPeriod / 1000, timerDataAcq);
+  //t.every(sampPeriod / 1000, timerDataAcq);
+  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
   DEBUG_PRINT_("Envie um comando: CMDSTART,CMDSTOP,CMDCONN,CMDREAD...");
 }
 
 void loop() {
   //Menu
-  t.update();
+  //t.update();
   if (Serial.available() > 0) {
     serialOp = Serial.readString();
     if (serialOp == "CMDSTART")
@@ -267,13 +268,12 @@ void inicializar_sensores() {
       mpu1.setZGyroOffset(26);*/
       
       mpu1.setDMPEnabled(true);
-      mpu1.setXAccelOffset(-360);
-      mpu1.setYAccelOffset(643);
-      mpu1.setZAccelOffset(1696);
-      mpu1.setXGyroOffset(143);
-      mpu1.setYGyroOffset(50);
-      mpu1.setZGyroOffset(34);
-
+      mpu1.setXAccelOffset(-566);
+      mpu1.setYAccelOffset(3075);
+      mpu1.setZAccelOffset(1248);
+      mpu1.setXGyroOffset(15);
+      mpu1.setYGyroOffset(108);
+      mpu1.setZGyroOffset(33);
       
       DEBUG_PRINT_("Sensor 1 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu1.testConnection()) + "\n");
@@ -293,7 +293,7 @@ void inicializar_sensores() {
 #endif /*USING_SENSOR_1*/
 #ifdef USING_SENSOR_2
   //Iniciando o sensor id 2
-  select_sensor(2);
+  select_sensor(2);  
   if (mpu2.testConnection())
   {
     //Initializes the IMU
@@ -380,7 +380,7 @@ void inicializar_sensores() {
 //------------------------------------------------------------------------------
 void timerDataAcq()
 {
-  Serial.write(ST); //byte Start Transmission
+  Timer3.stop();
   Serial.write(QNT_SENSORES); // Quantos Sensores Ativos
   //stops the timer so the function has enough time to run
   //  Timer3.stop();
@@ -389,7 +389,7 @@ void timerDataAcq()
   //DEBUG_PRINT_("SENSOR 1: quat\t");
   numbPackets = floor(mpu1.getFIFOCount() / PSDMP);
   //numbPackets = 1;
-  DEBUG_PRINT_(numbPackets); DEBUG_PRINT_(" - ");
+  //DEBUG_PRINT_(numbPackets); DEBUG_PRINT_(" - ");
   for (int i = 0; i < numbPackets; i++) {
     mpu1.getFIFOBytes(fifoBuffer, PSDMP);
   }
@@ -402,7 +402,7 @@ void timerDataAcq()
   //DEBUG_PRINT_("SENSOR 2: quat\t");
   numbPackets = floor(mpu2.getFIFOCount() / PSDMP);
   //numbPackets = 1;
-  DEBUG_PRINT_(" - "); DEBUG_PRINT_(numbPackets); DEBUG_PRINT_(" - ");
+  //DEBUG_PRINT_(" - "); DEBUG_PRINT_(numbPackets); DEBUG_PRINT_(" - ");
   for (int i = 0; i < numbPackets; i++) {
     mpu2.getFIFOBytes(fifoBuffer, PSDMP);
   }
@@ -439,7 +439,7 @@ void timerDataAcq()
 #endif /*USING_SENSOR_4*/ // que loucura
   Serial.write(ET); //byte End Transmission
   //starts the timer again
-  //Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
+  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);  
 }
 
 void show_data(uint8_t* _fifoBuffer) {

@@ -149,14 +149,15 @@ void setup() {
 
     if (ret == 0)
     {
-
+      Serial.println("Antes de configurar os offsets: " + String(mpu.getXAccelOffset()));
       mpu.setDMPEnabled(true);
-      mpu.setXAccelOffset(-360);
-      mpu.setYAccelOffset(643);
-      mpu.setZAccelOffset(1696);
-      mpu.setXGyroOffset(143);
-      mpu.setYGyroOffset(50);
-      mpu.setZGyroOffset(34);
+      mpu.setXAccelOffset(-566);
+      mpu.setYAccelOffset(3075);
+      mpu.setZAccelOffset(1248);
+      mpu.setXGyroOffset(15);
+      mpu.setYGyroOffset(108);
+      mpu.setZGyroOffset(33);
+      Serial.println("Depois de configurar os offsets: " + String(mpu.getXAccelOffset()));
     }
     else
     {
