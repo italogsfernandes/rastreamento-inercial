@@ -95,7 +95,7 @@ MPU6050 mpu(0x68);
 const double sampPeriod = (1.0 / sampFreq) * 1000000;
 //Serial variables
 String serialOp; // Variable for receiving commands from serial
-bool configOp = true; //If true, calibration. If false, acquisition
+bool configOp = true; //If true, calibration. If false, acquisition //m
 //DMP variables
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
@@ -149,13 +149,15 @@ void setup() {
 
     if (ret == 0)
     {
+      Serial.println("Antes de configurar os offsets: " + String(mpu.getXAccelOffset()));
       mpu.setDMPEnabled(true);
-      mpu.setXAccelOffset(-336);
-      mpu.setYAccelOffset(560);
-      mpu.setZAccelOffset(1702);
-      mpu.setXGyroOffset(139);
-      mpu.setYGyroOffset(49);
-      mpu.setZGyroOffset(35);
+      mpu.setXAccelOffset(-566);
+      mpu.setYAccelOffset(3075);
+      mpu.setZAccelOffset(1248);
+      mpu.setXGyroOffset(15);
+      mpu.setYGyroOffset(108);
+      mpu.setZGyroOffset(33);
+      Serial.println("Depois de configurar os offsets: " + String(mpu.getXAccelOffset()));
     }
     else
     {
@@ -174,7 +176,7 @@ void loop()
   {
     serialOp = Serial.readString();
 
-    if (serialOp == "CMDSTART")
+    if (serialOp == "m")
     {
       Serial.write(CMD_OK);
       //String spt = Serial.readStringUntil('\n');
