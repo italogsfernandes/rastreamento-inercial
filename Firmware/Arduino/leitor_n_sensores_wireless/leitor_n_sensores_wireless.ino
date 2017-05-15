@@ -27,15 +27,15 @@
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
 #include "Timer.h"
-#include <DueTimer.h>
+//#include <DueTimer.h>
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 //  DEFINES
 //------------------------------------------------------------------------------
 //Comente e descomente de acordo com quais sensores estiver a usar
 #define USING_SENSOR_1
-#define USING_SENSOR_2
-#define USING_SENSOR_3
+//#define USING_SENSOR_2
+//#define USING_SENSOR_3
 //#define USING_SENSOR_4
 
 #define QNT_SENSORES 1 //numero de sensores ativos
@@ -44,8 +44,8 @@
 //#define DEBUG_PRINT_(x)
 //LED
 #define LED_PIN 13 //LED for signaling acquisition running 
-#define PINO_ADDR_SENSOR1 5
-#define PINO_ADDR_SENSOR2 6
+#define PINO_ADDR_SENSOR1 3
+#define PINO_ADDR_SENSOR2 4
 #define PINO_ADDR_SENSOR3 7
 #define PINO_ADDR_SENSOR4 8
 
@@ -140,10 +140,10 @@ void setup() {
   mpu4.resetFIFO();
 #endif
 
-  delay(5);
+  delay(10);
   //timerDataAcq();
   //t.every(sampPeriod / 1000, timerDataAcq);
-  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
+  //  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
   DEBUG_PRINT_("Envie um comando: CMDSTART,CMDSTOP,CMDCONN,CMDREAD...");
 }
 
@@ -180,15 +180,15 @@ void loop() {
       mpu4.resetFIFO();
 #endif
 
-      delay(5);
+      delay(10);
       //Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
-      //is_alive = true;
+      is_alive = true;
     }
     else if (serialOp == "CMDSTOP")
     {
       digitalWrite(LED_PIN, LOW);
       //Timer3.stop();
-      //is_alive = false;
+      is_alive = false;
     }
     else if (serialOp == "CMDCONN")
     {
@@ -199,12 +199,13 @@ void loop() {
       timerDataAcq();
     }
   }
-  //  if(is_alive){
-  //    timerDataAcq();
-  //  }
+  if (is_alive) {
+    timerDataAcq();
+    delay(10);
+  }
 
-       
-     
+
+
 }
 
 
@@ -219,24 +220,24 @@ void select_sensor(uint8_t sensor_id) {
       break;
 
     case 2:
-      digitalWrite(PINO_ADDR_SENSOR2, LOW); //0x68
+        digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
+      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
       digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
       digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
       break;
 
     case 3:
-      digitalWrite(PINO_ADDR_SENSOR3, LOW);//0x68
+      digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
       digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
       digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
       break;
 
     case 4:
-      digitalWrite(PINO_ADDR_SENSOR4, LOW); //0x68
+      digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
       digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
       digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
       break;
 
   }
@@ -259,29 +260,30 @@ void inicializar_sensores() {
     uint8_t ret = mpu1.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      /*mpu1.setDMPEnabled(true); 
-      mpu1.setXAccelOffset(-520);
-      mpu1.setYAccelOffset(632);
-      mpu1.setZAccelOffset(914);
-      mpu1.setXGyroOffset(22);
-      mpu1.setYGyroOffset(-8);
-      mpu1.setZGyroOffset(26);*/
-      
+      /*mpu1.setDMPEnabled(true);
+        mpu1.setXAccelOffset(-520);
+        mpu1.setYAccelOffset(632);
+        mpu1.setZAccelOffset(914);
+        mpu1.setXGyroOffset(22);
+        mpu1.setYGyroOffset(-8);
+        mpu1.setZGyroOffset(26);*/
+
+
       mpu1.setDMPEnabled(true);
-      mpu1.setXAccelOffset(-566);
-      mpu1.setYAccelOffset(3075);
-      mpu1.setZAccelOffset(1248);
-      mpu1.setXGyroOffset(15);
-      mpu1.setYGyroOffset(108);
-      mpu1.setZGyroOffset(33);
-      
+      mpu1.setXAccelOffset(-1233);
+      mpu1.setYAccelOffset(1157);
+      mpu1.setZAccelOffset(1668);
+      mpu1.setXGyroOffset(-89);
+      mpu1.setYGyroOffset(-31);
+      mpu1.setZGyroOffset(73);
+
       DEBUG_PRINT_("Sensor 1 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu1.testConnection()) + "\n");
-      if(mpu1.testConnection())
+      if (mpu1.testConnection())
         DEBUG_PRINT_("CONN OK\n");
 
-     DEBUG_PRINT_(String(mpu1.getXAccelOffset()) + "\n");
-      
+      DEBUG_PRINT_(String(mpu1.getXAccelOffset()) + "\n");
+
     }
     else
     {
@@ -293,7 +295,7 @@ void inicializar_sensores() {
 #endif /*USING_SENSOR_1*/
 #ifdef USING_SENSOR_2
   //Iniciando o sensor id 2
-  select_sensor(2);  
+  select_sensor(2);
   if (mpu2.testConnection())
   {
     //Initializes the IMU
@@ -302,13 +304,14 @@ void inicializar_sensores() {
     uint8_t ret = mpu2.dmpInitialize();
     delay(50);
     if (ret == 0) {
+      
       mpu2.setDMPEnabled(true);/*Calibrated at 03 Mai 2017*/
-      mpu2.setXAccelOffset(-3030);
-      mpu2.setYAccelOffset(318);
-      mpu2.setZAccelOffset(1624);
-      mpu2.setXGyroOffset(-37);
-      mpu2.setYGyroOffset(10);
-      mpu2.setZGyroOffset(50);
+      mpu2.setXAccelOffset(-1089);
+      mpu2.setYAccelOffset(-727);
+      mpu2.setZAccelOffset(1233);
+      mpu2.setXGyroOffset(84);
+      mpu2.setYGyroOffset(-27);
+      mpu2.setZGyroOffset(24);
       DEBUG_PRINT_("Sensor 2 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu2.testConnection()) + "\n");
     }
@@ -380,7 +383,7 @@ void inicializar_sensores() {
 //------------------------------------------------------------------------------
 void timerDataAcq()
 {
-  Timer3.stop();
+  // Timer3.stop();
   Serial.write(QNT_SENSORES); // Quantos Sensores Ativos
   //stops the timer so the function has enough time to run
   //  Timer3.stop();
@@ -439,7 +442,7 @@ void timerDataAcq()
 #endif /*USING_SENSOR_4*/ // que loucura
   Serial.write(ET); //byte End Transmission
   //starts the timer again
-  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);  
+  //  Timer3.attachInterrupt(timerDataAcq).start(sampPeriod);
 }
 
 void show_data(uint8_t* _fifoBuffer) {
@@ -465,7 +468,7 @@ void show_data(uint8_t* _fifoBuffer) {
   DEBUG_PRINT_(q[3]);
   DEBUG_PRINT_("\t");
 
-  DEBUG_PRINT_(String(mpu1.getXAccelOffset()) + "\n");
+  //DEBUG_PRINT_(String(mpu1.getXAccelOffset()) + "\n");
 
   q[0] = 0; q[1] = 0; q[2] = 0; q[3] = 0;
   for (int i = 0; i < PSDMP; i++) {
