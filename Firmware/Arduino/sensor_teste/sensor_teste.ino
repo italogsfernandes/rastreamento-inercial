@@ -14,9 +14,9 @@
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include "Wire.h"
 #endif
-ter
 
-#define PIN_SENSOR1 3  // ok?
+
+#define PIN_SENSOR1 3  
 #define PIN_SENSOR2 4
 
 //declarando as variaveis
@@ -28,6 +28,8 @@ void setup() {
   Serial.begin(115200); //Inicializando a porta serial
   pinMode(PIN_SENSOR1, OUTPUT); // Inicializa os pinos
   pinMode(PIN_SENSOR2, OUTPUT);
+  digitalWrite(PIN_SENSOR1, HIGH);
+  digitalWrite(PIN_SENSOR2, LOW);
   Wire.begin();
   initialize_sensors();
   Serial.println("Chose sensor 1 or 2:");
@@ -36,9 +38,11 @@ void setup() {
 void loop() {
   if (Serial.available()) { // Se a comunicaçao esta disponivel para leitura 
 
-    chosen_option = Serial.read(); // leitura monitor serial
-    if (chosen_option == "1") {
+    String op = Serial.readString(); // leitura monitor serial
+    if (op == "1") {
       select_sensor(1);
+
+      Serial.println("Testando conexao: " + String(mpu1.testConnection()));
 
       mpu1.setXAccelOffset(100);
       mpu1.setYAccelOffset(101);
@@ -56,7 +60,7 @@ void loop() {
       Serial.print(mpu1.getZGyroOffset()); Serial.print("\n");
     }
 
-    else if (chosen_option == "2") {
+    else if (op == "2") {
       select_sensor(2);
 
       mpu2.setXAccelOffset(200);
@@ -66,6 +70,33 @@ void loop() {
       mpu2.setYGyroOffset(204);
       mpu2.setZGyroOffset(205);
 
+      Serial.println("Offsets sensor 2:");
+      Serial.print(mpu2.getXAccelOffset()); Serial.print("\t");
+      Serial.print(mpu2.getYAccelOffset()); Serial.print("\t");
+      Serial.print(mpu2.getZAccelOffset()); Serial.print("\t");
+      Serial.print(mpu2.getXGyroOffset()); Serial.print("\t");
+      Serial.print(mpu2.getYGyroOffset()); Serial.print("\t");
+      Serial.print(mpu2.getZGyroOffset()); Serial.print("\n");
+    }
+
+    else if (op == "3") {
+
+      Serial.println("\n\n");
+      
+      select_sensor(1);      
+      delay(2000);
+      Serial.println("Offsets sensor 1:");
+      Serial.print(mpu1.getXAccelOffset()); Serial.print("\t");
+      Serial.print(mpu1.getYAccelOffset()); Serial.print("\t");
+      Serial.print(mpu1.getZAccelOffset()); Serial.print("\t");
+      Serial.print(mpu1.getXGyroOffset()); Serial.print("\t");
+      Serial.print(mpu1.getYGyroOffset()); Serial.print("\t");
+      Serial.print(mpu1.getZGyroOffset()); Serial.print("\n");
+
+      delay(1000);
+      
+      select_sensor(2);      
+      delay(2000);
       Serial.println("Offsets sensor 2:");
       Serial.print(mpu2.getXAccelOffset()); Serial.print("\t");
       Serial.print(mpu2.getYAccelOffset()); Serial.print("\t");
@@ -145,13 +176,13 @@ void initialize_sensors() {
 void select_sensor(int sensorid) {
 
   if (sensorid == 1) {
-    digitalWrite(PIN_SENSOR1, LOW);
-    digitalWrite(PIN_SENSOR2, HIGH);
+    digitalWrite(PIN_SENSOR1, HIGH);
+    digitalWrite(PIN_SENSOR2, LOW);
 
   }
   else if (sensorid == 2) {
-    digitalWrite(PIN_SENSOR1, HIGH);
-    digitalWrite(PIN_SENSOR2, LOW);
+    digitalWrite(PIN_SENSOR1, LOW);
+    digitalWrite(PIN_SENSOR2, HIGH);
 
   }
 
