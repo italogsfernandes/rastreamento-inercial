@@ -1,15 +1,15 @@
 
 #include <Wire.h>
  
- 
+
 void setup()
 {
   Wire.begin();
   pinMode(3,OUTPUT);
   pinMode(4,OUTPUT);
 
-  digitalWrite(3,HIGH);
-  digitalWrite(4,LOW);
+  digitalWrite(4,HIGH);
+  digitalWrite(3,LOW);
  
   Serial.begin(115200);
   while (!Serial);             // Leonardo: wait for serial monitor
