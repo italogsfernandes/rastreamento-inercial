@@ -98,7 +98,7 @@ void setup() {
   accelgyro.initialize();
 
   // wait for ready
-  while (Serial.availablel() && Serial.read()); // empty buffer
+  while (Serial.available() && Serial.read()); // empty buffer
   while (!Serial.available()) {
     Serial.println(F("Send any character to start sketch.\n"));
     delay(1500);
