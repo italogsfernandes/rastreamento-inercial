@@ -260,22 +260,14 @@ void inicializar_sensores() {
     uint8_t ret = mpu1.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      /*mpu1.setDMPEnabled(true);
-        mpu1.setXAccelOffset(-520);
-        mpu1.setYAccelOffset(632);
-        mpu1.setZAccelOffset(914);
-        mpu1.setXGyroOffset(22);
-        mpu1.setYGyroOffset(-8);
-        mpu1.setZGyroOffset(26);*/
-
-
+      //-668  2875  1244  15  110 34
       mpu1.setDMPEnabled(true);
-      mpu1.setXAccelOffset(-1233);
-      mpu1.setYAccelOffset(1157);
-      mpu1.setZAccelOffset(1668);
-      mpu1.setXGyroOffset(-89);
-      mpu1.setYGyroOffset(-31);
-      mpu1.setZGyroOffset(73);
+      mpu1.setXAccelOffset(-668);
+      mpu1.setYAccelOffset(2875);
+      mpu1.setZAccelOffset(1244);
+      mpu1.setXGyroOffset(15);
+      mpu1.setYGyroOffset(110);
+      mpu1.setZGyroOffset(34);
 
       DEBUG_PRINT_("Sensor 1 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu1.testConnection()) + "\n");
