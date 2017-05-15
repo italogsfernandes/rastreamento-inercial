@@ -72,6 +72,11 @@ void setup() {
   pinMode(PINO_ADDR_SENSOR3, OUTPUT);
   pinMode(PINO_ADDR_SENSOR4, OUTPUT);
 
+  pinMode(3, OUTPUT);
+  pinMode(4, OUTPUT);
+  digitalWrite(4, LOW);
+  digitalWrite(3, HIGH);
+
 #ifdef USING_SENSOR_1
   select_sensor(1);
 #endif /*USING_SENSOR_1*/
@@ -89,7 +94,7 @@ void setup() {
   // join I2C bus (I2Cdev library doesn't do this automatically)
   Wire.begin();
   // COMMENT NEXT LINE IF YOU ARE USING ARDUINO DUE
-//  TWBR = 24; // 400kHz I2C clock lllll(200kHz if CPU is 8MHz). Leonardo measured 250kHz.
+  //  TWBR = 24; // 400kHz I2C clock lllll(200kHz if CPU is 8MHz). Leonardo measured 250kHz.
 
   // initialize serial communication
   Serial.begin(115200);

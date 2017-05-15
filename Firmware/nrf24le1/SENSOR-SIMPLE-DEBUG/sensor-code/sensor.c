@@ -45,7 +45,7 @@ void DataAcq() large;
 /**
 * Seta os pinos do nrf como saidas e entradas de acordo com as funcoes desejadas
 */
-void iniciarIO(void){
+void iniciarIO(void) large {
     P0DIR = 0x00;   // Tudo output
     P1DIR = 0x00;   // Tudo output
     P0CON = 0x00; P1CON = 0x00; //Reseting PxCON registers
@@ -56,11 +56,11 @@ void iniciarIO(void){
     P1CON |= 0x53; // All general I/O 0101 0011
 }
 
-void blink_status_led(){
+void blink_status_led() large {
   STATUS_LED = 1; delay_ms(250); STATUS_LED = 0; delay_ms(250);
 }
 
-void setup() {
+void setup() large {
     iniciarIO();
 		//Pisca o led 2 vezes indicando que iniciou
 		blink_status_led(); //1
@@ -105,19 +105,19 @@ void main(void) {
 										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL] = 0x00;//Y_quat
 										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH] = 0x08;
 										fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL] = 0x00;//Z_quat
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH] = 0x40;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL] = 0x00;//X_AC
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH] = 0x20;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL] = 0x00;//Y_AC
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH] = 0x10;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL] = 0x00;//Z_AC
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH] = 0x40;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL] = 0x00;//X_GY
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH] = 0x00;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL] = 0x20;//Y_GY
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH] = 0x00;
-                    fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL] = 0x10;//Z_GY
-                    fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x00;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH] = 0x40;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL] = 0x00;//X_AC
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH] = 0x20;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL] = 0x00;//Y_AC
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH] = 0x10;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL] = 0x00;//Z_AC
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH] = 0x40;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL] = 0x00;//X_GY
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH] = 0x00;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL] = 0x20;//Y_GY
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH] = 0x00;
+                    fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL] = 0x10;//Z_GY
+                    fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x00;
                     send_inertial_packet_by_rf(
                       PACKET_TYPE_FIFO_NO_MAG,
                       fifoBuffer,
@@ -187,26 +187,26 @@ void DataAcq() large {
     }/*END for every packet*/
 
 		tx_buf[0] = MY_SUB_ADDR;
-    tx_buf[1] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[2] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[3] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[4] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[5] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[6] = fifo_buffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[7] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[8] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[9] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[10] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[11] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[12] = fifo_buffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    tx_buf[13] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[14] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[15] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[16] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[17] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[18] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[19] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[20] = fifo_buffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+    tx_buf[1] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+    tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+    tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+    tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+    tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+    tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+    tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+    tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+    tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+    tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+    tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+    tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+    tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+    tx_buf[14] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+    tx_buf[15] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+    tx_buf[16] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+    tx_buf[17] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+    tx_buf[18] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+    tx_buf[19] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+    tx_buf[20] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
     tx_buf[21] = numbPackets;
     TX_Mode_NOACK(22);
 		RX_Mode();
