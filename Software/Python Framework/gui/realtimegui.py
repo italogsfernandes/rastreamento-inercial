@@ -80,12 +80,12 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.skeleton.add(BodyJoints.LEFT,BodyJoints.WRIST,lwr)
 
 		self.skeleton.add(BodyJoints.UNILAT,BodyJoints.WAIST,pwaist)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
+		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
+		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
+		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
+		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
+		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
+		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
 
 		#self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.HEAD).setQuaternion([0.707,0.707,0,0])
 
@@ -99,9 +99,9 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
 		self.btnStanding.clicked.connect(self.doStanding)
-		self.btnSentado.clicked.connect(self.doSentado)
 		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnStop.clicked.connect(self.doStop)
+		self.btnSavePostura.clicked.connect(self.doSavePosture)
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
@@ -147,7 +147,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		sh = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
 		el = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
 		wr = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
-		an = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).position
+		#an = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).position
 
 		#quiver for orientation of the torso
 		rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO).quaternion)
@@ -174,7 +174,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		wz = np.array([rot[2,0],rot[2,1],rot[2,2]])
 
 		#quiver for orientation of the wrist
-		rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).quaternion)
+		#rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).quaternion)
 		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
 		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
@@ -198,11 +198,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		#self.ax.quiver(to[0],to[1],to[2],ty[0],ty[1],ty[2],length=quiverSize, pivot='tail', color='green')
 		#self.ax.quiver(to[0],to[1],to[2],tz[0],tz[1],tz[2],length=quiverSize, pivot='tail', color='blue')
 		##Orientation of right ankle sensor
-		self.ax.quiver(an[0],an[1],an[2],ax[0],ay[0],az[0],length=quiverSize, pivot='tail', color='red')
-		self.ax.quiver(an[0],an[1],an[2],ax[1],ay[1],az[1],length=quiverSize, pivot='tail', color='green')
-		self.ax.quiver(an[0],an[1],an[2],ax[2],ay[2],az[2],length=quiverSize, pivot='tail', color='blue')
-
+		#self.ax.quiver(an[0],an[1],an[2],ax[0],ay[0],az[0],length=quiverSize, pivot='tail', color='red')
+		#self.ax.quiver(an[0],an[1],an[2],ax[1],ay[1],az[1],length=quiverSize, pivot='tail', color='green')
+		#self.ax.quiver(an[0],an[1],an[2],ax[2],ay[2],az[2],length=quiverSize, pivot='tail', color='blue')
 		points = self.skeleton.bodyPoints()
+
 		links,colors = self.skeleton.bodyLinks()
 		for i in range(len(self.skeleton.segments)):
 			self.ax.scatter(points[0][i],points[1][i],points[2][i],c='gray',s=60)
@@ -255,42 +255,44 @@ class Main(QMainWindow, Ui_MainWindow):
 		ql = [math.sqrt(2)/2,0,-math.sqrt(2)/2,0]
 		rel = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
 		lel = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
-		rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
-		lkn = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.KNEE)
 		self.updateQuaternions(rel,qr)
 		self.updateQuaternions(lel,ql)
-		self.updateQuaternions(rkn,qr)
-		self.updateQuaternions(lkn,ql)
 		self.skeleton.rotate()
 		self.plot()
 
-	def doSentado(self):
-		self.doStanding()
-		#qright_knee = [0.707,0,0,0.707]
-		#qright_ankle = [0.707,0,0,0.707]
-		#rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
-		#ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
-		#self.updateQuaternions(rkn,qright_knee)
-		#self.updateQuaternions(ran,qright_ankle)
-		#self.skeleton.rotate()
-		#self.plot()
-		#print 'entrando nos motherfucker'
-		#print ran.rotquaternion
-		#print ran.quaternion
-		qright_knee = [0.5,0,-0.5,0] #quat.fromEuler(-90,-90,0)
-		qleft_knee = [0.5,0,0.5,0] #quat.fromEuler(90,90,180)
-		#qright_ankle = [0.707,0.707,0,0] #quat.fromEuler(0,-90,0)
-		#qleft_ankle = [0.707,0.707,0,0] #quat.fromEuler(180,90,180)
-		ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
-		lan = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ANKLE)
-		rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
-		lkn = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.KNEE)
-		self.updateQuaternions(rkn,qright_knee)
-		self.updateQuaternions(lkn,qleft_knee)
-		#self.updateQuaternions(ran,qright_ankle)
-		#self.updateQuaternions(lan,qleft_ankle)
-		self.skeleton.rotate()
-		self.plot()
+	def doSavePosture(self):
+		dlg = QtGui.QFileDialog( self )
+		dlg.setWindowTitle( 'Secione o local para salvar a posição.' )
+		dlg.setViewMode( QtGui.QFileDialog.Detail )
+		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.txt' )
+		file_name = dlg.getSaveFileName(self,'Save File')
+		if ".txt" not in file_name:
+			file_name = file_name + ".txt"
+		print "*"*len(file_name)
+		print file_name
+		#Montar arquivo de saida
+		joints_to_save = []
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.HEAD))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.WAIST))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST))
+
+		file_to_save = open(file_name, 'w')
+		print("joint_name\t[position]\t[origin]\t[quaternion]\n")
+		file_to_save.write("joint_name\t[position]\t[origin]\t[quaternion]\n")
+		for _j in joints_to_save:
+			joint_dados = str(_j.name) + "\t" + str(_j.position) + "\t" + str(_j.origin) + "\t" + str(_j.quaternion) + "\n"
+			print(joint_dados)
+			file_to_save.write(joint_dados)
+		file_to_save.close()
+		print "*"*len(file_name)
+
 
 	def cbChanged(self,idx):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())

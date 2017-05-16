@@ -37,7 +37,7 @@
       <item>
        <widget class="QPushButton" name="btnMarcar">
         <property name="text">
-         <string>Marcar Posicao de Repouso</string>
+         <string>Marcar Posição de Repouso</string>
         </property>
        </widget>
       </item>
@@ -205,7 +205,7 @@
           </size>
          </property>
          <property name="text">
-          <string>Standing</string>
+          <string>Repouso</string>
          </property>
         </widget>
         <widget class="QPushButton" name="btnAnimation">
@@ -246,24 +246,11 @@
           <string>Stop</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="btnSentado">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>300</y>
-           <width>101</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Sentado</string>
-         </property>
-        </widget>
         <widget class="QPushButton" name="btnSavePostura">
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>330</y>
+           <y>300</y>
            <width>101</width>
            <height>28</height>
           </rect>
