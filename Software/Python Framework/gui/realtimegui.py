@@ -265,33 +265,32 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.plot()
 
 	def doSentado(self):
-		#self.doStanding()
-		qright_knee = [0.707,0,0,0.707]
-		qright_ankle = [0.707,0,0,0.707]
-		rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
-		ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
-		self.updateQuaternions(rkn,qright_knee)
-		#self.updateQuaternions(ran,qright_ankle)
-		self.skeleton.rotate()
-		self.plot()
-		print 'entrando nos motherfucker'
-		print ran.rotquaternion
-		print ran.quaternion		
-		#qright_knee = [-0.5,-0.5,-0.5,-0.5] #quat.fromEuler(-90,-90,0)
-		#qleft_knee = [0.5,0.5,-0.5,-0.5] #quat.fromEuler(90,90,180)
-		#qright_knee = [1,0,0,0]
-		#qright_ankle = [1,0,0,0] #quat.fromEuler(0,-90,0)
-		#qleft_ankle = [1,0,0,0] #quat.fromEuler(180,90,180)
-		#ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
-		#lan = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ANKLE)
+		self.doStanding()
+		#qright_knee = [0.707,0,0,0.707]
+		#qright_ankle = [0.707,0,0,0.707]
 		#rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
-		#lkn = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.KNEE)
+		#ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
 		#self.updateQuaternions(rkn,qright_knee)
-		#self.updateQuaternions(lkn,qleft_knee)
 		#self.updateQuaternions(ran,qright_ankle)
-		#self.updateQuaternions(lan,qleft_ankle)
 		#self.skeleton.rotate()
 		#self.plot()
+		#print 'entrando nos motherfucker'
+		#print ran.rotquaternion
+		#print ran.quaternion
+		qright_knee = [0.5,0,-0.5,0] #quat.fromEuler(-90,-90,0)
+		qleft_knee = [0.5,0,0.5,0] #quat.fromEuler(90,90,180)
+		#qright_ankle = [0.707,0.707,0,0] #quat.fromEuler(0,-90,0)
+		#qleft_ankle = [0.707,0.707,0,0] #quat.fromEuler(180,90,180)
+		ran = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE)
+		lan = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ANKLE)
+		rkn = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.KNEE)
+		lkn = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.KNEE)
+		self.updateQuaternions(rkn,qright_knee)
+		self.updateQuaternions(lkn,qleft_knee)
+		#self.updateQuaternions(ran,qright_ankle)
+		#self.updateQuaternions(lan,qleft_ankle)
+		self.skeleton.rotate()
+		self.plot()
 
 	def cbChanged(self,idx):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
