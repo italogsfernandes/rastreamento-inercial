@@ -28,14 +28,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="btnColeta">
         <property name="text">
          <string>Iniciar Coleta</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="btnMarcar">
         <property name="text">
          <string>Marcar Posicao de Repouso</string>
         </property>
@@ -246,7 +246,7 @@
           <string>Stop</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="btnSentado">
          <property name="geometry">
           <rect>
            <x>0</x>
@@ -259,7 +259,7 @@
           <string>Sentado</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="btnSavePostura">
          <property name="geometry">
           <rect>
            <x>0</x>

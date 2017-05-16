@@ -472,6 +472,9 @@ class Skeleton():
 						if node is not None and self.exist(None,None,node.name):
 							node.position = geometry.rotate(node.position,p0,rot)
 							node.rotquaternion = quaternion.product(node.rotquaternion,quaternion.conjugate(parent.rotquaternion))
+							if node.name == 'right_ankle':
+								print 'estou mudando o right ankle!'
+								print 'olha o valor', node.rotquaternion							
 							if node.links[idx] is not None:
 								node = node.links[idx]
 							else:
