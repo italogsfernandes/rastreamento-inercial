@@ -34,7 +34,7 @@
 //------------------------------------------------------------------------------
 //Comente e descomente de acordo com quais sensores estiver a usar
 #define USING_SENSOR_1
-//#define USING_SENSOR_2
+#define USING_SENSOR_2
 //#define USING_SENSOR_3
 //#define USING_SENSOR_4
 
@@ -220,8 +220,8 @@ void select_sensor(uint8_t sensor_id) {
       break;
 
     case 2:
-        digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
-      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
+      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x68
+      digitalWrite(PINO_ADDR_SENSOR2, LOW); //0x69
       digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
       digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
       break;
@@ -260,14 +260,13 @@ void inicializar_sensores() {
     uint8_t ret = mpu1.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      //-668  2875  1244  15  110 34
       mpu1.setDMPEnabled(true);
-      mpu1.setXAccelOffset(-668);
-      mpu1.setYAccelOffset(2875);
-      mpu1.setZAccelOffset(1244);
-      mpu1.setXGyroOffset(15);
-      mpu1.setYGyroOffset(110);
-      mpu1.setZGyroOffset(34);
+      mpu1.setXAccelOffset(-759);
+      mpu1.setYAccelOffset(3103);
+      mpu1.setZAccelOffset(1269);
+      mpu1.setXGyroOffset(0);
+      mpu1.setYGyroOffset(138);
+      mpu1.setZGyroOffset(41);
 
       DEBUG_PRINT_("Sensor 1 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu1.testConnection()) + "\n");
@@ -296,14 +295,13 @@ void inicializar_sensores() {
     uint8_t ret = mpu2.dmpInitialize();
     delay(50);
     if (ret == 0) {
-      
-      mpu2.setDMPEnabled(true);/*Calibrated at 03 Mai 2017*/
-      mpu2.setXAccelOffset(-1089);
-      mpu2.setYAccelOffset(-727);
-      mpu2.setZAccelOffset(1233);
-      mpu2.setXGyroOffset(84);
-      mpu2.setYGyroOffset(-27);
-      mpu2.setZGyroOffset(24);
+      mpu2.setDMPEnabled(true);
+      mpu2.setXAccelOffset(-361);
+      mpu2.setYAccelOffset(681);
+      mpu2.setZAccelOffset(1702);
+      mpu2.setXGyroOffset(141);
+      mpu2.setYGyroOffset(49);
+      mpu2.setZGyroOffset(34);
       DEBUG_PRINT_("Sensor 2 Iniciado.\n");
       DEBUG_PRINT_("Testando conexao - " + String(mpu2.testConnection()) + "\n");
     }

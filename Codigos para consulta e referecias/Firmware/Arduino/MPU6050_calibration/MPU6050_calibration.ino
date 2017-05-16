@@ -37,15 +37,11 @@
 #include "MPU6050.h"
 #include "Wire.h"
 
-#define USING_SENSOR_1
-//#define USING_SENSOR_2
-//#define USING_SENSOR_3
-//#define USING_SENSOR_4
-
-#define PINO_ADDR_SENSOR1 5
-#define PINO_ADDR_SENSOR2 6
-#define PINO_ADDR_SENSOR3 7
-#define PINO_ADDR_SENSOR4 8
+#define PINO_ADDR_SENSOR1 3
+#define PINO_ADDR_SENSOR2 4
+#define PINO_ADDR_SENSOR3 5
+#define PINO_ADDR_SENSOR4 6
+#define PINO_ADDR_SENSOR5 7
 
 ///////////////////////////////////   CONFIGURATION   /////////////////////////////
 //Change this 3 variables if you want to fine tune the skecth to your needs.
@@ -71,28 +67,22 @@ void setup() {
   pinMode(PINO_ADDR_SENSOR2, OUTPUT);
   pinMode(PINO_ADDR_SENSOR3, OUTPUT);
   pinMode(PINO_ADDR_SENSOR4, OUTPUT);
+  pinMode(PINO_ADDR_SENSOR5, OUTPUT);
 
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  digitalWrite(3, LOW);
-  digitalWrite(4, HIGH);
-
-#ifdef USING_SENSOR_1
-  select_sensor(1);
-#endif /*USING_SENSOR_1*/
-#ifdef USING_SENSOR_2
-  select_sensor(2);
-#endif /*USING_SENSOR_2*/
-#ifdef USING_SENSOR_3
-  select_sensor(3);
-#endif /*USING_SENSOR_3*/
-#ifdef USING_SENSOR_4
-  select_sensor(4);
-#endif /*USING_SENSOR_4*/
+  digitalWrite(PINO_ADDR_SENSOR1, LOW);
+  digitalWrite(PINO_ADDR_SENSOR2, HIGH);
+  digitalWrite(PINO_ADDR_SENSOR3, HIGH);
+  digitalWrite(PINO_ADDR_SENSOR4, HIGH);
+  digitalWrite(PINO_ADDR_SENSOR5, HIGH);
 
 
   // join I2C bus (I2Cdev library doesn't do this automatically)
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
+  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+  Fastwire::setup(400, true);
+#endif
   // COMMENT NEXT LINE IF YOU ARE USING ARDUINO DUE
   //  TWBR = 24; // 400kHz I2C clock lllll(200kHz if CPU is 8MHz). Leonardo measured 250kHz.
 
@@ -173,44 +163,25 @@ void loop() {
     Serial.println("\nData is printed as: acelX acelY acelZ giroX giroY giroZ");
     Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
     Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
+    Serial.print("\n\n");
+    Serial.print("mpu.setXAccelOffset(" + String(ax_offset) + ");\n");
+    Serial.print("mpu.setYAccelOffset(" + String(ay_offset) + ");\n");
+    Serial.print("mpu.setZAccelOffset(" + String(az_offset) + ");\n");
+    Serial.print("mpu.setXGyroOffset(" + String(gx_offset) + ");\n");
+    Serial.print("mpu.setYGyroOffset(" + String(gy_offset) + ");\n");
+    Serial.print("mpu.setZGyroOffset(" + String(gz_offset) + ");\n");
+    Serial.print("\n\n");
+    Serial.print("mpu_elbow.setXAccelOffset(" + String(ax_offset) + ");\n");
+    Serial.print("mpu_elbow.setYAccelOffset(" + String(ay_offset) + ");\n");
+    Serial.print("mpu_elbow.setZAccelOffset(" + String(az_offset) + ");\n");
+    Serial.print("mpu_elbow.setXGyroOffset(" + String(gx_offset) + ");\n");
+    Serial.print("mpu_elbow.setYGyroOffset(" + String(gy_offset) + ");\n");
+    Serial.print("mpu_elbow.setZGyroOffset(" + String(gz_offset) + ");\n");
+
     while (1);
   }
 }
 
-
-void select_sensor(uint8_t sensor_id) {
-  switch (sensor_id) {
-
-    case 1:
-      digitalWrite(PINO_ADDR_SENSOR1, LOW); //0x68
-      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
-      break;
-
-    case 2:
-      digitalWrite(PINO_ADDR_SENSOR2, LOW); //0x68
-      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
-      break;
-
-    case 3:
-      digitalWrite(PINO_ADDR_SENSOR3, LOW);//0x68
-      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR4, HIGH); //0x69
-      break;
-
-    case 4:
-      digitalWrite(PINO_ADDR_SENSOR4, LOW); //0x68
-      digitalWrite(PINO_ADDR_SENSOR2, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR3, HIGH); //0x69
-      digitalWrite(PINO_ADDR_SENSOR1, HIGH); //0x69
-      break;
-
-  }
-}
 
 ///////////////////////////////////   FUNCTIONS   ////////////////////////////////////
 void meansensors() {

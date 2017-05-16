@@ -5,11 +5,6 @@
 void setup()
 {
   Wire.begin();
-  pinMode(3,OUTPUT);
-  pinMode(4,OUTPUT);
-
-  digitalWrite(4,HIGH);
-  digitalWrite(3,LOW);
  
   Serial.begin(115200);
   while (!Serial);             // Leonardo: wait for serial monitor
@@ -55,6 +50,6 @@ void loop()
     Serial.println("No I2C devices found\n");
   else
     Serial.println("done\n");
- 
+    
   delay(5000);           // wait 5 seconds for next scan
 }
