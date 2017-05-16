@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mainwindow.ui'
 #
-# Created by: PyQt4 UI code generator 4.12
+# Created by: PyQt4 UI code generator 4.11.4
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -36,6 +36,12 @@ class Ui_MainWindow(object):
         self.cbJointNames.setMaximumSize(QtCore.QSize(200, 16777215))
         self.cbJointNames.setObjectName(_fromUtf8("cbJointNames"))
         self.verticalLayout_2.addWidget(self.cbJointNames)
+        self.pushButton_3 = QtGui.QPushButton(self.centralwidget)
+        self.pushButton_3.setObjectName(_fromUtf8("pushButton_3"))
+        self.verticalLayout_2.addWidget(self.pushButton_3)
+        self.pushButton_4 = QtGui.QPushButton(self.centralwidget)
+        self.pushButton_4.setObjectName(_fromUtf8("pushButton_4"))
+        self.verticalLayout_2.addWidget(self.pushButton_4)
         self.groupBox = QtGui.QGroupBox(self.centralwidget)
         self.groupBox.setMaximumSize(QtCore.QSize(200, 16777215))
         self.groupBox.setObjectName(_fromUtf8("groupBox"))
@@ -68,15 +74,15 @@ class Ui_MainWindow(object):
         self.slPsi.setOrientation(QtCore.Qt.Horizontal)
         self.slPsi.setObjectName(_fromUtf8("slPsi"))
         self.btnRotate = QtGui.QPushButton(self.groupBox)
-        self.btnRotate.setGeometry(QtCore.QRect(0, 260, 100, 27))
+        self.btnRotate.setGeometry(QtCore.QRect(0, 240, 100, 27))
         self.btnRotate.setMaximumSize(QtCore.QSize(200, 16777215))
         self.btnRotate.setObjectName(_fromUtf8("btnRotate"))
         self.btnReset = QtGui.QPushButton(self.groupBox)
-        self.btnReset.setGeometry(QtCore.QRect(0, 340, 100, 27))
+        self.btnReset.setGeometry(QtCore.QRect(0, 370, 100, 27))
         self.btnReset.setMaximumSize(QtCore.QSize(200, 16777215))
         self.btnReset.setObjectName(_fromUtf8("btnReset"))
         self.btnStanding = QtGui.QPushButton(self.groupBox)
-        self.btnStanding.setGeometry(QtCore.QRect(0, 300, 100, 27))
+        self.btnStanding.setGeometry(QtCore.QRect(0, 270, 100, 27))
         self.btnStanding.setMaximumSize(QtCore.QSize(200, 16777215))
         self.btnStanding.setObjectName(_fromUtf8("btnStanding"))
         self.btnAnimation = QtGui.QPushButton(self.groupBox)
@@ -84,9 +90,15 @@ class Ui_MainWindow(object):
         self.btnAnimation.setMaximumSize(QtCore.QSize(200, 16777215))
         self.btnAnimation.setObjectName(_fromUtf8("btnAnimation"))
         self.btnStop = QtGui.QPushButton(self.groupBox)
-        self.btnStop.setGeometry(QtCore.QRect(0, 430, 100, 27))
+        self.btnStop.setGeometry(QtCore.QRect(0, 420, 100, 27))
         self.btnStop.setMaximumSize(QtCore.QSize(200, 16777215))
         self.btnStop.setObjectName(_fromUtf8("btnStop"))
+        self.pushButton = QtGui.QPushButton(self.groupBox)
+        self.pushButton.setGeometry(QtCore.QRect(0, 300, 101, 28))
+        self.pushButton.setObjectName(_fromUtf8("pushButton"))
+        self.pushButton_2 = QtGui.QPushButton(self.groupBox)
+        self.pushButton_2.setGeometry(QtCore.QRect(0, 330, 101, 28))
+        self.pushButton_2.setObjectName(_fromUtf8("pushButton_2"))
         self.verticalLayout_2.addWidget(self.groupBox)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
         self.mbly = QtGui.QVBoxLayout()
@@ -94,7 +106,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addLayout(self.mbly)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 28))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
@@ -106,6 +118,8 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.pushButton_3.setText(_translate("MainWindow", "Iniciar Coleta", None))
+        self.pushButton_4.setText(_translate("MainWindow", "Marcar Posicao de Repouso", None))
         self.groupBox.setTitle(_translate("MainWindow", "Degrees", None))
         self.lbPhi.setText(_translate("MainWindow", "Phi", None))
         self.lbTheta.setText(_translate("MainWindow", "Theta", None))
@@ -115,4 +129,6 @@ class Ui_MainWindow(object):
         self.btnStanding.setText(_translate("MainWindow", "Standing", None))
         self.btnAnimation.setText(_translate("MainWindow", "Animation", None))
         self.btnStop.setText(_translate("MainWindow", "Stop", None))
+        self.pushButton.setText(_translate("MainWindow", "Sentado", None))
+        self.pushButton_2.setText(_translate("MainWindow", "Salvar Postura", None))
 

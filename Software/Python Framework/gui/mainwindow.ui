@@ -28,6 +28,20 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="text">
+         <string>Iniciar Coleta</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton_4">
+        <property name="text">
+         <string>Marcar Posicao de Repouso</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QGroupBox" name="groupBox">
         <property name="maximumSize">
          <size>
@@ -141,7 +155,7 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>260</y>
+           <y>240</y>
            <width>100</width>
            <height>27</height>
           </rect>
@@ -160,7 +174,7 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>340</y>
+           <y>370</y>
            <width>100</width>
            <height>27</height>
           </rect>
@@ -179,7 +193,7 @@
          <property name="geometry">
           <rect>
            <x>0</x>
-           <y>300</y>
+           <y>270</y>
            <width>100</width>
            <height>27</height>
           </rect>
@@ -232,6 +246,32 @@
           <string>Stop</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="pushButton">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>300</y>
+           <width>101</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Sentado</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="pushButton_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>330</y>
+           <width>101</width>
+           <height>28</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Salvar Postura</string>
+         </property>
+        </widget>
        </widget>
       </item>
      </layout>
@@ -247,7 +287,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>28</height>
     </rect>
    </property>
   </widget>
