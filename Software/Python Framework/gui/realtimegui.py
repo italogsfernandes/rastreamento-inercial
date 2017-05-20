@@ -35,6 +35,7 @@ import quaternion as quat
 from threadhandler import ThreadHandler
 from mpu6050handler import *
 import math
+from time import sleep
 #------------------------------------------------------------------------------
 Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
 #------------------------------------------------------------------------------
@@ -98,7 +99,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.slPsi.valueChanged.connect(self.degChanged)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
-		self.btnStanding.clicked.connect(self.doStanding)
+		self.btnOpenPostura.clicked.connect(self.doOpenPosture)
 		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnStop.clicked.connect(self.doStop)
 		self.btnSavePostura.clicked.connect(self.doSavePosture)
@@ -259,6 +260,44 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.updateQuaternions(lel,ql)
 		self.skeleton.rotate()
 		self.plot()
+		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
+		joint = self.skeleton.getJoint(None,None,str(jointName))
+		euler = quat.toEuler(joint.quaternion)
+		self.slPhi.setValue(int(np.round(euler[0])))
+		self.slTheta.setValue(int(np.round(euler[1])))
+		self.slPsi.setValue(int(np.round(euler[2])))
+
+
+	def doOpenPosture(self):
+		self.doReset()
+		dlg = QtGui.QFileDialog( self )
+		dlg.setWindowTitle( 'Secione a posição que deseja abrir.' )
+		dlg.setViewMode( QtGui.QFileDialog.Detail )
+		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.txt' )
+		file_name = dlg.getOpenFileName(self,'Open File')
+		print file_name
+
+		file_to_open = open(file_name, 'r')
+		file_to_open.readline() == "joint_name\t[position]\t[origin]\t[quaternion]\n"
+		linhas_read = file_to_open.readlines()
+		for line in linhas_read:
+			joint_values = line.split('\t')
+			joint_name = joint_values[0]
+			joint_position = [float(v.replace(',',' ')) for v in joint_values[1][1:len(joint_values[1])-1].split()]
+			joint_origin = [float(v.replace(',',' ')) for v in joint_values[2][1:len(joint_values[2])-1].split()]
+			joint_quaternion =  [float(v.replace(',',' ')) for v in joint_values[3][1:len(joint_values[3])-2].split()]
+			joint = self.skeleton.getJoint(None,None,joint_name)
+			print()
+			self.updateQuaternions(joint,joint_quaternion)
+			self.skeleton.rotate()
+			print(str(joint_name) + '\t'+ str(joint_quaternion))
+
+		print("Fim da leitura" + "*"*50)
+		self.updateSlideBars()
+		self.plot()
+		file_to_open.close()
+
 
 	def doSavePosture(self):
 		dlg = QtGui.QFileDialog( self )
@@ -295,6 +334,9 @@ class Main(QMainWindow, Ui_MainWindow):
 
 
 	def cbChanged(self,idx):
+		self.updateSlideBars()
+
+	def updateSlideBars(self):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
 		joint = self.skeleton.getJoint(None,None,str(jointName))
 		euler = quat.toEuler(joint.quaternion)
