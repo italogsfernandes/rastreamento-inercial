@@ -28,16 +28,16 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_3">
+       <widget class="QPushButton" name="btnColeta">
         <property name="text">
          <string>Iniciar Coleta</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_4">
+       <widget class="QPushButton" name="btnMarcar">
         <property name="text">
-         <string>Marcar Posicao de Repouso</string>
+         <string>Marcar</string>
         </property>
        </widget>
       </item>
@@ -52,226 +52,143 @@
         <property name="title">
          <string>Degrees</string>
         </property>
-        <widget class="QLabel" name="lbPhi">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>40</y>
-           <width>67</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Phi</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lbTheta">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>110</y>
-           <width>121</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Theta</string>
-         </property>
-        </widget>
-        <widget class="QLabel" name="lbPsi">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>170</y>
-           <width>67</width>
-           <height>17</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Psi</string>
-         </property>
-        </widget>
-        <widget class="QSlider" name="slPhi">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>70</y>
-           <width>121</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="minimum">
-          <number>-180</number>
-         </property>
-         <property name="maximum">
-          <number>180</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-        <widget class="QSlider" name="slTheta">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>130</y>
-           <width>121</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="minimum">
-          <number>-180</number>
-         </property>
-         <property name="maximum">
-          <number>180</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-        <widget class="QSlider" name="slPsi">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>200</y>
-           <width>121</width>
-           <height>31</height>
-          </rect>
-         </property>
-         <property name="minimum">
-          <number>-180</number>
-         </property>
-         <property name="maximum">
-          <number>180</number>
-         </property>
-         <property name="value">
-          <number>0</number>
-         </property>
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btnRotate">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>240</y>
-           <width>100</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Rotate</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btnReset">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>370</y>
-           <width>100</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Reset</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btnStanding">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>270</y>
-           <width>100</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Standing</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btnAnimation">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>400</y>
-           <width>100</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Animation</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="btnStop">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>420</y>
-           <width>100</width>
-           <height>27</height>
-          </rect>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Stop</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>300</y>
-           <width>101</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Sentado</string>
-         </property>
-        </widget>
-        <widget class="QPushButton" name="pushButton_2">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>330</y>
-           <width>101</width>
-           <height>28</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Salvar Postura</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="lbPhi">
+           <property name="text">
+            <string>Phi</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="slPhi">
+           <property name="minimum">
+            <number>-180</number>
+           </property>
+           <property name="maximum">
+            <number>180</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbTheta">
+           <property name="text">
+            <string>Theta</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="slTheta">
+           <property name="minimum">
+            <number>-180</number>
+           </property>
+           <property name="maximum">
+            <number>180</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbPsi">
+           <property name="text">
+            <string>Psi</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="slPsi">
+           <property name="minimum">
+            <number>-180</number>
+           </property>
+           <property name="maximum">
+            <number>180</number>
+           </property>
+           <property name="value">
+            <number>0</number>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnRotate">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Rotate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnOpenPostura">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Abrir Postura</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnSavePostura">
+           <property name="text">
+            <string>Salvar Postura</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnReset">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Reset</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnAnimation">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Iniciar Animação</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnStop">
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Stop</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>
@@ -290,8 +207,27 @@
      <height>28</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuArquivo">
+    <property name="title">
+     <string>Arquivo</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionAbrir_Postura"/>
+    <addaction name="actionSalvar_Postura"/>
+   </widget>
+   <addaction name="menuArquivo"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbrir_Postura">
+   <property name="text">
+    <string>Abrir Postura</string>
+   </property>
+  </action>
+  <action name="actionSalvar_Postura">
+   <property name="text">
+    <string>Salvar Postura</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
