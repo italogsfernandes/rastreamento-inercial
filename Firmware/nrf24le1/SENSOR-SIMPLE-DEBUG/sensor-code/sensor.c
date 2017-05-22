@@ -1,12 +1,13 @@
 //Subenderecos usados no sistema
 #define MY_SUB_ADDR 0x01
 /*
-Módulos GY521 - Offsets aproximados
-Id)	Xac		Yac		Zac		Xgy		Ygy		Zgy
-1)	-499	2739	1242	16		109		33
-2)	-2479	-1117	1459	42		21		60
-3)	1252	-205	1890	-339	-46		18
-4)	-365	529		1699	139		50		36
+Módulo GY521 - Offset aproximados
+setXAccelOffset(-1692);
+setYAccelOffset(-883);
+setZAccelOffset(1114);
+setXGyroOffset(78);
+setYGyroOffset(-20);
+setZGyroOffset(21);
 */
 
 #include "nrf24le1.h"
@@ -16,6 +17,7 @@ Id)	Xac		Yac		Zac		Xgy		Ygy		Zgy
 #include "hal_delay.h" //delay
 #include "pacotes_inerciais.h" //pacotes para enviar
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
+#include "timer0.h"
 
 #define  STATUS_LED  P03
 #define PSDMP 42
@@ -34,9 +36,14 @@ uint8_t xdata numbPackets;
 void initial_setup_dmp() large;
 
 /**
-* Realiza uma leitura da fifo da dmp e envia para o host
+* Realiza uma leitura da fifo da dmp
 */
 void DataAcq() large;
+
+/**
+ *  Envia dados da fifoBuffer para o host
+ */
+void send_dada_read() large;
 
 ///////////////////
 //Implementation //
@@ -71,6 +78,8 @@ void setup() large {
 
 		blink_status_led();//3
     initial_setup_dmp();//MPU_6050 and DPM
+
+    setup_T0_freq(200,1);
 }
 
 void main(void) {
@@ -86,7 +95,7 @@ void main(void) {
             if(rx_buf[0] == MY_SUB_ADDR){
                 switch(rx_buf[1]){
                     case CMD_READ:
-                    DataAcq();
+                    send_dada_read();
                     break;
                     case CMD_LIGHT_UP_LED:
                     STATUS_LED = 1;
@@ -118,10 +127,7 @@ void main(void) {
                     fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH] = 0x00;
                     fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL] = 0x10;//Z_GY
                     fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH] = 0x00;
-                    send_inertial_packet_by_rf(
-                      PACKET_TYPE_FIFO_NO_MAG,
-                      fifoBuffer,
-                      MY_SUB_ADDR);
+                    send_inertial_packet_by_rf(PACKET_TYPE_FIFO_NO_MAG,fifoBuffer,MY_SUB_ADDR);
 										break;
 										default:
                     //Inverte o led indicando que recebeu um comando desconhecido ou nao implementado
@@ -131,6 +137,11 @@ void main(void) {
                 }/*END SWITCH*/
             }/*END IF MY SUB ADDR*/
         } /* END Comunicacao RF */
+
+        if(timer_elapsed){
+          DataAcq();
+          timer_elapsed = 0;
+        }
     }/*END LOOP*/
 }/*END MAIN*/
 
@@ -177,7 +188,31 @@ void initial_setup_dmp() large {
     }
 }
 
-
+void send_dada_read() large {
+  		tx_buf[0] = MY_SUB_ADDR;
+      tx_buf[1] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
+      tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
+      tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
+      tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
+      tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
+      tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
+      tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
+      tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
+      tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
+      tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
+      tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
+      tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
+      tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
+      tx_buf[14] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
+      tx_buf[15] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
+      tx_buf[16] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
+      tx_buf[17] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
+      tx_buf[18] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
+      tx_buf[19] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
+      tx_buf[20] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
+      TX_Mode_NOACK(21);
+  		RX_Mode();
+}
 
 void DataAcq() large {
     uint8_t i = 0;
@@ -185,31 +220,7 @@ void DataAcq() large {
     for (i = 0; i < numbPackets; i++) {
         getFIFOBytes(fifoBuffer, PSDMP);  //read a packet from FIFO
     }/*END for every packet*/
-
-		tx_buf[0] = MY_SUB_ADDR;
-    tx_buf[1] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XH];
-    tx_buf[2] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_XL];//X_AC
-    tx_buf[3] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YH];
-    tx_buf[4] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_YL];//Y_AC
-    tx_buf[5] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZH];
-    tx_buf[6] = fifoBuffer[MOTIONAPPS_FIFO_I_ACCEL_ZL];//Z_AC
-    tx_buf[7] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XH];
-    tx_buf[8] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_XL];//X_GY
-    tx_buf[9] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YH];
-    tx_buf[10] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_YL];//Y_GY
-    tx_buf[11] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZH];
-    tx_buf[12] = fifoBuffer[MOTIONAPPS_FIFO_I_GYRO_ZL];//Z_GY
-    tx_buf[13] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WH];
-    tx_buf[14] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_WL];//W_quat
-    tx_buf[15] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XH];
-    tx_buf[16] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_XL];//X_quat
-    tx_buf[17] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YH];
-    tx_buf[18] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_YL];//Y_quat
-    tx_buf[19] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZH];
-    tx_buf[20] = fifoBuffer[MOTIONAPPS_FIFO_I_QUAT_ZL];//Z_quat
-    tx_buf[21] = numbPackets;
-    TX_Mode_NOACK(22);
-		RX_Mode();
+    STATUS_LED = !STATUS_LED;
 }/*End of DataAcq*/
 
 //interrupção do I2C - NOT USED

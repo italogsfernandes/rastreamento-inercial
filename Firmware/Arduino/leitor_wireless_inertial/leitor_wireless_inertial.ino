@@ -34,8 +34,8 @@ unsigned long timer_init_time, timer_actual_time;
 String serialOp;
 
 float q[4]; // [w,x,y,z]
-int16_t ax, ay, az;
-int16_t gx, gy, gz;
+float a[4];
+float g[4];
 
 bool timer_active = false;
 
@@ -87,9 +87,9 @@ void loop() {
       send_rf_command_to(0xAA, 1);
     }
   }
-  
-  if(timer_active){
-    takeReading();  
+
+  if (timer_active) {
+    takeReading();
   }
 }
 
@@ -124,15 +124,30 @@ void wait_rf_response() {
 
 void rf_communication_handler() {
   //Redirects the packet
-  //Packet: [id] [qw] [] [qx] [] [qy] [] [qz] []
-  q[0] = (host_nrf.rx_buf[1] << 8 | host_nrf.rx_buf[2]) / 16384.00;
-  q[1] = (host_nrf.rx_buf[3] << 8 | host_nrf.rx_buf[4]) / 16384.00;
-  q[2] = (host_nrf.rx_buf[5] << 8 | host_nrf.rx_buf[6]) / 16384.00;
-  q[3] = (host_nrf.rx_buf[7] << 8 | host_nrf.rx_buf[8]) / 16384.00;
-  q[0] = q[0] > 2 ? q[0] - 4 : q[0];
-  q[1] = q[1] > 2 ? q[1] - 4 : q[1];
-  q[2] = q[2] > 2 ? q[2] - 4 : q[2];
-  q[3] = q[3] > 2 ? q[3] - 4 : q[3];
+  mostrar_dados();
+  host_nrf.sta = 0;
+  host_nrf.newPayload = 0;
+
+}
+void mostrar_dados() {
+  //Redirects the packet
+  //Packet: [id] [qw] [] [qx] [] [qy] [] [qz] [] [ax] [] [ay] [] [az] [] [gx] [] [gy] [] [gz] []
+  //Quaternion
+  q[0] = (float) ((host_nrf.rx_buf[1] << 8) | host_nrf.rx_buf[2]) / 16384.0f;
+  q[1] = (float) ((host_nrf.rx_buf[3] << 8) | host_nrf.rx_buf[4]) / 16384.0f;
+  q[2] = (float) ((host_nrf.rx_buf[5] << 8) | host_nrf.rx_buf[6]) / 16384.0f;
+  q[3] = (float) ((host_nrf.rx_buf[7] << 8) | host_nrf.rx_buf[8]) / 16384.0f;
+
+  //Aceleracao
+  a[0] = (float) ((host_nrf.rx_buf[9] << 8) | host_nrf.rx_buf[10]) / 8192.0f;
+  a[1] = (float) ((host_nrf.rx_buf[11] << 8) | host_nrf.rx_buf[12]) / 8192.0f;
+  a[2] = (float) ((host_nrf.rx_buf[13] << 8) | host_nrf.rx_buf[14]) / 8192.0f;
+
+  //Giroscopio
+  g[0] = (float) ((host_nrf.rx_buf[15] << 8) | host_nrf.rx_buf[16]) / 131.0f;
+  g[1] = (float) ((host_nrf.rx_buf[17] << 8) | host_nrf.rx_buf[18]) / 131.0f;
+  g[2] = (float) ((host_nrf.rx_buf[19] << 8) | host_nrf.rx_buf[20]) / 131.0f;
+  //Quaternions
   Serial.print(q[0]);
   Serial.print("\t");
   Serial.print(q[1]);
@@ -140,9 +155,21 @@ void rf_communication_handler() {
   Serial.print(q[2]);
   Serial.print("\t");
   Serial.print(q[3]);
-  q[0] = 0; q[1] = 0; q[2] = 0; q[3] = 0;
-  host_nrf.sta = 0;
-  host_nrf.newPayload = 0;
+  Serial.print("\t-\t");
+  //accel in G
+  Serial.print(a[0]);
+  Serial.print("\t");
+  Serial.print(a[1]);
+  Serial.print("\t");
+  Serial.print(a[2]);
+  Serial.print("\t-\t");
+  //g[1]ro in degrees/s
+  Serial.print(g[0]);
+  Serial.print("\t");
+  Serial.print(g[1]);
+  Serial.print("\t");
+  Serial.print(g[2]);
+  Serial.print("\n");
 }
 
 /////////////////////
@@ -163,5 +190,7 @@ void send_rf_command_to(uint8_t cmd2send, uint8_t sensor_id) {
   host_nrf.TX_Mode_NOACK(2);
   wait_rf_response();
 }
+
+
 
 

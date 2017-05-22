@@ -37,12 +37,6 @@
 #include "MPU6050.h"
 #include "Wire.h"
 
-#define PINO_ADDR_SENSOR1 3
-#define PINO_ADDR_SENSOR2 4
-#define PINO_ADDR_SENSOR3 5
-#define PINO_ADDR_SENSOR4 6
-#define PINO_ADDR_SENSOR5 7
-
 ///////////////////////////////////   CONFIGURATION   /////////////////////////////
 //Change this 3 variables if you want to fine tune the skecth to your needs.
 int buffersize = 1000;   //Amount of readings used to average, make it higher to get more precision but sketch will be slower  (default:1000)
@@ -63,18 +57,6 @@ int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
 
 ///////////////////////////////////   SETUP   ////////////////////////////////////
 void setup() {
-  pinMode(PINO_ADDR_SENSOR1, OUTPUT);
-  pinMode(PINO_ADDR_SENSOR2, OUTPUT);
-  pinMode(PINO_ADDR_SENSOR3, OUTPUT);
-  pinMode(PINO_ADDR_SENSOR4, OUTPUT);
-  pinMode(PINO_ADDR_SENSOR5, OUTPUT);
-
-  digitalWrite(PINO_ADDR_SENSOR1, LOW);
-  digitalWrite(PINO_ADDR_SENSOR2, HIGH);
-  digitalWrite(PINO_ADDR_SENSOR3, HIGH);
-  digitalWrite(PINO_ADDR_SENSOR4, HIGH);
-  digitalWrite(PINO_ADDR_SENSOR5, HIGH);
-
 
   // join I2C bus (I2Cdev library doesn't do this automatically)
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
