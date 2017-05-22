@@ -80,6 +80,7 @@ void setup() large {
     initial_setup_dmp();//MPU_6050 and DPM
 
     setup_T0_freq(200,1);
+    start_T0();
 }
 
 void main(void) {
