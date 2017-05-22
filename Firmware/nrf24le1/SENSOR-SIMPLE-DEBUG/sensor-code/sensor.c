@@ -19,7 +19,7 @@ setZGyroOffset(21);
 #include "dmp.h" //configuracao e uso da dmp da mpu6050
 #include "timer0.h"
 
-#define  STATUS_LED  P03
+#define STATUS_LED  P03
 #define PSDMP 42
 
 uint8_t xdata packet_type = PACKET_TYPE_QUAT; //Tipo de pacote que o sensor obtera
@@ -74,12 +74,12 @@ void setup() large {
     rf_init(ADDR_HOST,ADDR_HOST,10,RF_DATA_RATE_2Mbps,RF_TX_POWER_0dBm);
 
 		blink_status_led();//2
-    hal_w2_configure_master(HAL_W2_100KHZ); //I2C
+    hal_w2_configure_master(HAL_W2_400KHZ); //I2C
 
 		blink_status_led();//3
     initial_setup_dmp();//MPU_6050 and DPM
 
-    setup_T0_freq(200,1);
+    setup_T0_ticks(6666,1);
     start_T0();
 }
 
@@ -177,13 +177,12 @@ void initial_setup_dmp() large {
         setDMPEnabled(true);
 
 				blink_status_led();//12
-			/*Calibrated at 03 Mai 2017*/
-      setXAccelOffset(-520);
-      setYAccelOffset(632);
-      setZAccelOffset(914);
-      setXGyroOffset(22);
-      setYGyroOffset(-8);
-      setZGyroOffset(26);
+				setXAccelOffset(-1692);
+				setYAccelOffset(-883);
+				setZAccelOffset(1114);
+				setXGyroOffset(78);
+				setYGyroOffset(-20);
+				setZGyroOffset(21);
 				blink_status_led();//13
        }
     }
