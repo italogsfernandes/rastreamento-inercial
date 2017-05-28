@@ -21,9 +21,9 @@ uint8_t timer_elapsed = 0; //flag of timer elapsed
 void start_T0(void);
 void stop_T0(void);
 void setup_T0_ticks(uint16_t number_beats,uint8_t flag_count);
-void setup_T0_elapsed_us(uint16_t T_us,uint8_t flag_count);
-void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count);
-void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count);
+//void setup_T0_elapsed_us(uint16_t T_us,uint8_t flag_count);
+//void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count);
+//void setup_T0_freq(uin16_t Freq_Hz,uint8_t flag_count);
 /********************TIMER*************************/
 /**************************************************/
 
@@ -34,10 +34,10 @@ void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count);
  * @param Freq_Hz    Frequencia em Hertz para configurar o timer
  * @param flag_count Numero de vezes para dividir essa frequencia
  */
-void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){
+/*void setup_T0_freq(uin16_t Freq_Hz,uint8_t flag_count){
   uint16_t qnt_ticks = (4000000 / (3 * Freq_Hz));
   setup_T0_ticks(qnt_ticks, flag_count);
-}
+}*/
 /**
  * Configura o tempo do timer de acordo com periodo em ms.
  * O periodo deve ser um multiplo de 0.000750 ms. (ou multiplo de 0.003)
@@ -47,9 +47,9 @@ void setup_T0_freq(uint8_t Freq_Hz,uint8_t flag_count){
  * @param T_ms       Tempo em ms, multiplo de 0.00075ms (ou 0.003 ms para facilitar)
  * @param flag_count Numero de vezes para o multiplicar este tempo
  */
-void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count){
+/*void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count){
   setup_T0_elapsed_us(T_ms*100,flag_count);
-}
+}*/
 /**
  * Configura o tempo do timer de acordo com periodo em us.
  * O periodo deve ser um multiplo de 0.750 us. (ou multiplo de 3.)
@@ -59,10 +59,10 @@ void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count){
  * @param T_us       Tempo em us, multiplo de 0.75us (ou 3us para facilitar)
  * @param flag_count Numero de vezes para o multiplicar este tempo
  */
-void setup_T0_elapsed_us(uint16_t T_us,uint8_t flag_count){
+/*void setup_T0_elapsed_us(uint16_t T_us,uint8_t flag_count){
   uint16_t qnt_ticks = T_us * 4 / 3;
   setup_T0_ticks(qnt_ticks,flag_count);
-}
+}*/
 /**
  * Configura o tempo do timer de cacordo com o numeo de ticks
  * Cada tick tem um periodo de 750 ns ((16/12)MHz = 13.333 MHz)
