@@ -105,6 +105,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnSavePostura.clicked.connect(self.doSavePosture)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.statusColetaRunning = False
+		self.btnMarcar.clicked.connect(self.doMarcar)
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
@@ -335,6 +336,19 @@ class Main(QMainWindow, Ui_MainWindow):
 		file_to_save.close()
 		print "*"*len(file_name)
 
+	def doMarcar(self):
+		if self.statusColetaRunning:
+			self.show_error_msg("Não implementado")
+		else:
+			self.show_error_msg("É necessário estar em uma coleta para marcar algo.")
+
+	def show_error_msg(self,msg_to_show):
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Warning)
+		msg.setText(msg_to_show)
+		msg.setWindowTitle("Erro")
+		retval = msg.exec_()
+
 	def doColeta(self):
 		if self.statusColetaRunning:
 			#Stops a coleta
@@ -348,12 +362,7 @@ class Main(QMainWindow, Ui_MainWindow):
    			msg.buttonClicked.connect(self.saveColeta)
 			self.btnColeta.setText("Iniciar Coleta")
 		elif not self.imu.acqThread.isAlive:
-			print "Coleta nao iniciada pois o sensor nao esta conectado."
-			msg = QMessageBox()
-			msg.setIcon(QMessageBox.Warning)
-			msg.setText("Coleta nao iniciada pois o sensor nao esta conectado.")
-			msg.setWindowTitle("Erro ao iniciar coleta")
-			retval = msg.exec_()
+			self.show_error_msg("Coleta nao iniciada pois o sensor nao esta conectado.")
 		else:
 			#inicia a coleta
 			self.statusColetaRunning = True
@@ -395,21 +404,24 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	#Triggered when the button "Animation" is clicked
 	def doAnimation(self):
-		self.imu.start()
+		try:
+			self.imu.start()
+			self.plotcounter = 0
+			#Thread that handles the data acquisition
+			self.dataProc = ThreadHandler(self.runAnimation)
+			#Thread that handles the chart
+			self.plotTh = ThreadHandler(self.runPlot)
 
-		self.plotcounter = 0
-		#Thread that handles the data acquisition
-		self.dataProc = ThreadHandler(self.runAnimation)
-		#Thread that handles the chart
-		self.plotTh = ThreadHandler(self.runPlot)
+			#Start the threads
+			self.imu.acqThread.start()
+			self.dataProc.start()
+			self.plotTh.start()
 
-		#Start the threads
-		self.imu.acqThread.start()
-		self.dataProc.start()
-		self.plotTh.start()
+			#self.plotTh.start()
+			self.drawLock = Lock()
+		except Exception as e:
+			self.show_error_msg("Erro ao iniciar animacao.\nError Log: " + str(e))
 
-		#self.plotTh.start()
-		self.drawLock = Lock()
 
 	#Triggered when the "Stop" button is clicked
 	def doStop(self):
