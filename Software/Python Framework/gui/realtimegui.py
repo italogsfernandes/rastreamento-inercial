@@ -99,9 +99,9 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.slPsi.valueChanged.connect(self.degChanged)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
-		self.btnOpenPostura.clicked.connect(self.doOpenPosture)
 		self.btnAnimation.clicked.connect(self.doAnimation)
-		self.btnSavePostura.clicked.connect(self.doSavePosture)
+		self.actionAbrir_Postura.triggered.connect(self.doOpenPosture)
+		self.actionSalvar_Postura.triggered.connect(self.doSavePosture)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.statusColetaRunning = False
 		self.btnMarcar.clicked.connect(self.doMarcar)

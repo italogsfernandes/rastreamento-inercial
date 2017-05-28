@@ -20,17 +20,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGroupBox" name="groupBox">
-          <property name="maximumSize">
-           <size>
-            <width>200</width>
-            <height>16777215</height>
-           </size>
-          </property>
+         <widget class="QGroupBox" name="ColetaGroup">
           <property name="title">
-           <string>Opções:</string>
+           <string>Coleta:</string>
           </property>
-          <layout class="QVBoxLayout" name="verticalLayout">
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QPushButton" name="btnAnimation">
+             <property name="text">
+              <string>Iniciar Animação</string>
+             </property>
+            </widget>
+           </item>
            <item>
             <widget class="QPushButton" name="btnColeta">
              <property name="text">
@@ -45,6 +46,34 @@
              </property>
             </widget>
            </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="maximumSize">
+           <size>
+            <width>200</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Rotação:</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout">
            <item>
             <widget class="QComboBox" name="cbJointNames">
              <property name="maximumSize">
@@ -132,26 +161,6 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btnOpenPostura">
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Abrir Postura</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btnSavePostura">
-             <property name="text">
-              <string>Salvar Postura</string>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="QPushButton" name="btnReset">
              <property name="maximumSize">
               <size>
@@ -161,19 +170,6 @@
              </property>
              <property name="text">
               <string>Reset</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btnAnimation">
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Iniciar Animação</string>
              </property>
             </widget>
            </item>
