@@ -101,7 +101,6 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnReset.clicked.connect(self.doReset)
 		self.btnOpenPostura.clicked.connect(self.doOpenPosture)
 		self.btnAnimation.clicked.connect(self.doAnimation)
-		self.btnStop.clicked.connect(self.doStop)
 		self.btnSavePostura.clicked.connect(self.doSavePosture)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.statusColetaRunning = False
@@ -404,23 +403,32 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	#Triggered when the button "Animation" is clicked
 	def doAnimation(self):
-		try:
-			self.imu.start()
-			self.plotcounter = 0
-			#Thread that handles the data acquisition
-			self.dataProc = ThreadHandler(self.runAnimation)
-			#Thread that handles the chart
-			self.plotTh = ThreadHandler(self.runPlot)
+		if not self.imu.acqThread.isAlive:
+			try:
+				self.imu.start()
+				self.plotcounter = 0
+				#Thread that handles the data acquisition
+				self.dataProc = ThreadHandler(self.runAnimation)
+				#Thread that handles the chart
+				self.plotTh = ThreadHandler(self.runPlot)
 
-			#Start the threads
-			self.imu.acqThread.start()
-			self.dataProc.start()
-			self.plotTh.start()
+				#Start the threads
+				self.imu.acqThread.start()
+				self.dataProc.start()
+				self.plotTh.start()
 
-			#self.plotTh.start()
-			self.drawLock = Lock()
-		except Exception as e:
-			self.show_error_msg("Erro ao iniciar animacao.\nError Log: " + str(e))
+				#self.plotTh.start()
+				self.drawLock = Lock()
+				self.btnAnimation.setText("Stop Animation")
+			except Exception as e:
+				self.show_error_msg("Erro ao iniciar animacao.\nError Log: " + str(e))
+		else:
+			try:
+				self.doStop()
+				self.btnAnimation.setText("Start Animation")
+			except Exception as e:
+				self.show_error_msg("Erro ao finalizar animacao.\nError Log: " + str(e))
+
 
 
 	#Triggered when the "Stop" button is clicked

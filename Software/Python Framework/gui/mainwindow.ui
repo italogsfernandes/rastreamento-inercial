@@ -177,19 +177,6 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QPushButton" name="btnStop">
-             <property name="maximumSize">
-              <size>
-               <width>200</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Stop</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
