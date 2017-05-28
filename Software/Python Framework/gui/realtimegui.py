@@ -103,6 +103,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnStop.clicked.connect(self.doStop)
 		self.btnSavePostura.clicked.connect(self.doSavePosture)
+		self.btnColeta.clicked.connect(self.doColeta)
+		self.statusColetaRunning = False
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
@@ -126,6 +128,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		for item in [self.fig, self.ax]:
 			item.patch.set_visible(False)
 
+		self.resize(800,600)
 		self.canvas = FigureCanvas(self.fig)
 		self.mbly.addWidget(self.canvas)
 		self.canvas.draw()
@@ -332,6 +335,47 @@ class Main(QMainWindow, Ui_MainWindow):
 		file_to_save.close()
 		print "*"*len(file_name)
 
+	def doColeta(self):
+		if self.statusColetaRunning:
+			#Stops a coleta
+			self.statusColetaRunning = False
+			msg = QMessageBox()
+			msg.setIcon(QMessageBox.Question)
+			msg.setText("Deseja salvar a coleta?")
+			msg.setWindowTitle("Coleta Finalizada")
+			retval = msg.exec_()
+			msg.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
+   			msg.buttonClicked.connect(self.saveColeta)
+			self.btnColeta.setText("Iniciar Coleta")
+		elif not self.imu.acqThread.isAlive:
+			print "Coleta nao iniciada pois o sensor nao esta conectado."
+			msg = QMessageBox()
+			msg.setIcon(QMessageBox.Warning)
+			msg.setText("Coleta nao iniciada pois o sensor nao esta conectado.")
+			msg.setWindowTitle("Erro ao iniciar coleta")
+			retval = msg.exec_()
+		else:
+			#inicia a coleta
+			self.statusColetaRunning = True
+			self.btnColeta.setText("Finalizar Coleta")
+
+	def saveColeta(self):
+		dlg = QtGui.QFileDialog( self )
+		dlg.setWindowTitle( 'Secione o local para salvar a coleta.' )
+		dlg.setViewMode( QtGui.QFileDialog.Detail )
+		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.txt' )
+		file_name = dlg.getSaveFileName(self,'Save File')
+		if ".txt" not in file_name:
+			file_name = file_name + ".txt"
+		print "*"*len(file_name)
+		print file_name
+
+		file_to_save = open(file_name, 'w')
+		print("Funcao a ser feita")
+		file_to_save.write("Nao implementado")
+		file_to_save.close()
+		print "*"*len(file_name)
 
 	def cbChanged(self,idx):
 		self.updateSlideBars()
