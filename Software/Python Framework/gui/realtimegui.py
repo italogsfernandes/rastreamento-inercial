@@ -36,6 +36,7 @@ from threadhandler import ThreadHandler
 from mpu6050handler import *
 import math
 from time import sleep
+from shutil import copyfile
 #------------------------------------------------------------------------------
 Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
 #------------------------------------------------------------------------------
@@ -99,18 +100,24 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.slPsi.valueChanged.connect(self.degChanged)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
-		self.btnAnimation.clicked.connect(self.doAnimation)
+
 		self.actionAbrir_Postura.triggered.connect(self.doOpenPosture)
 		self.actionSalvar_Postura.triggered.connect(self.doSavePosture)
+		self.actionMenu_de_Rota_o.triggered.connect(self.doMenuRotacao)
+		self.groupRotation.setVisible(False)
+
+		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.statusColetaRunning = False
 		self.btnMarcar.clicked.connect(self.doMarcar)
+		self.marcacaoPending = False
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
 		#Create the skeleton chart
 		#matplotlib
 		self.addmpl()
+
 
 	def addmpl(self):
 		#Plot parameters
@@ -301,6 +308,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.plot()
 		file_to_open.close()
 
+	def doMenuRotacao(self):
+		self.groupRotation.setVisible(not self.groupRotation.isVisible())
 
 	def doSavePosture(self):
 		dlg = QtGui.QFileDialog( self )
@@ -337,7 +346,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def doMarcar(self):
 		if self.statusColetaRunning:
-			self.show_error_msg("Não implementado")
+			self.marcacaoPending = True
 		else:
 			self.show_error_msg("É necessário estar em uma coleta para marcar algo.")
 
@@ -352,6 +361,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		if self.statusColetaRunning:
 			#Stops a coleta
 			self.statusColetaRunning = False
+			self.arqColeta.close()
 			msg = QMessageBox()
 			msg.setIcon(QMessageBox.Question)
 			msg.setText("Deseja salvar a coleta?")
@@ -365,6 +375,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		else:
 			#inicia a coleta
 			self.statusColetaRunning = True
+			self.arqColeta = open("arq_temporario.txt", 'w')
 			self.btnColeta.setText("Finalizar Coleta")
 
 	def saveColeta(self):
@@ -378,11 +389,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			file_name = file_name + ".txt"
 		print "*"*len(file_name)
 		print file_name
-
-		file_to_save = open(file_name, 'w')
-		print("Funcao a ser feita")
-		file_to_save.write("Nao implementado")
-		file_to_save.close()
+		copyfile("arq_temporario.txt", file_name)
 		print "*"*len(file_name)
 
 	def cbChanged(self,idx):
@@ -457,6 +464,11 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				print 'qntsensor: %d' % (len(data)/4)
+				if self.statusColetaRunning:
+					self.arqColeta.write(str(len(data)/4) + ": " + str(data) + "\n")
+				if self.marcacaoPending:
+					self.arqColeta.write("*******************MARCA****************")
+					self.marcacaoPending = False
 				if len(data) >= 4:
 					quat = data[0:4]
 					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])

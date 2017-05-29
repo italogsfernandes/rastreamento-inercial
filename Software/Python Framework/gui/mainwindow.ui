@@ -20,7 +20,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
-         <widget class="QGroupBox" name="ColetaGroup">
+         <widget class="QGroupBox" name="groupColeta">
           <property name="title">
            <string>Coleta:</string>
           </property>
@@ -63,7 +63,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupRotation">
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -199,7 +199,23 @@
     <addaction name="actionAbrir_Postura"/>
     <addaction name="actionSalvar_Postura"/>
    </widget>
+   <widget class="QMenu" name="menuVisualizar">
+    <property name="title">
+     <string>Visualizar</string>
+    </property>
+    <widget class="QMenu" name="menuGr_ficos">
+     <property name="title">
+      <string>Gráficos</string>
+     </property>
+     <addaction name="action_rea_do_Tri_ngulo"/>
+     <addaction name="actionPosi_o"/>
+     <addaction name="actionQuaternion"/>
+    </widget>
+    <addaction name="actionMenu_de_Rota_o"/>
+    <addaction name="menuGr_ficos"/>
+   </widget>
    <addaction name="menuArquivo"/>
+   <addaction name="menuVisualizar"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAbrir_Postura">
@@ -210,6 +226,26 @@
   <action name="actionSalvar_Postura">
    <property name="text">
     <string>Salvar Postura</string>
+   </property>
+  </action>
+  <action name="actionMenu_de_Rota_o">
+   <property name="text">
+    <string>Menu de Rotação</string>
+   </property>
+  </action>
+  <action name="action_rea_do_Tri_ngulo">
+   <property name="text">
+    <string>Área do Triângulo</string>
+   </property>
+  </action>
+  <action name="actionPosi_o">
+   <property name="text">
+    <string>Posição</string>
+   </property>
+  </action>
+  <action name="actionQuaternion">
+   <property name="text">
+    <string>Quaternion</string>
    </property>
   </action>
  </widget>
