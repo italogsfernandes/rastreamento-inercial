@@ -37,6 +37,7 @@ from mpu6050handler import *
 import math
 from time import sleep
 from shutil import copyfile
+import serial.tools.list_ports as serial_tools
 #------------------------------------------------------------------------------
 Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
 #------------------------------------------------------------------------------
@@ -46,8 +47,12 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.setupUi(self)
 
 		#mpu6050
-		self.imu = MPU6050('/dev/ttyACM0')
-		self.imu.open()
+		try:
+			self.imu = MPU6050('/dev/ttyACM0')
+			self.imu.open()
+		except Exception as e:
+			self.show_error_msg("Nao foi possivel abrir a porta /dev/ttyACM0, por favor selecione outra.")
+
 
 		#Limb positions
 		torso = np.array([0,0,0])
@@ -94,7 +99,16 @@ class Main(QMainWindow, Ui_MainWindow):
 		for segs in self.skeleton.segments:
 			self.cbJointNames.addItem(segs)
 
+		for serial_port in serial_tools.comports():
+			self.cbSerialPort.addItem(serial_port.device)
+
+		if len(serial_tools.comports()) == 0:
+			self.show_error_msg("Nenhuma porta Serial Disponivel")
+			self.cbSerialPort.setEnabled(False)
+			self.btnAnimation.setEnabled(False)
+
 		self.connect(self.cbJointNames,SIGNAL('currentIndexChanged(int)'),self.cbChanged)
+		self.connect(self.cbSerialPort,SIGNAL('currentIndexChanged(int)'),self.cbSerialChanged)
 		self.slPhi.valueChanged.connect(self.degChanged)
 		self.slTheta.valueChanged.connect(self.degChanged)
 		self.slPsi.valueChanged.connect(self.degChanged)
@@ -106,10 +120,17 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.actionMenu_de_Rota_o.triggered.connect(self.doMenuRotacao)
 		self.groupRotation.setVisible(False)
 
+		self.actionPosi_o.triggered.connect(self.doGraphPosition)
+		self.actionQuaternion.triggered.connect(self.doGraphQuaternion)
+		self.action_rea_do_Tri_ngulo.triggered.connect(self.doGraphTriangulo)
+
 		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnColeta.clicked.connect(self.doColeta)
+		self.btnColeta.setVisible(False)
 		self.statusColetaRunning = False
+
 		self.btnMarcar.clicked.connect(self.doMarcar)
+		self.btnMarcar.setVisible(False)
 		self.marcacaoPending = False
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
@@ -248,6 +269,16 @@ class Main(QMainWindow, Ui_MainWindow):
 		print _joint.name, _joint.quaternion
 
 
+	def doGraphTriangulo(self):
+		self.show_error_msg("Nao implementada")
+
+	def doGraphQuaternion(self):
+		self.show_error_msg("Nao implementada")
+
+	def doGraphPosition(self):
+		self.show_error_msg("Nao implementada")
+
+
 	def doReset(self):
 		for seg in self.skeleton.segments:
 			joint = self.skeleton.getJoint(None,None,seg)
@@ -370,11 +401,13 @@ class Main(QMainWindow, Ui_MainWindow):
 			msg.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
    			msg.buttonClicked.connect(self.saveColeta)
 			self.btnColeta.setText("Iniciar Coleta")
+			self.btnMarcar.setVisible(False)
 		elif not self.imu.acqThread.isAlive:
 			self.show_error_msg("Coleta nao iniciada pois o sensor nao esta conectado.")
 		else:
 			#inicia a coleta
 			self.statusColetaRunning = True
+			self.btnMarcar.setVisible(True)
 			self.arqColeta = open("arq_temporario.txt", 'w')
 			self.btnColeta.setText("Finalizar Coleta")
 
@@ -394,6 +427,13 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def cbChanged(self,idx):
 		self.updateSlideBars()
+
+	def cbSerialChanged(self, idx):
+		try:
+			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
+			self.imu.open()
+		except Exception as e:
+			show_error_msg("Erro ao abrir porta serial")
 
 	def updateSlideBars(self):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
@@ -427,12 +467,16 @@ class Main(QMainWindow, Ui_MainWindow):
 				#self.plotTh.start()
 				self.drawLock = Lock()
 				self.btnAnimation.setText("Stop Animation")
+				self.btnColeta.setVisible(True)
+				self.cbSerialPort.setEnabled(False)
 			except Exception as e:
 				self.show_error_msg("Erro ao iniciar animacao.\nError Log: " + str(e))
 		else:
 			try:
 				self.doStop()
 				self.btnAnimation.setText("Start Animation")
+				self.btnColeta.setVisible(False)
+				self.cbSerialPort.setEnabled(True)
 			except Exception as e:
 				self.show_error_msg("Erro ao finalizar animacao.\nError Log: " + str(e))
 
