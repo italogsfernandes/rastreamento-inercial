@@ -12,7 +12,7 @@
 # Decription: Adding real-time control of a single joint with MPU6050
 #------------------------------------------------------------------------------
 import os, sys
-sys.path.append('../')
+sys.path.append('..\\')
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.uic import loadUiType
@@ -38,8 +38,10 @@ import math
 from time import sleep
 from shutil import copyfile
 import serial.tools.list_ports as serial_tools
+
 #------------------------------------------------------------------------------
-Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
+path = os.path.dirname(os.path.abspath(__file__))
+Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path, 'mainwindow.ui'))
 #------------------------------------------------------------------------------
 class Main(QMainWindow, Ui_MainWindow):
 	def __init__(self):
