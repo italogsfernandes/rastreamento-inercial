@@ -17,12 +17,14 @@ from Queue import Queue
 from serial import Serial
 from threading import Timer
 from threadhandler import ThreadHandler
+import numpy as np
+import scipy as sp
 #------------------------------------------------------------------------------
 #MPU constants
 #Constants for handling serial communication
 class MPUConsts():
 	UART_ST = 0x24  			#Start transmission
-	UART_ET = 0x0A  			#End transmission
+	UART_ET = 0x0A				#End transmission
 	UART_PT1 = 0x21 			#Package Type I: Motion and Quaternion (in float)
 	UART_PT2 = 0x22 			#Package Type I: Motion and Quaternion (in int16)
 	UART_PT3 = 0x23 			#Package Type I: Motion and Quaternion (in int16)
@@ -131,6 +133,8 @@ class MPU6050(SerialHandler):
 	#Needs return?
 	def start(self):
 		self.serialPort.write(MPUConsts.CMD_START)
+		self.serialPort.flushInput()
+		self.serialPort.flushOutput()
 		self.dataQueue = Queue()
 
 	#Stops data acquisition
@@ -184,11 +188,10 @@ class MPU6050(SerialHandler):
 	Standard MPU6050 package contains:
 	Sensor data is read from DMP
 	1st byte: Start transmission = '$'
-	2nd byte: Total of sensors connected bytes
 	Next 8 bytes, each measure is composed by two bytes (MSB first)
 	Quaternion from sensor1 (w,x,y,z)
 	...
-	End Byte = 0x0A
+	End Byte = '\n'
 	'''
 	def readPackage(self):
 		#print 'readPackage called'
@@ -198,31 +201,44 @@ class MPU6050(SerialHandler):
 			ret = self.waitSTByte(MPUConsts.UART_ST)
 			if ret:
 				#print 'ST received'
+				for sensor_id in range(0,1):
+					#dataVector.append(float(sensor_id));
+					#print 'sensor_id: %d' % sensor_id
+					ret = self.waitBytes(8)
+					if ret:
+						data = self.serialPort.read(8)
+						data = map(ord,data)
+
+						for cont in range(0,8,2):
+							dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
+							#print dataVector[cont/2]
 				ret = self.waitBytes(1)
 				if ret:
-					self.qntsensor = ord(self.serialPort.read())
-					#print 'qnt sensores: %d' % self.qntsensor
-					for sensor_id in range(0,self.qntsensor):
-						#dataVector.append(float(sensor_id));
-						#print 'sensor_id: %d' % sensor_id
-						ret = self.waitBytes(8)
-						if ret:
-							data = self.serialPort.read(8)
-							data = map(ord,data)
-
-							for cont in range(0,8,2):
-								dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
-								#print dataVector[cont/2]
-					ret = self.waitBytes(1)
-					if ret:
-						endByte = ord(self.serialPort.read())
-						if endByte == MPUConsts.UART_ET:
+					endByte = ord(self.serialPort.read())
+					if endByte == MPUConsts.UART_ET:
+						normq = []
+						cont = 0
+						for i in range(1):
+							normq.append(np.sqrt(dataVector[cont]**2+dataVector[cont+1]**2+dataVector[cont+2]**2+dataVector[cont+3]**2))
+							cont += 4
+						#Should check if every quaternion value is less than 1
+						#quat = [q if -1 < q < 1 else [] for q in dataVector[0:4]]
+						normTest = lambda(val): True if 0.9 < val < 1.1 else False
+						vetNorms = map(normTest,normq)
+						#print normq
+						if not False in vetNorms:
+							#print "%.2f\t%.2f\t%.2f\t%.2f\t%.2f\t\t\t" % (dataVector[0], dataVector[1], dataVector[2], dataVector[3], normq)
+							#print self.serialPort.in_waiting
+							self.serialPort.flushInput()
 							self.acqThread.lock.acquire()
 							self.dataQueue.put(dataVector)
 							#print dataVector
 							self.acqThread.lock.release()
 						else:
-							print ' package error!'
+							print "NAO: %.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (dataVector[0], dataVector[1], dataVector[2], dataVector[3], normq)
+					else:
+						print dataVector
+						print ' package error!'
 		except:
 			print 'read error!'
 #------------------------------------------------------------------------------
