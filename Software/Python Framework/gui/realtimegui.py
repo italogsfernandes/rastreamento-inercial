@@ -140,6 +140,15 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.addmpl()
 
 
+	def closeEvent(self,event):
+		if self.imu.acqThread.isAlive:
+			self.imu.acqThread.kill()
+		if self.plotTh.isAlive:
+			self.plotTh.kill()
+		if self.dataProc.isAlive:
+			self.dataProc.kill()
+		print 'closing...'
+
 	def addmpl(self):
 		#Plot parameters
 		axesLim = [-10,10]
@@ -484,13 +493,12 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	#Triggered when the "Stop" button is clicked
 	def doStop(self):
-		self.imu.pause()
 		self.imu.stop()
 		time.sleep(1)
 		#Kill the threads
-		self.imu.acqThread.Kill()
-		self.dataProc.Kill()
-		self.plotTh.Kill()
+		self.imu.acqThread.kill()
+		self.dataProc.kill()
+		self.plotTh.kill()
 
 	#Function that updates the chart
 	def runPlot(self):
@@ -537,7 +545,7 @@ class Main(QMainWindow, Ui_MainWindow):
 					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-					
+
 				#self.updateQuaternions(joint,quat)
 		self.skeleton.rotate()
 		#self.plot()
