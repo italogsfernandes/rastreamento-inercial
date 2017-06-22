@@ -37,7 +37,7 @@ MPU6050 mpu2(0x68);
 MPU6050 mpu3(0x68);
 MPU6050 mpu4(0x68);
 
-const int offsets1[6] = {  -602, 2823, 1234, 16,   109,  33};
+const int offsets1[6] = {  -616, 2821, 1246, 16,   110,  34};
 const int offsets2[6] = { -331, 537,  1702, 142,  51,   35};
 const int offsets3[6] = { -2850,  312,  1612, -34,  6,    49};
 const int offsets4[6] = { 715,  401,  1242, 5,    46,   54};
@@ -70,7 +70,7 @@ void setup() {
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
-  Wire.setClock(200000);
+  //Wire.setClock(400000);
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(400, true);
 #endif
@@ -92,17 +92,17 @@ void setup() {
 }
 
 void loop() {
-  t.update();  
+  t.update(); 
 }
 
 
 void takereading(){
-  Serial.write("$");
+  Serial.write(0x7F);
   ler_sensor_1(); send_serial_packet_1(); //SHOW_DATA("1:\t"); mostrar_dados_1(); //send_serial_packet_1();
-  //ler_sensor_2(); send_serial_packet_2(); //SHOW_DATA("2:\t"); mostrar_dados_2(); //send_serial_packet_2();
-  //ler_sensor_3(); send_serial_packet_3(); //SHOW_DATA("3:\t"); mostrar_dados_3(); //send_serial_packet_3();
-  //ler_sensor_4(); send_serial_packet_4(); //SHOW_DATA("4:\t"); mostrar_dados_4();// send_serial_packet_4();
-  Serial.write("\n");
+  ler_sensor_2(); send_serial_packet_2(); //SHOW_DATA("2:\t"); mostrar_dados_2(); //send_serial_packet_2();
+  ler_sensor_3(); send_serial_packet_3(); //SHOW_DATA("3:\t"); mostrar_dados_3(); //send_serial_packet_3();
+  ler_sensor_4(); send_serial_packet_4(); //SHOW_DATA("4:\t"); mostrar_dados_4();// send_serial_packet_4();
+  Serial.write(0x7E);
   digitalWrite(LED_PIN, led_state);
   led_state = !led_state;
 }
@@ -292,6 +292,9 @@ void ler_sensor_1() {
   select_sensor(1);
   numbPackets = floor(mpu1.getFIFOCount() / PSDMP);
   SHOW_DATA(numbPackets); SHOW_DATA(" - ");
+  /*for (int i = 0; i < numbPackets; i++) {
+      mpu1.getFIFOBytes(fifoBuffer1, PSDMP);
+  }*/
   if (numbPackets >= 24) {
     mpu1.resetFIFO();
     DEBUG_PRINT_("FIFO sensor 1 overflow!\n");
