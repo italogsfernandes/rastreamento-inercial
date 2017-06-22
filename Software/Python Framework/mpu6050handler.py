@@ -218,9 +218,7 @@ class MPU6050(SerialHandler):
 					if ret:
 						data = self.serialPort.read(8)
 						data = map(ord,data)
-						dataint = []
 						for cont in range(0,8,2):
-							dataint.append(self.to_int16((data[cont]),(data[cont+1])))
 							dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
 							#print dataVector[cont/2]
 				ret = self.waitBytes(1)
@@ -247,7 +245,6 @@ class MPU6050(SerialHandler):
 								self.acqThread.lock.acquire()
 								self.dataQueue.put(dataVector)
 								self.acqThread.lock.release()
-
 						else:
 							print "NAO: %.2f\t%.2f\t%.2f\t%.2f\t%.2f" % (dataVector[0], dataVector[1], dataVector[2], dataVector[3], normq)
 					else:
