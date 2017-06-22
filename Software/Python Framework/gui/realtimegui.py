@@ -117,6 +117,9 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
 
+		self.marcanumero = 0
+		self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
+
 		self.actionAbrir_Postura.triggered.connect(self.doOpenPosture)
 		self.actionSalvar_Postura.triggered.connect(self.doSavePosture)
 		self.actionMenu_de_Rota_o.triggered.connect(self.doMenuRotacao)
@@ -388,7 +391,9 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def doMarcar(self):
 		if self.statusColetaRunning:
+			self.marcanumero = self.marcanumero + 1
 			self.marcacaoPending = True
+			self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
 		else:
 			self.show_error_msg("É necessário estar em uma coleta para marcar algo.")
 
@@ -410,7 +415,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			msg.setWindowTitle("Coleta Finalizada")
 			retval = msg.exec_()
 			msg.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
-   			msg.buttonClicked.connect(self.saveColeta)
+   			self.saveColeta()
 			self.btnColeta.setText("Iniciar Coleta")
 			self.btnMarcar.setVisible(False)
 		elif not self.imu.acqThread.isAlive:
@@ -504,7 +509,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	#Function that updates the chart
 	def runPlot(self):
-		if self.plotcounter == 10:
+		if self.plotcounter == 100:
 			self.plotLock.acquire()
 			self.plot()
 			self.plotLock.release()
@@ -521,13 +526,13 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				#print 'qntsensor: %d' % (len(data)/4)
-				'''
+
 				if self.statusColetaRunning:
 					self.arqColeta.write(str(len(data)/4) + ": " + str(data) + "\n")
 				if self.marcacaoPending:
-					self.arqColeta.write("*******************MARCA****************")
+					self.arqColeta.write("\n*******************MARCA %d****************\n\n" % self.marcanumero)
 					self.marcacaoPending = False
-				'''
+
 
 				if len(data) >= 4:
 					quat = data[0:4]
