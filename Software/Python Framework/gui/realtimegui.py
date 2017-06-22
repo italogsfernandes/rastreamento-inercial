@@ -54,6 +54,8 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.show_error_msg("Nao foi possivel abrir a porta /dev/ttyACM0, por favor selecione outra.")
 
 
+		self.plotLock = Lock()
+
 		#Limb positions
 		torso = np.array([0,0,0])
 		phead = np.array([0,0,2])
@@ -242,8 +244,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		#self.ax.quiver(an[0],an[1],an[2],ax[0],ay[0],az[0],length=quiverSize, pivot='tail', color='red')
 		#self.ax.quiver(an[0],an[1],an[2],ax[1],ay[1],az[1],length=quiverSize, pivot='tail', color='green')
 		#self.ax.quiver(an[0],an[1],an[2],ax[2],ay[2],az[2],length=quiverSize, pivot='tail', color='blue')
-		points = self.skeleton.bodyPoints()
 
+		points = self.skeleton.bodyPoints()
 		links,colors = self.skeleton.bodyLinks()
 		for i in range(len(self.skeleton.segments)):
 			self.ax.scatter(points[0][i],points[1][i],points[2][i],c='gray',s=60)
@@ -503,13 +505,16 @@ class Main(QMainWindow, Ui_MainWindow):
 	#Function that updates the chart
 	def runPlot(self):
 		if self.plotcounter == 10:
+			self.plotLock.acquire()
 			self.plot()
+			self.plotLock.release()
 			self.plotcounter = 0
 		else:
 			self.plotcounter += 1
 
 	#Function that handles the data acquisition
 	def runAnimation(self):
+		self.plotLock.acquire()
 		#self.imu.acqThread.lock.acquire()
 		if self.imu.dataQueue.qsize() > 0:
 			n = self.imu.dataQueue.qsize()
@@ -526,28 +531,39 @@ class Main(QMainWindow, Ui_MainWindow):
 
 				if len(data) >= 4:
 					quat = data[0:4]
-					#print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)
-
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 8:
 					quat = data[4:8]
-					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
-					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
+					#self.skeleton.rotate()
+					#print '[%.2f,%.2f,%.2f,%.2f  %.2f,%.2f,%.2f,%.2f  %.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3],joint.rotquaternion[0],joint.rotquaternion[1],joint.rotquaternion[2],joint.rotquaternion[3],joint.position[0],joint.position[1],joint.position[2])
 				if len(data) >= 12:
 					quat = data[8:12]
-					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
-					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
-					joint.setQuaternion(quat)
-				if len(data) >= 16:
-					quat = data[12:16]
-					print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
+					#print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
+					#self.skeleton.rotate()
+				if len(data) >= 16:
+					quat = data[12:16]
+					#print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+					joint.setQuaternion(quat)
+					#self.skeleton.rotate()
 
 				#self.updateQuaternions(joint,quat)
+
+		#print joint.quaternion, joint.rotquaternion, joint.position
+		#print joint.position
 		self.skeleton.rotate()
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
+		print ''
+		self.plotLock.release()
+		#print "[%.2f\t%.2f\t%.2f\t]" % (joint.position[0],joint.position[1],joint.position[2])
 		#self.plot()
 		#self.imu.acqThread.lock.release()
 		#time.sleep(0.005) #sampling frequency 100 Hz
