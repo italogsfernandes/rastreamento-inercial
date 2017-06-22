@@ -86,9 +86,11 @@ class Joint():
 		self.origin = _position
 		#Quaternion
 		self.quaternion = None
+		self.rotquaternion = [1.,0.,0.,0.]
 		#The joint does not have nodes when it is created. The nodes are assigned
 		#by the "Skeleton" class.
 		self.links = [None,None,None]
+		self.parent = []
 	#Updates the quaternion of the joint
 	#The rotation of the joint is given by the product between the new quaternion
 	#and the conjugate of the current quaternion
@@ -96,8 +98,16 @@ class Joint():
 	#joint in space, while the "quaternion" property will serve to be used
 	#when the new quaternion will be updated.
 	def setQuaternion(self,_quaternion):
-		self.rotquaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
+		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
 		self.quaternion = _quaternion
+		self.rotquaternion = self.quaternion
+		'''
+		for i in range(len(self.rotquaternion)):
+			if self.rotquaternion[i] < -1.0:
+				self.rotquaternion[i] = -1.0
+			elif self.rotquaternion[i] > 1.0:
+				self.rotquaternion[i] = 1.0
+	 	'''
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
@@ -182,6 +192,7 @@ class Skeleton():
 		self.joints[torso.name] = torso
 		self.joints[head.name] = head
 		self.joints[waist.name] = waist
+		torso.parent = None
 
 		#Right segments of the body
 		#Upper limbs
@@ -192,6 +203,11 @@ class Skeleton():
 		rshoulder.links[self.sideId[BodyJoints.RIGHT]] = relbow
 		relbow.links[self.sideId[BodyJoints.RIGHT]] = rwrist
 		rwrist.links[self.sideId[BodyJoints.RIGHT]] = rhand
+		#Defining the parents
+		rshoulder.parent = torso
+		relbow.parent = rshoulder
+		rwrist.parent = relbow
+		rhand.parent = rwrist
 		#Adding the joints to the dictionary
 		self.joints[rshoulder.name] = rshoulder
 		self.joints[relbow.name] = relbow
@@ -224,6 +240,11 @@ class Skeleton():
 		self.joints[lelbow.name] = lelbow
 		self.joints[lwrist.name] = lwrist
 		self.joints[lhand.name] = lhand
+		#Defining the parents
+		lshoulder.parent = torso
+		lelbow.parent = lshoulder
+		lwrist.parent = lelbow
+		lhand.parent = lwrist
 		#Lower limbs
 		lhip = Joint(BodyJoints.LEFT, BodyJoints.HIP)
 		lknee = Joint(BodyJoints.LEFT, BodyJoints.KNEE)
@@ -416,24 +437,88 @@ class Skeleton():
 		body.append(bodyz)
 		return body
 
+	def rotate3(self):
+		to = self.getJoint(BodyJoints.UNILAT, BodyJoints.TORSO)
+		sh = self.getJoint(BodyJoints.RIGHT, BodyJoints.SHOULDER)
+		el = self.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+		wr = self.getJoint(BodyJoints.RIGHT, BodyJoints.WRIST)
+
+		rot = quaternion.toRotMat(to.rotquaternion)
+		sh.position = geometry.rotate(sh.origin,to.origin,rot)
+		el.position = geometry.rotate(el.origin,to.origin,rot)
+		wr.position = geometry.rotate(wr.origin,to.origin,rot)
+
+		sh.rotquaternion = quaternion.product(sh.quaternion, quaternion.conjugate(to.quaternion))
+		el.rotquaternion = quaternion.product(el.quaternion, quaternion.conjugate(to.quaternion))
+		wr.rotquaternion = quaternion.product(wr.quaternion, quaternion.conjugate(to.quaternion))
+		rot = quaternion.toRotMat(sh.rotquaternion)
+		sh.position = geometry.rotate(sh.position,to.position,rot)
+		el.position = geometry.rotate(el.position,to.position,rot)
+		wr.position = geometry.rotate(wr.position,to.position,rot)
+
+		el.rotquaternion = quaternion.product(el.rotquaternion, quaternion.conjugate(sh.rotquaternion))
+		wr.rotquaternion = quaternion.product(wr.rotquaternion, quaternion.conjugate(sh.rotquaternion))
+		rot = quaternion.toRotMat(el.rotquaternion)
+		el.position = geometry.rotate(el.position,sh.position,rot)
+		wr.position = geometry.rotate(wr.position,sh.position,rot)
+
+		wr.rotquaternion = quaternion.product(wr.rotquaternion, quaternion.conjugate(el.rotquaternion))
+		rot = quaternion.toRotMat(wr.rotquaternion)
+		wr.position = geometry.rotate(wr.position,el.position,rot)
+
+	#Rotates the right and left arms
+	def rotateArms(self):
+		#Right side
+		sh = self.getJoint(BodyJoints.RIGHT, BodyJoints.SHOULDER)
+		el = self.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+		wr = self.getJoint(BodyJoints.RIGHT, BodyJoints.WRIST)
+		rot = quaternion.toRotMat(el.rotquaternion)
+		el.position = geometry.rotate(el.origin,sh.origin,rot)
+		wr.position = geometry.rotate(wr.origin,sh.origin,rot)
+		wr.rotquaternion = quaternion.product(wr.quaternion,quaternion.conjugate(el.quaternion))
+		rot = quaternion.toRotMat(wr.rotquaternion)
+		wr.position = geometry.rotate(wr.position,el.position,rot)
+
+		#Left side
+		lsh = self.getJoint(BodyJoints.LEFT, BodyJoints.SHOULDER)
+		lel = self.getJoint(BodyJoints.LEFT, BodyJoints.ELBOW)
+		lwr = self.getJoint(BodyJoints.LEFT, BodyJoints.WRIST)
+		rot = quaternion.toRotMat(lel.rotquaternion)
+		lel.position = geometry.rotate(lel.origin,lsh.origin,rot)
+		lwr.position = geometry.rotate(lwr.origin,lsh.origin,rot)
+		lwr.rotquaternion = quaternion.product(lwr.quaternion,quaternion.conjugate(lel.quaternion))
+		rot = quaternion.toRotMat(lwr.rotquaternion)
+		lwr.position = geometry.rotate(lwr.position,lel.position,rot)
 
 	def rotate(self):
 		#Rotating upper-limbs
 		for i in range(len(self.sideId)):
 			idx = i
 			parent = self.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
-			node = parent.links[idx]
 			p0 = parent.origin
+			node = parent.links[idx]
 			while True:
 				if self.exist(None,None,parent.name):
-					rot = quaternion.toRotMat(parent.rotquaternion)
 					#Rotation of the parent itself
-					parent.position = geometry.rotate(parent.position,p0,rot)
+					#Rotation matrix from quaternion
+					rot = quaternion.toRotMat(parent.rotquaternion)
+
+					if parent.name == 'torso':
+						parent.position = geometry.rotate(parent.origin,p0,rot)
+					else:
+						parent.position = geometry.rotate(parent.position,p0,rot)
+
 					#Rotation of the linked segments
 					while True:
 						if node is not None and self.exist(None,None,node.name):
-							node.position = geometry.rotate(node.position,p0,rot)
-							node.rotquaternion = quaternion.product(node.rotquaternion,quaternion.conjugate(parent.rotquaternion))
+
+							if parent.name == 'torso':
+								node.position = geometry.rotate(node.origin,p0,rot)
+								node.rotquaternion = quaternion.product(node.quaternion,quaternion.conjugate(parent.quaternion))
+							else:
+								node.position = geometry.rotate(node.position,p0,rot)
+								node.rotquaternion = quaternion.product(node.rotquaternion,quaternion.conjugate(parent.rotquaternion))
+
 							if node.links[idx] is not None:
 								node = node.links[idx]
 							else:
@@ -442,7 +527,7 @@ class Skeleton():
 							break
 					#Since the rotation have been applied, we can set the
 					#"rotquaternion" of the parent to be the identity quaternion
-					parent.rotquaternion = np.array([1,0,0,0])
+					#parent.rotquaternion = np.array([1,0,0,0])
 					#If exists another node in the hierarchy
 					if parent.links[idx] is not None:
 						#The origin for translations is the parent position
@@ -474,7 +559,7 @@ class Skeleton():
 							node.rotquaternion = quaternion.product(node.rotquaternion,quaternion.conjugate(parent.rotquaternion))
 							if node.name == 'right_ankle':
 								print 'estou mudando o right ankle!'
-								print 'olha o valor', node.rotquaternion							
+								print 'olha o valor', node.rotquaternion
 							if node.links[idx] is not None:
 								node = node.links[idx]
 							else:
@@ -508,12 +593,13 @@ if __name__ == '__main__':
 	s.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).setQuaternion([0.966,0,0.259,0])
 	s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).setQuaternion([0.966,0,0.259,0])
 	s.getJoint(BodyJoints.RIGHT,BodyJoints.HAND).setQuaternion([0.966,0,0.259,0])
-	print s.segments
-	s.rotate()
-	print 'Positions'
-	print 'Torso:', s.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO).position
-	print 'Shoulder:', s.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
-	print 'Elbow:', s.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
-	print 'Wrist:', s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
-	print 'Hand:', s.getJoint(BodyJoints.RIGHT,BodyJoints.HAND).position
+	#print s.segments
+	#s.rotate()
+	#print 'Positions'
+	#print 'Torso:', s.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO).position
+	#print 'Shoulder:', s.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
+	#print 'Elbow:', s.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
+	#print 'Wrist:', s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
+	#print 'Hand:', s.getJoint(BodyJoints.RIGHT,BodyJoints.HAND).position
+	s.rotateJoint(s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST),s.sideId[BodyJoints.RIGHT])
 #------------------------------------------------------------------------------
