@@ -45,6 +45,7 @@ class MPUConsts():
 class SerialHandler():
 	def __init__(self,_port='ttyACM0',_baud=115200,_timeout=0.5):
 		self.port = _port
+		print("inside serial handler %s" % str(self.port))
 		self.baud = _baud
 		self.timeout = _timeout
 		self.waiting = False
@@ -52,7 +53,11 @@ class SerialHandler():
 
 	def open(self):
 		try:
-			self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			print "birl %s - %s - %s" % (str(self.port), str(self.baud), str(self.timeout))
+			#self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			self.serialPort = Serial("/dev/ttyACM0",115200,timeout=0.5)
+			print("Eh hora do show " + str(self.serialPort))
+			print("Sera q vai dar? " + "nao vai dar nao" if not self.serialPort.is_open else "vai dar sim")
 			if self.serialPort.is_open:
 				self.serialPort.flushInput()
 				self.serialPort.flushOutput()
@@ -131,6 +136,7 @@ class MPU6050(SerialHandler):
 		self.isConnected = False
 		self.dataQueue = Queue()
 		self.flagAcq = False
+		print("mpu6050 to serial handler %s" % str(_port))
 		SerialHandler.__init__(self,_port,_baud)
 
 	#Stars data acquisition

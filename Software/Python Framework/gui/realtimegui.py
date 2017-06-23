@@ -447,9 +447,11 @@ class Main(QMainWindow, Ui_MainWindow):
 	def cbSerialChanged(self, idx):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
+			print(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
 			self.imu.open()
+			print(str(self.imu.serialPort.is_open))
 		except Exception as e:
-			show_error_msg("Erro ao abrir porta serial")
+			self.show_error_msg("Erro ao abrir porta serial\nErro num:" + str(e))
 
 	def updateSlideBars(self):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
