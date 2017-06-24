@@ -52,7 +52,8 @@ class SerialHandler():
 
 	def open(self):
 		try:
-			self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			#self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			self.serialPort = Serial('/dev/ttyUSB0',self.baud,timeout=self.timeout)
 			if self.serialPort.is_open:
 				self.serialPort.flushInput()
 				self.serialPort.flushOutput()
@@ -211,7 +212,7 @@ class MPU6050(SerialHandler):
 			ret = self.waitSTByte(MPUConsts.UART_ST)
 			if ret:
 				#print 'ST received'
-				for sensor_id in range(0,4):
+				for sensor_id in range(0,1):
 					#dataVector.append(float(sensor_id));
 					#print 'sensor_id: %d' % sensor_id
 					ret = self.waitBytes(8)
@@ -227,7 +228,7 @@ class MPU6050(SerialHandler):
 					if endByte == MPUConsts.UART_ET:
 						normq = []
 						cont = 0
-						for i in range(4):
+						for i in range(0,1):
 							normq.append(np.sqrt(dataVector[cont]**2+dataVector[cont+1]**2+dataVector[cont+2]**2+dataVector[cont+3]**2))
 							cont += 4
 						#Should check if every quaternion value is less than 1

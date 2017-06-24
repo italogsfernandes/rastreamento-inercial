@@ -537,7 +537,10 @@ class Main(QMainWindow, Ui_MainWindow):
 				if len(data) >= 4:
 					quat = data[0:4]
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+					corrected_quat = quaternion.product([0.0,0.0,0.0,-1.0],quaternion.conjugate(quat))
+					joint.setQuaternion([0.0,0.0,0.0,-1.0])
 					joint.setQuaternion(quat)
+
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 8:
 					quat = data[4:8]
