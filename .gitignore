@@ -1,3 +1,6 @@
+#Coletas
+*gui/*.txt
+
 #python
 *.py~
 #logs de leituras
