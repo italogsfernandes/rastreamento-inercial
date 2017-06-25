@@ -328,25 +328,25 @@ class Main(QMainWindow, Ui_MainWindow):
 		dlg = QtGui.QFileDialog( self )
 		dlg.setWindowTitle( 'Secione a posição que deseja abrir.' )
 		dlg.setViewMode( QtGui.QFileDialog.Detail )
-		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
-		dlg.setDefaultSuffix( '.txt' )
+		dlg.setNameFilters( [self.tr('Arquivos de Posição (*.position)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.position' )
 		file_name = dlg.getOpenFileName(self,'Open File')
 		print file_name
-
 		file_to_open = open(file_name, 'r')
 		file_to_open.readline() == "joint_name\t[position]\t[origin]\t[quaternion]\n"
 		linhas_read = file_to_open.readlines()
 		for line in linhas_read:
 			joint_values = line.split('\t')
 			joint_name = joint_values[0]
-			joint_position = [float(v.replace(',',' ')) for v in joint_values[1][1:len(joint_values[1])-1].split()]
-			joint_origin = [float(v.replace(',',' ')) for v in joint_values[2][1:len(joint_values[2])-1].split()]
-			joint_quaternion =  [float(v.replace(',',' ')) for v in joint_values[3][1:len(joint_values[3])-2].split()]
+			joint_position = [float(v) for v in joint_values[1].split(',')]
+			joint_origin = [float(v) for v in joint_values[2].split(',')]
+			joint_quaternion =  [float(v) for v in joint_values[3].split(',')]
 			joint = self.skeleton.getJoint(None,None,joint_name)
 			print()
+			print(str(joint_name) + '\t'+ str(joint_quaternion))
 			self.updateQuaternions(joint,joint_quaternion)
 			self.skeleton.rotate()
-			print(str(joint_name) + '\t'+ str(joint_quaternion))
+			
 
 		print("Fim da leitura" + "*"*50)
 		self.updateSlideBars()
@@ -360,11 +360,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		dlg = QtGui.QFileDialog( self )
 		dlg.setWindowTitle( 'Secione o local para salvar a posição.' )
 		dlg.setViewMode( QtGui.QFileDialog.Detail )
-		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
-		dlg.setDefaultSuffix( '.txt' )
+		dlg.setNameFilters( [self.tr('Arquivos de Posição (*.position)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.position' )
 		file_name = dlg.getSaveFileName(self,'Save File')
-		if ".txt" not in file_name:
-			file_name = file_name + ".txt"
+		if ".position" not in file_name:
+			file_name = file_name + ".position"
 		print "*"*len(file_name)
 		print file_name
 		#Montar arquivo de saida
@@ -383,7 +383,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		print("joint_name\t[position]\t[origin]\t[quaternion]\n")
 		file_to_save.write("joint_name\t[position]\t[origin]\t[quaternion]\n")
 		for _j in joints_to_save:
-			joint_dados = str(_j.name) + "\t" + str(_j.position) + "\t" + str(_j.origin) + "\t" + str(_j.quaternion) + "\n"
+			joint_dados = "%s\t%.4f,%.4f,%.4f\t%.4f,%.4f,%.4f\t%.6f,%.6f,%.6f,%.6f\n" % (_j.name,
+				 _j.position[0],  _j.position[1],  _j.position[2],
+				 _j.origin[0], _j.origin[1], _j.origin[2],
+				 _j.quaternion[0], _j.quaternion[1], _j.quaternion[2],_j.quaternion[3])
+			#joint_dados = str(_j.name) + "\t" + str(_j.position) + "\t" + str(_j.origin) + "\t" + str(_j.quaternion) + "\n"
 			print(joint_dados)
 			file_to_save.write(joint_dados)
 		file_to_save.close()
