@@ -1,5 +1,6 @@
 #Coletas
-*gui/*.txt
+Software/Python Framework/gui/*.txt
+Software/Python Framework/gui/arq_temporario.txt
 
 #python
 *.py~
