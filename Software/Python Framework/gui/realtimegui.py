@@ -130,6 +130,10 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.action_rea_do_Tri_ngulo.triggered.connect(self.doGraphTriangulo)
 
 		self.btnAnimation.clicked.connect(self.doAnimation)
+		self.btnColeta.setText("Iniciar Coleta")
+		self.btnSetOffset.setText("Set Offset")
+		self.arqColeta = None
+		self.btnSetOffset.clicked.connect(self.doOffset)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.btnColeta.setVisible(False)
 		self.statusColetaRunning = False
@@ -143,6 +147,20 @@ class Main(QMainWindow, Ui_MainWindow):
 		#Create the skeleton chart
 		#matplotlib
 		self.addmpl()
+
+	def doOffset(self):
+		print "*******************DOING OFFSETS********************"
+		joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+		joint.setQuaternionOffset()
+		joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+		joint.setQuaternionOffset()
+		joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+		joint.setQuaternionOffset()
+		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
+		joint.setQuaternionOffset()
+		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+		joint.setQuaternionOffset()
+					
 
 
 	def closeEvent(self,event):
@@ -224,7 +242,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
 		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
-
+		self.arqColeta = None
 
 		quiverSize = 1.5
 		#Orientation of elbow sensor

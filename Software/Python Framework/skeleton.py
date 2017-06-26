@@ -87,6 +87,7 @@ class Joint():
 		#Quaternion
 		self.quaternion = None
 		self.rotquaternion = [1.,0.,0.,0.]
+		self.quaternion_offset = [1.,0.,0.,0.]
 		#The joint does not have nodes when it is created. The nodes are assigned
 		#by the "Skeleton" class.
 		self.links = [None,None,None]
@@ -100,6 +101,7 @@ class Joint():
 	def setQuaternion(self,_quaternion):
 		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
 		self.quaternion = _quaternion
+		self.quaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion_offset))
 		self.rotquaternion = self.quaternion
 		'''
 		for i in range(len(self.rotquaternion)):
@@ -108,6 +110,8 @@ class Joint():
 			elif self.rotquaternion[i] > 1.0:
 				self.rotquaternion[i] = 1.0
 	 	'''
+	def setQuaternionOffset(self):
+		self.quaternion_offset = quaternion.product(self.quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
