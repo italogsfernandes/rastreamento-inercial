@@ -38,6 +38,7 @@ import math
 from time import sleep
 from shutil import copyfile
 import serial.tools.list_ports as serial_tools
+from datetime import datetime
 #------------------------------------------------------------------------------
 Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
 #------------------------------------------------------------------------------
@@ -116,7 +117,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.slPsi.valueChanged.connect(self.degChanged)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
-
+		self.arqColeta = None
 		self.marcanumero = 0
 		self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
 
@@ -132,11 +133,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnAnimation.clicked.connect(self.doAnimation)
 		self.btnColeta.setText("Iniciar Coleta")
 		self.btnSetOffset.setText("Set Offset")
-		self.arqColeta = None
 		self.btnSetOffset.clicked.connect(self.doOffset)
 		self.btnColeta.clicked.connect(self.doColeta)
 		self.btnColeta.setVisible(False)
 		self.statusColetaRunning = False
+		self.offsetpending = False
 
 		self.btnMarcar.clicked.connect(self.doMarcar)
 		self.btnMarcar.setVisible(False)
@@ -149,17 +150,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.addmpl()
 
 	def doOffset(self):
-		print "*******************DOING OFFSETS********************"
-		joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
-		joint.setQuaternionOffset()
-		joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
-		joint.setQuaternionOffset()
-		joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
-		joint.setQuaternionOffset()
-		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
-		joint.setQuaternionOffset()
-		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
-		joint.setQuaternionOffset()
+		self.offsetpending = True
+		
 					
 
 
@@ -242,7 +234,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
 		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
-		self.arqColeta = None
+	
 
 		quiverSize = 1.5
 		#Orientation of elbow sensor
@@ -435,32 +427,41 @@ class Main(QMainWindow, Ui_MainWindow):
 			msg.setIcon(QMessageBox.Question)
 			msg.setText("Deseja salvar a coleta?")
 			msg.setWindowTitle("Coleta Finalizada")
-			retval = msg.exec_()
 			msg.setStandardButtons(QMessageBox.Save | QMessageBox.Cancel)
+			retval = msg.exec_()
    			self.saveColeta()
-			self.btnColeta.setText("Iniciar Coleta")
+   			self.btnColeta.setText("Iniciar Coleta")
 			self.btnMarcar.setVisible(False)
 		elif not self.imu.acqThread.isAlive:
 			self.show_error_msg("Coleta nao iniciada pois o sensor nao esta conectado.")
 		else:
 			#inicia a coleta
+			self.arqColeta = open("arq_temporario.temp", 'w')
+			self.write_coleta_header()
+			self.btnColeta.setText("Finalizar Coleta")
 			self.statusColetaRunning = True
 			self.btnMarcar.setVisible(True)
-			self.arqColeta = open("arq_temporario.txt", 'w')
-			self.btnColeta.setText("Finalizar Coleta")
+
+	def write_coleta_header(self):
+		self.arqColeta.write("Coleta - " + str(datetime.now()) + "\n")
+		self.arqColeta.write("Quaternions das seguintes Joints: \n")
+		self.arqColeta.write("q_w\tq_x\tq_y\tq_z\n")
+		self.arqColeta.write("RIGHT WRIST\tRIGHT ELBOW\tUNILAT TORSO\tLEFT ELBOW\tLEFT WRIST\n")
+		self.arqColeta.write("*" * 36 + " DADOS: " + "*" * 36 + "\n")
+
 
 	def saveColeta(self):
 		dlg = QtGui.QFileDialog( self )
 		dlg.setWindowTitle( 'Secione o local para salvar a coleta.' )
 		dlg.setViewMode( QtGui.QFileDialog.Detail )
-		dlg.setNameFilters( [self.tr('Text Files (*.txt)'), self.tr('All Files (*)')] )
-		dlg.setDefaultSuffix( '.txt' )
+		dlg.setNameFilters( [self.tr('Text Files (*.coleta)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.coleta' )
 		file_name = dlg.getSaveFileName(self,'Save File')
-		if ".txt" not in file_name:
-			file_name = file_name + ".txt"
+		if ".coleta" not in file_name:
+			file_name = file_name + ".coleta"
 		print "*"*len(file_name)
 		print file_name
-		copyfile("arq_temporario.txt", file_name)
+		copyfile("arq_temporario.temp", file_name)
 		print "*"*len(file_name)
 
 	def cbChanged(self,idx):
@@ -513,6 +514,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			try:
 				self.doStop()
 				self.btnAnimation.setText("Start Animation")
+				self.btnAnimation.setEnabled(False)
 				self.btnColeta.setVisible(False)
 				self.cbSerialPort.setEnabled(True)
 			except Exception as e:
@@ -550,79 +552,106 @@ class Main(QMainWindow, Ui_MainWindow):
 				#print 'qntsensor: %d' % (len(data)/4)
 				
 				if self.statusColetaRunning:
-					for q_lido in data:
-						self.arqColeta.write("%f," % q_lido)
-					self.arqColeta.write("\n")
+					self.write_joints_quat()
 				if self.marcacaoPending:
-					self.arqColeta.write("\n*******************MARCA %d****************\n\n" % self.marcanumero)
+					self.arqColeta.write("%s MARCA-%d %s\n" % ("*"*30,self.marcanumero,"*"*30))
 					self.marcacaoPending = False
 
-				print "Pacote: "				
-				print "%f\t%f\t%f\t%f" % (data[0], data[1], data[2], data[3])
-				print "%f\t%f\t%f\t%f" % (data[0+4], data[1+4], data[2+4], data[3+4])
-				print "%f\t%f\t%f\t%f" % (data[0+8], data[1+8], data[2+8], data[3+8])
-				print "%f\t%f\t%f\t%f" % (data[0+12], data[1+12], data[2+12], data[3+12])
-				print "%f\t%f\t%f\t%f" % (data[0+16], data[1+16], data[2+16], data[3+16])
-				print "Recalculado: "	
+				if self.offsetpending:
+					self.offsetpending = False
+					print "*******************DOING OFFSETS********************"
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+					joint.setQuaternionOffset(data[0:4])
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+					joint.setQuaternionOffset(data[4:8])
+					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+					joint.setQuaternionOffset(data[8:12])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
+					joint.setQuaternionOffset(data[12:16])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+					joint.setQuaternionOffset(data[16:20])
+
+				
+
 				if len(data) >= 4:
 					quat = data[0:4]
-					#aux_euler = quaternion.toEuler(quat)
-					#aux_euler[2] *= 2;
-					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)
-					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 8:
 					quat = data[4:8]
-					#aux_euler = quaternion.toEuler(quat)
-					#aux_euler[2] *= 2;
-					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 12:
 					quat = data[8:12]
-					#aux_euler = quaternion.toEuler(quat)
-					#aux_euler[2] *= 2;
-					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 					joint.setQuaternion(quat)
-					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 16:
 					quat = data[12:16]
-					#aux_euler = quaternion.toEuler(quat)
-					#aux_euler[2] *= 2;
-					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 20:
 					quat = data[16:20]
-					#aux_euler = quaternion.toEuler(quat)
-					#aux_euler[2] *= 2;
-					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)					
 
 				#self.updateQuaternions(joint,quat)
+				self.print_pacote(data)
+				self.print_joints_quat()
 
 		#print joint.quaternion, joint.rotquaternion, joint.position
 		#print joint.position
 		self.skeleton.rotate()
-		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
-		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
-		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
-		print ''
 		self.plotLock.release()
 		#print "[%.2f\t%.2f\t%.2f\t]" % (joint.position[0],joint.position[1],joint.position[2])
 		#self.plot()
 		#self.imu.acqThread.lock.release()
 		#time.sleep(0.005) #sampling frequency 100 Hz
+
+	def print_pacote(self,_data):
+		print "Pacote: "				
+		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0], _data[1], _data[2], _data[3])
+		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+4], _data[1+4], _data[2+4], _data[3+4])
+		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+8], _data[1+8], _data[2+8], _data[3+8])
+		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+12], _data[1+12], _data[2+12], _data[3+12])
+		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+16], _data[1+16], _data[2+16], _data[3+16])
+
+	def print_joints_quat(self):
+		print "Joint Quats: "
+		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).quaternion
+		print "RIGHT\tWRIST: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).quaternion
+		print "RIGHT\tELBOW: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+		q_joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO).quaternion
+		print "UNILAT\tTORSO: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion
+		print "LEFT\tELBOW: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).quaternion
+		print "LEFT\tWRIST: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+	def write_joints_quat(self):
+		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+
+		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+
+		q_joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+
+		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+
+		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+		self.arqColeta.write("\n")
+
+
+
+
 
 if __name__ == '__main__':
 	import sys

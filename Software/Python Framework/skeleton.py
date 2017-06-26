@@ -100,7 +100,6 @@ class Joint():
 	#when the new quaternion will be updated.
 	def setQuaternion(self,_quaternion):
 		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
-		self.quaternion = _quaternion
 		self.quaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion_offset))
 		self.rotquaternion = self.quaternion
 		'''
@@ -110,8 +109,8 @@ class Joint():
 			elif self.rotquaternion[i] > 1.0:
 				self.rotquaternion[i] = 1.0
 	 	'''
-	def setQuaternionOffset(self):
-		self.quaternion_offset = quaternion.product(self.quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
+	def setQuaternionOffset(self,_quaternion):
+		self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
