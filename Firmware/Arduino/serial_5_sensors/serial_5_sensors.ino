@@ -123,10 +123,10 @@ void setup() {
   {
     initializeSensor(i+1);
   }
-  Serial.println("Eh hora do show porra!");
-  while (!Serial.available());
+  Serial.println("Pronto para iniciar, aguardando comando serial.");
+  //while (!Serial.available());
   
-  t.every(10,takereading); //chama a cada 10ms  
+  t.every(50,takereading); //chama a cada 10ms = 1000/20
 }
 //---------------------------------------------------------------------------
 void loop() {
@@ -261,8 +261,8 @@ void initializeSensor(int sensorId)
   select_sensor(sensorId);
   if(mpu.testConnection())
   {
-    //Serial.println("conn ok");
-    Serial.println("Birl - " + String(sensorId));
+    Serial.println("conn ok - Sensor: "+ String(sensorId));
+    //Serial.println("Birl - " + String(sensorId));
     mpu.initialize();
     uint8_t ret = mpu.dmpInitialize();
     delay(50);

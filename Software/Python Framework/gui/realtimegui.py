@@ -548,46 +548,46 @@ class Main(QMainWindow, Ui_MainWindow):
 				print "Recalculado: "	
 				if len(data) >= 4:
 					quat = data[0:4]
-					aux_euler = quaternion.toEuler(quat)
-					aux_euler[2] *= 2;
-					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 8:
 					quat = data[4:8]
-					aux_euler = quaternion.toEuler(quat)
-					aux_euler[2] *= 2;
-					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 12:
 					quat = data[8:12]
-					aux_euler = quaternion.toEuler(quat)
-					aux_euler[2] *= 2;
-					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 					joint.setQuaternion(quat)
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 16:
 					quat = data[12:16]
-					aux_euler = quaternion.toEuler(quat)
-					aux_euler[2] *= 2;
-					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 20:
 					quat = data[16:20]
-					aux_euler = quaternion.toEuler(quat)
-					aux_euler[2] *= 2;
-					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
-					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 					joint.setQuaternion(quat)					
 
