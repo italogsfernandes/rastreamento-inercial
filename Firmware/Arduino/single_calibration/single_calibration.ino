@@ -36,10 +36,10 @@
 #include "I2Cdev.h"
 #include "MPU6050.h"
 #include "Wire.h"
-
-#define saidaC 2
+#define saidaC 4
 #define saidaB 3
-#define saidaA 4
+#define saidaA 2
+
 
 #define maxIterations 10
 
@@ -75,12 +75,9 @@ void setup() {
 #endif
   // COMMENT NEXT LINE IF YOU ARE USING ARDUINO DUE
   //  TWBR = 24; // 400kHz I2C clock lllll(200kHz if CPU is 8MHz). Leonardo measured 250kHz.
-  
+
   pinMode(saidaC, OUTPUT);  pinMode(saidaB, OUTPUT);  pinMode(saidaA, OUTPUT);
-  digitalWrite(saidaA, 0);
-  digitalWrite(saidaB, 0);
-  digitalWrite(saidaC, 1);
-  
+  select_sensor(4);
   // initialize serial communication
   Serial.begin(115200);
 
@@ -89,20 +86,19 @@ void setup() {
 
   // wait for ready
   while (Serial.available() && Serial.read()); // empty buffer
-  while (!Serial.available()) {
+  /*while (!Serial.available()) {
     Serial.println(F("Send any character to start sketch.\n"));
     delay(1500);
-  }
-  while (Serial.available() && Serial.read()); // empty buffer again
-
+    }*/
+  /*while (Serial.available() && Serial.read()); // empty buffer again*/
   // start message
-  Serial.println("\nMPU6050 Calibration Sketch");
-  delay(2000);
-  Serial.println("\nYour MPU6050 should be placed in horizontal position, with package letters facing up. \nDon't touch it until you see a finish message.\n");
-  delay(3000);
+  //Serial.println("\nMPU6050 Calibration Sketch");
+  //delay(2000);
+  //Serial.println("\nYour MPU6050 should be placed in horizontal position, with package letters facing up. \nDon't touch it until you see a finish message.\n");
+  //delay(3000);
   // verify connection
-  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
-  delay(1000);
+  //Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
+  //delay(1000);
   // reset offsets
   accelgyro.setXAccelOffset(0);
   accelgyro.setYAccelOffset(0);
@@ -159,19 +155,26 @@ void loop() {
     Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
     Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
     Serial.print("\n\n");
-    Serial.print("mpu.setXAccelOffset(" + String(ax_offset) + ");\n");
-    Serial.print("mpu.setYAccelOffset(" + String(ay_offset) + ");\n");
-    Serial.print("mpu.setZAccelOffset(" + String(az_offset) + ");\n");
-    Serial.print("mpu.setXGyroOffset(" + String(gx_offset) + ");\n");
-    Serial.print("mpu.setYGyroOffset(" + String(gy_offset) + ");\n");
-    Serial.print("mpu.setZGyroOffset(" + String(gz_offset) + ");\n");
-    Serial.print("\n\n");
-    Serial.print("mpu_elbow.setXAccelOffset(" + String(ax_offset) + ");\n");
-    Serial.print("mpu_elbow.setYAccelOffset(" + String(ay_offset) + ");\n");
-    Serial.print("mpu_elbow.setZAccelOffset(" + String(az_offset) + ");\n");
-    Serial.print("mpu_elbow.setXGyroOffset(" + String(gx_offset) + ");\n");
-    Serial.print("mpu_elbow.setYGyroOffset(" + String(gy_offset) + ");\n");
-    Serial.print("mpu_elbow.setZGyroOffset(" + String(gz_offset) + ");\n");
+    /*Serial.print("mpu.setXAccelOffset(" + String(ax_offset) + ");\n");
+      Serial.print("mpu.setYAccelOffset(" + String(ay_offset) + ");\n");
+      Serial.print("mpu.setZAccelOffset(" + String(az_offset) + ");\n");
+      Serial.print("mpu.setXGyroOffset(" + String(gx_offset) + ");\n");
+      Serial.print("mpu.setYGyroOffset(" + String(gy_offset) + ");\n");
+      Serial.print("mpu.setZGyroOffset(" + String(gz_offset) + ");\n");
+      Serial.print("\n\n");
+      Serial.print("mpu_elbow.setXAccelOffset(" + String(ax_offset) + ");\n");
+      Serial.print("mpu_elbow.setYAccelOffset(" + String(ay_offset) + ");\n");
+      Serial.print("mpu_elbow.setZAccelOffset(" + String(az_offset) + ");\n");
+      Serial.print("mpu_elbow.setXGyroOffset(" + String(gx_offset) + ");\n");
+      Serial.print("mpu_elbow.setYGyroOffset(" + String(gy_offset) + ");\n");
+      Serial.print("mpu_elbow.setZGyroOffset(" + String(gz_offset) + ");\n");*/
+    Serial.print("const int offsets[6] = { ");
+    Serial.print(String(ax_offset) + ", ");
+    Serial.print(String(ay_offset) + ", ");
+    Serial.print(String(az_offset) + ", ");
+    Serial.print(String(gx_offset) + ", ");
+    Serial.print(String(gy_offset) + ", ");
+    Serial.print(String(gz_offset) + "};\n\n");
 
     while (1);
   }
@@ -205,6 +208,12 @@ void meansensors() {
     }
     i++;
     delay(2); //Needed so we don't get repeated measures
+    /*Serial.print(ax); Serial.print("\t");
+    Serial.print(ay); Serial.print("\t");
+    Serial.print(az); Serial.print("\t");
+    Serial.print(gx); Serial.print("\t");
+    Serial.print(gy); Serial.print("\t");
+    Serial.print(gz); Serial.print("\n");*/
   }
 }
 
@@ -228,7 +237,13 @@ void calibration() {
     accelgyro.setZGyroOffset(gz_offset);
 
     meansensors();
-    Serial.println("...");
+    Serial.print(mean_ax); Serial.print("\t");
+    Serial.print(mean_ay); Serial.print("\t");
+    Serial.print(mean_az); Serial.print("\t");
+    Serial.print(mean_gx); Serial.print("\t");
+    Serial.print(mean_gy); Serial.print("\t");
+    Serial.print(mean_gz); Serial.print("\n");
+
 
     if (abs(mean_ax) <= acel_deadzone) ready++;
     else ax_offset = ax_offset - mean_ax / acel_deadzone;
@@ -252,4 +267,50 @@ void calibration() {
 
     itCounter++;
   }
+}
+
+void select_sensor(int sensor) {
+  switch (sensor) {
+    case 0:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 0);
+      break;
+    case 1:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 1);
+      break;
+    case 2:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 0);
+      break;
+    case 3:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 1);
+      break;
+    case 4:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 0);
+      break;
+    case 5:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 1);
+      break;
+    case 6:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 0);
+      break;
+    case 7:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 1);
+      break;
+  }
+  delayMicroseconds(10);
 }
