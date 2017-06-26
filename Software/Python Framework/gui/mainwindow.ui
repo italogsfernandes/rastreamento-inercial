@@ -26,6 +26,18 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <item>
+         <widget class="QGroupBox" name="groupDadosColeta">
+          <property name="title">
+           <string>Marcas:</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QComboBox" name="cbMarcas"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupColeta">
           <property name="title">
            <string>Coleta:</string>
@@ -196,6 +208,13 @@
       </item>
      </layout>
     </item>
+    <item>
+     <widget class="QSlider" name="sliderColeta">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -214,6 +233,9 @@
     <addaction name="separator"/>
     <addaction name="actionAbrir_Postura"/>
     <addaction name="actionSalvar_Postura"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbrir_Coleta"/>
+    <addaction name="actionFechar_Coleta"/>
    </widget>
    <widget class="QMenu" name="menuVisualizar">
     <property name="title">
@@ -262,6 +284,16 @@
   <action name="actionQuaternion">
    <property name="text">
     <string>Quaternion</string>
+   </property>
+  </action>
+  <action name="actionAbrir_Coleta">
+   <property name="text">
+    <string>Abrir Dados de Coleta</string>
+   </property>
+  </action>
+  <action name="actionFechar_Coleta">
+   <property name="text">
+    <string>Fechar Dados de Coleta</string>
    </property>
   </action>
  </widget>

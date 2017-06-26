@@ -112,14 +112,19 @@ class Main(QMainWindow, Ui_MainWindow):
 
 		self.connect(self.cbJointNames,SIGNAL('currentIndexChanged(int)'),self.cbChanged)
 		self.connect(self.cbSerialPort,SIGNAL('currentIndexChanged(int)'),self.cbSerialChanged)
+		self.connect(self.cbMarcas,SIGNAL('currentIndexChanged(int)'),self.cbMarcasChanged)
 		self.slPhi.valueChanged.connect(self.degChanged)
 		self.slTheta.valueChanged.connect(self.degChanged)
 		self.slPsi.valueChanged.connect(self.degChanged)
+		self.sliderColeta.valueChanged.connect(self.updateRotfromColeta)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
 		self.arqColeta = None
 		self.marcanumero = 0
 		self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
+
+		self.actionAbrir_Coleta.triggered.connect(self.doOpenColeta)
+		self.actionFechar_Coleta.triggered.connect(self.doCloseColeta)
 
 		self.actionAbrir_Postura.triggered.connect(self.doOpenPosture)
 		self.actionSalvar_Postura.triggered.connect(self.doSavePosture)
@@ -142,6 +147,9 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnMarcar.clicked.connect(self.doMarcar)
 		self.btnMarcar.setVisible(False)
 		self.marcacaoPending = False
+		self.cbMarcas.setVisible(False)
+		self.groupDadosColeta.setVisible(False)
+		self.sliderColeta.setVisible(False)
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
@@ -443,11 +451,11 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.btnMarcar.setVisible(True)
 
 	def write_coleta_header(self):
-		self.arqColeta.write("Coleta - " + str(datetime.now()) + "\n")
-		self.arqColeta.write("Quaternions das seguintes Joints: \n")
-		self.arqColeta.write("q_w\tq_x\tq_y\tq_z\n")
-		self.arqColeta.write("RIGHT WRIST\tRIGHT ELBOW\tUNILAT TORSO\tLEFT ELBOW\tLEFT WRIST\n")
-		self.arqColeta.write("*" * 36 + " DADOS: " + "*" * 36 + "\n")
+		self.arqColeta.write("#Coleta - " + str(datetime.now()) + "\n")
+		self.arqColeta.write("#Quaternions das seguintes Joints: \n")
+		self.arqColeta.write("#q_w\tq_x\tq_y\tq_z\n")
+		self.arqColeta.write("#RIGHT WRIST\tRIGHT ELBOW\tUNILAT TORSO\tLEFT ELBOW\tLEFT WRIST\n")
+		self.arqColeta.write("#*" * 36 + " DADOS: " + "*" * 36 + "\n")
 
 
 	def saveColeta(self):
@@ -463,6 +471,144 @@ class Main(QMainWindow, Ui_MainWindow):
 		print file_name
 		copyfile("arq_temporario.temp", file_name)
 		print "*"*len(file_name)
+
+	def doOpenColeta(self):
+		self.doReset()
+		dlg = QtGui.QFileDialog( self )
+		dlg.setWindowTitle( 'Secione a coleta que deseja abrir.' )
+		dlg.setViewMode( QtGui.QFileDialog.Detail )
+		dlg.setNameFilters( [self.tr('Arquivos de Posição (*.coleta)'), self.tr('All Files (*)')] )
+		dlg.setDefaultSuffix( '.coleta' )
+		file_name = dlg.getOpenFileName(self,'Open File')
+		print file_name
+		self.opened_coleta_file_name = file_name
+		self.marca_quats = []
+		self.populateCBMarcas()
+
+		self.cbMarcas.setVisible(True)
+		self.groupDadosColeta.setVisible(True)
+		self.sliderColeta.setVisible(True)
+		print "TODO"
+
+	def create_file_coleta(self):
+		joints_to_save = []
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST))
+		joints_to_save.append(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW))
+		file_to_save = open('coleta_file.temp', 'w')
+		file_to_save.write("MARCACAO\n")
+		file_to_save.write("\t\tPosicao\t\t\tEulerAngles\n")
+		file_to_save.write("joint_name\tX\tY\tZ\tX\tY\tZ\n")
+		for _j in joints_to_save:
+			j_euler = quaternion.toEuler(_j.quaternion)
+			joint_dados = ("%s\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n")% (_j.name,
+				 _j.position[0],  _j.position[1],  _j.position[2],
+				 j_euler[0], j_euler[1], j_euler[2])
+			file_to_save.write(joint_dados)
+
+		file_to_save.write("Angulos entre os segmentos\n")
+
+		right_ombro_euler = quaternion.toEuler(
+			self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).quaternion)
+		left_ombro_euler = quaternion.toEuler(
+			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion)
+
+		file_to_save.write("\tDireito\tEsquerdo\n")
+		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" % 
+			(right_ombro_euler[1], left_ombro_euler[1]))
+		file_to_save.write("Ombro-Braço (Plano transversal)\t%.4f\t%.4f\n" %
+			(right_ombro_euler[2], left_ombro_euler[2]))
+
+		rvectorbraco = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
+		rvectorantebraco = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
+		lvectorbraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position
+		lvectorantebraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position
+		
+		file_to_save.write("Braço-Antebraço\t%.4f\t%.4f\n" % (
+			geometry.degBetweenVectors(rvectorbraco,rvectorantebraco),
+			geometry.degBetweenVectors(lvectorbraco,lvectorantebraco)))
+
+		file_to_save.write("Posicao Final da Mão\n")
+		file_to_save.write("Direita\t\t\tEsquerda\n")
+		file_to_save.write("X\tY\tZ\tX\tY\tZ\n")
+		file_to_save.write("%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n" % (
+			self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position[0],
+			self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position[1],
+			self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position[2],
+			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[0],
+			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[1],
+			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[2]))
+
+		
+		mao_direita = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
+		mao_esquerda = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position
+		mao_esquerda[0] = -mao_esquerda[0]
+		vector_maos = mao_direita - mao_esquerda
+		dist_maos = np.sqrt(vector_maos[0]**2+vector_maos[1]**2+vector_maos[2]**2)
+		file_to_save.write("Diferença da Posicao Final das 2 Mãos%.4f\n" % dist_maos)
+		#file_to_save.write("Area do triangulo Mao-Cotovelo-Ombro")
+		#file_to_save.write("Direito\tEsquerdo\n")
+		#file_to_save.write("%.4f\t%.4f\n")
+
+		file_to_save.close()
+
+	def populateCBMarcas(self):
+		self.cbMarcas.clear()
+		self.quats_coleta = []
+		marca_achada = False
+		with open(self.opened_coleta_file_name, 'r') as openfileobject:
+			for line in openfileobject:
+				if marca_achada:
+					marca_achada = False
+					self.marca_quats.append(line)
+					print line
+				if 'MARCA' in line:
+					self.cbMarcas.addItem(line.split(' ')[1])
+					marca_achada = True
+				elif '#' not in line and '*' not in line:
+					self.quats_coleta.append(line)
+		self.sliderColeta.setMaximum(len(self.quats_coleta)-1)
+		self.cbMarcasChanged(0)
+
+	def updateRotfromColeta(self):
+		#peg index no slider
+		#colocar a rota do index do slider
+		idx = self.sliderColeta.value()
+		print idx
+		print self.quats_coleta[idx]
+		data = [float(s) for s in self.quats_coleta[idx].split()]
+		if len(data) == 20:
+			self.rotate_joints_from_data_vector(data)
+
+
+	def doCloseColeta(self):
+		self.cbMarcas.setVisible(False)
+		self.groupDadosColeta.setVisible(False)
+		self.sliderColeta.setVisible(False)
+
+	def cbMarcasChanged(self, idx):
+		actual_position = self.marca_quats[idx]
+		data = [float(s) for s in actual_position.split()]
+		self.rotate_joints_from_data_vector(data)
+		self.create_file_coleta()
+
+	def rotate_joints_from_data_vector(self, data):
+		self.print_pacote(data)
+		joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+		self.updateQuaternions(joint,data[0:4])
+		joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+		self.updateQuaternions(joint,data[4:8])
+		joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+		self.updateQuaternions(joint,data[8:12])
+		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
+		self.updateQuaternions(joint,data[12:16])
+		joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+		self.updateQuaternions(joint,data[16:20])
+
+		self.skeleton.rotate()
+		self.plot()
 
 	def cbChanged(self,idx):
 		self.updateSlideBars()
@@ -519,7 +665,6 @@ class Main(QMainWindow, Ui_MainWindow):
 				self.cbSerialPort.setEnabled(True)
 			except Exception as e:
 				self.show_error_msg("Erro ao finalizar animacao.\nError Log: " + str(e))
-
 
 
 	#Triggered when the "Stop" button is clicked
