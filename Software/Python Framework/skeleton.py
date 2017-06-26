@@ -87,6 +87,7 @@ class Joint():
 		#Quaternion
 		self.quaternion = None
 		self.rotquaternion = [1.,0.,0.,0.]
+		self.quaternion_offset = [1.,0.,0.,0.]
 		#The joint does not have nodes when it is created. The nodes are assigned
 		#by the "Skeleton" class.
 		self.links = [None,None,None]
@@ -99,7 +100,8 @@ class Joint():
 	#when the new quaternion will be updated.
 	def setQuaternion(self,_quaternion):
 		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
-		self.quaternion = _quaternion
+		self.quaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion_offset))
+		self.quaternion = _quaternion 
 		self.rotquaternion = self.quaternion
 		'''
 		for i in range(len(self.rotquaternion)):
@@ -108,6 +110,8 @@ class Joint():
 			elif self.rotquaternion[i] > 1.0:
 				self.rotquaternion[i] = 1.0
 	 	'''
+	def setQuaternionOffset(self):
+		self.quaternion_offset = quaternion.product(self.quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
@@ -484,8 +488,8 @@ class Skeleton():
 		lel = self.getJoint(BodyJoints.LEFT, BodyJoints.ELBOW)
 		lwr = self.getJoint(BodyJoints.LEFT, BodyJoints.WRIST)
 		rot = quaternion.toRotMat(lel.rotquaternion)
-		lel.position = geometry.rotate(lel.origin,lsh.origin,rot)
-		lwr.position = geometry.rotate(lwr.origin,lsh.origin,rot)
+		lel.position = geometry.rotate(lel.origin,lsh.position,rot)
+		lwr.position = geometry.rotate(lwr.origin,lsh.position,rot)
 		lwr.rotquaternion = quaternion.product(lwr.quaternion,quaternion.conjugate(lel.quaternion))
 		rot = quaternion.toRotMat(lwr.rotquaternion)
 		lwr.position = geometry.rotate(lwr.position,lel.position,rot)

@@ -46,6 +46,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		super(Main,self).__init__()
 		self.setupUi(self)
 
+		self.StatusdaMarca = 0
 		#mpu6050
 		try:
 			self.imu = MPU6050('/dev/ttyACM0')
@@ -63,12 +64,12 @@ class Main(QMainWindow, Ui_MainWindow):
 		#Upper limbs
 		#Right
 		rsh = np.array([3,0,0])
-		rel = np.array([5,0,0])
-		rwr = np.array([7,0,0])
+		rel = np.array([3,0,-2])
+		rwr = np.array([3,0,-4])
 		#Left
 		lsh = np.array([-3,0,0])
-		lel = np.array([-5,0,0])
-		lwr = np.array([-7,0,0])
+		lel = np.array([-3,0,-2])
+		lwr = np.array([-3,0,-4])
 		#Lower limbs
 		#Right
 		rhi = np.array([1.5,0,-4])
@@ -137,6 +138,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnMarcar.clicked.connect(self.doMarcar)
 		self.btnMarcar.setVisible(False)
 		self.marcacaoPending = False
+		self.btnMarcar.setText("Marcar PF" + str(self.marcanumero + 1))
 		#Queue for data acquisition from RF sensors
 		self.dataQueue = Queue()
 
@@ -393,11 +395,32 @@ class Main(QMainWindow, Ui_MainWindow):
 		file_to_save.close()
 		print "*"*len(file_name)
 
+	
+
+	'''
+	Pode ser 3 marcacoes: "Marcar PF" = 0 "Marcar PP" = 1  e  "Marcar Repouso" = 2
+
+	'''
 	def doMarcar(self):
 		if self.statusColetaRunning:
-			self.marcanumero = self.marcanumero + 1
-			self.marcacaoPending = True
-			self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
+			#self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
+			print "***************************SET OFFSET********************"
+			joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+			joint.setQuaternionOffset()
+			joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
+			joint.setQuaternionOffset()
+			'''if self.StatusdaMarca == 0:
+				self.btnMarcar.setText("Marcar PP" + str(self.marcanumero + 1))
+				self.StatusdaMarca = 1
+			elif self.StatusdaMarca == 1:
+				self.btnMarcar.setText("Marcar Repouso" + str(self.marcanumero + 1))
+				self.StatusdaMarca = 2
+			elif self.StatusdaMarca == 2:
+				self.btnMarcar.setText("Marcar PF" + str(self.marcanumero + 1))
+				self.StatusdaMarca = 0
+				self.marcanumero = self.marcanumero + 1
+			self.marcacaoPending = True'''
+
 		else:
 			self.show_error_msg("É necessário estar em uma coleta para marcar algo.")
 
@@ -530,7 +553,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				#print 'qntsensor: %d' % (len(data)/4)
-
+				'''
 				if self.statusColetaRunning:
 					for q_lido in data:
 						self.arqColeta.write("%f," % q_lido)
@@ -538,37 +561,64 @@ class Main(QMainWindow, Ui_MainWindow):
 				if self.marcacaoPending:
 					self.arqColeta.write("\n*******************MARCA %d****************\n\n" % self.marcanumero)
 					self.marcacaoPending = False
+					if self.StatusdaMarca == 0:
+						print "***************************SET OFFSET********************"
+						joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+						joint.setQuaternionOffset()
+						joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW)
+						joint.setQuaternionOffset()'''
 
-				'''print "%f\t%f\t%f\t%f" % (data[0], data[1], data[2], data[3])
+				print "Pacote: "				
+				print "%f\t%f\t%f\t%f" % (data[0], data[1], data[2], data[3])
 				print "%f\t%f\t%f\t%f" % (data[0+4], data[1+4], data[2+4], data[3+4])
 				print "%f\t%f\t%f\t%f" % (data[0+8], data[1+8], data[2+8], data[3+8])
-				print "%f\t%f\t%f\t%f" % (data[0+12], data[1+12], data[2+12], data[3+12])'''
+				print "%f\t%f\t%f\t%f" % (data[0+12], data[1+12], data[2+12], data[3+12])
+				print "%f\t%f\t%f\t%f" % (data[0+16], data[1+16], data[2+16], data[3+16])
+				#print "Recalculado: "	
 				if len(data) >= 4:
-					quat = data[0:4]
+					quat = data[16:20]
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
-					#corrected_quat = quaternion.product(quat,quaternion.conjugate([0.0,0.0,0.0,-1.0]))
-					#joint.setQuaternion([0.0,0.0,0.0,-1.0])
 					joint.setQuaternion(quat)
-
 					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 8:
-					quat = data[4:8]
+					quat = data[12:16]
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-					#self.skeleton.rotate()
-					#print '[%.2f,%.2f,%.2f,%.2f  %.2f,%.2f,%.2f,%.2f  %.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3],joint.rotquaternion[0],joint.rotquaternion[1],joint.rotquaternion[2],joint.rotquaternion[3],joint.position[0],joint.position[1],joint.position[2])
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 12:
 					quat = data[8:12]
-					#print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
-					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
-					joint.setQuaternion(quat)
-					#self.skeleton.rotate()
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+					#joint.setQuaternion(quat)
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
 				if len(data) >= 16:
 					quat = data[12:16]
-					#print '[%.2f,%.2f,%.2f,%.2f]'% (quat[0],quat[1],quat[2],quat[3])
-					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 					joint.setQuaternion(quat)
-					#self.skeleton.rotate()
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
+				if len(data) >= 20:
+					quat = data[16:20]
+					#aux_euler = quaternion.toEuler(quat)
+					#aux_euler[2] *= 2;
+					#quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					#print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+					joint.setQuaternion(quat)					
 
 				#self.updateQuaternions(joint,quat)
 

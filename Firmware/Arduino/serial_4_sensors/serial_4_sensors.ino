@@ -57,9 +57,9 @@
 #include "Wire.h"
 #endif
 //---------------------------------------------------------------------------
-#define saidaC 2
+#define saidaC 4
 #define saidaB 3
-#define saidaA 4
+#define saidaA 2
 #define LED_PIN 13
 #define sampFreq 100
 #define PSDMP 42
@@ -72,18 +72,27 @@
 //---------------------------------------------------------------------------
 MPU6050 mpu(0x68);
 //---------------------------------------------------------------------------
-const int numSensors = 4;
+const int numSensors = 5;
 const int* offsets;
+const int offsets1[6] = { -2511, -599, 1185, 80, -25, -2};
+const int offsets2[6] = { -2892, 359, 1616, -24, -7, 40};
+const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
+//const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
+//const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
+const int offsets4[6] = { -788, 1274, 1876, 142, 54, 45};
+const int offsets5[6] = { -1018, 3769, 1574, 24, 106, 19};
+/*
 const int offsets1[6] = {  -616, 2821, 1246, 16,   110,  34};
 const int offsets2[6] = { -331, 537,  1702, 142,  51,   35};
 const int offsets3[6] = { -2850,  312,  1612, -34,  6,    49};
-const int offsets4[6] = { 715,  401,  1242, 5,    46,   54};
+const int offsets4[6] = { 715,  401,  1242, 5,    46,   54};*/
 //---------------------------------------------------------------------------
 uint8_t* fifoBuffer; // FIFO storage fifoBuffer of mpu
 uint8_t fb1[42];
 uint8_t fb2[42];
 uint8_t fb3[42];
 uint8_t fb4[42];
+uint8_t fb5[42];
 //---------------------------------------------------------------------------
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 int numbPackets;
@@ -106,12 +115,12 @@ void setup() {
   Fastwire::setup(400, true);
 #endif
 
-  offsets = (int*)malloc(sizeof(int)*24);  
+  offsets = (int*)malloc(sizeof(int)*numSensors*6);  
   memcpy(offsets,offsets1,sizeof(int)*6);
   memcpy(offsets+6,offsets2,sizeof(int)*6);
   memcpy(offsets+12,offsets3,sizeof(int)*6);
   memcpy(offsets+18,offsets4,sizeof(int)*6);
-
+  memcpy(offsets+24,offsets5,sizeof(int)*6);
   for(int i=0; i<numSensors; i++)
   {
     initializeSensor(i+1);
@@ -238,6 +247,13 @@ uint8_t* readSensor(int sensorId)
         mpu.getFIFOBytes(fb4, PSDMP);    
         numbPackets=0;
         return fb4;        
+    }
+    else if(sensorId==5)
+    {
+      for (int i = 0; i < numbPackets; i++)  
+        mpu.getFIFOBytes(fb5, PSDMP);    
+        numbPackets=0;
+        return fb5;        
     }
   }    
 }
