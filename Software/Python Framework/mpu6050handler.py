@@ -44,24 +44,26 @@ class MPUConsts():
 #------------------------------------------------------------------------------
 class SerialHandler():
 	def __init__(self,_port='ttyACM0',_baud=115200,_timeout=0.5):
-		self.port = _port
+		self.port = str(_port)
 		self.baud = _baud
 		self.timeout = _timeout
 		self.waiting = False
 		self.serialPort = None
 
 	def open(self):
-		try:
-			#self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
-			self.serialPort = Serial('/dev/ttyUSB1',self.baud,timeout=self.timeout)
-			if self.serialPort.is_open:
-				self.serialPort.flushInput()
-				self.serialPort.flushOutput()
-				return True
-			else:
-				return False
-		except:
+		#try:
+		print "Conectando a porta: %s" % self.port
+		self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+		#self.serialPort = Serial('/dev/ttyUSB1',self.baud,timeout=self.timeout)
+		if self.serialPort.is_open:
+			print "Porta aberta com Sucesso"
+			self.serialPort.flushInput()
+			self.serialPort.flushOutput()
+			return True
+		else:
 			return False
+		#except:
+		#	return False
 
 	def close(self):
 		try:
