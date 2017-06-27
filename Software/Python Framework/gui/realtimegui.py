@@ -12,7 +12,6 @@
 # Decription: Adding real-time control of a single joint with MPU6050
 #------------------------------------------------------------------------------
 import os, sys
-sys.path.append('..\\')
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.uic import loadUiType
