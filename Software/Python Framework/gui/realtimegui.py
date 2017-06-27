@@ -12,7 +12,7 @@
 # Decription: Adding real-time control of a single joint with MPU6050
 #------------------------------------------------------------------------------
 import os, sys
-sys.path.append('../')
+sys.path.append('..\\')
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 from PyQt4.uic import loadUiType
@@ -35,7 +35,7 @@ import quaternion as quat
 from threadhandler import ThreadHandler
 from mpu6050handler import *
 import math
-from time import sleep
+import time
 from shutil import copyfile
 import serial.tools.list_ports as serial_tools
 from datetime import datetime
@@ -48,11 +48,13 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.setupUi(self)
 
 		#mpu6050
+		'''
 		try:
-			self.imu = MPU6050('/dev/ttyACM0')
+			self.imu = MPU6050('COM6')
 			self.imu.open()
 		except Exception as e:
-			self.show_error_msg("Nao foi possivel abrir a porta /dev/ttyACM0, por favor selecione outra.")
+			self.show_error_msg("Nao foi possivel abrir a porta serial, por favor selecione outra.")
+		'''
 
 
 		self.plotLock = Lock()
@@ -109,6 +111,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.show_error_msg("Nenhuma porta Serial Disponivel")
 			self.cbSerialPort.setEnabled(False)
 			self.btnAnimation.setEnabled(False)
+		self.cbSerialChanged(0)
 
 		self.connect(self.cbJointNames,SIGNAL('currentIndexChanged(int)'),self.cbChanged)
 		self.connect(self.cbSerialPort,SIGNAL('currentIndexChanged(int)'),self.cbSerialChanged)
@@ -159,8 +162,8 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def doOffset(self):
 		self.offsetpending = True
-		
-					
+
+
 
 
 	def closeEvent(self,event):
@@ -242,7 +245,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
 		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
-	
+
 
 		quiverSize = 1.5
 		#Orientation of elbow sensor
@@ -287,7 +290,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			node = _joint.links[i]
 			while node is not None:
 				if node.name in self.skeleton.segments:
-					print node.name
+					#print node.name
 					auxq = quat.product(quat.conjugate(_joint.quaternion),node.quaternion)
 					node.setQuaternion(quat.product(_quat,auxq))
 					node = node.links[i]
@@ -295,10 +298,10 @@ class Main(QMainWindow, Ui_MainWindow):
 					break
 
 		_joint.setQuaternion(_quat)
-		if(_joint.name == 'right_ankle'):
-			print 'entrei malandro'
-			print _joint.rotquaternion
-		print _joint.name, _joint.quaternion
+		#if(_joint.name == 'right_ankle'):
+		#	print 'entrei malandro'
+		#	print _joint.rotquaternion
+		#print _joint.name, _joint.quaternion
 
 
 	def doGraphTriangulo(self):
@@ -364,7 +367,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			print(str(joint_name) + '\t'+ str(joint_quaternion))
 			self.updateQuaternions(joint,joint_quaternion)
 			self.skeleton.rotate()
-			
+
 
 		print("Fim da leitura" + "*"*50)
 		self.updateSlideBars()
@@ -439,6 +442,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			retval = msg.exec_()
    			self.saveColeta()
    			self.btnColeta.setText("Iniciar Coleta")
+			self.doReset()
 			self.btnMarcar.setVisible(False)
 		elif not self.imu.acqThread.isAlive:
 			self.show_error_msg("Coleta nao iniciada pois o sensor nao esta conectado.")
@@ -488,7 +492,6 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.cbMarcas.setVisible(True)
 		self.groupDadosColeta.setVisible(True)
 		self.sliderColeta.setVisible(True)
-		print "TODO"
 
 	def create_file_coleta(self):
 		joints_to_save = []
@@ -516,7 +519,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion)
 
 		file_to_save.write("\tDireito\tEsquerdo\n")
-		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" % 
+		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[1], left_ombro_euler[1]))
 		file_to_save.write("Ombro-Braço (Plano transversal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[2], left_ombro_euler[2]))
@@ -525,7 +528,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		rvectorantebraco = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
 		lvectorbraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position
 		lvectorantebraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position
-		
+
 		file_to_save.write("Braço-Antebraço\t%.4f\t%.4f\n" % (
 			geometry.degBetweenVectors(rvectorbraco,rvectorantebraco),
 			geometry.degBetweenVectors(lvectorbraco,lvectorantebraco)))
@@ -541,7 +544,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[1],
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[2]))
 
-		
+
 		mao_direita = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
 		mao_esquerda = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position
 		mao_esquerda[0] = -mao_esquerda[0]
@@ -573,12 +576,12 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.cbMarcasChanged(0)
 
 	def updateRotfromColeta(self):
-		#peg index no slider
-		#colocar a rota do index do slider
-		idx = self.sliderColeta.value()
-		print idx
-		print self.quats_coleta[idx]
-		data = [float(s) for s in self.quats_coleta[idx].split()]
+		data = [float(s) for s in self.quats_coleta[self.sliderColeta.value()].split()]
+		if len(data) == 20:
+			self.rotate_joints_from_data_vector(data)
+
+	def updateRotfromColeta_idx(self,_idx):
+		data = [float(s) for s in self.quats_coleta[_idx].split()]
 		if len(data) == 20:
 			self.rotate_joints_from_data_vector(data)
 
@@ -595,7 +598,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.create_file_coleta()
 
 	def rotate_joints_from_data_vector(self, data):
-		self.print_pacote(data)
+		#self.print_pacote(data)
 		joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 		self.updateQuaternions(joint,data[0:4])
 		joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
@@ -617,8 +620,9 @@ class Main(QMainWindow, Ui_MainWindow):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
 			self.imu.open()
+			print self.imu.port
 		except Exception as e:
-			show_error_msg("Erro ao abrir porta serial")
+			self.show_error_msg("Erro ao abrir porta serial")
 
 	def updateSlideBars(self):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
@@ -695,7 +699,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				#print 'qntsensor: %d' % (len(data)/4)
-				
+
 				if self.statusColetaRunning:
 					self.write_joints_quat()
 				if self.marcacaoPending:
@@ -716,7 +720,7 @@ class Main(QMainWindow, Ui_MainWindow):
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 					joint.setQuaternionOffset(data[16:20])
 
-				
+
 
 				if len(data) >= 4:
 					quat = data[0:4]
@@ -737,11 +741,11 @@ class Main(QMainWindow, Ui_MainWindow):
 				if len(data) >= 20:
 					quat = data[16:20]
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
-					joint.setQuaternion(quat)					
+					joint.setQuaternion(quat)
 
 				#self.updateQuaternions(joint,quat)
-				self.print_pacote(data)
-				self.print_joints_quat()
+				#self.print_pacote(data)
+				#self.print_joints_quat()
 
 		#print joint.quaternion, joint.rotquaternion, joint.position
 		#print joint.position
@@ -753,7 +757,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		#time.sleep(0.005) #sampling frequency 100 Hz
 
 	def print_pacote(self,_data):
-		print "Pacote: "				
+		print "Pacote: "
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0], _data[1], _data[2], _data[3])
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+4], _data[1+4], _data[2+4], _data[3+4])
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+8], _data[1+8], _data[2+8], _data[3+8])
