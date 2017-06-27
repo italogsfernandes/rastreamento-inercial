@@ -40,7 +40,8 @@ from shutil import copyfile
 import serial.tools.list_ports as serial_tools
 from datetime import datetime
 #------------------------------------------------------------------------------
-Ui_MainWindow, QMainWindow = loadUiType('mainwindow.ui')
+path = os.path.dirname(os.path.abspath(__file__))
+Ui_MainWindow, QMainWindow = loadUiType(os.path.join(path, 'mainwindow.ui'))
 #------------------------------------------------------------------------------
 class Main(QMainWindow, Ui_MainWindow):
 	def __init__(self):
