@@ -1,18 +1,18 @@
 MARCACAO
 		Posicao			EulerAngles
 joint_name	X	Y	Z	X	Y	Z
-right_wrist	6.1881	-0.1283	0.0317	0.0047	1.1226	4.6340
-right_elbow	4.6144	0.0074	-0.0012	0.0052	-0.0206	-0.0625
-torso	0.0000	0.0000	0.0000	0.0057	-0.0104	-0.1115
-left_wrist	-4.1594	0.0641	1.6699	178.0768	-77.6949	-175.9062
-left_elbow	-4.6160	-0.0010	0.0262	0.0195	-0.8020	0.1384
+right_wrist	0.1966	1.2100	-2.9202	176.7826	-29.5117	156.4852
+right_elbow	1.7856	0.3662	-2.0729	61.2229	-63.2310	-70.7660
+torso	0.0000	0.0000	0.0000	-3.7574	-5.2540	1.3460
+left_wrist	-4.0945	1.9740	2.4363	-40.1566	-10.9956	50.7397
+left_elbow	-2.8594	0.9513	1.2589	-27.2680	-22.6514	41.9887
 Angulos entre os segmentos
 	Direito	Esquerdo
-Ombro-Braço (Plano coronal)	-0.0206	-0.8020
-Ombro-Braço (Plano transversal)	-0.0625	0.1384
-Braço-Antebraço	5.1360	104.6823
+Ombro-Braço (Plano coronal)	-63.2310	-22.6514
+Ombro-Braço (Plano transversal)	-70.7660	41.9887
+Braço-Antebraço	67.7560	5.0196
 Posicao Final da Mão
 Direita			Esquerda
 X	Y	Z	X	Y	Z
-6.1881	-0.1283	0.0317	-4.1594	0.0641	1.6699
-Diferença da Posicao Final das 2 Mãos2.6147
+0.1966	1.2100	-2.9202	-4.0945	1.9740	2.4363
+Diferença da Posicao Final das 2 Mãos6.6685
