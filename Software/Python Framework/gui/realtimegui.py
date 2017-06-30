@@ -11,6 +11,7 @@
 #------------------------------------------------------------------------------
 # Decription: Adding real-time control of a single joint with MPU6050
 #------------------------------------------------------------------------------
+import webbrowser
 import os, sys
 sys.path.append('../')
 from PyQt4.QtCore import *
@@ -64,12 +65,16 @@ class Main(QMainWindow, Ui_MainWindow):
 		#Upper limbs
 		#Right
 		rsh = np.array([3,0,0])
-		rel = np.array([5,0,0])
-		rwr = np.array([7,0,0])
+		rel = np.array([3,0,-2])
+		rwr = np.array([3,0,-4])
+		#rel = np.array([5,0,0])
+		#rwr = np.array([7,0,0])
 		#Left
 		lsh = np.array([-3,0,0])
-		lel = np.array([-5,0,0])
-		lwr = np.array([-7,0,0])
+		lel = np.array([-3,0,-2])
+		lwr = np.array([-3,0,-4])
+		#lel = np.array([-5,0,0])
+		#lwr = np.array([-7,0,0])
 		#Lower limbs
 		#Right
 		rhi = np.array([1.5,0,-4])
@@ -119,16 +124,20 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.sliderColeta.valueChanged.connect(self.updateRotfromColeta)
 		self.btnRotate.clicked.connect(self.doRotate)
 		self.btnReset.clicked.connect(self.doReset)
+		self.btnMedidas.clicked.connect(self.doMedidas)
 		self.arqColeta = None
 		self.marcanumero = 0
 		self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
 
 		self.actionAbrir_Coleta.triggered.connect(self.doOpenColeta)
 		self.actionFechar_Coleta.triggered.connect(self.doCloseColeta)
+		self.actionHelp.triggered.connect(self.doHelp)
+		self.actionMedidas_da_Pessoa.triggered.connect(self.doMenuRotacao)
 
 		self.actionAbrir_Postura.triggered.connect(self.doOpenPosture)
 		self.actionSalvar_Postura.triggered.connect(self.doSavePosture)
 		self.actionMenu_de_Rota_o.triggered.connect(self.doMenuRotacao)
+
 		self.groupRotation.setVisible(False)
 
 		self.actionPosi_o.triggered.connect(self.doGraphPosition)
@@ -157,11 +166,39 @@ class Main(QMainWindow, Ui_MainWindow):
 		#matplotlib
 		self.addmpl()
 
+	def doHelp(self):
+		webbrowser.open('http://www.github.com/italogfernandes/rastreamento-inercial', autoraise=True)
 	def doOffset(self):
 		self.offsetpending = True
-		
-					
 
+	def doMedidas(self):
+		shouldershoulder = float(self.editShoulderShoulder.text())/20.0
+		shoulderelbow = float(self.editShoulderElbow.text())/10.0
+		elbowwritst = float(self.editElbowWrist.text())/10.0
+
+		#Upper limbs
+		#Right
+		rsh = np.array([shouldershoulder,0,0])
+		rel = np.array([shouldershoulder,0,-shoulderelbow])
+		rwr = np.array([shouldershoulder,0,-elbowwritst-shoulderelbow])
+		#rel = np.array([5,0,0])
+		#rwr = np.array([7,0,0])
+		#Left
+		lsh = np.array([-shouldershoulder,0,0])
+		lel = np.array([-shouldershoulder,0,-shoulderelbow])
+		lwr = np.array([-shouldershoulder,0,-elbowwritst-shoulderelbow])
+		#lel = np.array([-5,0,0])
+		#lwr = np.array([-7,0,0])
+
+		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position = rsh
+		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position = rel
+		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position = rwr
+		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position = lsh
+		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position = lel
+		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position = lwr
+
+		self.plot()
+		self.doMenuRotacao()
 
 	def closeEvent(self,event):
 		if self.imu.acqThread.isAlive:
@@ -190,7 +227,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
 		self.resize(800,600)
 		self.canvas = FigureCanvas(self.fig)
-		self.mbly.addWidget(self.canvas)
+		self.horizontalLayout_3.addWidget(self.canvas)
 		self.canvas.draw()
 		Axes3D.mouse_init(self.ax)
 		#self.toolbar = NavigationToolbar(self.canvas,self,coordinates=True)
@@ -242,7 +279,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
 		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
-	
+
 
 		quiverSize = 1.5
 		#Orientation of elbow sensor
@@ -340,7 +377,6 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.slTheta.setValue(int(np.round(euler[1])))
 		self.slPsi.setValue(int(np.round(euler[2])))
 
-
 	def doOpenPosture(self):
 		self.doReset()
 		dlg = QtGui.QFileDialog( self )
@@ -364,7 +400,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			print(str(joint_name) + '\t'+ str(joint_quaternion))
 			self.updateQuaternions(joint,joint_quaternion)
 			self.skeleton.rotate()
-			
+
 
 		print("Fim da leitura" + "*"*50)
 		self.updateSlideBars()
@@ -373,6 +409,7 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def doMenuRotacao(self):
 		self.groupRotation.setVisible(not self.groupRotation.isVisible())
+		self.groupMedidas.setVisible(not self.groupMedidas.isVisible())
 
 	def doSavePosture(self):
 		dlg = QtGui.QFileDialog( self )
@@ -424,6 +461,13 @@ class Main(QMainWindow, Ui_MainWindow):
 		msg.setIcon(QMessageBox.Warning)
 		msg.setText(msg_to_show)
 		msg.setWindowTitle("Erro")
+		retval = msg.exec_()
+
+	def show_info_msg(self,msg_to_show):
+		msg = QMessageBox()
+		msg.setIcon(QMessageBox.Information)
+		msg.setText(msg_to_show)
+		msg.setWindowTitle("Informação")
 		retval = msg.exec_()
 
 	def doColeta(self):
@@ -516,7 +560,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion)
 
 		file_to_save.write("\tDireito\tEsquerdo\n")
-		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" % 
+		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[1], left_ombro_euler[1]))
 		file_to_save.write("Ombro-Braço (Plano transversal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[2], left_ombro_euler[2]))
@@ -525,7 +569,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		rvectorantebraco = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
 		lvectorbraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position
 		lvectorantebraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position
-		
+
 		file_to_save.write("Braço-Antebraço\t%.4f\t%.4f\n" % (
 			geometry.degBetweenVectors(rvectorbraco,rvectorantebraco),
 			geometry.degBetweenVectors(lvectorbraco,lvectorantebraco)))
@@ -541,7 +585,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[1],
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position[2]))
 
-		
+
 		mao_direita = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
 		mao_esquerda = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position
 		mao_esquerda[0] = -mao_esquerda[0]
@@ -616,7 +660,8 @@ class Main(QMainWindow, Ui_MainWindow):
 	def cbSerialChanged(self, idx):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
-			self.imu.open()
+			if self.imu.open():
+				show_info_msg("Porta serial %s aberta com sucesso!" % (self.cbSerialPort.itemText(self.cbSerialPort.currentIndex())))
 		except Exception as e:
 			show_error_msg("Erro ao abrir porta serial")
 
@@ -695,7 +740,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				#print 'qntsensor: %d' % (len(data)/4)
-				
+
 				if self.statusColetaRunning:
 					self.write_joints_quat()
 				if self.marcacaoPending:
@@ -716,7 +761,7 @@ class Main(QMainWindow, Ui_MainWindow):
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 					joint.setQuaternionOffset(data[16:20])
 
-				
+
 
 				if len(data) >= 4:
 					quat = data[0:4]
@@ -737,11 +782,12 @@ class Main(QMainWindow, Ui_MainWindow):
 				if len(data) >= 20:
 					quat = data[16:20]
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
-					joint.setQuaternion(quat)					
+					joint.setQuaternion(quat)
 
 				#self.updateQuaternions(joint,quat)
 				self.print_pacote(data)
 				self.print_joints_quat()
+				self.updateSlideBars()
 
 		#print joint.quaternion, joint.rotquaternion, joint.position
 		#print joint.position
@@ -753,7 +799,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		#time.sleep(0.005) #sampling frequency 100 Hz
 
 	def print_pacote(self,_data):
-		print "Pacote: "				
+		print "Pacote: "
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0], _data[1], _data[2], _data[3])
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+4], _data[1+4], _data[2+4], _data[3+4])
 		print "%.2f\t%.2f\t%.2f\t%.2f" % (_data[0+8], _data[1+8], _data[2+8], _data[3+8])
