@@ -49,13 +49,6 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.setupUi(self)
 
 		#mpu6050
-		try:
-			self.imu = MPU6050('/dev/ttyACM0')
-			self.imu.open()
-		except Exception as e:
-			self.show_error_msg("Nao foi possivel abrir a porta /dev/ttyACM0, por favor selecione outra.")
-
-
 		self.plotLock = Lock()
 
 		#Limb positions
@@ -65,16 +58,12 @@ class Main(QMainWindow, Ui_MainWindow):
 		#Upper limbs
 		#Right
 		rsh = np.array([3,0,0])
-		rel = np.array([3,0,-2])
-		rwr = np.array([3,0,-4])
-		#rel = np.array([5,0,0])
-		#rwr = np.array([7,0,0])
+		rel = np.array([5,0,0])
+		rwr = np.array([7,0,0])
 		#Left
 		lsh = np.array([-3,0,0])
-		lel = np.array([-3,0,-2])
-		lwr = np.array([-3,0,-4])
-		#lel = np.array([-5,0,0])
-		#lwr = np.array([-7,0,0])
+		lel = np.array([-5,0,0])
+		lwr = np.array([-7,0,0])
 		#Lower limbs
 		#Right
 		rhi = np.array([1.5,0,-4])
@@ -114,6 +103,8 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.show_error_msg("Nenhuma porta Serial Disponivel")
 			self.cbSerialPort.setEnabled(False)
 			self.btnAnimation.setEnabled(False)
+		else:
+			self.cbSerialChanged(0)
 
 		self.connect(self.cbJointNames,SIGNAL('currentIndexChanged(int)'),self.cbChanged)
 		self.connect(self.cbSerialPort,SIGNAL('currentIndexChanged(int)'),self.cbSerialChanged)
@@ -179,14 +170,14 @@ class Main(QMainWindow, Ui_MainWindow):
 		#Upper limbs
 		#Right
 		rsh = np.array([shouldershoulder,0,0])
-		rel = np.array([shouldershoulder,0,-shoulderelbow])
-		rwr = np.array([shouldershoulder,0,-elbowwritst-shoulderelbow])
+		rel = np.array([shouldershoulder+shoulderelbow,0,0])
+		rwr = np.array([shouldershoulder+shoulderelbow+shouldershoulder+shoulderelbow,0,0])
 		#rel = np.array([5,0,0])
 		#rwr = np.array([7,0,0])
 		#Left
-		lsh = np.array([-shouldershoulder,0,0])
-		lel = np.array([-shouldershoulder,0,-shoulderelbow])
-		lwr = np.array([-shouldershoulder,0,-elbowwritst-shoulderelbow])
+		lsh = np.array([-(shouldershoulder),0,0])
+		lel = np.array([-(shouldershoulder+shoulderelbow),0,0])
+		lwr = np.array([-(shouldershoulder+shoulderelbow+shouldershoulder+shoulderelbow),0,0])
 		#lel = np.array([-5,0,0])
 		#lwr = np.array([-7,0,0])
 
@@ -467,7 +458,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		msg = QMessageBox()
 		msg.setIcon(QMessageBox.Information)
 		msg.setText(msg_to_show)
-		msg.setWindowTitle("Informação")
+		msg.setWindowTitle("Mensagem Info")
 		retval = msg.exec_()
 
 	def doColeta(self):
@@ -661,7 +652,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
 			if self.imu.open():
-				show_info_msg("Porta serial %s aberta com sucesso!" % (self.cbSerialPort.itemText(self.cbSerialPort.currentIndex())))
+				self.show_info_msg("Porta serial %s aberta com sucesso!" % (self.imu.port))
 		except Exception as e:
 			show_error_msg("Erro ao abrir porta serial")
 
@@ -785,8 +776,8 @@ class Main(QMainWindow, Ui_MainWindow):
 					joint.setQuaternion(quat)
 
 				#self.updateQuaternions(joint,quat)
-				self.print_pacote(data)
-				self.print_joints_quat()
+				#self.print_pacote(data)
+				#self.print_joints_quat()
 				self.updateSlideBars()
 
 		#print joint.quaternion, joint.rotquaternion, joint.position
