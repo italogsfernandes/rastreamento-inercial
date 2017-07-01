@@ -346,10 +346,10 @@ class Skeleton():
 	#Removes the specified joint from the set of body segments
 	def remove(self,_side,_joint):
 		if(self.exist(_side,_joint)):
-			self.segments.remove(_side.value+_joint.value)
 			joint = self.getJoint(_side,_joint)
 			joint.position = None
 			joint.origin = None
+			self.segments.remove(_side.value+_joint.value)
 		else:
 			return False
 

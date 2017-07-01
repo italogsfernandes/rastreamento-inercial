@@ -48,51 +48,13 @@ class Main(QMainWindow, Ui_MainWindow):
 		super(Main,self).__init__()
 		self.setupUi(self)
 
-		#mpu6050
 		self.plotLock = Lock()
 
-		#Limb positions
-		torso = np.array([0,0,0])
-		phead = np.array([0,0,2])
-		pwaist = np.array([0,0,-2])
-		#Upper limbs
-		#Right
-		rsh = np.array([3.2/2.0,0,0])
-		rel = np.array([rsh[0]+2.6,0,0])
-		rwr = np.array([rel[0]+2.1,0,0])
-		#Left
-		lsh = np.array([-3.2/2.0,0,0])
-		lel = np.array([lsh[0]-2.6,0,0])
-		lwr = np.array([lel[0]-2.1,0,0])
-
-		#Lower limbs
-		#Right
-		#rhi = np.array([1.5,0,-4])
-		#rkn = np.array([4.5,0,-4])
-		#ran = np.array([7.5,0,-4])
-		#Left
-		#lhi = np.array([-1.5,0,-4])
-		#lkn = np.array([-4.5,0,-4])
-		#lan = np.array([-7.5,0,-4])
-
 		self.skeleton = Skeleton()
-		self.skeleton.add(BodyJoints.UNILAT,BodyJoints.HEAD,phead)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.SHOULDER,rsh)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ELBOW,rel)
-		self.skeleton.add(BodyJoints.RIGHT,BodyJoints.WRIST,rwr)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.SHOULDER,lsh)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.ELBOW,lel)
-		self.skeleton.add(BodyJoints.LEFT,BodyJoints.WRIST,lwr)
-
-		self.skeleton.add(BodyJoints.UNILAT,BodyJoints.WAIST,pwaist)
-		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
-		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
-		#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
-		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
-		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
-		#self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
-
-		#self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.HEAD).setQuaternion([0.707,0.707,0,0])
+		self.shdist = 20.0
+		self.eldist = 28.0
+		self.wrdist = 23.0
+		self.criarSkeleton(40.0,28.0,23.0)
 
 		for segs in self.skeleton.segments:
 			self.cbJointNames.addItem(segs)
@@ -118,6 +80,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.btnReset.clicked.connect(self.doReset)
 		self.btnMedidas.clicked.connect(self.doMedidas)
 		self.arqColeta = None
+		self.arqColetaBruta = None
 		self.marcanumero = 0
 		self.btnMarcar.setText("Marcar " + str(self.marcanumero + 1))
 
@@ -158,40 +121,84 @@ class Main(QMainWindow, Ui_MainWindow):
 		#matplotlib
 		self.addmpl()
 
+	def criarSkeleton(self,distShoulders,distShouderElbow,distElbowWrist):
+			self.shdist = distShoulders/2.0
+			self.eldist = distShouderElbow
+			self.wrdist = distElbowWrist
+
+			#Limb positions
+			torso = np.array([0,0,0])
+			phead = np.array([0,0,self.shdist/2.0])
+			pwaist = np.array([0,0,-self.shdist*1.75])
+			#Upper limbs
+			#Right
+			rsh = np.array([self.shdist,0,0])
+			rel = np.array([rsh[0]+self.eldist,0,0])
+			rwr = np.array([rel[0]+self.wrdist,0,0])
+			#Left
+			lsh = np.array([-rsh[0],0,0])
+			lel = np.array([-rel[0],0,0])
+			lwr = np.array([-rwr[0],0,0])
+
+			#Lower limbs
+			#Right
+			rhi = np.array([self.shdist*0.66,0,pwaist[2]])
+			rkn = np.array([rhi[0],self.eldist,pwaist[2]])
+			ran = np.array([rkn[0],rkn[1],pwaist[2]-self.eldist])
+			#Left
+			lhi = np.array([-rhi[0],0,pwaist[2]])
+			lkn = np.array([-rkn[0],rkn[1],pwaist[2]])
+			lan = np.array([-ran[0],ran[1],ran[2]])
+
+			#Remove all existing joints
+			self.skeleton.remove(BodyJoints.UNILAT,BodyJoints.HEAD)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.SHOULDER)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.ELBOW)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.WRIST)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.SHOULDER)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.ELBOW)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.WRIST)
+
+			self.skeleton.remove(BodyJoints.UNILAT,BodyJoints.WAIST)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.HIP)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.KNEE)
+			self.skeleton.remove(BodyJoints.RIGHT,BodyJoints.ANKLE)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.HIP)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.KNEE)
+			self.skeleton.remove(BodyJoints.LEFT,BodyJoints.ANKLE)
+
+			#Then add the new joints
+			self.skeleton.add(BodyJoints.UNILAT,BodyJoints.HEAD,phead)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.SHOULDER,rsh)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ELBOW,rel)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.WRIST,rwr)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.SHOULDER,lsh)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.ELBOW,lel)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.WRIST,lwr)
+
+			self.skeleton.add(BodyJoints.UNILAT,BodyJoints.WAIST,pwaist)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
+			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
+			self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
+
+
+
 	def doHelp(self):
 		webbrowser.open('http://www.github.com/italogfernandes/rastreamento-inercial', autoraise=True)
 		#webbrowser.open('http://www.gogle.com', autoraise=True)
 		#webbrowser.open('http://lmgtfy.com/?q=Como+medir+angulos%3F', autoraise=True)
+
 	def doOffset(self):
 		self.offsetpending = True
 
 	def doMedidas(self):
-		shouldershoulder = float(self.editShoulderShoulder.text())/20.0
-		shoulderelbow = float(self.editShoulderElbow.text())/10.0
-		elbowwritst = float(self.editElbowWrist.text())/10.0
-
-		#Upper limbs
-		#Right
-		rsh = np.array([shouldershoulder,0,0])
-		rel = np.array([shouldershoulder+shoulderelbow,0,0])
-		rwr = np.array([shouldershoulder+shoulderelbow+shouldershoulder+shoulderelbow,0,0])
-		#rel = np.array([5,0,0])
-		#rwr = np.array([7,0,0])
-		#Left
-		lsh = np.array([-(shouldershoulder),0,0])
-		lel = np.array([-(shouldershoulder+shoulderelbow),0,0])
-		lwr = np.array([-(shouldershoulder+shoulderelbow+shouldershoulder+shoulderelbow),0,0])
-		#lel = np.array([-5,0,0])
-		#lwr = np.array([-7,0,0])
-
-		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position = rsh
-		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position = rel
-		self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position = rwr
-		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position = lsh
-		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position = lel
-		self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position = lwr
-
-		self.skeleton.rotate()
+		shouldershoulder = float(self.editShoulderShoulder.text())
+		shoulderelbow = float(self.editShoulderElbow.text())
+		elbowwritst = float(self.editElbowWrist.text())
+		self.criarSkeleton(shouldershoulder,shoulderelbow,elbowwritst)
 		self.plot()
 		self.doMenuRotacao()
 
@@ -206,16 +213,16 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def addmpl(self):
 		#Plot parameters
-		axesLim = [-10,10]
+		axesLim = [-100,100]
 		self.fig = plt.figure()
 		self.ax = self.fig.gca(projection='3d')
 		self.ax.set_xlim(axesLim)
 		self.ax.set_ylim(axesLim)
 		self.ax.set_zlim(axesLim)
 		self.ax.set_title('Body model')
-		self.ax.set_xlabel('x-axis')
-		self.ax.set_ylabel('y-axis')
-		self.ax.set_zlabel('z-axis')
+		self.ax.set_xlabel('x-axis (cm)')
+		self.ax.set_ylabel('y-axis (cm)')
+		self.ax.set_zlabel('z-axis (cm)')
 
 		for item in [self.fig, self.ax]:
 			item.patch.set_visible(False)
@@ -225,8 +232,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.horizontalLayout_3.addWidget(self.canvas)
 		self.canvas.draw()
 		Axes3D.mouse_init(self.ax)
-		#self.toolbar = NavigationToolbar(self.canvas,self,coordinates=True)
-		#self.mbly.addWidget(self.toolbar)
+		self.toolbar = NavigationToolbar(self.canvas,self,coordinates=True)
+		self.verticalLayout_6.addWidget(self.toolbar)
 
 	def plot(self):
 		#self.ax.cla()
@@ -243,6 +250,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		sh = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
 		el = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
 		wr = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
+		lel = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position
+		lwr = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position
 		#an = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).position
 
 		#quiver for orientation of the torso
@@ -269,14 +278,27 @@ class Main(QMainWindow, Ui_MainWindow):
 		wy = np.array([rot[1,0],rot[1,1],rot[1,2]])
 		wz = np.array([rot[2,0],rot[2,1],rot[2,2]])
 
-		#quiver for orientation of the wrist
+		#quiver for orientation of the left elbow
+		rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion)
+		lux = np.array([rot[0,0],rot[0,1],rot[0,2]])
+		luy = np.array([rot[1,0],rot[1,1],rot[1,2]])
+		luz = np.array([rot[2,0],rot[2,1],rot[2,2]])
+
+		#quiver for orientation of the left wrist
+		rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).quaternion)
+		lwx = np.array([rot[0,0],rot[0,1],rot[0,2]])
+		lwy = np.array([rot[1,0],rot[1,1],rot[1,2]])
+		lwz = np.array([rot[2,0],rot[2,1],rot[2,2]])
+
+
+		#quiver for orientation of the ankle
 		#rot = quat.toRotMat(self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ANKLE).quaternion)
-		ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
-		ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
-		az = np.array([rot[2,0],rot[2,1],rot[2,2]])
+		#ax = np.array([rot[0,0],rot[0,1],rot[0,2]])
+		#ay = np.array([rot[1,0],rot[1,1],rot[1,2]])
+		#az = np.array([rot[2,0],rot[2,1],rot[2,2]])
 
 
-		quiverSize = 1.5
+		quiverSize = 7.5
 		#Orientation of elbow sensor
 		self.ax.quiver(el[0],el[1],el[2],ux[0],ux[1],ux[2],length=quiverSize, pivot='tail', color='red')
 		self.ax.quiver(el[0],el[1],el[2],uy[0],uy[1],uy[2],length=quiverSize, pivot='tail', color='green')
@@ -285,14 +307,23 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.ax.quiver(wr[0],wr[1],wr[2],wx[0],wx[1],wx[2],length=quiverSize, pivot='tail', color='red')
 		self.ax.quiver(wr[0],wr[1],wr[2],wy[0],wy[1],wy[2],length=quiverSize, pivot='tail', color='green')
 		self.ax.quiver(wr[0],wr[1],wr[2],wz[0],wz[1],wz[2],length=quiverSize, pivot='tail', color='blue')
-		#Orientation of head sensor
-		self.ax.quiver(he[0],he[1],he[2],kx[0],kx[1],kx[2],length=quiverSize, pivot='tail', color='red')
-		self.ax.quiver(he[0],he[1],he[2],ky[0],ky[1],ky[2],length=quiverSize, pivot='tail', color='green')
-		self.ax.quiver(he[0],he[1],he[2],kz[0],kz[1],kz[2],length=quiverSize, pivot='tail', color='blue')
 		#Orientation of torso sensor
-		#self.ax.quiver(to[0],to[1],to[2],tx[0],tx[1],tx[2],length=quiverSize, pivot='tail', color='red')
-		#self.ax.quiver(to[0],to[1],to[2],ty[0],ty[1],ty[2],length=quiverSize, pivot='tail', color='green')
-		#self.ax.quiver(to[0],to[1],to[2],tz[0],tz[1],tz[2],length=quiverSize, pivot='tail', color='blue')
+		self.ax.quiver(to[0],to[1],to[2],tx[0],tx[1],tx[2],length=quiverSize, pivot='tail', color='red')
+		self.ax.quiver(to[0],to[1],to[2],ty[0],ty[1],ty[2],length=quiverSize, pivot='tail', color='green')
+		self.ax.quiver(to[0],to[1],to[2],tz[0],tz[1],tz[2],length=quiverSize, pivot='tail', color='blue')
+		#Orientation of left elbow sensor
+		self.ax.quiver(lel[0],lel[1],lel[2],lux[0],lux[1],lux[2],length=quiverSize, pivot='tail', color='red')
+		self.ax.quiver(lel[0],lel[1],lel[2],luy[0],luy[1],luy[2],length=quiverSize, pivot='tail', color='green')
+		self.ax.quiver(lel[0],lel[1],lel[2],luz[0],luz[1],luz[2],length=quiverSize, pivot='tail', color='blue')
+		#Orientation of left wrist sensor
+		self.ax.quiver(lwr[0],lwr[1],lwr[2],lwx[0],lwx[1],lwx[2],length=quiverSize, pivot='tail', color='red')
+		self.ax.quiver(lwr[0],lwr[1],lwr[2],lwy[0],lwy[1],lwy[2],length=quiverSize, pivot='tail', color='green')
+		self.ax.quiver(lwr[0],lwr[1],lwr[2],lwz[0],lwz[1],lwz[2],length=quiverSize, pivot='tail', color='blue')
+
+		#Orientation of head sensor
+		#self.ax.quiver(he[0],he[1],he[2],kx[0],kx[1],kx[2],length=quiverSize, pivot='tail', color='red')
+		#self.ax.quiver(he[0],he[1],he[2],ky[0],ky[1],ky[2],length=quiverSize, pivot='tail', color='green')
+		#self.ax.quiver(he[0],he[1],he[2],kz[0],kz[1],kz[2],length=quiverSize, pivot='tail', color='blue')
 		##Orientation of right ankle sensor
 		#self.ax.quiver(an[0],an[1],an[2],ax[0],ay[0],az[0],length=quiverSize, pivot='tail', color='red')
 		#self.ax.quiver(an[0],an[1],an[2],ax[1],ay[1],az[1],length=quiverSize, pivot='tail', color='green')
@@ -472,6 +503,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			#Stops a coleta
 			self.statusColetaRunning = False
 			self.arqColeta.close()
+			self.arqColetaBruta.close()
 			msg = QMessageBox()
 			msg.setIcon(QMessageBox.Question)
 			msg.setText("Deseja salvar a coleta?")
@@ -486,17 +518,20 @@ class Main(QMainWindow, Ui_MainWindow):
 		else:
 			#inicia a coleta
 			self.arqColeta = open("arq_temporario.temp", 'w')
-			self.write_coleta_header()
+			self.arqColetaBruta = open("arq_temporario_bruto.temp", 'w')
+			self.write_coleta_header(arqColeta)
+			self.write_coleta_header(arqColetaBruta)
 			self.btnColeta.setText("Finalizar Coleta")
 			self.statusColetaRunning = True
 			self.btnMarcar.setVisible(True)
 
-	def write_coleta_header(self):
-		self.arqColeta.write("#Coleta - " + str(datetime.now()) + "\n")
-		self.arqColeta.write("#Quaternions das seguintes Joints: \n")
-		self.arqColeta.write("#q_w\tq_x\tq_y\tq_z\n")
-		self.arqColeta.write("#RIGHT WRIST\tRIGHT ELBOW\tUNILAT TORSO\tLEFT ELBOW\tLEFT WRIST\n")
-		self.arqColeta.write("#*" * 36 + " DADOS: " + "*" * 36 + "\n")
+	def write_coleta_header(self,file2write):
+		file2write.write("#Coleta - " + str(datetime.now()) + "\n")
+		file2write.write("#Dimencoes(shdist-eldist-wrdist):\t%.2f\t%.2f\t%.2f\n" % (self.shdist, self.eldist, self.wrdist))
+		file2write.write("#Quaternions das seguintes Joints: \n")
+		file2write.write("#q_w\tq_x\tq_y\tq_z\n")
+		file2write.write("#RIGHT WRIST\tRIGHT ELBOW\tUNILAT TORSO\tLEFT ELBOW\tLEFT WRIST\n")
+		file2write.write("#" + "*" * 36 + " DADOS: " + "*" * 36 + "\n")
 
 
 	def saveColeta(self):
@@ -511,6 +546,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		print "*"*len(file_name)
 		print file_name
 		copyfile("arq_temporario.temp", file_name)
+		copyfile("arq_temporario_bruto.temp", file_name.replace('.coleta','_dadosbrutos.coleta'))
 		print "*"*len(file_name)
 
 	def doOpenColeta(self):
@@ -752,8 +788,10 @@ class Main(QMainWindow, Ui_MainWindow):
 
 			if self.statusColetaRunning:
 				self.write_joints_quat()
+				self.write_dados_brutos_quat(data)
 			if self.marcacaoPending:
 				self.arqColeta.write("%s MARCA-%d %s\n" % ("*"*30,self.marcanumero,"*"*30))
+				self.arqColetaBruta.write("%s MARCA-%d %s\n" % ("*"*30,self.marcanumero,"*"*30))
 				self.marcacaoPending = False
 
 			if self.offsetpending:
@@ -851,6 +889,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).quaternion
 		self.arqColeta.write("%f\t%f\t%f\t%f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
 		self.arqColeta.write("\n")
+
+	def write_dados_brutos_quat(self,quats):
+		for valor in quats:
+			self.arqColetaBruta.write('%f\t')
+		self.arqColetaBruta.write("\n")
 
 
 
