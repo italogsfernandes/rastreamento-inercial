@@ -123,6 +123,10 @@ void setup() {
   {
     initializeSensor(i+1);
   }
+  for(int i=0; i<numSensors; i++)
+  {
+    verificaSensor(i+1);
+  }
   Serial.println("Pronto para iniciar, aguardando comando serial.");
   //while (!Serial.available());
   
@@ -204,6 +208,11 @@ void send_serial_packet(uint8_t* _fifoBuffer)
   Serial.write(_fifoBuffer[9]); //qy_lsb
   Serial.write(_fifoBuffer[12]); //qz_msb
   Serial.write(_fifoBuffer[13]); //qz_lsb
+  /*
+  Serial.print((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00);
+  Serial.print((_fifoBuffer[4] << 8 | _fifoBuffer[5]) / 16384.00);
+  Serial.print((_fifoBuffer[8] << 8 | _fifoBuffer[9]) / 16384.00);
+  Serial.println((_fifoBuffer[12] << 8 | _fifoBuffer[13]) / 16384.00);*/
 }
 //---------------------------------------------------------------------------
 uint8_t* readSensor(int sensorId)
@@ -279,5 +288,19 @@ void initializeSensor(int sensorId)
       mpu.setZGyroOffset(offsets[id+5]);      
     }
   }
+}
+//---------------------------------------------------------------------------
+void verificaSensor(int sensorId)
+{
+  Serial.print("Verificando sensor ");
+  Serial.print(sensorId);
+  select_sensor(sensorId);
+  int id = (sensorId-1) * 6;
+  Serial.print(mpu.getXAccelOffset() == offsets[id]); Serial.print("\t");
+  Serial.print(mpu.getYAccelOffset() == offsets[id+1]); Serial.print("\t");
+  Serial.print(mpu.getZAccelOffset() == offsets[id+2]); Serial.print("\t");
+  Serial.print(mpu.getXGyroOffset() == offsets[id+3]); Serial.print("\t");
+  Serial.print(mpu.getYGyroOffset() == offsets[id+4]); Serial.print("\t");
+  Serial.print(mpu.getZGyroOffset() == offsets[id+5]); Serial.print("\n");
 }
 //---------------------------------------------------------------------------

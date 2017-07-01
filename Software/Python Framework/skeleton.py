@@ -102,15 +102,18 @@ class Joint():
 		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
 		self.quaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion_offset))
 		self.rotquaternion = self.quaternion
-		'''
-		for i in range(len(self.rotquaternion)):
-			if self.rotquaternion[i] < -1.0:
-				self.rotquaternion[i] = -1.0
-			elif self.rotquaternion[i] > 1.0:
-				self.rotquaternion[i] = 1.0
-	 	'''
+
 	def setQuaternionOffset(self,_quaternion):
 		self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
+		if ('wrist' in self.name or 'elbow' in self.name) and 'right' in self.name:
+			print self.name
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate([-np.sqrt(2)/2.0,0.0,-np.sqrt(2)/2.0,0.0]))
+			print [-np.sqrt(2)/2.0,0.0,-np.sqrt(2)/2.0,0.0]
+		if ('wrist' in self.name or 'elbow' in self.name) and 'left' in self.name:
+			print self.name
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate([np.sqrt(2)/2.0,0.0,-np.sqrt(2)/2.0,0.0]))
+			print [np.sqrt(2)/2.0,0.0,-np.sqrt(2)/2.0,0.0]
+#def updatePosition(self)
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
