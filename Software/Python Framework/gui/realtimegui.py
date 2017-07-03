@@ -56,6 +56,13 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.wrdist = 23.0
 		self.criarSkeleton(40.0,28.0,23.0)
 
+		self.cbJointNames.addItem('InterSegmentos-Right')
+		self.lbPhi.setText('Inclinacao do Torso:')
+		self.lbTheta.setText('Ombro-Braco: ')
+		self.lbPsi.setText('Braco-Antebraco: ')
+		self.interseginuse = True
+		self.cbJointNames.addItem('InterSegmentos-Left')
+
 		for segs in self.skeleton.segments:
 			self.cbJointNames.addItem(segs)
 
@@ -67,7 +74,8 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.cbSerialPort.setEnabled(False)
 			self.btnAnimation.setEnabled(False)
 		else:
-			self.cbSerialChanged(0)
+			self.cbSerialPort.setCurrentIndex(len(serial_tools.comports())-1)
+			self.cbSerialChanged(len(serial_tools.comports())-1)
 
 		self.connect(self.cbJointNames,SIGNAL('currentIndexChanged(int)'),self.cbChanged)
 		self.connect(self.cbSerialPort,SIGNAL('currentIndexChanged(int)'),self.cbSerialChanged)
@@ -133,12 +141,12 @@ class Main(QMainWindow, Ui_MainWindow):
 			#Upper limbs
 			#Right
 			rsh = np.array([self.shdist,0,0])
-			rel = np.array([rsh[0]+self.eldist,0,0])
+			rel = np.array([self.shdist+self.eldist,0,0])
 			rwr = np.array([rel[0]+self.wrdist,0,0])
 			#Left
 			lsh = np.array([-rsh[0],0,0])
-			lel = np.array([-rel[0],0,0])
-			lwr = np.array([-rwr[0],0,0])
+			lel = np.array([lsh[0]-self.eldist,0,0])
+			lwr = np.array([lel[0]-self.wrdist,0,0])
 
 			#Lower limbs
 			#Right
@@ -177,12 +185,12 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.add(BodyJoints.LEFT,BodyJoints.WRIST,lwr)
 
 			self.skeleton.add(BodyJoints.UNILAT,BodyJoints.WAIST,pwaist)
-			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
-			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
-			self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
-			self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
-			self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
-			self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
+			#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.HIP,rhi)
+			#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.KNEE,rkn)
+			#self.skeleton.add(BodyJoints.RIGHT,BodyJoints.ANKLE,ran)
+			#self.skeleton.add(BodyJoints.LEFT,BodyJoints.HIP,lhi)
+			#self.skeleton.add(BodyJoints.LEFT,BodyJoints.KNEE,lkn)
+			#self.skeleton.add(BodyJoints.LEFT,BodyJoints.ANKLE,lan)
 
 
 
@@ -593,9 +601,9 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).quaternion)
 
 		file_to_save.write("\tDireito\tEsquerdo\n")
-		file_to_save.write("Ombro-Braço (Plano coronal)\t%.4f\t%.4f\n" %
+		file_to_save.write("Ombro-Braco (Plano coronal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[1], left_ombro_euler[1]))
-		file_to_save.write("Ombro-Braço (Plano transversal)\t%.4f\t%.4f\n" %
+		file_to_save.write("Ombro-Braco (Plano transversal)\t%.4f\t%.4f\n" %
 			(right_ombro_euler[2], left_ombro_euler[2]))
 
 		rvectorbraco = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
@@ -603,7 +611,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		lvectorbraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position
 		lvectorantebraco = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW).position - self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER).position
 
-		file_to_save.write("Braço-Antebraço\t%.4f\t%.4f\n" % (
+		file_to_save.write("Braco-Antebraco\t%.4f\t%.4f\n" % (
 			geometry.degBetweenVectors(rvectorbraco,rvectorantebraco),
 			geometry.degBetweenVectors(lvectorbraco,lvectorantebraco)))
 
@@ -687,9 +695,6 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.skeleton.rotate()
 		self.plot()
 
-	def cbChanged(self,idx):
-		self.updateSlideBars()
-
 	def cbSerialChanged(self, idx):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
@@ -698,18 +703,81 @@ class Main(QMainWindow, Ui_MainWindow):
 		except Exception as e:
 			show_error_msg("Erro ao abrir porta serial")
 
+	def cbChanged(self,idx):
+		self.updateSlideBars()
+
 	def updateSlideBars(self):
 		jointName = self.cbJointNames.itemText(self.cbJointNames.currentIndex())
-		joint = self.skeleton.getJoint(None,None,str(jointName))
-		euler = quat.toEuler(joint.quaternion)
-		self.slPhi.setValue(int(np.round(euler[0])))
-		self.slTheta.setValue(int(np.round(euler[1])))
-		self.slPsi.setValue(int(np.round(euler[2])))
+		if jointName == 'InterSegmentos-Right':
+			self.interseginuse = True
+			intersegAngulos = self.calculateInterSegAngles('right')
+			self.slPhi.setValue(int(np.round(intersegAngulos[0])))
+			self.slTheta.setValue(int(np.round(intersegAngulos[1])))
+			self.slPsi.setValue(int(np.round(intersegAngulos[2])))
+		elif jointName == 'InterSegmentos-Left':
+			self.interseginuse = True
+			intersegAngulos = self.calculateInterSegAngles('left')
+			self.slPhi.setValue(int(np.round(intersegAngulos[0])))
+			self.slTheta.setValue(int(np.round(intersegAngulos[1])))
+			self.slPsi.setValue(int(np.round(intersegAngulos[2])))
+		else:
+			self.interseginuse = False
+			joint = self.skeleton.getJoint(None,None,str(jointName))
+			euler = quat.toEuler(joint.quaternion)
+			self.slPhi.setValue(int(np.round(euler[0])))
+			self.slTheta.setValue(int(np.round(euler[1])))
+			self.slPsi.setValue(int(np.round(euler[2])))
 
 	def degChanged(self):
-		self.lbPhi.setText('Phi: ' + str(self.slPhi.value()))
-		self.lbTheta.setText('Theta: ' + str(self.slTheta.value()))
-		self.lbPsi.setText('Psi: ' + str(self.slPsi.value()))
+		if not self.interseginuse:
+			self.lbPhi.setText('Phi: '+  str(self.slPhi.value()))
+			self.lbTheta.setText('Theta: '+  str(self.slTheta.value()))
+			self.lbPsi.setText('Psi: ' + str(self.slPsi.value()))
+		else:
+			self.lbPhi.setText('Inclinacao do Torso: '+  str(self.slPhi.value()))
+			self.lbTheta.setText('Ombro-Braco: '+  str(self.slTheta.value()))
+			self.lbPsi.setText('Braco-Antebraco: ' +  str(self.slPsi.value()))
+
+
+	''' Return a vector containing the following angles:
+			interSegAngles[0] = angulo entre torso e o eixo longitudinal.
+			interSegAngles[1] = angulo entre o ombro e o braco.
+			interSegAngles[2] = angulo entre o braco e o antebraco.'''
+	def calculateInterSegAngles(self, side):
+		if 'right' in side:
+			jsh = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER)
+			jel = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+			jwr = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+
+			vsh = jsh.position
+			refsh = [1.0,0.0,0.0]
+			dsh = geometry.degBetweenVectors(jsh.position,refsh)
+			vel = jel.position - jsh.position
+			refel = vsh
+			dshel = geometry.degBetweenVectors(vel,refel)
+			vwr = jwr.position - jel.position
+			refwr = vel
+			delwr = geometry.degBetweenVectors(vwr,refwr)
+
+			return [dsh,dshel,delwr]
+
+		elif 'left' in side:
+			jsh = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER)
+			jel = self.skeleton.getJoint(BodyJoints.LEFT, BodyJoints.ELBOW)
+			jwr = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+
+			vsh = jsh.position
+			refsh = [-1.0,0.0,0.0]
+			dsh = geometry.degBetweenVectors(jsh.position,refsh)
+			vel = jel.position - jsh.position
+			refel = vsh
+			dshel = geometry.degBetweenVectors(vel,refel)
+			vwr = jwr.position - jel.position
+			refwr = vel
+			delwr = geometry.degBetweenVectors(vwr,refwr)
+
+			return [dsh,dshel,delwr]
+
 
 	#Triggered when the button "Animation" is clicked
 	def doAnimation(self):

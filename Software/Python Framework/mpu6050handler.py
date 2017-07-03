@@ -53,8 +53,8 @@ class SerialHandler():
 
 	def open(self):
 		try:
-			#self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
-			self.serialPort = Serial('/dev/ttyUSB0',self.baud,timeout=self.timeout)
+			self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			#self.serialPort = Serial('/dev/ttyUSB0',self.baud,timeout=self.timeout)
 			if self.serialPort.is_open:
 				self.serialPort.flushInput()
 				self.serialPort.flushOutput()
