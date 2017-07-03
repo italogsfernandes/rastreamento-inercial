@@ -730,13 +730,13 @@ class Main(QMainWindow, Ui_MainWindow):
 
 	def degChanged(self):
 		if not self.interseginuse:
-			self.lbPhi.setText('Phi: '+  str(self.slPhi.value()))
-			self.lbTheta.setText('Theta: '+  str(self.slTheta.value()))
-			self.lbPsi.setText('Psi: ' + str(self.slPsi.value()))
+			self.lbPhi.setText('Phi: '+  str(self.slPhi.value()) + ' graus')
+			self.lbTheta.setText('Theta: '+  str(self.slTheta.value()) + ' graus')
+			self.lbPsi.setText('Psi: ' + str(self.slPsi.value()) + ' graus')
 		else:
-			self.lbPhi.setText('Inclinacao do Torso: '+  str(self.slPhi.value()))
-			self.lbTheta.setText('Ombro-Braco: '+  str(self.slTheta.value()))
-			self.lbPsi.setText('Braco-Antebraco: ' +  str(self.slPsi.value()))
+			self.lbPhi.setText('Inclinacao do Torso: '+  str(self.slPhi.value()) + ' graus')
+			self.lbTheta.setText('Ombro-Braco: '+  str(self.slTheta.value()) + ' graus')
+			self.lbPsi.setText('Braco-Antebraco: ' +  str(self.slPsi.value()) + ' graus')
 
 
 	''' Return a vector containing the following angles:
