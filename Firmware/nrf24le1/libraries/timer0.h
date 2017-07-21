@@ -23,7 +23,7 @@ void stop_T0(void);
 void setup_T0_ticks(uint16_t number_beats,uint8_t flag_count);
 //void setup_T0_elapsed_us(uint16_t T_us,uint8_t flag_count);
 //void setup_T0_elapsed_ms(uint16_t T_ms,uint8_t flag_count);
-//void setup_T0_freq(uin16_t Freq_Hz,uint8_t flag_count);
+//void setup_T0_freq(uin16_t Freq_Hz, uint8_t flag_count);
 /********************TIMER*************************/
 /**************************************************/
 
@@ -34,7 +34,7 @@ void setup_T0_ticks(uint16_t number_beats,uint8_t flag_count);
  * @param Freq_Hz    Frequencia em Hertz para configurar o timer
  * @param flag_count Numero de vezes para dividir essa frequencia
  */
-/*void setup_T0_freq(uin16_t Freq_Hz,uint8_t flag_count){
+/*void setup_T0_freq(uin16_t Freq_Hz, uint8_t flag_count){
   uint16_t qnt_ticks = (4000000 / (3 * Freq_Hz));
   setup_T0_ticks(qnt_ticks, flag_count);
 }*/

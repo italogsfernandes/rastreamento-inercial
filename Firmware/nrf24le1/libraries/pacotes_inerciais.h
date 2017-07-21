@@ -277,7 +277,7 @@ void send_packet_to_host(uint8_t packet_type, uint8_t *data_to_send, uint8_t dat
 	RX_Mode();
 }
 
-
+/*
 //Start signal | Packet Type | Packet Length | ... | data | ... | End signal
 void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len){
 	unsigned int i;
@@ -288,7 +288,8 @@ void send_packet_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t
 			hal_uart_putchar(data_to_send[i]);
 		}
 	hal_uart_putchar(UART_END_SIGNAL);
-}
+}*/
+/*
 //Start signal | Packet Type | Packet Length | ... | data | ... | End signal
 void redirect_rf_pkt_to_serial(uint8_t *data_to_send, uint8_t data_len){
 	unsigned int i;
@@ -298,7 +299,8 @@ void redirect_rf_pkt_to_serial(uint8_t *data_to_send, uint8_t data_len){
 		hal_uart_putchar(data_to_send[i]);
 	}
 	hal_uart_putchar(UART_END_SIGNAL);//TODO: revise end
-}
+}*/
+/*
 //Start signal | Packet Type | Packet Length | ... | data | ... | End signal
 void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_send, uint8_t data_len,uint8_t my_sub_addr){
 	unsigned int i;
@@ -310,11 +312,12 @@ void send_packet_from_host_to_computer(uint8_t packet_type, uint8_t *data_to_sen
 		hal_uart_putchar(data_to_send[i]);
 	}
 	hal_uart_putchar(UART_END_SIGNAL);
-}
+}*/
+/*
 //TODO: cabeçalho
 void hal_uart_putstring(char *str_2_send){
   while(*str_2_send != 0)
 	hal_uart_putchar(*str_2_send++);
 }
-
+*/
 #endif

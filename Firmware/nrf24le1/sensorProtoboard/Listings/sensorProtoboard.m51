@@ -1,0 +1,2651 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        07/15/2017  17:00:27  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\main.obj, .\Objects\hal_delay.obj, .\Objects\hal_w2_isr.obj TO .\Objects\sensorPro
+>> toboard PRINT (.\Listings\sensorProtoboard.m51) RAMSIZE (256) DISABLEWARNING (16)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\main.obj (MAIN)
+  .\Objects\hal_delay.obj (HAL_DELAY)
+  .\Objects\hal_w2_isr.obj (HAL_W2_ISR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CLDOPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?CSTOPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ILDIX)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ILDPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ISTPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ISTOPTR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?MEMCMP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (MALLOC)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (INIT_MEM)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (REALLOC)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (FREE)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IILDX)
+
+
+LINK MAP OF MODULE:  .\Objects\sensorProtoboard (MAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000EH     UNIT         ?DT?_SEND_OFFSET_VALUES?MAIN
+            DATA    0016H     0007H     UNIT         ?DT?HAL_W2_WAIT_DATA_READY?HAL_W2_ISR
+            DATA    001DH     0002H     UNIT         ?DT?HAL_W2_ISR
+                    001FH     0001H                  *** GAP ***
+            DATA    0020H     0001H     BIT_ADDR     ?BA?MAIN
+            BIT     0021H.0   0000H.1   UNIT         ?BI?MAIN
+                    0021H.1   0000H.7                *** GAP ***
+            DATA    0022H     001BH     UNIT         _DATA_GROUP_
+            DATA    003DH     0007H     UNIT         ?DT?_I2C_MPU_READBIT?HAL_W2_ISR
+            DATA    0044H     0006H     UNIT         ?DT?_SEND_PACKET_TO_HOST?MAIN
+            DATA    004AH     0006H     UNIT         ?DT?_HAL_W2_WRITE?HAL_W2_ISR
+            DATA    0050H     0006H     UNIT         ?DT?_HAL_W2_READ?HAL_W2_ISR
+            DATA    0056H     0005H     UNIT         ?DT?_SEND_INERTIAL_PACKET_BY_RF?MAIN
+            DATA    005BH     0005H     UNIT         ?DT?MAIN
+            IDATA   0060H     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0288H     UNIT         ?XD?MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 2
+
+
+            XDATA   0288H     00BEH     UNIT         _XDATA_GROUP_
+            XDATA   0346H     0012H     UNIT         ?XD?_GETMOTION6_VARIABLES?MAIN
+            XDATA   0358H     0008H     UNIT         ?XD?INIT_MEM
+            XDATA   0360H     0006H     UNIT         ?XD?_DMPGETQUATERNION_INT16?MAIN
+            XDATA   0366H     0006H     UNIT         ?XD?_DMPGETPACKET16BITS?MAIN
+            XDATA   036CH     0002H     UNIT         ?XD?_GETMOTION6_PACKET?MAIN
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0006H     UNIT         ?PR?_HAL_W2_SET_SLAVE_ADDRESS?HAL_W2_ISR
+                    0009H     0002H                  *** GAP ***
+            CODE    000BH     0003H     ABSOLUTE     
+            CODE    000EH     003CH     UNIT         ?PR?_INIT_MEMPOOL?INIT_MEM
+                    004AH     0001H                  *** GAP ***
+            CODE    004BH     0003H     ABSOLUTE     
+                    004EH     0005H                  *** GAP ***
+            CODE    0053H     0003H     ABSOLUTE     
+            CODE    0056H     087DH     UNIT         ?CO?MAIN
+            CODE    08D3H     04F7H     UNIT         ?PR?DMPINITIALIZE?MAIN
+            CODE    0DCAH     0412H     UNIT         ?C?LIB_CODE
+            CODE    11DCH     0319H     UNIT         ?PR?_SEND_INERTIAL_PACKET_BY_RF?MAIN
+            CODE    14F5H     02D6H     UNIT         ?PR?_DMPGETPACKET16BITS?MAIN
+            CODE    17CBH     0297H     UNIT         ?PR?_WRITEDMPCONFIGURATIONSET?MAIN
+            CODE    1A62H     0268H     UNIT         ?PR?_WRITEMEMORYBLOCK?MAIN
+            CODE    1CCAH     0177H     UNIT         ?PR?MAIN?MAIN
+            CODE    1E41H     0104H     UNIT         ?PR?_FREE?FREE
+            CODE    1F45H     00F7H     UNIT         ?PR?_READMEMORYBLOCK?MAIN
+            CODE    203CH     00E2H     UNIT         ?PR?_DMPGETQUATERNION_INT16?MAIN
+            CODE    211EH     00CFH     UNIT         ?PR?_GETMOTION6_PACKET?MAIN
+            CODE    21EDH     00BFH     UNIT         ?PR?_GETMOTION6_VARIABLES?MAIN
+            CODE    22ACH     00A5H     UNIT         ?PR?_RF_INIT?MAIN
+            CODE    2351H     009CH     UNIT         ?PR?_MALLOC?MALLOC
+            CODE    23EDH     008EH     UNIT         ?PR?_SEND_OFFSET_VALUES?MAIN
+            CODE    247BH     008CH     UNIT         ?C_C51STARTUP
+            CODE    2507H     0085H     UNIT         ?PR?RF_IRQ?MAIN
+            CODE    258CH     0083H     UNIT         ?PR?HAL_W2_SOFT_RESET?HAL_W2_ISR
+            CODE    260FH     0078H     UNIT         ?PR?_REALLOC?REALLOC
+            CODE    2687H     0074H     UNIT         ?PR?INITIAL_SETUP_DMP?MAIN
+            CODE    26FBH     0068H     UNIT         ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+            CODE    2763H     0065H     UNIT         ?C_INITSEG
+            CODE    27C8H     0063H     UNIT         ?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR
+            CODE    282BH     0063H     UNIT         ?PR?_I2C_MPU_WRITEWORDS?HAL_W2_ISR
+            CODE    288EH     0058H     UNIT         ?PR?_I2C_MPU_READBITS?HAL_W2_ISR
+            CODE    28E6H     0057H     UNIT         ?PR?_SEND_PACKET_TO_HOST?MAIN
+            CODE    293DH     004EH     UNIT         ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+            CODE    298BH     004DH     UNIT         ?PR?_HAL_W2_READ?HAL_W2_ISR
+            CODE    29D8H     004CH     UNIT         ?PR?_GETFIFOBYTES?MAIN
+            CODE    2A24H     0041H     UNIT         ?PR?SETUP?MAIN
+            CODE    2A65H     003FH     UNIT         ?PR?_I2C_MPU_WRITEBYTES?HAL_W2_ISR
+            CODE    2AA4H     003BH     UNIT         ?PR?I2C_IRQ?MAIN
+            CODE    2ADFH     003AH     UNIT         ?PR?_HAL_W2_WRITE?HAL_W2_ISR
+            CODE    2B19H     0032H     UNIT         ?PR?_SPI_WRITE_BUF?MAIN
+            CODE    2B4BH     0032H     UNIT         ?PR?_TX_MODE_NOACK?MAIN
+            CODE    2B7DH     0031H     UNIT         ?PR?_SPI_READ_BUF?MAIN
+            CODE    2BAEH     0027H     UNIT         ?PR?HAL_W2_WAIT_DATA_READY?HAL_W2_ISR
+            CODE    2BD5H     0024H     UNIT         ?PR?_I2C_MPU_READBIT?HAL_W2_ISR
+            CODE    2BF9H     0023H     UNIT         ?PR?MPU_TESTCONNECTION?MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 3
+
+
+            CODE    2C1CH     0023H     UNIT         ?PR?_SETMEMORYBANK?MAIN
+            CODE    2C3FH     0021H     UNIT         ?PR?_HAL_W2_CONFIGURE_MASTER?HAL_W2_ISR
+            CODE    2C60H     0020H     UNIT         ?PR?_WRITEPROGMEMORYBLOCK?MAIN
+            CODE    2C80H     001EH     UNIT         ?PR?TMR0_IRQ?MAIN
+            CODE    2C9EH     001DH     UNIT         ?PR?GETXACCELOFFSET?MAIN
+            CODE    2CBBH     001DH     UNIT         ?PR?GETYACCELOFFSET?MAIN
+            CODE    2CD8H     001DH     UNIT         ?PR?GETZACCELOFFSET?MAIN
+            CODE    2CF5H     001DH     UNIT         ?PR?GETXGYROOFFSET?MAIN
+            CODE    2D12H     001DH     UNIT         ?PR?GETYGYROOFFSET?MAIN
+            CODE    2D2FH     001DH     UNIT         ?PR?GETZGYROOFFSET?MAIN
+            CODE    2D4CH     001DH     UNIT         ?PR?GETFIFOCOUNT?MAIN
+            CODE    2D69H     001BH     UNIT         ?PR?GETXGYROOFFSETTC?MAIN
+            CODE    2D84H     001BH     UNIT         ?PR?GETYGYROOFFSETTC?MAIN
+            CODE    2D9FH     001BH     UNIT         ?PR?GETZGYROOFFSETTC?MAIN
+            CODE    2DBAH     001AH     UNIT         ?PR?_SETSLAVEADDRESS?MAIN
+            CODE    2DD4H     001AH     UNIT         ?PR?_DELAY_US?HAL_DELAY
+            CODE    2DEEH     0018H     UNIT         ?PR?GETFIFOENABLED?MAIN
+            CODE    2E06H     0017H     UNIT         ?PR?GETOTPBANKVALID?MAIN
+            CODE    2E1DH     0016H     UNIT         ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR
+            CODE    2E33H     0015H     UNIT         ?PR?_SEND_RF_COMMAND_WITH_ARG?MAIN
+            CODE    2E48H     0014H     UNIT         ?PR?MPU_INITIALIZE?MAIN
+            CODE    2E5CH     0014H     UNIT         ?PR?_DELAY_MS?HAL_DELAY
+            CODE    2E70H     0013H     UNIT         ?PR?_SPI_RW_REG?MAIN
+            CODE    2E83H     0013H     UNIT         ?PR?GETINTSTATUS?MAIN
+            CODE    2E96H     0013H     UNIT         ?PR?GETDMPCONFIG1?MAIN
+            CODE    2EA9H     0013H     UNIT         ?PR?GETDMPCONFIG2?MAIN
+            CODE    2EBCH     0013H     UNIT         ?PR?GETMOTIONDETECTIONTHRESHOLD?MAIN
+            CODE    2ECFH     0013H     UNIT         ?PR?GETZEROMOTIONDETECTIONTHRESHOLD?MAIN
+            CODE    2EE2H     0013H     UNIT         ?PR?GETMOTIONDETECTIONDURATION?MAIN
+            CODE    2EF5H     0013H     UNIT         ?PR?GETZEROMOTIONDETECTIONDURATION?MAIN
+            CODE    2F08H     0013H     UNIT         ?PR?INICIARIO?MAIN
+            CODE    2F1BH     0013H     UNIT         ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+            CODE    2F2EH     0012H     UNIT         ?PR?_SEND_RF_COMMAND?MAIN
+            CODE    2F40H     0012H     UNIT         ?PR?PISCA_LED?MAIN
+            CODE    2F52H     0012H     UNIT         ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+            CODE    2F64H     0011H     UNIT         ?PR?RX_MODE?MAIN
+            CODE    2F75H     0011H     UNIT         ?PR?HAL_W2_WAIT_DATA_READY_ISR?HAL_W2_ISR
+            CODE    2F86H     0011H     UNIT         ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+            CODE    2F97H     0010H     UNIT         ?PR?START_T0?MAIN
+            CODE    2FA7H     0010H     UNIT         ?PR?STOP_T0?MAIN
+            CODE    2FB7H     000EH     UNIT         ?PR?_SETCLOCKSOURCE?MAIN
+            CODE    2FC5H     000EH     UNIT         ?PR?_SETFULLSCALEGYRORANGE?MAIN
+            CODE    2FD3H     000EH     UNIT         ?PR?_SETFULLSCALEACCELRANGE?MAIN
+            CODE    2FE1H     000EH     UNIT         ?PR?_SETMEMORYSTARTADDRESS?MAIN
+            CODE    2FEFH     000EH     UNIT         ?PR?_SETEXTERNALFRAMESYNC?MAIN
+            CODE    2FFDH     000EH     UNIT         ?PR?_SETDLPFMODE?MAIN
+            CODE    300BH     000EH     UNIT         ?PR?_SETXGYROOFFSETTC?MAIN
+            CODE    3019H     000EH     UNIT         ?PR?_SETYGYROOFFSETTC?MAIN
+            CODE    3027H     000EH     UNIT         ?PR?_SETZGYROOFFSETTC?MAIN
+            CODE    3035H     000EH     UNIT         ?PR?_SETUP_T0_TICKS?MAIN
+            CODE    3043H     000EH     UNIT         ?PR?_HAL_W2_SET_CLK_FREQ?HAL_W2_ISR
+            CODE    3051H     000DH     UNIT         ?PR?_SPI_READ?MAIN
+            CODE    305EH     000CH     UNIT         ?PR?RESETFIFO?MAIN
+            CODE    306AH     000CH     UNIT         ?PR?I2C_MPU_RESET?MAIN
+            CODE    3076H     000CH     UNIT         ?PR?RESETI2CMASTER?MAIN
+            CODE    3082H     000CH     UNIT         ?PR?RESETDMP?MAIN
+            CODE    308EH     000BH     UNIT         ?PR?MPU_8051_MALLOC_SETUP?MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 4
+
+
+            CODE    3099H     000BH     UNIT         ?PR?_SETSLEEPENABLED?MAIN
+            CODE    30A4H     000BH     UNIT         ?PR?_SETXACCELOFFSET?MAIN
+            CODE    30AFH     000BH     UNIT         ?PR?_SETYACCELOFFSET?MAIN
+            CODE    30BAH     000BH     UNIT         ?PR?_SETZACCELOFFSET?MAIN
+            CODE    30C5H     000BH     UNIT         ?PR?_SETXGYROOFFSET?MAIN
+            CODE    30D0H     000BH     UNIT         ?PR?_SETYGYROOFFSET?MAIN
+            CODE    30DBH     000BH     UNIT         ?PR?_SETZGYROOFFSET?MAIN
+            CODE    30E6H     000BH     UNIT         ?PR?_SETDMPENABLED?MAIN
+            CODE    30F1H     000BH     UNIT         ?PR?_SETI2CMASTERMODEENABLED?MAIN
+            CODE    30FCH     000BH     UNIT         ?PR?_SETFIFOENABLED?MAIN
+            CODE    3107H     000BH     UNIT         ?PR?_HAL_W2_RESPOND_TO_GEN_ADR?HAL_W2_ISR
+            CODE    3112H     000BH     UNIT         ?PR?_HAL_W2_ALTER_CLOCK?HAL_W2_ISR
+            CODE    311DH     000BH     UNIT         ?PR?_HAL_W2_IRQ_STOP_COND_ENABLE?HAL_W2_ISR
+            CODE    3128H     000BH     UNIT         ?PR?_HAL_W2_IRQ_ADR_MATCH_ENABLE?HAL_W2_ISR
+            CODE    3133H     000BH     UNIT         ?PR?_HAL_W2_SET_OP_MODE?HAL_W2_ISR
+            CODE    313EH     000BH     UNIT         ?PR?_HAL_W2_ENABLE?HAL_W2_ISR
+            CODE    3149H     000BH     UNIT         ?PR?_HAL_W2_ALL_IRQ_ENABLE?HAL_W2_ISR
+            CODE    3154H     000AH     UNIT         ?PR?_SPI_RW?MAIN
+            CODE    315EH     000AH     UNIT         ?PR?_WRITEPROGDMPCONFIGURATIONSET?MAIN
+            CODE    3168H     000AH     UNIT         ?PR?_SETOTPBANKVALID?MAIN
+            CODE    3172H     000AH     UNIT         ?PR?I2C_IRQ_HANDLER?HAL_W2_ISR
+            CODE    317CH     0009H     UNIT         ?PR?DMPGETFIFOPACKETSIZE?MAIN
+            CODE    3185H     0009H     UNIT         ?PR?_SETINTENABLED?MAIN
+            CODE    318EH     0009H     UNIT         ?PR?_SETRATE?MAIN
+            CODE    3197H     0009H     UNIT         ?PR?_SETDMPCONFIG1?MAIN
+            CODE    31A0H     0009H     UNIT         ?PR?_SETDMPCONFIG2?MAIN
+            CODE    31A9H     0009H     UNIT         ?PR?_SETMOTIONDETECTIONTHRESHOLD?MAIN
+            CODE    31B2H     0009H     UNIT         ?PR?_SETZEROMOTIONDETECTIONTHRESHOLD?MAIN
+            CODE    31BBH     0009H     UNIT         ?PR?_SETMOTIONDETECTIONDURATION?MAIN
+            CODE    31C4H     0009H     UNIT         ?PR?_SETZEROMOTIONDETECTIONDURATION?MAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\sensorProtoboard (MAIN)
+
+
+SEGMENT                                            DATA_GROUP          XDATA_GROUP
+  +--> CALLED SEGMENT                            START    LENGTH     START    LENGTH
+------------------------------------------------------------------------------------
+?PR?RF_IRQ?MAIN                                  -----    -----      -----    -----
+  +--> ?PR?_SPI_READ?MAIN
+  +--> ?PR?_SPI_READ_BUF?MAIN
+  +--> ?PR?_SPI_RW_REG?MAIN
+
+?PR?_SPI_READ?MAIN                               -----    -----      -----    -----
+  +--> ?PR?_SPI_RW?MAIN
+
+?PR?_SPI_READ_BUF?MAIN                           0022H    0005H      -----    -----
+  +--> ?PR?_SPI_RW?MAIN
+
+?PR?_SPI_RW_REG?MAIN                             -----    -----      -----    -----
+  +--> ?PR?_SPI_RW?MAIN
+
+*** NEW ROOT ***************************************************
+
+?PR?I2C_IRQ?MAIN                                 -----    -----      -----    -----
+  +--> ?PR?I2C_IRQ_HANDLER?HAL_W2_ISR
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 5
+
+
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP                                    -----    -----      -----    -----
+  +--> ?PR?MAIN?MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?MAIN                                    -----    -----      -----    -----
+  +--> ?PR?SETUP?MAIN
+  +--> ?PR?GETFIFOCOUNT?MAIN
+  +--> ?PR?_GETFIFOBYTES?MAIN
+  +--> ?PR?_SEND_RF_COMMAND_WITH_ARG?MAIN
+  +--> ?PR?_TX_MODE_NOACK?MAIN
+  +--> ?PR?RX_MODE?MAIN
+  +--> ?PR?PISCA_LED?MAIN
+
+?PR?SETUP?MAIN                                   -----    -----      -----    -----
+  +--> ?PR?INICIARIO?MAIN
+  +--> ?PR?PISCA_LED?MAIN
+  +--> ?CO?MAIN
+  +--> ?PR?_RF_INIT?MAIN
+  +--> ?PR?_HAL_W2_CONFIGURE_MASTER?HAL_W2_ISR
+  +--> ?PR?INITIAL_SETUP_DMP?MAIN
+  +--> ?PR?_SETUP_T0_TICKS?MAIN
+  +--> ?PR?START_T0?MAIN
+
+?PR?PISCA_LED?MAIN                               -----    -----      -----    -----
+  +--> ?PR?_DELAY_MS?HAL_DELAY
+
+?PR?_DELAY_MS?HAL_DELAY                          -----    -----      -----    -----
+  +--> ?PR?_DELAY_US?HAL_DELAY
+
+?PR?_RF_INIT?MAIN                                0027H    0009H      -----    -----
+  +--> ?PR?_SPI_WRITE_BUF?MAIN
+  +--> ?PR?_SPI_RW_REG?MAIN
+  +--> ?PR?RX_MODE?MAIN
+
+?PR?_SPI_WRITE_BUF?MAIN                          0030H    0005H      -----    -----
+  +--> ?PR?_SPI_RW?MAIN
+
+?PR?RX_MODE?MAIN                                 -----    -----      -----    -----
+  +--> ?PR?_SPI_RW_REG?MAIN
+
+?PR?_HAL_W2_CONFIGURE_MASTER?HAL_W2_ISR          -----    -----      -----    -----
+  +--> ?PR?_HAL_W2_ENABLE?HAL_W2_ISR
+  +--> ?PR?_HAL_W2_SET_CLK_FREQ?HAL_W2_ISR
+  +--> ?PR?_HAL_W2_SET_OP_MODE?HAL_W2_ISR
+  +--> ?PR?_HAL_W2_ALL_IRQ_ENABLE?HAL_W2_ISR
+
+?PR?INITIAL_SETUP_DMP?MAIN                       -----    -----      0288H    0001H
+  +--> ?PR?MPU_8051_MALLOC_SETUP?MAIN
+  +--> ?PR?PISCA_LED?MAIN
+  +--> ?PR?MPU_TESTCONNECTION?MAIN
+  +--> ?PR?MPU_INITIALIZE?MAIN
+  +--> ?PR?DMPINITIALIZE?MAIN
+  +--> ?PR?_DELAY_MS?HAL_DELAY
+  +--> ?PR?_SETDMPENABLED?MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 6
+
+
+  +--> ?PR?_SETXACCELOFFSET?MAIN
+  +--> ?PR?_SETYACCELOFFSET?MAIN
+  +--> ?PR?_SETZACCELOFFSET?MAIN
+  +--> ?PR?_SETXGYROOFFSET?MAIN
+  +--> ?PR?_SETYGYROOFFSET?MAIN
+  +--> ?PR?_SETZGYROOFFSET?MAIN
+
+?PR?MPU_8051_MALLOC_SETUP?MAIN                   -----    -----      -----    -----
+  +--> ?PR?_INIT_MEMPOOL?INIT_MEM
+
+?PR?MPU_TESTCONNECTION?MAIN                      -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBITS?HAL_W2_ISR
+
+?PR?_I2C_MPU_READBITS?HAL_W2_ISR                 0027H    0009H      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+
+?PR?_I2C_MPU_READBYTE?HAL_W2_ISR                 0030H    0003H      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+
+?PR?_I2C_MPU_READBYTES?HAL_W2_ISR                0033H    0008H      -----    -----
+  +--> ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR
+  +--> ?PR?HAL_W2_WAIT_DATA_READY_ISR?HAL_W2...
+  +--> ?PR?HAL_W2_SOFT_RESET?HAL_W2_ISR
+
+?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR             -----    -----      -----    -----
+  +--> ?PR?HAL_W2_WAIT_DATA_READY_ISR?HAL_W2...
+
+?PR?HAL_W2_SOFT_RESET?HAL_W2_ISR                 003BH    0002H      -----    -----
+  +--> ?PR?_DELAY_US?HAL_DELAY
+
+?PR?MPU_INITIALIZE?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_SETCLOCKSOURCE?MAIN
+  +--> ?PR?_SETFULLSCALEGYRORANGE?MAIN
+  +--> ?PR?_SETFULLSCALEACCELRANGE?MAIN
+  +--> ?PR?_SETSLEEPENABLED?MAIN
+
+?PR?_SETCLOCKSOURCE?MAIN                         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR                0027H    0007H      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR                002EH    0001H      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTES?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEBYTES?HAL_W2_ISR               002FH    0006H      -----    -----
+  +--> ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR
+  +--> ?PR?HAL_W2_WAIT_DATA_READY_ISR?HAL_W2...
+
+?PR?_SETFULLSCALEGYRORANGE?MAIN                  -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR
+
+?PR?_SETFULLSCALEACCELRANGE?MAIN                 -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR
+
+?PR?_SETSLEEPENABLED?MAIN                        -----    -----      -----    -----
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 7
+
+
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR                 0027H    0005H      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?DMPINITIALIZE?MAIN                           -----    -----      0289H    009BH
+  +--> ?PR?I2C_MPU_RESET?MAIN
+  +--> ?PR?_DELAY_MS?HAL_DELAY
+  +--> ?PR?_SETSLEEPENABLED?MAIN
+  +--> ?PR?_SETMEMORYBANK?MAIN
+  +--> ?PR?_SETMEMORYSTARTADDRESS?MAIN
+  +--> ?PR?GETXGYROOFFSETTC?MAIN
+  +--> ?PR?GETYGYROOFFSETTC?MAIN
+  +--> ?PR?GETZGYROOFFSETTC?MAIN
+  +--> ?PR?_SETSLAVEADDRESS?MAIN
+  +--> ?PR?_SETI2CMASTERMODEENABLED?MAIN
+  +--> ?PR?RESETI2CMASTER?MAIN
+  +--> ?CO?MAIN
+  +--> ?PR?_WRITEPROGMEMORYBLOCK?MAIN
+  +--> ?PR?_WRITEPROGDMPCONFIGURATIONSET?MAIN
+  +--> ?PR?_SETCLOCKSOURCE?MAIN
+  +--> ?PR?_SETINTENABLED?MAIN
+  +--> ?PR?_SETRATE?MAIN
+  +--> ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+  +--> ?PR?_SETDLPFMODE?MAIN
+  +--> ?PR?_SETFULLSCALEGYRORANGE?MAIN
+  +--> ?PR?_SETDMPCONFIG1?MAIN
+  +--> ?PR?_SETDMPCONFIG2?MAIN
+  +--> ?PR?_SETOTPBANKVALID?MAIN
+  +--> ?PR?_WRITEMEMORYBLOCK?MAIN
+  +--> ?PR?RESETFIFO?MAIN
+  +--> ?PR?GETFIFOCOUNT?MAIN
+  +--> ?PR?_GETFIFOBYTES?MAIN
+  +--> ?PR?_SETMOTIONDETECTIONTHRESHOLD?MAIN
+  +--> ?PR?_SETZEROMOTIONDETECTIONTHRESHOLD?...
+  +--> ?PR?_SETMOTIONDETECTIONDURATION?MAIN
+  +--> ?PR?_SETZEROMOTIONDETECTIONDURATION?MAIN
+  +--> ?PR?_SETFIFOENABLED?MAIN
+  +--> ?PR?_SETDMPENABLED?MAIN
+  +--> ?PR?RESETDMP?MAIN
+  +--> ?PR?_READMEMORYBLOCK?MAIN
+  +--> ?PR?GETINTSTATUS?MAIN
+
+?PR?I2C_MPU_RESET?MAIN                           -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?_SETMEMORYBANK?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETMEMORYSTARTADDRESS?MAIN                  -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?GETXGYROOFFSETTC?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBITS?HAL_W2_ISR
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 8
+
+
+?PR?GETYGYROOFFSETTC?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBITS?HAL_W2_ISR
+
+?PR?GETZGYROOFFSETTC?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBITS?HAL_W2_ISR
+
+?PR?_SETSLAVEADDRESS?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETI2CMASTERMODEENABLED?MAIN                -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?RESETI2CMASTER?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?_WRITEPROGMEMORYBLOCK?MAIN                   -----    -----      0324H    0008H
+  +--> ?PR?_WRITEMEMORYBLOCK?MAIN
+
+?PR?_WRITEMEMORYBLOCK?MAIN                       -----    -----      0334H    0012H
+  +--> ?PR?_SETMEMORYBANK?MAIN
+  +--> ?PR?_SETMEMORYSTARTADDRESS?MAIN
+  +--> ?PR?_MALLOC?MALLOC
+  +--> ?PR?_I2C_MPU_WRITEBYTES?HAL_W2_ISR
+  +--> ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+  +--> ?PR?_FREE?FREE
+
+?PR?_MALLOC?MALLOC                               002FH    0004H      -----    -----
+
+?PR?_FREE?FREE                                   002FH    0004H      -----    -----
+
+?PR?_WRITEPROGDMPCONFIGURATIONSET?MAIN           -----    -----      -----    -----
+  +--> ?PR?_WRITEDMPCONFIGURATIONSET?MAIN
+
+?PR?_WRITEDMPCONFIGURATIONSET?MAIN               -----    -----      0324H    0010H
+  +--> ?PR?_MALLOC?MALLOC
+  +--> ?PR?_REALLOC?REALLOC
+  +--> ?PR?_WRITEMEMORYBLOCK?MAIN
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+  +--> ?PR?_FREE?FREE
+
+?PR?_REALLOC?REALLOC                             0027H    0008H      -----    -----
+  +--> ?PR?_MALLOC?MALLOC
+  +--> ?PR?_FREE?FREE
+
+?PR?_SETINTENABLED?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETRATE?MAIN                                -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETDLPFMODE?MAIN                            -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBITS?HAL_W2_ISR
+
+?PR?_SETDMPCONFIG1?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETDMPCONFIG2?MAIN                          -----    -----      -----    -----
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 9
+
+
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETOTPBANKVALID?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?RESETFIFO?MAIN                               -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?GETFIFOCOUNT?MAIN                            -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+
+?PR?_GETFIFOBYTES?MAIN                           -----    -----      0324H    0003H
+  +--> ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+
+?PR?_SETMOTIONDETECTIONTHRESHOLD?MAIN            -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETZEROMOTIONDETECTIONTHRESHOLD?...         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETMOTIONDETECTIONDURATION?MAIN             -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETZEROMOTIONDETECTIONDURATION?MAIN         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBYTE?HAL_W2_ISR
+
+?PR?_SETFIFOENABLED?MAIN                         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?_SETDMPENABLED?MAIN                          -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?RESETDMP?MAIN                                -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEBIT?HAL_W2_ISR
+
+?PR?_READMEMORYBLOCK?MAIN                        -----    -----      0324H    000AH
+  +--> ?PR?_SETMEMORYBANK?MAIN
+  +--> ?PR?_SETMEMORYSTARTADDRESS?MAIN
+  +--> ?PR?_I2C_MPU_READBYTES?HAL_W2_ISR
+
+?PR?GETINTSTATUS?MAIN                            -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_READBYTE?HAL_W2_ISR
+
+?PR?_SETXACCELOFFSET?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR                0027H    0002H      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORDS?HAL_W2_ISR
+
+?PR?_I2C_MPU_WRITEWORDS?HAL_W2_ISR               0029H    0006H      -----    -----
+  +--> ?PR?_HAL_W2_INIT_TRANSFER?HAL_W2_ISR
+  +--> ?PR?HAL_W2_WAIT_DATA_READY_ISR?HAL_W2...
+
+?PR?_SETYACCELOFFSET?MAIN                        -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_SETZACCELOFFSET?MAIN                        -----    -----      -----    -----
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 10
+
+
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_SETXGYROOFFSET?MAIN                         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_SETYGYROOFFSET?MAIN                         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_SETZGYROOFFSET?MAIN                         -----    -----      -----    -----
+  +--> ?PR?_I2C_MPU_WRITEWORD?HAL_W2_ISR
+
+?PR?_SEND_RF_COMMAND_WITH_ARG?MAIN               -----    -----      -----    -----
+  +--> ?PR?_TX_MODE_NOACK?MAIN
+  +--> ?PR?RX_MODE?MAIN
+
+?PR?_TX_MODE_NOACK?MAIN                          0027H    0002H      -----    -----
+  +--> ?PR?_SPI_RW_REG?MAIN
+  +--> ?CO?MAIN
+  +--> ?PR?_SPI_WRITE_BUF?MAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\sensorProtoboard (MAIN)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:005BH         PUBLIC        initial_timer_count
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  X:0000H         PUBLIC        numbPackets
+  X:0001H         PUBLIC        fifoBuffer
+  C:317CH         PUBLIC        dmpGetFIFOPacketSize
+  B:00A8H.7       PUBLIC        EA
+  C:3082H         PUBLIC        resetDMP
+  X:0041H         PUBLIC        rx_buf
+  C:1F45H         PUBLIC        _readMemoryBlock
+  C:2AA4H         PUBLIC        I2C_IRQ
+  X:0061H         PUBLIC        tx_buf
+  C:23EDH         PUBLIC        _send_offset_values
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  C:2BF9H         PUBLIC        mpu_testConnection
+  C:2F64H         PUBLIC        RX_Mode
+  C:21EDH         PUBLIC        _getMotion6_variables
+  C:2F97H         PUBLIC        start_T0
+  C:2EBCH         PUBLIC        getMotionDetectionThreshold
+  X:0081H         PUBLIC        malloc_memory_pool
+  C:2DEEH         PUBLIC        getFIFOEnabled
+  C:2DBAH         PUBLIC        _setSlaveAddress
+  B:00B8H.1       PUBLIC        RF
+  D:00E7H         PUBLIC        SPIRDAT
+  C:3035H         PUBLIC        _setup_T0_ticks
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 11
+
+
+  C:1A85H         PUBLIC        _writeMemoryBlock
+  B:0021H.0       PUBLIC        newPayload
+  C:2FD3H         PUBLIC        _setFullScaleAccelRange
+  C:07E4H         PUBLIC        dmpConfig
+  C:08A4H         PUBLIC        dmpUpdates
+  B:0020H.6       PUBLIC        RX_DR
+  B:00E8H.0       PUBLIC        RFCE
+  C:17CBH         PUBLIC        _writeDMPConfigurationSet
+  C:31A9H         PUBLIC        _setMotionDetectionThreshold
+  C:30FCH         PUBLIC        _setFIFOEnabled
+  B:0020H.5       PUBLIC        TX_DS
+  C:2FEFH         PUBLIC        _setExternalFrameSync
+  C:1CCAH         PUBLIC        main
+  C:2687H         PUBLIC        initial_setup_dmp
+  C:203CH         PUBLIC        _dmpGetQuaternion_int16
+  C:2E06H         PUBLIC        getOTPBankValid
+  C:2FE6H         PUBLIC        _setMemoryStartAddress
+  C:2F40H         PUBLIC        pisca_led
+  C:2CF5H         PUBLIC        getXGyroOffset
+  C:2F2EH         PUBLIC        _send_rf_command
+  C:3185H         PUBLIC        _setIntEnabled
+  C:2D12H         PUBLIC        getYGyroOffset
+  C:2D2FH         PUBLIC        getZGyroOffset
+  C:2FA7H         PUBLIC        stop_T0
+  C:2EE2H         PUBLIC        getMotionDetectionDuration
+  C:2E96H         PUBLIC        getDMPConfig1
+  D:005CH         PUBLIC        timer_count
+  C:2EA9H         PUBLIC        getDMPConfig2
+  B:0090H.0       PUBLIC        P10
+  C:2FB7H         PUBLIC        _setClockSource
+  C:2A24H         PUBLIC        setup
+  C:3168H         PUBLIC        _setOTPBankValid
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:2C60H         PUBLIC        _writeProgMemoryBlock
+  C:30F1H         PUBLIC        _setI2CMasterModeEnabled
+  C:30C5H         PUBLIC        _setXGyroOffset
+  C:30D0H         PUBLIC        _setYGyroOffset
+  C:30DBH         PUBLIC        _setZGyroOffset
+  C:2ECFH         PUBLIC        getZeroMotionDetectionThreshold
+  C:306AH         PUBLIC        i2c_mpu_reset
+  C:31BBH         PUBLIC        _setMotionDetectionDuration
+  B:00E8H.2       PUBLIC        RFCKEN
+  C:3197H         PUBLIC        _setDMPConfig1
+  C:0056H         PUBLIC        ADDR_HOST
+  C:31A0H         PUBLIC        _setDMPConfig2
+  C:315EH         PUBLIC        _writeProgDMPConfigurationSet
+  X:0275H         PUBLIC        dmpPacketSize
+  C:11DCH         PUBLIC        _send_inertial_packet_by_rf
+  C:005BH         PUBLIC        dmpMemory
+  C:2D69H         PUBLIC        getXGyroOffsetTC
+  C:2D84H         PUBLIC        getYGyroOffsetTC
+  C:2D9FH         PUBLIC        getZGyroOffsetTC
+  C:31B2H         PUBLIC        _setZeroMotionDetectionThreshold
+  D:0020H         PUBLIC        sta
+  B:00A8H.1       PUBLIC        ET0
+  C:2C24H         PUBLIC        _setMemoryBank
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 12
+
+
+  C:2B7DH         PUBLIC        _SPI_Read_Buf
+  C:3051H         PUBLIC        _SPI_Read
+  C:305EH         PUBLIC        resetFIFO
+  D:008CH         PUBLIC        TH0
+  C:300BH         PUBLIC        _setXGyroOffsetTC
+  C:3019H         PUBLIC        _setYGyroOffsetTC
+  C:211EH         PUBLIC        _getMotion6_packet
+  C:3027H         PUBLIC        _setZGyroOffsetTC
+  D:008AH         PUBLIC        TL0
+  C:2EF5H         PUBLIC        getZeroMotionDetectionDuration
+  C:3076H         PUBLIC        resetI2CMaster
+  B:0088H.4       PUBLIC        TR0
+  C:2B19H         PUBLIC        _SPI_Write_Buf
+  C:08D3H         PUBLIC        dmpInitialize
+  C:318EH         PUBLIC        _setRate
+  D:005DH         PUBLIC        NBT0H
+  C:14F5H         PUBLIC        _dmpGetPacket16bits
+  C:31C4H         PUBLIC        _setZeroMotionDetectionDuration
+  C:30E6H         PUBLIC        _setDMPEnabled
+  D:0093H         PUBLIC        P0DIR
+  D:005EH         PUBLIC        NBT0L
+  C:2C9EH         PUBLIC        getXAccelOffset
+  D:009EH         PUBLIC        P0CON
+  D:0094H         PUBLIC        P1DIR
+  C:2CBBH         PUBLIC        getYAccelOffset
+  C:2B4BH         PUBLIC        _TX_Mode_NOACK
+  D:009FH         PUBLIC        P1CON
+  C:2CD8H         PUBLIC        getZAccelOffset
+  C:2FC5H         PUBLIC        _setFullScaleGyroRange
+  D:0098H         PUBLIC        S0CON
+  C:2E33H         PUBLIC        _send_rf_command_with_arg
+  C:2507H         PUBLIC        RF_IRQ
+  D:00D8H         PUBLIC        ADCON
+  D:005FH         PUBLIC        timer_elapsed
+  D:00C8H         PUBLIC        T2CON
+  D:00F8H         PUBLIC        FSR
+  C:30A4H         PUBLIC        _setXAccelOffset
+  C:2E48H         PUBLIC        mpu_initialize
+  B:0020H.4       PUBLIC        MAX_RT
+  C:30AFH         PUBLIC        _setYAccelOffset
+  C:28E6H         PUBLIC        _send_packet_to_host
+  C:30BAH         PUBLIC        _setZAccelOffset
+  C:22ACH         PUBLIC        _rf_init
+  C:2C80H         PUBLIC        TMR0_IRQ
+  C:29E4H         PUBLIC        _getFIFOBytes
+  X:0277H         PUBLIC        payloadWidth
+  C:2D4CH         PUBLIC        getFIFOCount
+  C:308EH         PUBLIC        mpu_8051_malloc_setup
+  C:2E70H         PUBLIC        _SPI_RW_Reg
+  C:3154H         PUBLIC        _SPI_RW
+  C:2E83H         PUBLIC        getIntStatus
+  D:00E8H         PUBLIC        RFCON
+  C:3099H         PUBLIC        _setSleepEnabled
+  D:00D0H         PUBLIC        PSW
+  C:2F08H         PUBLIC        iniciarIO
+  D:00C0H         PUBLIC        IRCON
+  C:2FFDH         PUBLIC        _setDLPFMode
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 13
+
+
+  X:0278H         PUBLIC        dmpPacketBuffer
+  X:027AH         PUBLIC        buffer
+  B:00E8H.1       PUBLIC        RFCSN
+  D:00E6H         PUBLIC        SPIRSTAT
+  -------         PROC          _SPI_RW
+  D:0007H         SYMBOL        value
+  C:3154H         LINE#         127
+  C:3154H         LINE#         128
+  C:3156H         LINE#         130
+  C:315BH         LINE#         132
+  C:315DH         LINE#         133
+  -------         ENDPROC       _SPI_RW
+  -------         PROC          _SPI_RW_REG
+  D:0007H         SYMBOL        reg
+  D:0006H         SYMBOL        value
+  -------         DO            
+  D:0005H         SYMBOL        status
+  -------         ENDDO         
+  C:2E70H         LINE#         142
+  C:2E72H         LINE#         145
+  C:2E74H         LINE#         146
+  C:2E79H         LINE#         147
+  C:2E7EH         LINE#         148
+  C:2E80H         LINE#         150
+  C:2E82H         LINE#         151
+  -------         ENDPROC       _SPI_RW_REG
+  -------         PROC          _SPI_READ
+  D:0007H         SYMBOL        reg
+  -------         DO            
+  D:0007H         SYMBOL        reg_val
+  -------         ENDDO         
+  C:3051H         LINE#         159
+  C:3051H         LINE#         162
+  C:3053H         LINE#         163
+  C:3056H         LINE#         164
+  C:305BH         LINE#         165
+  C:305DH         LINE#         167
+  C:305DH         LINE#         168
+  -------         ENDPROC       _SPI_READ
+  -------         PROC          _SPI_READ_BUF
+  D:0007H         SYMBOL        reg
+  D:0023H         SYMBOL        pBuf
+  D:0026H         SYMBOL        bytes
+  -------         DO            
+  D:0006H         SYMBOL        status
+  D:0005H         SYMBOL        byte_ctr
+  -------         ENDDO         
+  C:2B7DH         LINE#         177
+  C:2B83H         LINE#         180
+  C:2B85H         LINE#         181
+  C:2B8AH         LINE#         183
+  C:2B92H         LINE#         184
+  C:2BA9H         LINE#         186
+  C:2BABH         LINE#         188
+  C:2BADH         LINE#         189
+  -------         ENDPROC       _SPI_READ_BUF
+  -------         PROC          _SPI_WRITE_BUF
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 14
+
+
+  D:0007H         SYMBOL        reg
+  D:0031H         SYMBOL        pBuf
+  D:0034H         SYMBOL        bytes
+  -------         DO            
+  D:0006H         SYMBOL        status
+  D:0005H         SYMBOL        byte_ctr
+  -------         ENDDO         
+  C:2B19H         LINE#         199
+  C:2B1FH         LINE#         202
+  C:2B21H         LINE#         203
+  C:2B26H         LINE#         204
+  C:2B2EH         LINE#         205
+  C:2B46H         LINE#         206
+  C:2B48H         LINE#         207
+  C:2B4AH         LINE#         208
+  -------         ENDPROC       _SPI_WRITE_BUF
+  -------         PROC          RX_MODE
+  C:2F64H         LINE#         213
+  C:2F64H         LINE#         214
+  C:2F67H         LINE#         215
+  C:2F69H         LINE#         216
+  C:2F6BH         LINE#         217
+  C:2F72H         LINE#         218
+  C:2F74H         LINE#         219
+  -------         ENDPROC       RX_MODE
+  -------         PROC          _TX_MODE_NOACK
+  D:0027H         SYMBOL        payloadLength
+  C:2B4BH         LINE#         227
+  C:2B4FH         LINE#         228
+  C:2B51H         LINE#         229
+  C:2B58H         LINE#         230
+  C:2B66H         LINE#         231
+  C:2B74H         LINE#         233
+  C:2B76H         LINE#         234
+  C:2B7CH         LINE#         235
+  -------         ENDPROC       _TX_MODE_NOACK
+  -------         PROC          RF_IRQ
+  C:2507H         LINE#         242
+  C:2520H         LINE#         244
+  C:2527H         LINE#         245
+  C:252AH         LINE#         246
+  C:2538H         LINE#         247
+  C:253FH         LINE#         248
+  C:2541H         LINE#         249
+  C:254BH         LINE#         250
+  C:2550H         LINE#         251
+  C:2552H         LINE#         252
+  C:2558H         LINE#         253
+  C:255AH         LINE#         254
+  C:255AH         LINE#         255
+  C:255AH         LINE#         256
+  C:255DH         LINE#         257
+  C:2564H         LINE#         258
+  C:2567H         LINE#         259
+  C:256EH         LINE#         260
+  C:2575H         LINE#         261
+  -------         ENDPROC       RF_IRQ
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 15
+
+
+  -------         PROC          _RF_INIT
+  D:0027H         SYMBOL        rx_addr
+  D:002AH         SYMBOL        tx_addr
+  D:002DH         SYMBOL        rf_channel
+  D:002EH         SYMBOL        rf_data_rate
+  D:002FH         SYMBOL        rf_pwr
+  -------         DO            
+  D:0004H         SYMBOL        rf_setup_byte
+  -------         ENDDO         
+  C:22ACH         LINE#         271
+  C:22B2H         LINE#         272
+  C:22B4H         LINE#         273
+  C:22B6H         LINE#         274
+  C:22B8H         LINE#         275
+  C:22BAH         LINE#         276
+  C:22BCH         LINE#         277
+  C:22BEH         LINE#         279
+  C:22CDH         LINE#         280
+  C:22CDH         LINE#         281
+  C:22D0H         LINE#         282
+  C:22D2H         LINE#         283
+  C:22D2H         LINE#         284
+  C:22D5H         LINE#         285
+  C:22D8H         LINE#         286
+  C:22DAH         LINE#         287
+  C:22DAH         LINE#         288
+  C:22DDH         LINE#         289
+  C:22DDH         LINE#         290
+  C:22DFH         LINE#         291
+  C:22DFH         LINE#         292
+  C:22E2H         LINE#         293
+  C:22E2H         LINE#         294
+  C:22E2H         LINE#         295
+  C:22ECH         LINE#         296
+  C:22ECH         LINE#         297
+  C:22EFH         LINE#         298
+  C:22F2H         LINE#         299
+  C:22F4H         LINE#         300
+  C:22F4H         LINE#         301
+  C:22F7H         LINE#         302
+  C:22F9H         LINE#         303
+  C:22F9H         LINE#         304
+  C:22FCH         LINE#         305
+  C:22FFH         LINE#         306
+  C:22FFH         LINE#         307
+  C:22FFH         LINE#         309
+  C:230DH         LINE#         311
+  C:231BH         LINE#         313
+  C:2322H         LINE#         315
+  C:2329H         LINE#         317
+  C:2330H         LINE#         319
+  C:2337H         LINE#         321
+  C:233EH         LINE#         323
+  C:2345H         LINE#         325
+  C:234CH         LINE#         327
+  C:234EH         LINE#         328
+  -------         ENDPROC       _RF_INIT
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 16
+
+
+  -------         PROC          _SEND_INERTIAL_PACKET_BY_RF
+  D:0007H         SYMBOL        pkt_type
+  D:0057H         SYMBOL        fifo_buffer
+  D:005AH         SYMBOL        my_sub_addr
+  C:11DCH         LINE#         125
+  C:11E2H         LINE#         126
+  C:11E8H         LINE#         127
+  C:1215H         LINE#         128
+  C:1215H         LINE#         129
+  C:1225H         LINE#         130
+  C:122FH         LINE#         131
+  C:1239H         LINE#         132
+  C:1243H         LINE#         133
+  C:124DH         LINE#         134
+  C:1250H         LINE#         135
+  C:1250H         LINE#         136
+  C:1252H         LINE#         137
+  C:1252H         LINE#         138
+  C:1262H         LINE#         139
+  C:126CH         LINE#         140
+  C:1276H         LINE#         141
+  C:1280H         LINE#         142
+  C:128AH         LINE#         143
+  C:1293H         LINE#         144
+  C:1293H         LINE#         145
+  C:1295H         LINE#         146
+  C:1295H         LINE#         148
+  C:12A2H         LINE#         149
+  C:12A4H         LINE#         150
+  C:12A6H         LINE#         151
+  C:12A8H         LINE#         152
+  C:12AAH         LINE#         153
+  C:12ACH         LINE#         154
+  C:12AEH         LINE#         155
+  C:12B1H         LINE#         156
+  C:12B1H         LINE#         157
+  C:12C1H         LINE#         158
+  C:12CBH         LINE#         159
+  C:12D5H         LINE#         160
+  C:12DFH         LINE#         161
+  C:12E9H         LINE#         162
+  C:12F3H         LINE#         163
+  C:12FDH         LINE#         164
+  C:1307H         LINE#         165
+  C:1311H         LINE#         166
+  C:131BH         LINE#         167
+  C:1325H         LINE#         168
+  C:132FH         LINE#         169
+  C:1331H         LINE#         170
+  C:1334H         LINE#         171
+  C:1334H         LINE#         172
+  C:1344H         LINE#         173
+  C:134EH         LINE#         174
+  C:1358H         LINE#         175
+  C:1362H         LINE#         176
+  C:136CH         LINE#         177
+  C:1376H         LINE#         178
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 17
+
+
+  C:1380H         LINE#         179
+  C:138AH         LINE#         180
+  C:1394H         LINE#         181
+  C:139EH         LINE#         182
+  C:13A8H         LINE#         183
+  C:13B2H         LINE#         185
+  C:13B9H         LINE#         186
+  C:13BBH         LINE#         187
+  C:13BDH         LINE#         188
+  C:13BFH         LINE#         189
+  C:13C1H         LINE#         190
+  C:13C3H         LINE#         191
+  C:13C5H         LINE#         192
+  C:13C8H         LINE#         193
+  C:13C8H         LINE#         194
+  C:13D5H         LINE#         195
+  C:13DFH         LINE#         196
+  C:13E9H         LINE#         197
+  C:13F3H         LINE#         198
+  C:13FDH         LINE#         199
+  C:1407H         LINE#         200
+  C:1411H         LINE#         201
+  C:141BH         LINE#         202
+  C:141DH         LINE#         203
+  C:1420H         LINE#         204
+  C:1420H         LINE#         205
+  C:1430H         LINE#         206
+  C:143AH         LINE#         207
+  C:1444H         LINE#         208
+  C:144EH         LINE#         209
+  C:1458H         LINE#         210
+  C:1462H         LINE#         211
+  C:146CH         LINE#         212
+  C:1476H         LINE#         213
+  C:1480H         LINE#         214
+  C:148AH         LINE#         215
+  C:1494H         LINE#         216
+  C:149EH         LINE#         217
+  C:14A5H         LINE#         218
+  C:14AFH         LINE#         219
+  C:14B9H         LINE#         220
+  C:14C3H         LINE#         221
+  C:14CDH         LINE#         222
+  C:14D7H         LINE#         223
+  C:14E1H         LINE#         224
+  C:14EBH         LINE#         225
+  C:14F2H         LINE#         226
+  C:14F2H         LINE#         227
+  C:14F2H         LINE#         229
+  C:14F2H         LINE#         230
+  C:14F2H         LINE#         231
+  -------         ENDPROC       _SEND_INERTIAL_PACKET_BY_RF
+  -------         PROC          _SEND_RF_COMMAND
+  D:0007H         SYMBOL        cmd2send
+  D:0005H         SYMBOL        sensor_id
+  C:2F2EH         LINE#         234
+  C:2F2EH         LINE#         235
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 18
+
+
+  C:2F33H         LINE#         236
+  C:2F36H         LINE#         237
+  C:2F3DH         LINE#         238
+  -------         ENDPROC       _SEND_RF_COMMAND
+  -------         PROC          _SEND_RF_COMMAND_WITH_ARG
+  D:0007H         SYMBOL        cmd2send
+  D:0005H         SYMBOL        agr2send
+  D:0003H         SYMBOL        sensor_id
+  C:2E33H         LINE#         241
+  C:2E33H         LINE#         242
+  C:2E38H         LINE#         243
+  C:2E3BH         LINE#         244
+  C:2E3EH         LINE#         245
+  C:2E45H         LINE#         246
+  -------         ENDPROC       _SEND_RF_COMMAND_WITH_ARG
+  -------         PROC          _SEND_OFFSET_VALUES
+  D:0007H         SYMBOL        sensor_id
+  D:0005H         SYMBOL        cmd2send
+  D:0002H         SYMBOL        Xac_of
+  D:000CH         SYMBOL        Yac_of
+  D:000EH         SYMBOL        Zac_of
+  D:0010H         SYMBOL        Xgy_of
+  D:0012H         SYMBOL        Ygy_of
+  D:0014H         SYMBOL        Zgy_of
+  C:23EDH         LINE#         248
+  C:23EDH         LINE#         249
+  C:23F2H         LINE#         250
+  C:23F5H         LINE#         251
+  C:23FAH         LINE#         252
+  C:2408H         LINE#         253
+  C:240EH         LINE#         254
+  C:241DH         LINE#         255
+  C:2423H         LINE#         256
+  C:2432H         LINE#         257
+  C:2438H         LINE#         258
+  C:2447H         LINE#         259
+  C:244DH         LINE#         260
+  C:245CH         LINE#         261
+  C:2462H         LINE#         262
+  C:2471H         LINE#         263
+  C:2478H         LINE#         264
+  -------         ENDPROC       _SEND_OFFSET_VALUES
+  -------         PROC          _SEND_PACKET_TO_HOST
+  D:0007H         SYMBOL        packet_type
+  D:0045H         SYMBOL        data_to_send
+  D:0048H         SYMBOL        data_len
+  D:0049H         SYMBOL        my_sub_addr
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:28E6H         LINE#         269
+  C:28ECH         LINE#         271
+  C:28F1H         LINE#         272
+  C:28F5H         LINE#         273
+  C:2908H         LINE#         274
+  C:2928H         LINE#         275
+  C:292FH         LINE#         276
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 19
+
+
+  C:293AH         LINE#         277
+  -------         ENDPROC       _SEND_PACKET_TO_HOST
+  -------         PROC          MPU_8051_MALLOC_SETUP
+  C:308EH         LINE#         312
+  C:308EH         LINE#         313
+  -------         ENDPROC       MPU_8051_MALLOC_SETUP
+  -------         PROC          _SETCLOCKSOURCE
+  D:0007H         SYMBOL        source
+  C:2FB7H         LINE#         332
+  C:2FB7H         LINE#         333
+  -------         ENDPROC       _SETCLOCKSOURCE
+  -------         PROC          _SETFULLSCALEGYRORANGE
+  D:0007H         SYMBOL        range
+  C:2FC5H         LINE#         341
+  C:2FC5H         LINE#         342
+  -------         ENDPROC       _SETFULLSCALEGYRORANGE
+  -------         PROC          _SETFULLSCALEACCELRANGE
+  D:0007H         SYMBOL        range
+  C:2FD3H         LINE#         349
+  C:2FD3H         LINE#         350
+  -------         ENDPROC       _SETFULLSCALEACCELRANGE
+  -------         PROC          _SETSLEEPENABLED
+  D:0007H         SYMBOL        enabled
+  C:3099H         LINE#         358
+  C:3099H         LINE#         359
+  -------         ENDPROC       _SETSLEEPENABLED
+  -------         PROC          MPU_INITIALIZE
+  C:2E48H         LINE#         366
+  C:2E48H         LINE#         367
+  C:2E4DH         LINE#         368
+  C:2E52H         LINE#         369
+  C:2E57H         LINE#         370
+  -------         ENDPROC       MPU_INITIALIZE
+  -------         PROC          MPU_TESTCONNECTION
+  C:2BF9H         LINE#         378
+  C:2BF9H         LINE#         379
+  C:2C0EH         LINE#         380
+  C:2C1BH         LINE#         381
+  -------         ENDPROC       MPU_TESTCONNECTION
+  -------         PROC          _GETMOTION6_PACKET
+  X:036CH         SYMBOL        packet6
+  C:211EH         LINE#         388
+  C:2126H         LINE#         389
+  C:2138H         LINE#         390
+  C:214BH         LINE#         391
+  C:2155H         LINE#         392
+  C:2160H         LINE#         393
+  C:216CH         LINE#         394
+  C:217CH         LINE#         395
+  C:218CH         LINE#         396
+  C:219CH         LINE#         397
+  C:21ACH         LINE#         398
+  C:21BCH         LINE#         399
+  C:21CCH         LINE#         400
+  C:21DCH         LINE#         401
+  C:21ECH         LINE#         402
+  -------         ENDPROC       _GETMOTION6_PACKET
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 20
+
+
+  -------         PROC          _SETXACCELOFFSET
+  D:0006H         SYMBOL        offset
+  C:30A4H         LINE#         407
+  C:30A4H         LINE#         408
+  -------         ENDPROC       _SETXACCELOFFSET
+  -------         PROC          _SETYACCELOFFSET
+  D:0006H         SYMBOL        offset
+  C:30AFH         LINE#         410
+  C:30AFH         LINE#         411
+  -------         ENDPROC       _SETYACCELOFFSET
+  -------         PROC          _SETZACCELOFFSET
+  D:0006H         SYMBOL        offset
+  C:30BAH         LINE#         413
+  C:30BAH         LINE#         414
+  -------         ENDPROC       _SETZACCELOFFSET
+  -------         PROC          _SETXGYROOFFSET
+  D:0006H         SYMBOL        offset
+  C:30C5H         LINE#         416
+  C:30C5H         LINE#         417
+  -------         ENDPROC       _SETXGYROOFFSET
+  -------         PROC          _SETYGYROOFFSET
+  D:0006H         SYMBOL        offset
+  C:30D0H         LINE#         419
+  C:30D0H         LINE#         420
+  -------         ENDPROC       _SETYGYROOFFSET
+  -------         PROC          _SETZGYROOFFSET
+  D:0006H         SYMBOL        offset
+  C:30DBH         LINE#         422
+  C:30DBH         LINE#         423
+  -------         ENDPROC       _SETZGYROOFFSET
+  -------         PROC          GETXACCELOFFSET
+  C:2C9EH         LINE#         425
+  C:2C9EH         LINE#         426
+  C:2CB0H         LINE#         427
+  C:2CBAH         LINE#         428
+  -------         ENDPROC       GETXACCELOFFSET
+  -------         PROC          GETYACCELOFFSET
+  C:2CBBH         LINE#         429
+  C:2CBBH         LINE#         430
+  C:2CCDH         LINE#         431
+  C:2CD7H         LINE#         432
+  -------         ENDPROC       GETYACCELOFFSET
+  -------         PROC          GETZACCELOFFSET
+  C:2CD8H         LINE#         433
+  C:2CD8H         LINE#         434
+  C:2CEAH         LINE#         435
+  C:2CF4H         LINE#         436
+  -------         ENDPROC       GETZACCELOFFSET
+  -------         PROC          GETXGYROOFFSET
+  C:2CF5H         LINE#         437
+  C:2CF5H         LINE#         438
+  C:2D07H         LINE#         439
+  C:2D11H         LINE#         440
+  -------         ENDPROC       GETXGYROOFFSET
+  -------         PROC          GETYGYROOFFSET
+  C:2D12H         LINE#         441
+  C:2D12H         LINE#         442
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 21
+
+
+  C:2D24H         LINE#         443
+  C:2D2EH         LINE#         444
+  -------         ENDPROC       GETYGYROOFFSET
+  -------         PROC          GETZGYROOFFSET
+  C:2D2FH         LINE#         445
+  C:2D2FH         LINE#         446
+  C:2D41H         LINE#         447
+  C:2D4BH         LINE#         448
+  -------         ENDPROC       GETZGYROOFFSET
+  C:2C1CH         SYMBOL        L?0287
+  C:2C1FH         SYMBOL        L?0288
+  -------         PROC          L?0286
+  -------         ENDPROC       L?0286
+  C:2C1CH         SYMBOL        L?0287
+  C:2C1FH         SYMBOL        L?0288
+  -------         PROC          _SETMEMORYBANK
+  D:0007H         SYMBOL        bank
+  D:0005H         SYMBOL        prefetchEnabled
+  D:0003H         SYMBOL        userBank
+  C:2C24H         LINE#         450
+  C:2C24H         LINE#         451
+  C:2C28H         LINE#         452
+  C:2C2FH         LINE#         453
+  C:2C36H         LINE#         454
+  -------         ENDPROC       _SETMEMORYBANK
+  -------         PROC          GETFIFOCOUNT
+  C:2D4CH         LINE#         462
+  C:2D4CH         LINE#         463
+  C:2D5EH         LINE#         464
+  C:2D68H         LINE#         465
+  -------         ENDPROC       GETFIFOCOUNT
+  -------         PROC          GETINTSTATUS
+  C:2E83H         LINE#         467
+  C:2E83H         LINE#         468
+  C:2E90H         LINE#         469
+  C:2E95H         LINE#         470
+  -------         ENDPROC       GETINTSTATUS
+  -------         PROC          _SETDMPENABLED
+  D:0007H         SYMBOL        enabled
+  C:30E6H         LINE#         472
+  C:30E6H         LINE#         473
+  -------         ENDPROC       _SETDMPENABLED
+  -------         PROC          RESETFIFO
+  C:305EH         LINE#         480
+  C:305EH         LINE#         481
+  -------         ENDPROC       RESETFIFO
+  -------         PROC          DMPGETFIFOPACKETSIZE
+  C:317CH         LINE#         484
+  C:317CH         LINE#         485
+  C:3184H         LINE#         486
+  -------         ENDPROC       DMPGETFIFOPACKETSIZE
+  -------         PROC          L?0289
+  -------         ENDPROC       L?0289
+  -------         PROC          _GETFIFOBYTES
+  X:0324H         SYMBOL        data_ptr
+  D:0005H         SYMBOL        data_len
+  C:29E4H         LINE#         488
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 22
+
+
+  C:29EFH         LINE#         489
+  C:29F5H         LINE#         490
+  C:2A14H         LINE#         491
+  C:2A14H         LINE#         492
+  C:2A23H         LINE#         493
+  C:2A23H         LINE#         494
+  -------         ENDPROC       _GETFIFOBYTES
+  C:2FE1H         SYMBOL        L?0291
+  -------         PROC          L?0290
+  -------         ENDPROC       L?0290
+  C:2FE1H         SYMBOL        L?0291
+  -------         PROC          _SETMEMORYSTARTADDRESS
+  D:0007H         SYMBOL        address
+  C:2FE6H         LINE#         496
+  C:2FE6H         LINE#         497
+  -------         ENDPROC       _SETMEMORYSTARTADDRESS
+  C:1A62H         SYMBOL        L?0285
+  -------         PROC          L?0284
+  -------         ENDPROC       L?0284
+  C:1A62H         SYMBOL        L?0285
+  -------         PROC          _WRITEMEMORYBLOCK
+  X:0334H         SYMBOL        data_ptr
+  X:0337H         SYMBOL        dataSize
+  X:0339H         SYMBOL        bank
+  X:033AH         SYMBOL        address
+  X:033BH         SYMBOL        verify
+  X:033CH         SYMBOL        useProgMem
+  -------         DO            
+  X:033DH         SYMBOL        chunkSize_wmb
+  X:033EH         SYMBOL        verifyBuffer_wmb
+  X:0341H         SYMBOL        progBuffer_wmb
+  X:0344H         SYMBOL        i_wmb
+  D:0007H         SYMBOL        j_wmb
+  -------         ENDDO         
+  C:1A85H         LINE#         501
+  C:1A96H         LINE#         505
+  C:1A9FH         LINE#         508
+  C:1AA2H         LINE#         509
+  C:1AA5H         LINE#         510
+  C:1AC2H         LINE#         511
+  C:1ADFH         LINE#         512
+  C:1AFFH         LINE#         514
+  C:1B05H         LINE#         517
+  C:1B27H         LINE#         520
+  C:1B44H         LINE#         522
+  C:1B4AH         LINE#         524
+  C:1B92H         LINE#         525
+  C:1B92H         LINE#         527
+  C:1BB6H         LINE#         528
+  C:1BB6H         LINE#         530
+  C:1BD2H         LINE#         533
+  C:1BEBH         LINE#         534
+  C:1BEEH         LINE#         535
+  C:1BF1H         LINE#         536
+  C:1C0DH         LINE#         537
+  C:1C34H         LINE#         538
+  C:1C42H         LINE#         539
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 23
+
+
+  C:1C56H         LINE#         540
+  C:1C59H         LINE#         541
+  C:1C59H         LINE#         542
+  C:1C59H         LINE#         545
+  C:1C6CH         LINE#         548
+  C:1C72H         LINE#         551
+  C:1C8AH         LINE#         552
+  C:1C96H         LINE#         553
+  C:1C99H         LINE#         554
+  C:1C9CH         LINE#         555
+  C:1C9CH         LINE#         556
+  C:1C9FH         LINE#         557
+  C:1CB3H         LINE#         558
+  C:1CC7H         LINE#         559
+  C:1CC9H         LINE#         560
+  -------         ENDPROC       _WRITEMEMORYBLOCK
+  -------         PROC          _WRITEDMPCONFIGURATIONSET
+  X:0324H         SYMBOL        data_ptr
+  X:0327H         SYMBOL        dataSize
+  X:0329H         SYMBOL        useProgMem
+  -------         DO            
+  X:032AH         SYMBOL        progBuffer_wdcs
+  X:032DH         SYMBOL        success_wdcs
+  X:032EH         SYMBOL        special_wdcs
+  X:032FH         SYMBOL        i_wdcs
+  D:0006H         SYMBOL        j_wdcs
+  X:0331H         SYMBOL        bank_wdcs
+  X:0332H         SYMBOL        offset_wdcs
+  X:0333H         SYMBOL        length_wdcs
+  -------         ENDDO         
+  C:17CBH         LINE#         563
+  C:17DCH         LINE#         564
+  C:17E5H         LINE#         568
+  C:17EBH         LINE#         569
+  C:1802H         LINE#         570
+  C:1802H         LINE#         575
+  C:1821H         LINE#         576
+  C:182BH         LINE#         577
+  C:184CH         LINE#         578
+  C:1870H         LINE#         579
+  C:1890H         LINE#         580
+  C:1892H         LINE#         581
+  C:18B0H         LINE#         582
+  C:18C6H         LINE#         583
+  C:18DCH         LINE#         584
+  C:18DCH         LINE#         587
+  C:18E9H         LINE#         589
+  C:18ECH         LINE#         590
+  C:1916H         LINE#         591
+  C:1963H         LINE#         592
+  C:1963H         LINE#         593
+  C:1987H         LINE#         594
+  C:1987H         LINE#         595
+  C:19B8H         LINE#         596
+  C:19CAH         LINE#         597
+  C:19CCH         LINE#         603
+  C:19D5H         LINE#         604
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 24
+
+
+  C:19F2H         LINE#         605
+  C:19F4H         LINE#         606
+  C:1A12H         LINE#         607
+  C:1A12H         LINE#         611
+  C:1A19H         LINE#         617
+  C:1A22H         LINE#         619
+  C:1A28H         LINE#         620
+  C:1A2AH         LINE#         622
+  C:1A2FH         LINE#         623
+  C:1A2FH         LINE#         624
+  C:1A2FH         LINE#         626
+  C:1A38H         LINE#         627
+  C:1A4AH         LINE#         628
+  C:1A4DH         LINE#         629
+  C:1A4DH         LINE#         630
+  C:1A4DH         LINE#         631
+  C:1A5FH         LINE#         632
+  C:1A61H         LINE#         633
+  -------         ENDPROC       _WRITEDMPCONFIGURATIONSET
+  -------         PROC          _READMEMORYBLOCK
+  X:0324H         SYMBOL        data_ptr
+  X:0327H         SYMBOL        dataSize
+  X:0329H         SYMBOL        bank
+  X:032AH         SYMBOL        address
+  -------         DO            
+  X:032BH         SYMBOL        chunkSize_rmb
+  X:032CH         SYMBOL        i_rmb
+  -------         ENDDO         
+  C:1F45H         LINE#         635
+  C:1F56H         LINE#         638
+  C:1F5AH         LINE#         639
+  C:1F62H         LINE#         640
+  C:1F82H         LINE#         642
+  C:1F88H         LINE#         645
+  C:1FA8H         LINE#         648
+  C:1FC3H         LINE#         651
+  C:1FEDH         LINE#         654
+  C:2000H         LINE#         657
+  C:2006H         LINE#         660
+  C:201EH         LINE#         661
+  C:202AH         LINE#         662
+  C:2030H         LINE#         663
+  C:2038H         LINE#         664
+  C:2038H         LINE#         665
+  C:203BH         LINE#         666
+  -------         ENDPROC       _READMEMORYBLOCK
+  -------         PROC          _WRITEPROGDMPCONFIGURATIONSET
+  D:0001H         SYMBOL        data_ptr
+  D:0004H         SYMBOL        dataSize
+  C:315EH         LINE#         668
+  C:315EH         LINE#         669
+  C:3167H         LINE#         670
+  -------         ENDPROC       _WRITEPROGDMPCONFIGURATIONSET
+  -------         PROC          _WRITEPROGMEMORYBLOCK
+  D:0001H         SYMBOL        data_ptr
+  D:0004H         SYMBOL        dataSize
+  X:0329H         SYMBOL        bank
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 25
+
+
+  X:032AH         SYMBOL        address
+  X:032BH         SYMBOL        verify
+  C:2C60H         LINE#         672
+  C:2C60H         LINE#         673
+  C:2C7FH         LINE#         674
+  -------         ENDPROC       _WRITEPROGMEMORYBLOCK
+  -------         PROC          I2C_MPU_RESET
+  C:306AH         LINE#         680
+  C:306AH         LINE#         681
+  -------         ENDPROC       I2C_MPU_RESET
+  -------         PROC          _SETSLAVEADDRESS
+  D:0007H         SYMBOL        num
+  D:0006H         SYMBOL        address
+  C:2DBAH         LINE#         690
+  C:2DBCH         LINE#         691
+  C:2DC2H         LINE#         692
+  C:2DD3H         LINE#         693
+  -------         ENDPROC       _SETSLAVEADDRESS
+  -------         PROC          _SETI2CMASTERMODEENABLED
+  D:0007H         SYMBOL        enabled
+  C:30F1H         LINE#         700
+  C:30F1H         LINE#         701
+  -------         ENDPROC       _SETI2CMASTERMODEENABLED
+  -------         PROC          RESETI2CMASTER
+  C:3076H         LINE#         708
+  C:3076H         LINE#         709
+  -------         ENDPROC       RESETI2CMASTER
+  -------         PROC          _SETINTENABLED
+  D:0007H         SYMBOL        enabled
+  C:3185H         LINE#         712
+  C:3185H         LINE#         713
+  -------         ENDPROC       _SETINTENABLED
+  -------         PROC          _SETRATE
+  D:0007H         SYMBOL        rate
+  C:318EH         LINE#         721
+  C:318EH         LINE#         722
+  -------         ENDPROC       _SETRATE
+  -------         PROC          _SETEXTERNALFRAMESYNC
+  D:0007H         SYMBOL        sync_ext
+  C:2FEFH         LINE#         730
+  C:2FEFH         LINE#         731
+  -------         ENDPROC       _SETEXTERNALFRAMESYNC
+  -------         PROC          _SETDLPFMODE
+  D:0007H         SYMBOL        mode
+  C:2FFDH         LINE#         739
+  C:2FFDH         LINE#         740
+  -------         ENDPROC       _SETDLPFMODE
+  -------         PROC          GETDMPCONFIG1
+  C:2E96H         LINE#         746
+  C:2E96H         LINE#         747
+  C:2EA3H         LINE#         748
+  C:2EA8H         LINE#         749
+  -------         ENDPROC       GETDMPCONFIG1
+  -------         PROC          _SETDMPCONFIG1
+  D:0007H         SYMBOL        config
+  C:3197H         LINE#         750
+  C:3197H         LINE#         751
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 26
+
+
+  -------         ENDPROC       _SETDMPCONFIG1
+  -------         PROC          GETDMPCONFIG2
+  C:2EA9H         LINE#         757
+  C:2EA9H         LINE#         758
+  C:2EB6H         LINE#         759
+  C:2EBBH         LINE#         760
+  -------         ENDPROC       GETDMPCONFIG2
+  -------         PROC          _SETDMPCONFIG2
+  D:0007H         SYMBOL        config
+  C:31A0H         LINE#         761
+  C:31A0H         LINE#         762
+  -------         ENDPROC       _SETDMPCONFIG2
+  -------         PROC          GETOTPBANKVALID
+  C:2E06H         LINE#         765
+  C:2E06H         LINE#         766
+  C:2E17H         LINE#         767
+  C:2E1CH         LINE#         768
+  -------         ENDPROC       GETOTPBANKVALID
+  -------         PROC          _SETOTPBANKVALID
+  D:0007H         SYMBOL        enabled
+  C:3168H         LINE#         769
+  C:3168H         LINE#         770
+  -------         ENDPROC       _SETOTPBANKVALID
+  -------         PROC          GETXGYROOFFSETTC
+  C:2D69H         LINE#         776
+  C:2D69H         LINE#         777
+  C:2D7EH         LINE#         778
+  C:2D83H         LINE#         779
+  -------         ENDPROC       GETXGYROOFFSETTC
+  -------         PROC          _SETXGYROOFFSETTC
+  D:0007H         SYMBOL        offset
+  C:300BH         LINE#         780
+  C:300BH         LINE#         781
+  -------         ENDPROC       _SETXGYROOFFSETTC
+  -------         PROC          GETYGYROOFFSETTC
+  C:2D84H         LINE#         787
+  C:2D84H         LINE#         788
+  C:2D99H         LINE#         789
+  C:2D9EH         LINE#         790
+  -------         ENDPROC       GETYGYROOFFSETTC
+  -------         PROC          _SETYGYROOFFSETTC
+  D:0007H         SYMBOL        offset
+  C:3019H         LINE#         791
+  C:3019H         LINE#         792
+  -------         ENDPROC       _SETYGYROOFFSETTC
+  -------         PROC          GETZGYROOFFSETTC
+  C:2D9FH         LINE#         798
+  C:2D9FH         LINE#         799
+  C:2DB4H         LINE#         800
+  C:2DB9H         LINE#         801
+  -------         ENDPROC       GETZGYROOFFSETTC
+  -------         PROC          _SETZGYROOFFSETTC
+  D:0007H         SYMBOL        offset
+  C:3027H         LINE#         802
+  C:3027H         LINE#         803
+  -------         ENDPROC       _SETZGYROOFFSETTC
+  -------         PROC          GETMOTIONDETECTIONTHRESHOLD
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 27
+
+
+  C:2EBCH         LINE#         813
+  C:2EBCH         LINE#         814
+  C:2EC9H         LINE#         815
+  C:2ECEH         LINE#         816
+  -------         ENDPROC       GETMOTIONDETECTIONTHRESHOLD
+  -------         PROC          _SETMOTIONDETECTIONTHRESHOLD
+  D:0007H         SYMBOL        threshold
+  C:31A9H         LINE#         823
+  C:31A9H         LINE#         824
+  -------         ENDPROC       _SETMOTIONDETECTIONTHRESHOLD
+  -------         PROC          GETZEROMOTIONDETECTIONTHRESHOLD
+  C:2ECFH         LINE#         835
+  C:2ECFH         LINE#         836
+  C:2EDCH         LINE#         837
+  C:2EE1H         LINE#         838
+  -------         ENDPROC       GETZEROMOTIONDETECTIONTHRESHOLD
+  -------         PROC          _SETZEROMOTIONDETECTIONTHRESHOLD
+  D:0007H         SYMBOL        threshold
+  C:31B2H         LINE#         845
+  C:31B2H         LINE#         846
+  -------         ENDPROC       _SETZEROMOTIONDETECTIONTHRESHOLD
+  -------         PROC          GETMOTIONDETECTIONDURATION
+  C:2EE2H         LINE#         855
+  C:2EE2H         LINE#         856
+  C:2EEFH         LINE#         857
+  C:2EF4H         LINE#         858
+  -------         ENDPROC       GETMOTIONDETECTIONDURATION
+  -------         PROC          _SETMOTIONDETECTIONDURATION
+  D:0007H         SYMBOL        duration
+  C:31BBH         LINE#         865
+  C:31BBH         LINE#         866
+  -------         ENDPROC       _SETMOTIONDETECTIONDURATION
+  -------         PROC          GETZEROMOTIONDETECTIONDURATION
+  C:2EF5H         LINE#         875
+  C:2EF5H         LINE#         876
+  C:2F02H         LINE#         877
+  C:2F07H         LINE#         878
+  -------         ENDPROC       GETZEROMOTIONDETECTIONDURATION
+  -------         PROC          _SETZEROMOTIONDETECTIONDURATION
+  D:0007H         SYMBOL        duration
+  C:31C4H         LINE#         885
+  C:31C4H         LINE#         886
+  -------         ENDPROC       _SETZEROMOTIONDETECTIONDURATION
+  -------         PROC          GETFIFOENABLED
+  C:2DEEH         LINE#         894
+  C:2DEEH         LINE#         895
+  C:2E00H         LINE#         896
+  C:2E05H         LINE#         897
+  -------         ENDPROC       GETFIFOENABLED
+  -------         PROC          _SETFIFOENABLED
+  D:0007H         SYMBOL        enabled
+  C:30FCH         LINE#         904
+  C:30FCH         LINE#         905
+  -------         ENDPROC       _SETFIFOENABLED
+  -------         PROC          RESETDMP
+  C:3082H         LINE#         908
+  C:3082H         LINE#         909
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 28
+
+
+  -------         ENDPROC       RESETDMP
+  -------         PROC          DMPINITIALIZE
+  -------         DO            
+  X:0289H         SYMBOL        xgOffsetTC
+  X:028AH         SYMBOL        ygOffsetTC
+  X:028BH         SYMBOL        zgOffsetTC
+  X:028CH         SYMBOL        dmpUpdate
+  X:029CH         SYMBOL        j
+  X:029DH         SYMBOL        pos
+  X:029FH         SYMBOL        fifoCount
+  X:02A1H         SYMBOL        fifoBuffer
+  X:0321H         SYMBOL        b
+  X:0322H         SYMBOL        data_to_write
+  X:0323H         SYMBOL        mask
+  -------         ENDDO         
+  C:08D3H         LINE#         912
+  C:08D3H         LINE#         915
+  C:08DAH         LINE#         925
+  C:08DDH         LINE#         926
+  C:08E4H         LINE#         937
+  C:08E9H         LINE#         941
+  C:08F2H         LINE#         944
+  C:08F7H         LINE#         950
+  C:08FEH         LINE#         960
+  C:0906H         LINE#         961
+  C:090EH         LINE#         962
+  C:0916H         LINE#         973
+  C:091DH         LINE#         976
+  C:0922H         LINE#         978
+  C:0929H         LINE#         980
+  C:092CH         LINE#         981
+  C:0933H         LINE#         989
+  C:0950H         LINE#         997
+  C:0963H         LINE#         1002
+  C:0968H         LINE#         1006
+  C:096DH         LINE#         1010
+  C:0972H         LINE#         1018
+  C:0978H         LINE#         1021
+  C:0984H         LINE#         1023
+  C:0984H         LINE#         1025
+  C:0984H         LINE#         1028
+  C:098AH         LINE#         1029
+  C:0994H         LINE#         1030
+  C:0998H         LINE#         1031
+  C:09A4H         LINE#         1032
+  C:09A7H         LINE#         1035
+  C:09B0H         LINE#         1037
+  C:09B0H         LINE#         1039
+  C:09B0H         LINE#         1046
+  C:09B5H         LINE#         1050
+  C:09BAH         LINE#         1054
+  C:09BFH         LINE#         1055
+  C:09C4H         LINE#         1059
+  C:09C9H         LINE#         1067
+  C:09D6H         LINE#         1069
+  C:09D6H         LINE#         1071
+  C:09D6H         LINE#         1074
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 29
+
+
+  C:09DCH         LINE#         1075
+  C:09E3H         LINE#         1076
+  C:09E7H         LINE#         1077
+  C:09F3H         LINE#         1078
+  C:09F6H         LINE#         1081
+  C:09FFH         LINE#         1083
+  C:09FFH         LINE#         1085
+  C:09FFH         LINE#         1090
+  C:0A0CH         LINE#         1092
+  C:0A0CH         LINE#         1094
+  C:0A0CH         LINE#         1097
+  C:0A12H         LINE#         1098
+  C:0A19H         LINE#         1099
+  C:0A1DH         LINE#         1100
+  C:0A29H         LINE#         1101
+  C:0A2CH         LINE#         1104
+  C:0A35H         LINE#         1106
+  C:0A35H         LINE#         1108
+  C:0A35H         LINE#         1113
+  C:0A42H         LINE#         1115
+  C:0A42H         LINE#         1117
+  C:0A42H         LINE#         1120
+  C:0A48H         LINE#         1121
+  C:0A4FH         LINE#         1122
+  C:0A52H         LINE#         1123
+  C:0A5EH         LINE#         1124
+  C:0A6BH         LINE#         1127
+  C:0A74H         LINE#         1129
+  C:0A74H         LINE#         1131
+  C:0A74H         LINE#         1141
+  C:0AD1H         LINE#         1144
+  C:0AD4H         LINE#         1148
+  C:0B31H         LINE#         1150
+  C:0B34H         LINE#         1153
+  C:0B37H         LINE#         1156
+  C:0B42H         LINE#         1161
+  C:0B4CH         LINE#         1164
+  C:0B51H         LINE#         1167
+  C:0B56H         LINE#         1170
+  C:0B5BH         LINE#         1173
+  C:0B60H         LINE#         1176
+  C:0B63H         LINE#         1179
+  C:0B68H         LINE#         1182
+  C:0B6DH         LINE#         1185
+  C:0B70H         LINE#         1189
+  C:0BCDH         LINE#         1190
+  C:0BD0H         LINE#         1194
+  C:0C2DH         LINE#         1195
+  C:0C30H         LINE#         1199
+  C:0C8DH         LINE#         1200
+  C:0C90H         LINE#         1206
+  C:0C9FH         LINE#         1207
+  C:0CAAH         LINE#         1209
+  C:0CACH         LINE#         1214
+  C:0CAFH         LINE#         1223
+  C:0D0CH         LINE#         1224
+  C:0D2CH         LINE#         1228
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 30
+
+
+  C:0D3BH         LINE#         1229
+  C:0D46H         LINE#         1230
+  C:0D48H         LINE#         1236
+  C:0D4BH         LINE#         1245
+  C:0DA8H         LINE#         1246
+  C:0DABH         LINE#         1251
+  C:0DB0H         LINE#         1254
+  C:0DB9H         LINE#         1260
+  C:0DBCH         LINE#         1261
+  C:0DBFH         LINE#         1262
+  C:0DC1H         LINE#         1265
+  C:0DC4H         LINE#         1266
+  C:0DC4H         LINE#         1267
+  C:0DC4H         LINE#         1270
+  C:0DC7H         LINE#         1271
+  C:0DC7H         LINE#         1273
+  C:0DC9H         LINE#         1274
+  -------         ENDPROC       DMPINITIALIZE
+  -------         PROC          _DMPGETQUATERNION_INT16
+  X:0360H         SYMBOL        data_ptr
+  X:0363H         SYMBOL        packet
+  C:203CH         LINE#         1277
+  C:2047H         LINE#         1279
+  C:2066H         LINE#         1280
+  C:208EH         LINE#         1281
+  C:20BDH         LINE#         1282
+  C:20ECH         LINE#         1283
+  C:211BH         LINE#         1284
+  C:211DH         LINE#         1285
+  -------         ENDPROC       _DMPGETQUATERNION_INT16
+  -------         PROC          _DMPGETPACKET16BITS
+  X:0366H         SYMBOL        data_ptr
+  X:0369H         SYMBOL        packet
+  C:14F5H         LINE#         1286
+  C:1500H         LINE#         1289
+  C:1540H         LINE#         1290
+  C:1588H         LINE#         1291
+  C:15D0H         LINE#         1292
+  C:1618H         LINE#         1294
+  C:1660H         LINE#         1295
+  C:16A8H         LINE#         1296
+  C:16F0H         LINE#         1298
+  C:1738H         LINE#         1299
+  C:1780H         LINE#         1300
+  C:17C8H         LINE#         1301
+  C:17CAH         LINE#         1302
+  -------         ENDPROC       _DMPGETPACKET16BITS
+  -------         PROC          _GETMOTION6_VARIABLES
+  X:0346H         SYMBOL        ax
+  X:0349H         SYMBOL        ay
+  X:034CH         SYMBOL        az
+  X:034FH         SYMBOL        gx
+  X:0352H         SYMBOL        gy
+  X:0355H         SYMBOL        gz
+  C:21EDH         LINE#         1310
+  C:21F8H         LINE#         1311
+  C:220AH         LINE#         1314
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 31
+
+
+  C:2225H         LINE#         1315
+  C:2240H         LINE#         1316
+  C:225BH         LINE#         1317
+  C:2276H         LINE#         1318
+  C:2291H         LINE#         1319
+  -------         ENDPROC       _GETMOTION6_VARIABLES
+  -------         PROC          _SETUP_T0_TICKS
+  D:0002H         SYMBOL        number_beats
+  D:0005H         SYMBOL        flag_count
+  C:3035H         LINE#         73
+  C:3037H         LINE#         74
+  C:3039H         LINE#         75
+  C:303CH         LINE#         76
+  C:3042H         LINE#         77
+  -------         ENDPROC       _SETUP_T0_TICKS
+  -------         PROC          TMR0_IRQ
+  C:2C80H         LINE#         80
+  C:2C84H         LINE#         82
+  C:2C84H         LINE#         83
+  C:2C84H         LINE#         84
+  C:2C86H         LINE#         85
+  C:2C8DH         LINE#         86
+  C:2C90H         LINE#         87
+  C:2C93H         LINE#         88
+  C:2C93H         LINE#         89
+  C:2C96H         LINE#         90
+  C:2C99H         LINE#         91
+  C:2C99H         LINE#         92
+  -------         ENDPROC       TMR0_IRQ
+  -------         PROC          START_T0
+  C:2F97H         LINE#         94
+  C:2F97H         LINE#         95
+  C:2F9AH         LINE#         96
+  C:2F9DH         LINE#         97
+  C:2FA0H         LINE#         98
+  C:2FA2H         LINE#         99
+  C:2FA4H         LINE#         100
+  C:2FA6H         LINE#         101
+  -------         ENDPROC       START_T0
+  -------         PROC          STOP_T0
+  C:2FA7H         LINE#         103
+  C:2FA7H         LINE#         104
+  C:2FAAH         LINE#         105
+  C:2FADH         LINE#         106
+  C:2FB0H         LINE#         107
+  C:2FB2H         LINE#         108
+  C:2FB4H         LINE#         109
+  C:2FB6H         LINE#         110
+  -------         ENDPROC       STOP_T0
+  -------         PROC          PISCA_LED
+  C:2F40H         LINE#         36
+  C:2F40H         LINE#         37
+  -------         ENDPROC       PISCA_LED
+  -------         PROC          INICIARIO
+  C:2F08H         LINE#         42
+  C:2F08H         LINE#         43
+  C:2F0BH         LINE#         44
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 32
+
+
+  C:2F0DH         LINE#         45
+  C:2F11H         LINE#         47
+  C:2F14H         LINE#         48
+  C:2F17H         LINE#         50
+  C:2F1AH         LINE#         51
+  -------         ENDPROC       INICIARIO
+  -------         PROC          SETUP
+  C:2A24H         LINE#         54
+  C:2A24H         LINE#         55
+  C:2A27H         LINE#         56
+  C:2A2AH         LINE#         57
+  C:2A45H         LINE#         58
+  C:2A48H         LINE#         59
+  C:2A4DH         LINE#         60
+  C:2A50H         LINE#         61
+  C:2A53H         LINE#         62
+  C:2A56H         LINE#         63
+  C:2A5FH         LINE#         64
+  C:2A62H         LINE#         65
+  -------         ENDPROC       SETUP
+  -------         PROC          MAIN
+  C:1CCAH         LINE#         68
+  C:1CCAH         LINE#         69
+  C:1CCDH         LINE#         70
+  C:1CCDH         LINE#         74
+  C:1CD1H         LINE#         75
+  C:1CD4H         LINE#         76
+  C:1CE3H         LINE#         77
+  C:1CECH         LINE#         78
+  C:1CF7H         LINE#         79
+  C:1CFDH         LINE#         80
+  C:1CFFH         LINE#         81
+  C:1D01H         LINE#         82
+  C:1D01H         LINE#         86
+  C:1D04H         LINE#         87
+  C:1D07H         LINE#         88
+  C:1D09H         LINE#         90
+  C:1D10H         LINE#         91
+  C:1D2DH         LINE#         92
+  C:1D2DH         LINE#         93
+  C:1D33H         LINE#         94
+  C:1D3BH         LINE#         95
+  C:1D43H         LINE#         96
+  C:1D4BH         LINE#         97
+  C:1D53H         LINE#         98
+  C:1D5BH         LINE#         99
+  C:1D63H         LINE#         100
+  C:1D6BH         LINE#         101
+  C:1D73H         LINE#         102
+  C:1D7BH         LINE#         103
+  C:1D83H         LINE#         104
+  C:1D8BH         LINE#         105
+  C:1D93H         LINE#         106
+  C:1D9BH         LINE#         107
+  C:1DA3H         LINE#         108
+  C:1DABH         LINE#         109
+  C:1DB3H         LINE#         110
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 33
+
+
+  C:1DBBH         LINE#         111
+  C:1DC3H         LINE#         112
+  C:1DCBH         LINE#         113
+  C:1DD2H         LINE#         114
+  C:1DD2H         LINE#         115
+  C:1DD2H         LINE#         116
+  C:1DD4H         LINE#         117
+  C:1DD4H         LINE#         118
+  C:1DD6H         LINE#         119
+  C:1DDCH         LINE#         120
+  C:1DDEH         LINE#         121
+  C:1DDEH         LINE#         122
+  C:1DE0H         LINE#         123
+  C:1DE9H         LINE#         124
+  C:1DECH         LINE#         125
+  C:1DECH         LINE#         126
+  C:1DF2H         LINE#         127
+  C:1DFBH         LINE#         128
+  C:1E04H         LINE#         129
+  C:1E0DH         LINE#         130
+  C:1E16H         LINE#         131
+  C:1E1FH         LINE#         132
+  C:1E28H         LINE#         133
+  C:1E2EH         LINE#         134
+  C:1E35H         LINE#         135
+  C:1E38H         LINE#         136
+  C:1E3BH         LINE#         137
+  C:1E3BH         LINE#         139
+  C:1E3EH         LINE#         140
+  -------         ENDPROC       MAIN
+  -------         PROC          INITIAL_SETUP_DMP
+  -------         DO            
+  X:0288H         SYMBOL        ret
+  -------         ENDDO         
+  C:2687H         LINE#         152
+  C:2687H         LINE#         154
+  C:268AH         LINE#         155
+  C:268DH         LINE#         156
+  C:2695H         LINE#         157
+  C:2698H         LINE#         158
+  C:269EH         LINE#         159
+  C:26A1H         LINE#         160
+  C:26A4H         LINE#         161
+  C:26A7H         LINE#         162
+  C:26AFH         LINE#         163
+  C:26B2H         LINE#         164
+  C:26B9H         LINE#         165
+  C:26BCH         LINE#         166
+  C:26C2H         LINE#         167
+  C:26C5H         LINE#         168
+  C:26CAH         LINE#         169
+  C:26CDH         LINE#         171
+  C:26D4H         LINE#         172
+  C:26DBH         LINE#         173
+  C:26E2H         LINE#         174
+  C:26E9H         LINE#         175
+  C:26F0H         LINE#         176
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 34
+
+
+  C:26F7H         LINE#         177
+  C:26FAH         LINE#         178
+  C:26FAH         LINE#         179
+  C:26FAH         LINE#         180
+  -------         ENDPROC       INITIAL_SETUP_DMP
+  -------         PROC          I2C_IRQ
+  C:2AA4H         LINE#         184
+  C:2AC1H         LINE#         185
+  C:2AC4H         LINE#         186
+  -------         ENDPROC       I2C_IRQ
+  -------         ENDMOD        MAIN
+
+  -------         MODULE        HAL_DELAY
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  C:2E5CH         PUBLIC        _delay_ms
+  C:2DDFH         PUBLIC        _delay_us
+  -------         PROC          L?0011
+  -------         ENDPROC       L?0011
+  -------         PROC          _DELAY_US
+  D:0006H         SYMBOL        us
+  C:2DDFH         LINE#         37
+  C:2DDFH         LINE#         38
+  C:2DDFH         LINE#         40
+  C:2DDFH         LINE#         41
+  C:2DE0H         LINE#         42
+  C:2DE1H         LINE#         43
+  C:2DE2H         LINE#         44
+  C:2DE3H         LINE#         45
+  C:2DE4H         LINE#         46
+  C:2DEDH         LINE#         47
+  -------         ENDPROC       _DELAY_US
+  -------         PROC          _DELAY_MS
+  D:0004H         SYMBOL        ms
+  C:2E5CH         LINE#         49
+  C:2E60H         LINE#         50
+  C:2E60H         LINE#         52
+  C:2E60H         LINE#         53
+  C:2E60H         LINE#         54
+  C:2E63H         LINE#         55
+  C:2E63H         LINE#         56
+  C:2E66H         LINE#         57
+  C:2E6FH         LINE#         58
+  -------         ENDPROC       _DELAY_MS
+  -------         ENDMOD        HAL_DELAY
+
+  -------         MODULE        HAL_W2_ISR
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:313EH         PUBLIC        _hal_w2_enable
+  D:00A8H         PUBLIC        IEN0
+  D:00B8H         PUBLIC        IEN1
+  D:001DH         PUBLIC        data_ready
+  C:3107H         PUBLIC        _hal_w2_respond_to_gen_adr
+  D:00E2H         PUBLIC        W2CON0
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 35
+
+
+  C:3043H         PUBLIC        _hal_w2_set_clk_freq
+  D:00E1H         PUBLIC        W2CON1
+  C:2F7CH         PUBLIC        hal_w2_wait_data_ready_ISR
+  C:2E1DH         PUBLIC        _hal_w2_init_transfer
+  C:3112H         PUBLIC        _hal_w2_alter_clock
+  D:001EH         PUBLIC        w2_status
+  B:00C0H.2       PUBLIC        SPIF
+  D:00D9H         PUBLIC        W2SADR
+  D:0088H         PUBLIC        TCON
+  C:3133H         PUBLIC        _hal_w2_set_op_mode
+  C:0003H         PUBLIC        _hal_w2_set_slave_address
+  C:26FBH         PUBLIC        _i2c_mpu_readBytes
+  C:298BH         PUBLIC        _hal_w2_read
+  C:3128H         PUBLIC        _hal_w2_irq_adr_match_enable
+  C:288EH         PUBLIC        _i2c_mpu_readBits
+  C:2F52H         PUBLIC        _i2c_mpu_readByte
+  C:2A65H         PUBLIC        _i2c_mpu_writeBytes
+  C:2BAEH         PUBLIC        hal_w2_wait_data_ready
+  C:3172H         PUBLIC        I2C_IRQ_handler
+  C:2ADFH         PUBLIC        _hal_w2_write
+  C:2BD5H         PUBLIC        _i2c_mpu_readBit
+  C:282BH         PUBLIC        _i2c_mpu_writeWords
+  C:3149H         PUBLIC        _hal_w2_all_irq_enable
+  C:27C8H         PUBLIC        _i2c_mpu_writeBits
+  C:2F86H         PUBLIC        _i2c_mpu_writeByte
+  C:2C3FH         PUBLIC        _hal_w2_configure_master
+  D:00A6H         PUBLIC        INTEXP
+  C:2F1BH         PUBLIC        _i2c_mpu_writeWord
+  D:0094H         PUBLIC        P1DIR
+  C:293DH         PUBLIC        _i2c_mpu_writeBit
+  D:00DAH         PUBLIC        W2DAT
+  D:0098H         PUBLIC        S0CON
+  C:258CH         PUBLIC        hal_w2_soft_reset
+  D:00D8H         PUBLIC        ADCON
+  D:00C8H         PUBLIC        T2CON
+  C:311DH         PUBLIC        _hal_w2_irq_stop_cond_enable
+  D:00F8H         PUBLIC        FSR
+  D:00E8H         PUBLIC        RFCON
+  D:00D0H         PUBLIC        PSW
+  D:00C0H         PUBLIC        IRCON
+  -------         PROC          L?0106
+  -------         ENDPROC       L?0106
+  -------         PROC          HAL_W2_WAIT_DATA_READY_ISR
+  C:2F7CH         LINE#         39
+  C:2F7CH         LINE#         40
+  C:2F7CH         LINE#         41
+  C:2F7FH         LINE#         42
+  C:2F83H         LINE#         43
+  C:2F85H         LINE#         44
+  -------         ENDPROC       HAL_W2_WAIT_DATA_READY_ISR
+  -------         PROC          I2C_IRQ_HANDLER
+  C:3172H         LINE#         45
+  C:3172H         LINE#         46
+  C:3172H         LINE#         48
+  C:3175H         LINE#         49
+  C:317BH         LINE#         51
+  -------         ENDPROC       I2C_IRQ_HANDLER
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 36
+
+
+  -------         PROC          _HAL_W2_RESPOND_TO_GEN_ADR
+  D:0007H         SYMBOL        resp_gen
+  C:3107H         LINE#         52
+  C:3107H         LINE#         53
+  C:3107H         LINE#         54
+  C:310AH         LINE#         55
+  C:310AH         LINE#         56
+  C:310DH         LINE#         57
+  C:310EH         LINE#         59
+  C:310EH         LINE#         60
+  C:3111H         LINE#         61
+  C:3111H         LINE#         62
+  -------         ENDPROC       _HAL_W2_RESPOND_TO_GEN_ADR
+  -------         PROC          _HAL_W2_ALTER_CLOCK
+  D:0007H         SYMBOL        alt_clk
+  C:3112H         LINE#         64
+  C:3112H         LINE#         65
+  C:3112H         LINE#         66
+  C:3115H         LINE#         67
+  C:3115H         LINE#         68
+  C:3118H         LINE#         69
+  C:3119H         LINE#         71
+  C:3119H         LINE#         72
+  C:311CH         LINE#         73
+  C:311CH         LINE#         74
+  -------         ENDPROC       _HAL_W2_ALTER_CLOCK
+  -------         PROC          _HAL_W2_IRQ_STOP_COND_ENABLE
+  D:0007H         SYMBOL        stop_cond
+  C:311DH         LINE#         76
+  C:311DH         LINE#         77
+  C:311DH         LINE#         78
+  C:3120H         LINE#         79
+  C:3120H         LINE#         80
+  C:3123H         LINE#         81
+  C:3124H         LINE#         83
+  C:3124H         LINE#         84
+  C:3127H         LINE#         85
+  C:3127H         LINE#         86
+  -------         ENDPROC       _HAL_W2_IRQ_STOP_COND_ENABLE
+  -------         PROC          _HAL_W2_IRQ_ADR_MATCH_ENABLE
+  D:0007H         SYMBOL        addr_match
+  C:3128H         LINE#         88
+  C:3128H         LINE#         89
+  C:3128H         LINE#         90
+  C:312BH         LINE#         91
+  C:312BH         LINE#         92
+  C:312EH         LINE#         93
+  C:312FH         LINE#         95
+  C:312FH         LINE#         96
+  C:3132H         LINE#         97
+  C:3132H         LINE#         98
+  -------         ENDPROC       _HAL_W2_IRQ_ADR_MATCH_ENABLE
+  -------         PROC          _HAL_W2_SET_SLAVE_ADDRESS
+  D:0007H         SYMBOL        address
+  C:0003H         LINE#         100
+  C:0003H         LINE#         101
+  C:0003H         LINE#         102
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 37
+
+
+  C:0008H         LINE#         103
+  -------         ENDPROC       _HAL_W2_SET_SLAVE_ADDRESS
+  -------         PROC          _HAL_W2_SET_CLK_FREQ
+  D:0007H         SYMBOL        freq
+  C:3043H         LINE#         107
+  C:3043H         LINE#         108
+  C:3043H         LINE#         109
+  C:3050H         LINE#         110
+  -------         ENDPROC       _HAL_W2_SET_CLK_FREQ
+  -------         PROC          _HAL_W2_SET_OP_MODE
+  D:0007H         SYMBOL        mode
+  C:3133H         LINE#         112
+  C:3133H         LINE#         113
+  C:3133H         LINE#         114
+  C:3136H         LINE#         115
+  C:3136H         LINE#         116
+  C:3139H         LINE#         117
+  C:313AH         LINE#         119
+  C:313AH         LINE#         120
+  C:313DH         LINE#         121
+  C:313DH         LINE#         122
+  -------         ENDPROC       _HAL_W2_SET_OP_MODE
+  -------         PROC          _HAL_W2_ENABLE
+  D:0007H         SYMBOL        en
+  C:313EH         LINE#         124
+  C:313EH         LINE#         125
+  C:313EH         LINE#         126
+  C:3141H         LINE#         127
+  C:3141H         LINE#         128
+  C:3144H         LINE#         129
+  C:3145H         LINE#         131
+  C:3145H         LINE#         132
+  C:3148H         LINE#         133
+  C:3148H         LINE#         134
+  -------         ENDPROC       _HAL_W2_ENABLE
+  -------         PROC          _HAL_W2_ALL_IRQ_ENABLE
+  D:0007H         SYMBOL        irq
+  C:3149H         LINE#         136
+  C:3149H         LINE#         137
+  C:3149H         LINE#         140
+  C:314CH         LINE#         141
+  C:314CH         LINE#         142
+  C:314FH         LINE#         143
+  C:3150H         LINE#         145
+  C:3150H         LINE#         146
+  C:3153H         LINE#         147
+  C:3153H         LINE#         148
+  -------         ENDPROC       _HAL_W2_ALL_IRQ_ENABLE
+  -------         PROC          _HAL_W2_CONFIGURE_MASTER
+  D:0006H         SYMBOL        mode
+  C:2C3FH         LINE#         150
+  C:2C41H         LINE#         151
+  C:2C41H         LINE#         152
+  C:2C46H         LINE#         153
+  C:2C4BH         LINE#         154
+  C:2C50H         LINE#         156
+  C:2C53H         LINE#         157
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 38
+
+
+  C:2C56H         LINE#         158
+  C:2C59H         LINE#         160
+  C:2C5DH         LINE#         161
+  C:2C5FH         LINE#         162
+  -------         ENDPROC       _HAL_W2_CONFIGURE_MASTER
+  -------         PROC          HAL_W2_WAIT_DATA_READY
+  -------         DO            
+  D:0016H         SYMBOL        timeout_counter
+  D:001AH         SYMBOL        w2_status
+  D:001BH         SYMBOL        data_ready
+  D:001CH         SYMBOL        nack_received
+  -------         ENDDO         
+  C:2BAEH         LINE#         164
+  C:2BAEH         LINE#         165
+  C:2BAEH         LINE#         166
+  C:2BB8H         LINE#         172
+  C:2BB8H         LINE#         173
+  C:2BBBH         LINE#         174
+  C:2BC1H         LINE#         175
+  C:2BC7H         LINE#         176
+  C:2BCEH         LINE#         177
+  C:2BD2H         LINE#         180
+  C:2BD4H         LINE#         181
+  -------         ENDPROC       HAL_W2_WAIT_DATA_READY
+  -------         PROC          _HAL_W2_INIT_TRANSFER
+  D:0007H         SYMBOL        address
+  D:0005H         SYMBOL        direction
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  -------         ENDDO         
+  C:2E1DH         LINE#         183
+  C:2E1DH         LINE#         184
+  C:2E1DH         LINE#         187
+  C:2E20H         LINE#         188
+  C:2E26H         LINE#         190
+  C:2E29H         LINE#         192
+  C:2E2DH         LINE#         193
+  C:2E2DH         LINE#         194
+  C:2E30H         LINE#         195
+  C:2E30H         LINE#         197
+  C:2E30H         LINE#         198
+  C:2E32H         LINE#         199
+  C:2E32H         LINE#         200
+  -------         ENDPROC       _HAL_W2_INIT_TRANSFER
+  -------         PROC          _HAL_W2_WRITE
+  D:0007H         SYMBOL        address
+  D:004BH         SYMBOL        data_ptr
+  D:004EH         SYMBOL        data_len
+  -------         DO            
+  D:0006H         SYMBOL        ack_received
+  -------         DO            
+  D:004FH         SYMBOL        w2_status
+  -------         ENDDO         
+  -------         ENDDO         
+  C:2ADFH         LINE#         202
+  C:2AE5H         LINE#         203
+  C:2AE5H         LINE#         205
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 39
+
+
+  C:2AECH         LINE#         207
+  C:2AF9H         LINE#         208
+  C:2AF9H         LINE#         210
+  C:2B05H         LINE#         211
+  C:2B0AH         LINE#         212
+  C:2B0FH         LINE#         213
+  C:2B0FH         LINE#         214
+  C:2B11H         LINE#         215
+  C:2B11H         LINE#         216
+  C:2B13H         LINE#         218
+  C:2B16H         LINE#         220
+  C:2B18H         LINE#         221
+  -------         ENDPROC       _HAL_W2_WRITE
+  -------         PROC          _HAL_W2_READ
+  D:0007H         SYMBOL        address
+  D:0051H         SYMBOL        data_ptr
+  D:0054H         SYMBOL        data_len
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  D:0055H         SYMBOL        ack_received
+  -------         ENDDO         
+  C:298BH         LINE#         223
+  C:2991H         LINE#         224
+  C:2991H         LINE#         228
+  C:2998H         LINE#         230
+  C:299CH         LINE#         231
+  C:299CH         LINE#         233
+  C:299FH         LINE#         234
+  C:299FH         LINE#         237
+  C:29AAH         LINE#         238
+  C:29AAH         LINE#         239
+  C:29AEH         LINE#         240
+  C:29AEH         LINE#         241
+  C:29B1H         LINE#         242
+  C:29B1H         LINE#         244
+  C:29B4H         LINE#         246
+  C:29C7H         LINE#         247
+  C:29D3H         LINE#         248
+  C:29D5H         LINE#         250
+  C:29D7H         LINE#         251
+  -------         ENDPROC       _HAL_W2_READ
+  -------         PROC          HAL_W2_SOFT_RESET
+  -------         DO            
+  D:003BH         SYMBOL        pulsecount
+  D:003CH         SYMBOL        w2_freq
+  -------         ENDDO         
+  C:258CH         LINE#         253
+  C:258CH         LINE#         254
+  C:258CH         LINE#         259
+  C:2592H         LINE#         261
+  C:2595H         LINE#         262
+  C:259DH         LINE#         266
+  C:25A0H         LINE#         267
+  C:25A3H         LINE#         270
+  C:25A6H         LINE#         275
+  C:25AEH         LINE#         278
+  C:25B5H         LINE#         280
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 40
+
+
+  C:25B8H         LINE#         284
+  C:25BFH         LINE#         285
+  C:25C2H         LINE#         286
+  C:25C2H         LINE#         288
+  C:25CAH         LINE#         289
+  C:25D1H         LINE#         291
+  C:25D4H         LINE#         292
+  C:25DBH         LINE#         293
+  C:25E4H         LINE#         296
+  C:25EBH         LINE#         298
+  C:25F3H         LINE#         301
+  C:25FAH         LINE#         303
+  C:2602H         LINE#         306
+  C:2605H         LINE#         309
+  C:2608H         LINE#         310
+  C:260EH         LINE#         312
+  -------         ENDPROC       HAL_W2_SOFT_RESET
+  -------         PROC          _I2C_MPU_WRITEBYTE
+  D:0007H         SYMBOL        devAddr
+  D:0005H         SYMBOL        regAddr
+  D:002EH         SYMBOL        data_to_write
+  C:2F86H         LINE#         317
+  C:2F88H         LINE#         318
+  C:2F96H         LINE#         319
+  -------         ENDPROC       _I2C_MPU_WRITEBYTE
+  -------         PROC          _I2C_MPU_WRITEBYTES
+  D:0007H         SYMBOL        devAddr
+  D:0004H         SYMBOL        regAddr
+  D:0006H         SYMBOL        data_len
+  D:0032H         SYMBOL        data_ptr
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  D:0005H         SYMBOL        ack_received
+  -------         ENDDO         
+  C:2A65H         LINE#         321
+  C:2A69H         LINE#         326
+  C:2A70H         LINE#         327
+  C:2A72H         LINE#         328
+  C:2A75H         LINE#         329
+  C:2A79H         LINE#         330
+  C:2A79H         LINE#         331
+  C:2A7BH         LINE#         332
+  C:2A7BH         LINE#         334
+  C:2A87H         LINE#         335
+  C:2A87H         LINE#         336
+  C:2A93H         LINE#         337
+  C:2A96H         LINE#         338
+  C:2A9AH         LINE#         339
+  C:2A9AH         LINE#         340
+  C:2A9CH         LINE#         341
+  C:2A9CH         LINE#         342
+  C:2A9EH         LINE#         343
+  C:2AA1H         LINE#         345
+  C:2AA3H         LINE#         346
+  -------         ENDPROC       _I2C_MPU_WRITEBYTES
+  -------         PROC          _I2C_MPU_READBYTE
+  D:0007H         SYMBOL        devAddr
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 41
+
+
+  D:0005H         SYMBOL        regAddr
+  D:0030H         SYMBOL        data_ptr
+  C:2F52H         LINE#         348
+  C:2F58H         LINE#         349
+  C:2F63H         LINE#         350
+  -------         ENDPROC       _I2C_MPU_READBYTE
+  -------         PROC          _I2C_MPU_READBYTES
+  D:0006H         SYMBOL        devAddr
+  D:0004H         SYMBOL        regAddr
+  D:0035H         SYMBOL        data_len
+  D:0036H         SYMBOL        data_ptr
+  -------         DO            
+  D:0039H         SYMBOL        w2_status
+  D:003AH         SYMBOL        ack_received
+  -------         ENDDO         
+  C:26FBH         LINE#         352
+  C:2701H         LINE#         357
+  C:2708H         LINE#         358
+  C:270AH         LINE#         359
+  C:270FH         LINE#         360
+  C:2714H         LINE#         361
+  C:2714H         LINE#         362
+  C:2717H         LINE#         363
+  C:2717H         LINE#         367
+  C:2720H         LINE#         369
+  C:2724H         LINE#         370
+  C:2724H         LINE#         372
+  C:2727H         LINE#         374
+  C:2727H         LINE#         376
+  C:2732H         LINE#         377
+  C:2732H         LINE#         378
+  C:2736H         LINE#         379
+  C:2736H         LINE#         380
+  C:2739H         LINE#         381
+  C:2739H         LINE#         383
+  C:273EH         LINE#         385
+  C:2751H         LINE#         386
+  C:275EH         LINE#         387
+  C:2760H         LINE#         389
+  C:2762H         LINE#         390
+  -------         ENDPROC       _I2C_MPU_READBYTES
+  -------         PROC          _I2C_MPU_WRITEBIT
+  D:0027H         SYMBOL        devAddr
+  D:0028H         SYMBOL        regAddr
+  D:0029H         SYMBOL        bitNum
+  D:002AH         SYMBOL        data_to_write
+  -------         DO            
+  D:002BH         SYMBOL        b
+  -------         ENDDO         
+  C:293DH         LINE#         393
+  C:2943H         LINE#         395
+  C:294CH         LINE#         396
+  C:2981H         LINE#         397
+  C:298AH         LINE#         398
+  -------         ENDPROC       _I2C_MPU_WRITEBIT
+  -------         PROC          _I2C_MPU_WRITEBITS
+  D:0027H         SYMBOL        devAddr
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 42
+
+
+  D:0028H         SYMBOL        regAddr
+  D:0029H         SYMBOL        bitStart
+  D:002AH         SYMBOL        data_length
+  D:002BH         SYMBOL        data_to_write
+  -------         DO            
+  D:002CH         SYMBOL        b
+  -------         DO            
+  D:002DH         SYMBOL        mask
+  -------         ENDDO         
+  -------         ENDDO         
+  C:27C8H         LINE#         399
+  C:27CEH         LINE#         408
+  C:27DAH         LINE#         409
+  C:2807H         LINE#         410
+  C:2814H         LINE#         411
+  C:2818H         LINE#         412
+  C:281BH         LINE#         413
+  C:281FH         LINE#         414
+  C:2828H         LINE#         415
+  C:2828H         LINE#         416
+  C:282AH         LINE#         417
+  C:282AH         LINE#         418
+  -------         ENDPROC       _I2C_MPU_WRITEBITS
+  -------         PROC          _I2C_MPU_READBIT
+  D:0007H         SYMBOL        devAddr
+  D:0005H         SYMBOL        regAddr
+  D:003FH         SYMBOL        bitNum
+  D:0040H         SYMBOL        data_ptr
+  -------         DO            
+  D:0043H         SYMBOL        b
+  D:0007H         SYMBOL        count
+  -------         ENDDO         
+  C:2BD5H         LINE#         419
+  C:2BD7H         LINE#         421
+  C:2BE0H         LINE#         422
+  C:2BF8H         LINE#         423
+  C:2BF8H         LINE#         424
+  -------         ENDPROC       _I2C_MPU_READBIT
+  -------         PROC          _I2C_MPU_READBITS
+  D:0007H         SYMBOL        devAddr
+  D:0005H         SYMBOL        regAddr
+  D:0029H         SYMBOL        bitStart
+  D:002AH         SYMBOL        data_length
+  D:002BH         SYMBOL        data_ptr
+  -------         DO            
+  D:0005H         SYMBOL        count
+  D:002EH         SYMBOL        b
+  -------         DO            
+  D:002FH         SYMBOL        mask
+  -------         ENDDO         
+  -------         ENDDO         
+  C:288EH         LINE#         425
+  C:2890H         LINE#         432
+  C:289EH         LINE#         433
+  C:28CBH         LINE#         434
+  C:28CDH         LINE#         435
+  C:28DAH         LINE#         436
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 43
+
+
+  C:28E3H         LINE#         437
+  C:28E3H         LINE#         438
+  C:28E5H         LINE#         439
+  -------         ENDPROC       _I2C_MPU_READBITS
+  -------         PROC          _I2C_MPU_WRITEWORD
+  D:0007H         SYMBOL        devAddr
+  D:0005H         SYMBOL        regAddr
+  D:0027H         SYMBOL        data_to_write
+  C:2F1BH         LINE#         442
+  C:2F1FH         LINE#         443
+  C:2F2DH         LINE#         444
+  -------         ENDPROC       _I2C_MPU_WRITEWORD
+  -------         PROC          _I2C_MPU_WRITEWORDS
+  D:0007H         SYMBOL        devAddr
+  D:0006H         SYMBOL        regAddr
+  D:0004H         SYMBOL        data_length
+  D:002CH         SYMBOL        data_ptr
+  -------         DO            
+  D:0007H         SYMBOL        w2_status
+  D:0005H         SYMBOL        ack_received
+  -------         ENDDO         
+  C:282BH         LINE#         445
+  C:282FH         LINE#         456
+  C:2836H         LINE#         457
+  C:2838H         LINE#         458
+  C:283BH         LINE#         459
+  C:283FH         LINE#         460
+  C:283FH         LINE#         461
+  C:2841H         LINE#         462
+  C:2841H         LINE#         464
+  C:284FH         LINE#         465
+  C:284FH         LINE#         466
+  C:285CH         LINE#         467
+  C:285FH         LINE#         468
+  C:2863H         LINE#         469
+  C:2863H         LINE#         470
+  C:2865H         LINE#         471
+  C:2865H         LINE#         472
+  C:2868H         LINE#         473
+  C:287DH         LINE#         474
+  C:2880H         LINE#         475
+  C:2884H         LINE#         476
+  C:2884H         LINE#         477
+  C:2886H         LINE#         478
+  C:2886H         LINE#         479
+  C:2888H         LINE#         480
+  C:2888H         LINE#         481
+  C:2888H         LINE#         482
+  C:2888H         LINE#         483
+  C:288BH         LINE#         485
+  C:288DH         LINE#         486
+  -------         ENDPROC       _I2C_MPU_WRITEWORDS
+  -------         ENDMOD        HAL_W2_ISR
+
+  -------         MODULE        ?C?CLDPTR
+  C:0DCAH         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 44
+
+
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0DE3H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+  -------         MODULE        ?C?CSTPTR
+  C:0E10H         PUBLIC        ?C?CSTPTR
+  -------         ENDMOD        ?C?CSTPTR
+
+  -------         MODULE        ?C?CSTOPTR
+  C:0E22H         PUBLIC        ?C?CSTOPTR
+  -------         ENDMOD        ?C?CSTOPTR
+
+  -------         MODULE        ?C?UIDIV
+  C:0E44H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?ILDIX
+  C:0E99H         PUBLIC        ?C?ILDIX
+  -------         ENDMOD        ?C?ILDIX
+
+  -------         MODULE        ?C?ILDPTR
+  C:0EAFH         PUBLIC        ?C?ILDPTR
+  -------         ENDMOD        ?C?ILDPTR
+
+  -------         MODULE        ?C?ISTPTR
+  C:0EDAH         PUBLIC        ?C?ISTPTR
+  -------         ENDMOD        ?C?ISTPTR
+
+  -------         MODULE        ?C?ISTOPTR
+  C:0EF9H         PUBLIC        ?C?ISTOPTR
+  -------         ENDMOD        ?C?ISTOPTR
+
+  -------         MODULE        ?C?MEMCMP
+  C:10ACH         PUBLIC        ?C?MEMCMP
+  -------         ENDMOD        ?C?MEMCMP
+
+  -------         MODULE        MALLOC
+  C:2351H         PUBLIC        _malloc
+  -------         ENDMOD        MALLOC
+
+  -------         MODULE        INIT_MEM
+  X:0358H         PUBLIC        __mem_avail__
+  C:000EH         PUBLIC        _init_mempool
+  -------         ENDMOD        INIT_MEM
+
+  -------         MODULE        REALLOC
+  C:260FH         PUBLIC        _realloc
+  -------         ENDMOD        REALLOC
+
+  -------         MODULE        FREE
+  C:1E41H         PUBLIC        _free
+  -------         ENDMOD        FREE
+
+  -------         MODULE        ?C?COPY
+  C:11A0H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+BL51 BANKED LINKER/LOCATER V6.22                                                      07/15/2017  17:00:27  PAGE 45
+
+
+
+  -------         MODULE        ?C?IILDX
+  C:11C6H         PUBLIC        ?C?IILDX
+  -------         ENDMOD        ?C?IILDX
+
+Program Size: data=95.1 xdata=878 code=12741
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
