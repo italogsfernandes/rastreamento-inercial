@@ -129,6 +129,11 @@ class Main(QMainWindow, Ui_MainWindow):
 		#matplotlib
 		self.addmpl()
 
+		self.linereg = [3.925e-5, 3.0504e-5, 3.197e-5, 3.774e-5, 4.7458e-5]
+		self.biasreg = [-0.00664, 0.0179, -0.0163, -0.00613, -0.00614]
+		self.time = 0.0
+		self.sampfreq = 20.0
+
 	def criarSkeleton(self,distShoulders,distShouderElbow,distElbowWrist):
 			self.shdist = distShoulders/2.0
 			self.eldist = distShouderElbow
@@ -903,17 +908,29 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint.setQuaternionOffset(data[16:20])
 
 
-
 			if len(data) >= 4:
 				quat = data[0:4]
+				zn = quat[3]
+				estz = self.linereg[0]*self.time + self.biasreg[0]
+				quat[3] -= estz
+				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
+				quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 				joint.setQuaternion(quat)
 			if len(data) >= 8:
 				quat = data[4:8]
+				estz = self.linereg[1]*self.time + self.biasreg[1]
+				quat[3] -= estz
+				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
+				quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 				joint.setQuaternion(quat)
 			if len(data) >= 12:
 				quat = data[8:12]
+				estz = self.linereg[2]*self.time + self.biasreg[2]
+				quat[3] -= estz
+				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
+				quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 				joint.setQuaternion(quat)
 				joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER)
@@ -924,13 +941,22 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint.setQuaternion(quat)
 			if len(data) >= 16:
 				quat = data[12:16]
+				estz = self.linereg[3]*self.time + self.biasreg[3]
+				quat[3] -= estz
+				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
+				quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
 				joint.setQuaternion(quat)
 			if len(data) >= 20:
 				quat = data[16:20]
+				estz = self.linereg[4]*self.time + self.biasreg[4]
+				quat[3] -= estz
+				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
+				quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 				joint.setQuaternion(quat)
 
+			self.time += 1.0/self.sampfreq
 			#self.updateQuaternions(joint,quat)
 			#self.print_pacote(data)
 			#self.print_joints_quat()
