@@ -104,8 +104,7 @@ void takereading();
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   pinMode(saidaC, OUTPUT);  pinMode(saidaB, OUTPUT);  pinMode(saidaA, OUTPUT);
-  Serial.begin(115200);
-
+  Serial.begin(115200);  
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
   //Wire.setClock(400000);
@@ -208,10 +207,13 @@ void send_serial_packet(uint8_t* _fifoBuffer)
   Serial.write(_fifoBuffer[9]); //qy_lsb
   Serial.write(_fifoBuffer[12]); //qz_msb
   Serial.write(_fifoBuffer[13]); //qz_lsb
-  /*
-  Serial.print((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00);
+  
+  /*Serial.print((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00);
+  Serial.print(" ");
   Serial.print((_fifoBuffer[4] << 8 | _fifoBuffer[5]) / 16384.00);
+  Serial.print(" ");
   Serial.print((_fifoBuffer[8] << 8 | _fifoBuffer[9]) / 16384.00);
+  Serial.print(" ");
   Serial.println((_fifoBuffer[12] << 8 | _fifoBuffer[13]) / 16384.00);*/
 }
 //---------------------------------------------------------------------------
@@ -286,7 +288,11 @@ void initializeSensor(int sensorId)
       mpu.setXGyroOffset(offsets[id+3]);
       mpu.setYGyroOffset(offsets[id+4]);
       mpu.setZGyroOffset(offsets[id+5]);      
-    }
+    }   
+  }
+  else
+  {
+    Serial.println("bad conn - Sensor: "+ String(sensorId));
   }
 }
 //---------------------------------------------------------------------------

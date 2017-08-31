@@ -77,12 +77,15 @@ void setup() {
   //  TWBR = 24; // 400kHz I2C clock lllll(200kHz if CPU is 8MHz). Leonardo measured 250kHz.
 
   pinMode(saidaC, OUTPUT);  pinMode(saidaB, OUTPUT);  pinMode(saidaA, OUTPUT);
-  select_sensor(4);
+  select_sensor(1);
   // initialize serial communication
   Serial.begin(115200);
 
   // initialize device
   accelgyro.initialize();
+
+  Serial.println("Testing device connections...");
+  Serial.println(accelgyro.testConnection() ? "MPU6050 connection successful" : "MPU6050 connection failed");
 
   // wait for ready
   while (Serial.available() && Serial.read()); // empty buffer

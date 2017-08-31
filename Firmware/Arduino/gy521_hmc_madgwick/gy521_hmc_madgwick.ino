@@ -78,16 +78,24 @@ bool aquisition_running = false;
 
 //Variaveis Inercial
 MPU6050 mpu(0x68);
+int16_t accel[3], gyro[3];
+float ax,ay,az,gx,gy,gz;
 const int offsets[6] = { -1226, -71, 431, 78, -31, 25};
 uint8_t fifoBuffer[42]; // FIFO storage fifoBuffer of mpu
 int numbPackets;
 
 //Variaveis Magnetometro
 HMC5883L mag;
+float mx,my,mz;
 uint8_t mag_buffer[6];
 int16_t magOffsets[3] = {46,-322,-69};
 int16_t magmax[3] = {0,0,0};
 int16_t magmin[3] = {0,0,0};
+
+//madgwick parameters
+float GyroMeasError = PI * (40.0f / 180.0f); 
+float beta = sqrt(3.0f / 4.0f) * GyroMeasError;   // compute beta
+float quat[4] = {1.0f,0.0f,0.0f,0.0f};
 
 void setup()
 {
@@ -126,7 +134,7 @@ void loop()
       mpu.resetFIFO();
       delay(5);
       timer_id = t.every(mpu_interval, ler_sensor_inercial); //Realiza leitura e envia pacote(ou mostra) dados a cada mpu_interval
-      aquisition_running = true;      
+      aquisition_running = true;
       
     }
     else if (serialOp == '2')
@@ -137,22 +145,21 @@ void loop()
     }
     else if(serialOp == '3')
     {
-      DEBUG_PRINT_("Magnetometer calibration\n");  
-      magCal(mag,magOffsets,magmin,magmax);
+      DEBUG_PRINT_("Magnetometer calibration\n");
+      //magCal(mag,magOffsets,magmin,magmax);
       DEBUG_PRINT_("Min: " + String(magmin[0]) + " " + String(magmin[1]) + " " + String(magmin[2]) + "\n");
       DEBUG_PRINT_("Max: " + String(magmax[0]) + " " + String(magmax[1]) + " " + String(magmax[2]) + "\n");
       DEBUG_PRINT_("Offsets: " + String(magOffsets[0]) + " " + String(magOffsets[1]) + " " + String(magOffsets[2]) + "\n");
       int16_t x,y,z;
       mag.getHeadingWithOffset(&x,&y,&z,magOffsets);
-      DEBUG_PRINT_("Mag with offsets: " + String(x) + " " + String(y) + " " + String(z) + "\n");  
+      DEBUG_PRINT_("Mag with offsets: " + String(x) + " " + String(y) + " " + String(z) + "\n");
       DEBUG_PRINT_("Insira um comando: '1' - Start, '2' - Stop,  '3' - Magnetometer calibration.\n");
     }
     else if(serialOp == '4')
     {
       mpu.resetFIFO();
       //faz uma leitura
-      ler_sensor_inercial();     
-
+      ler_sensor_inercial();
     }
   }
 }
@@ -183,7 +190,6 @@ void iniciar_sensor_inercial() {
 
 void iniciar_mag(){
   mag.initialize();
-
   // verify connection
   Serial.println("Testing device connections...");
   Serial.println(mag.testConnection() ? "HMC5883L connection successful" : "HMC5883L connection failed");
@@ -192,154 +198,27 @@ void iniciar_mag(){
 
 void ler_sensor_inercial()
 {
+  //inertial sensors
+  mpu.getMotion6(accel,gyro);
+  ax = (float)accel[0] * (2.0/32768.0);
+  ay = (float)accel[1] * (2.0/32768.0);
+  az = (float)accel[2] * (2.0/32768.0);
+  gx = (float)gyro[0] * (250.0/32768.0);
+  gy = (float)gyro[1] * (250.0/32768.0);
+  gz = (float)gyro[2] * (250.0/32768.0);
+  //Serial.print(String(ax) + " " + String(ay) + " " + String(az) + " ");
+  //Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " ");
   //mag.getHeading(mag_buffer);
-  mag.getHeadingWithOffsetBuffer(mag_buffer,magOffsets);
-  enviar_pacote_inercial();  
+
+  //magnetometer
+  int16_t _mx,_my,_mz;
+  mag.getHeadingWithOffset(&_mx,&_my,&_mz,magOffsets);
+  mx = (float)_mx/1090.0f;
+  my = (float)_my/1090.0f;
+  mz = (float)_mz/1090.0f;
+  //Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
+
+  QuaternionUpdate(quat,ax,ay,az,gx,gy,gz,mx,my,mz,beta,100.0);
+  Serial.println(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + " ");
+  //enviar_pacote_inercial();  
 }
-
-void enviar_pacote_inercial() {
-#ifndef DEBUG_MODE
-  //Assembling packet and sending
-  serial_buffer_out[0] = UART_START; //['$']
-  //Quaternion
-  serial_buffer_out[1] = fifoBuffer[0];  serial_buffer_out[2] = fifoBuffer[1];    //[QWH] [QWL]
-  serial_buffer_out[3] = fifoBuffer[4];  serial_buffer_out[4] = fifoBuffer[5];    //[QXH] [QXL]
-  serial_buffer_out[5] = fifoBuffer[8];  serial_buffer_out[6] = fifoBuffer[9];    //[QYH] [QYL]
-  serial_buffer_out[7] = fifoBuffer[12]; serial_buffer_out[8] = fifoBuffer[13];   //[QZH] [QZL]  
-  //Aceleracao
-  serial_buffer_out[9] = fifoBuffer[28]; serial_buffer_out[10] = fifoBuffer[29];  //[AXH] [AXL]
-  serial_buffer_out[11] = fifoBuffer[32]; serial_buffer_out[12] = fifoBuffer[33]; //[AYH] [AYL]
-  serial_buffer_out[13] = fifoBuffer[36]; serial_buffer_out[14] = fifoBuffer[37]; //[AZH] [AZL]
-  //Giroscopio
-  serial_buffer_out[15] = fifoBuffer[16]; serial_buffer_out[16] = fifoBuffer[17]; //[GXH] [GXL]
-  serial_buffer_out[17] = fifoBuffer[20]; serial_buffer_out[18] = fifoBuffer[21]; //[GYH] [GYL]
-  serial_buffer_out[19] = fifoBuffer[24]; serial_buffer_out[20] = fifoBuffer[25]; //[GZH] [GZL]
-  //Magnetometer
-  serial_buffer_out[21] = mag_buffer[0]; serial_buffer_out[22] = mag_buffer[1]; //[MXH] [MXL]
-  serial_buffer_out[23] = mag_buffer[2]; serial_buffer_out[24] = mag_buffer[3]; //[MYH] [MYL]
-  serial_buffer_out[25] = mag_buffer[4]; serial_buffer_out[26] = mag_buffer[5]; //[MZH] [MZL]
-
-  //data fusion
-  //quaternion dmp
-  quatDMP[0] = (float) ((fifoBuffer[0] << 8) | fifoBuffer[1]) / 16384.0f;
-  quatDMP[1] = (float) ((fifoBuffer[4] << 8) | fifoBuffer[5]) / 16384.0f;
-  quatDMP[2] = (float) ((fifoBuffer[8] << 8) | fifoBuffer[9]) / 16384.0f;
-  quatDMP[3] = (float) ((fifoBuffer[12] << 8) | fifoBuffer[13]) / 16384.0f;
-  //magnetometer - invert X and Y axis so it is the same orientation of the gyroscope
-  magRead[0] = (float) ((((int16_t)mag_buffer[2]) << 8) | mag_buffer[3]) / 1090.0f;
-  magRead[1] = -(float) ((((int16_t)mag_buffer[0]) << 8) | mag_buffer[1]) / 1090.0f;
-  magRead[2] = (float) ((((int16_t)mag_buffer[4]) << 8) | mag_buffer[5]) / 1090.0f;
-  //data fusion algorithm
-  //RawDataFusion(fifoBuffer,mag_buffer,quatCompensated,2.0,&lastDMPYaw,&lastYaw);
-  DataFusion(quatDMP,magRead,quatCompensated,2.0,&lastDMPYaw,&lastYaw);
-  //converting from float back to uint16
-  uint16_t qw = floatTouint16(quatCompensated[0]);
-  uint16_t qx = floatTouint16(quatCompensated[1]);
-  uint16_t qy = floatTouint16(quatCompensated[2]);
-  uint16_t qz = floatTouint16(quatCompensated[3]);
-  //compensated quaternion
-  serial_buffer_out[27] = (uint8_t) (qw>>8); serial_buffer_out[28] = (uint8_t)qw&0xFF;
-  serial_buffer_out[29] = (uint8_t) (qx>>8); serial_buffer_out[30] = (uint8_t)qx&0xFF;
-  serial_buffer_out[31] = (uint8_t) (qy>>8); serial_buffer_out[32] = (uint8_t)qy&0xFF;
-  serial_buffer_out[33] = (uint8_t) (qz>>8); serial_buffer_out[34] = (uint8_t)qz&0xFF;
-  serial_buffer_out[35] = UART_END; //['\n']
-  Serial.write(serial_buffer_out, 36);
-#endif /*DEBUG_MODE*/
-#ifdef DEBUG_MODE
-  float q[4], a[3], g[3], m[3];
-  //Quaternion
-  q[0] = (float) ((fifoBuffer[0] << 8) | fifoBuffer[1]) / 16384.0f;
-  q[1] = (float) ((fifoBuffer[4] << 8) | fifoBuffer[5]) / 16384.0f;
-  q[2] = (float) ((fifoBuffer[8] << 8) | fifoBuffer[9]) / 16384.0f;
-  q[3] = (float) ((fifoBuffer[12] << 8) | fifoBuffer[13]) / 16384.0f;
-  quatDMP[0] = q[0];
-  quatDMP[1] = q[1];
-  quatDMP[2] = q[2];
-  quatDMP[3] = q[3];
-  //Aceleracao
-  a[0] = (float) ((fifoBuffer[28] << 8) | fifoBuffer[29]) / 8192.0f;
-  a[1] = (float) ((fifoBuffer[32] << 8) | fifoBuffer[33]) / 8192.0f;
-  a[2] = (float) ((fifoBuffer[36] << 8) | fifoBuffer[37]) / 8192.0f;
-  //Giroscopio
-  g[0] = (float) ((fifoBuffer[16] << 8) | fifoBuffer[17]) / 131.0f;
-  g[1] = (float) ((fifoBuffer[20] << 8) | fifoBuffer[21]) / 131.0f;
-  g[2] = (float) ((fifoBuffer[24] << 8) | fifoBuffer[25]) / 131.0f;
-  //Magnetrometro
-  m[0] = (float) ((((int16_t)mag_buffer[0]) << 8) | mag_buffer[1]) / 1090.0f;
-  m[1] = (float) ((((int16_t)mag_buffer[2]) << 8) | mag_buffer[3]) / 1090.0f;
-  m[2] = (float) ((((int16_t)mag_buffer[4]) << 8) | mag_buffer[5]) / 1090.0f;    
-  magRead[0] = m[1];
-  magRead[1] = -m[0];
-  magRead[2] = m[2];
-  //correcting orientation axis
-  //float aux = m[0];
-  //m[0] = m[1];
-  //m[1] = aux;
-  //DEBUG_PRINT_("Quat-Accel-Gyro-Mag:\t");
-  //Quaternions  
-  DEBUG_PRINT_(q[0]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(q[1]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(q[2]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(q[3]);
-  DEBUG_PRINT_("\t | ");
-  //compensation
-  DataFusion(quatDMP,magRead,quatCompensated,2.0,&lastDMPYaw,&lastYaw);            
-  DEBUG_PRINT_(quatCompensated[0]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(quatCompensated[1]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(quatCompensated[2]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(quatCompensated[3]);
-  DEBUG_PRINT_("\t | ");  
-  float heading = atan2(m[1],m[0]);
-  if(heading < 0)
-    heading += 2.0*M_PI;    
-  DEBUG_PRINT_(String(heading*(180.0/M_PI)));
-  DEBUG_PRINT_(" | ");
-  //Prints the raw magnetomter values
-  DEBUG_PRINT_(String(m[0],3));
-  DEBUG_PRINT_("  ");
-  DEBUG_PRINT_(String(m[1],3));
-  DEBUG_PRINT_("  ");
-  DEBUG_PRINT_(String(m[2],3));  
-  DEBUG_PRINT_("\n");
-  //accel in G
-  /*DEBUG_PRINT_(a[0]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(a[1]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(a[2]);
-  DEBUG_PRINT_("\t-\t");
-  //gyro in degrees/s
-  DEBUG_PRINT_(g[0]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(g[1]);
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(g[2]);
-  DEBUG_PRINT_("\t-\t");
-  //mag in .... ?? //TODO : descobrir
-  DEBUG_PRINT_(String(m[0],3));
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(String(m[1],3));
-  DEBUG_PRINT_("\t");
-  DEBUG_PRINT_(String(m[2],3));
-  DEBUG_PRINT_("\t  ");
-  float heading = atan2(m[1],m[0]);
-  if(heading < 0)
-    heading += 2.0*M_PI;
-  DEBUG_PRINT_(String(heading*(180.0/M_PI)));
-  DEBUG_PRINT_("\n");*/
-#endif /*DEBUG_MODE*/
-}
-
-uint16_t floatTouint16(float q)
-{
-  uint16_t resp = 0;
-  resp = (uint16_t)(q*16384);
-  return resp;
-}
-
