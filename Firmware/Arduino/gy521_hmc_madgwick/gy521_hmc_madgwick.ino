@@ -96,6 +96,8 @@ int16_t magmin[3] = {0,0,0};
 float GyroMeasError = PI * (40.0f / 180.0f); 
 float beta = sqrt(3.0f / 4.0f) * GyroMeasError;   // compute beta
 float quat[4] = {1.0f,0.0f,0.0f,0.0f};
+float eul[3] = {0,0,0};
+float deg[3] = {0,0,0};
 
 void setup()
 {
@@ -216,9 +218,33 @@ void ler_sensor_inercial()
   mx = (float)_mx/1090.0f;
   my = (float)_my/1090.0f;
   mz = (float)_mz/1090.0f;
-  //Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
-
-  QuaternionUpdate(quat,ax,ay,az,gx,gy,gz,mx,my,mz,beta,100.0);
-  Serial.println(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + " ");
+  //Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");  
+  QuaternionUpdate(quat,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,50.0);  
+  quatern2euler(quat,eul);
+  rad2deg(eul,deg);
+  Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + " | ");  
+  Serial.println(String(deg[0]) + " " + String(deg[1]) + " " + String(deg[2]) + " ");  
   //enviar_pacote_inercial();  
 }
+
+void quatern2euler(float* q, float* v)
+{
+  float pole = M_PI/2.0f - 0.05f;                           // fix roll near poles with this tolerance
+
+  v[1] = asin(2.0f * (q[0] * q[2] - q[1] * q[3]));
+
+  if ((v[1] < pole) && (v[1] > -pole))
+    v[0] = atan2(2.0f * (q[2] * q[3] + q[0] * q[1]),
+                    1.0f - 2.0f * (q[1] * q[1] + q[2] * q[2]));
+
+  v[2] = atan2(2.0f * (q[1] * q[2] + q[0] * q[3]),
+                    1.0f - 2.0f * (q[2] * q[2] + q[3] * q[3]));
+}
+
+void rad2deg(float* e, float* d)
+{
+  d[0] = e[0] * (180.0f/PI);
+  d[1] = e[1] * (180.0f/PI);
+  d[2] = e[2] * (180.0f/PI);
+}
+
