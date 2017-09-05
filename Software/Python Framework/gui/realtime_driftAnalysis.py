@@ -129,8 +129,8 @@ class Main(QMainWindow, Ui_MainWindow):
 		#matplotlib
 		self.addmpl()
 
-		self.linereg = [3.925e-5, 3.0504e-5, 3.197e-5, 3.774e-5, 4.7458e-5]
-		self.biasreg = [-0.00664, 0.0179, -0.0163, -0.00613, -0.00614]
+		self.linereg = [4.1535e-5, 3.0504e-5, 3.197e-5, 3.774e-5, 4.7458e-5]
+		self.biasreg = [5.3023e-4, 0.0179, -0.0163, -0.00613, -0.00614]
 		self.time = 0.0
 		self.sampfreq = 20.0
 
@@ -880,7 +880,9 @@ class Main(QMainWindow, Ui_MainWindow):
 			#print 'qntsensor: %d' % (len(data)/4)
 
 			if self.statusColetaRunning:
-				self.write_joints_quat()
+				#self.write_joints_quat()
+				self.writeRawData(data)
+
 				self.write_dados_brutos_quat(data)
 			if self.marcacaoPending:
 				self.arqColeta.write("%s MARCA-%d %s\n" % ("*"*30,self.marcanumero,"*"*30))
@@ -888,12 +890,15 @@ class Main(QMainWindow, Ui_MainWindow):
 				self.marcacaoPending = False
 
 			if self.offsetpending:
+				print data
 				self.offsetpending = False
 				print "*******************DOING OFFSETS********************"
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 				joint.setQuaternionOffset(data[0:4])
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 				joint.setQuaternionOffset(data[4:8])
+
+				'''
 				joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 				joint.setQuaternionOffset(data[8:12])
 				joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.SHOULDER)
@@ -906,6 +911,8 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint.setQuaternionOffset(data[12:16])
 				joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
 				joint.setQuaternionOffset(data[16:20])
+				'''
+
 
 
 			if len(data) >= 4:
@@ -918,6 +925,7 @@ class Main(QMainWindow, Ui_MainWindow):
 				#quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 				joint.setQuaternion(quat)
+
 				print quat
 			'''
 			if len(data) >= 8:
@@ -928,6 +936,7 @@ class Main(QMainWindow, Ui_MainWindow):
 				#quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 				joint.setQuaternion(quat)
+
 			if len(data) >= 12:
 				quat = data[8:12]
 				estz = self.linereg[2]*self.time + self.biasreg[2]
@@ -989,6 +998,21 @@ class Main(QMainWindow, Ui_MainWindow):
 
 		q_joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST).quaternion
 		print "LEFT\tWRIST: %.2f\t%.2f\t%.2f\t%.2f" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3])
+
+
+	def writeRawData(self,data):
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (data[0], data[1], data[2], data[3]))
+		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).quaternion
+		self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+		self.arqColeta.write("%f\t%f\t%f\t" % (data[4], data[5], data[6]))
+		self.arqColeta.write("%f\t%f\t%f\t" % (data[7], data[8], data[9]))
+		#self.arqColeta.write("%f\t%f\t%f\t%f\t" % (data[4], data[5], data[6], data[7]))
+		#q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).quaternion
+		#self.arqColeta.write("%f\t%f\t%f\t%f\t" % (q_joint[0], q_joint[1], q_joint[2], q_joint[3]))
+		#self.arqColeta.write("%f\t%f\t%f\t%f\t" % (data[0], data[1], data[2], data[3]))
+
+		self.arqColeta.write("\n")
+
 
 	def write_joints_quat(self):
 		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).quaternion
