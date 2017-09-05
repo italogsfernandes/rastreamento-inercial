@@ -25,17 +25,14 @@
 /* ==========  LICENSE  ==================================
   I2Cdev device library code is placed under the MIT license
   Copyright (c) 2011 Jeff Rowberg
-
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
   in the Software without restriction, including without limitation the rights
   to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
   copies of the Software, and to permit persons to whom the Software is
   furnished to do so, subject to the following conditions:
-
   The above copyright notice and this permission notice shall be included in
   all copies or substantial portions of the Software.
-
   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -74,13 +71,21 @@
 MPU6050 mpu(0x68);
 HMC5883L mag;
 //---------------------------------------------------------------------------
-const int numSensors = 3;
+/*const int numSensors = 1;
 const int* offsets;
 const int offsets1[6] = { -1243, -30, 464, 87, -27, 25};
-const int offsets2[6] = { -1243, -30, 464, 87, -27, 25};
-const int offsets3[6] = { -1243, -30, 464, 87, -27, 25};
+const int offsets2[6] = { -2892, 359, 1616, -24, -7, 40};
+const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
+*/
+const int numSensors = 5;
+const int* offsets;
+const int offsets0[6] =   { -998, -883, 1276, 10, -48, -28};
+const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4}; 
+const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};  
+const int offsets3[6] = { 2086, 1218, 1306, -5, -36, 35};
+const int offsets4[6] = { -2276, 382, 1140, 31, -40, -29};
 //---------------------------------------------------------------------------
 uint8_t* fifoBuffer; // FIFO storage fifoBuffer of mpu
 uint8_t fb1[42];
@@ -114,11 +119,11 @@ void setup() {
 #endif
 
   offsets = (int*)malloc(sizeof(int) * numSensors * 6);
-  memcpy(offsets, offsets1, sizeof(int) * 6);
-  memcpy(offsets + 6, offsets2, sizeof(int) * 6);
-  memcpy(offsets + 12, offsets3, sizeof(int) * 6);
-  memcpy(offsets + 18, offsets4, sizeof(int) * 6);
-  memcpy(offsets + 24, offsets5, sizeof(int) * 6);
+  memcpy(offsets, offsets0, sizeof(int) * 6);
+  memcpy(offsets + 6, offsets1, sizeof(int) * 6);
+  memcpy(offsets + 12, offsets2, sizeof(int) * 6);
+  memcpy(offsets + 18, offsets3, sizeof(int) * 6);
+  memcpy(offsets + 24, offsets4, sizeof(int) * 6);
   for (int i = 0; i < numSensors; i++)
   {
     initializeSensor(i);
@@ -155,6 +160,7 @@ void takereading() {
   digitalWrite(LED_PIN, led_state);
   led_state = !led_state;
 }
+
 void select_sensor(int sensor) {
   switch (sensor) {
     case 0:
@@ -225,17 +231,12 @@ void readSensor(int sensorId)
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
   mag.getHeading(&mx, &my, &mz);
-  //convert accel to g
   float fax = (float)(ax) / 16384.0f;
   float fay = (float)(ay) / 16384.0f;
   float faz = (float)(az) / 16384.0f;
-  //convert gyro to deg/s
-  float fgx = (float)gx * (250.0/32768.0);
-  float fgy = (float)gy * (250.0/32768.0);
-  float fgz = (float)gz * (250.0/32768.0);
   Serial.print("Sensor: " + String(sensorId) + " | ");
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " ");
-  Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " ");
+  Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " ");
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
 }
 //---------------------------------------------------------------------------
@@ -263,7 +264,7 @@ void initializeSensor(int sensorId)
       mpu.setZGyroOffset(offsets[id + 5]);
     }
   }
-  //verificaSensor(sensorId);
+  verificaSensor(sensorId);
 }
 //---------------------------------------------------------------------------
 void verificaSensor(int sensorId)
