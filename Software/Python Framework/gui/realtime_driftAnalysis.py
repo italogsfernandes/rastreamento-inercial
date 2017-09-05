@@ -882,6 +882,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			if self.statusColetaRunning:
 				#self.write_joints_quat()
 				self.writeRawData(data)
+
 				self.write_dados_brutos_quat(data)
 			if self.marcacaoPending:
 				self.arqColeta.write("%s MARCA-%d %s\n" % ("*"*30,self.marcanumero,"*"*30))
@@ -896,6 +897,7 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint.setQuaternionOffset(data[0:4])
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 				joint.setQuaternionOffset(data[4:8])
+
 				'''
 				joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
 				joint.setQuaternionOffset(data[8:12])
@@ -912,8 +914,9 @@ class Main(QMainWindow, Ui_MainWindow):
 				'''
 
 
+
 			if len(data) >= 4:
-				print data
+				print len(data)
 				quat = data[0:4]
 				zn = quat[3]
 				estz = self.linereg[0]*self.time + self.biasreg[0]
@@ -923,6 +926,7 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
 				joint.setQuaternion(quat)
 
+				print quat
 			'''
 			if len(data) >= 8:
 				quat = data[4:8]
@@ -933,8 +937,6 @@ class Main(QMainWindow, Ui_MainWindow):
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
 				joint.setQuaternion(quat)
 
-			'''
-			'''
 			if len(data) >= 12:
 				quat = data[8:12]
 				estz = self.linereg[2]*self.time + self.biasreg[2]
@@ -1010,6 +1012,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		#self.arqColeta.write("%f\t%f\t%f\t%f\t" % (data[0], data[1], data[2], data[3]))
 
 		self.arqColeta.write("\n")
+
 
 	def write_joints_quat(self):
 		q_joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).quaternion

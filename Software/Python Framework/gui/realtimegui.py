@@ -698,8 +698,7 @@ class Main(QMainWindow, Ui_MainWindow):
 	def cbSerialChanged(self, idx):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
-			if self.imu.open():
-				self.show_info_msg("Porta serial %s aberta com sucesso!" % (self.imu.port))
+			self.imu.open()			
 		except Exception as e:
 			show_error_msg("Erro ao abrir porta serial")
 
@@ -837,10 +836,81 @@ class Main(QMainWindow, Ui_MainWindow):
 		self.plotLock.acquire()
 		#self.imu.acqThread.lock.acquire()
 		if self.imu.dataQueue.qsize() > 0:
-			self.disassemblePacket()
-			#print joint.quaternion, joint.rotquaternion, joint.position
-			#print joint.position
-			self.skeleton.rotate()
+<<<<<<< HEAD
+			n = self.imu.dataQueue.qsize()
+			for i in range(n):
+				data = self.imu.dataQueue.get()
+				#print 'qntsensor: %d' % (len(data)/4)
+
+				if self.statusColetaRunning:
+					for q_lido in data:
+						self.arqColeta.write("%f," % q_lido)
+					self.arqColeta.write("\n")
+				if self.marcacaoPending:
+					self.arqColeta.write("\n*******************MARCA %d****************\n\n" % self.marcanumero)
+					self.marcacaoPending = False
+
+				print "Pacote: "
+				print "%f\t%f\t%f\t%f" % (data[0], data[1], data[2], data[3])
+				print "%f\t%f\t%f\t%f" % (data[0+4], data[1+4], data[2+4], data[3+4])
+				print "%f\t%f\t%f\t%f" % (data[0+8], data[1+8], data[2+8], data[3+8])
+				print "%f\t%f\t%f\t%f" % (data[0+12], data[1+12], data[2+12], data[3+12])
+				print "%f\t%f\t%f\t%f" % (data[0+16], data[1+16], data[2+16], data[3+16])
+				print "Recalculado: "
+				if len(data) >= 4:
+					quat = data[0:4]
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+					joint.setQuaternion(quat)
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
+				if len(data) >= 8:
+					quat = data[4:8]
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.RIGHT, BodyJoints.ELBOW)
+					joint.setQuaternion(quat)
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
+				if len(data) >= 12:
+					quat = data[8:12]
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.UNILAT,BodyJoints.TORSO)
+					joint.setQuaternion(quat)
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
+				if len(data) >= 16:
+					quat = data[12:16]
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.ELBOW)
+					joint.setQuaternion(quat)
+					#print '[%.2f,%.2f,%.2f,%.2f]' % (quat[0],quat[1],quat[2],quat[3])
+				if len(data) >= 20:
+					quat = data[16:20]
+					aux_euler = quaternion.toEuler(quat)
+					aux_euler[2] *= 2;
+					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
+					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
+					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
+					joint.setQuaternion(quat)
+
+				#self.updateQuaternions(joint,quat)
+
+		#print joint.quaternion, joint.rotquaternion, joint.position
+		#print joint.position
+		self.skeleton.rotate()
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.SHOULDER).position
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
+		print self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
+		print ''
 		self.plotLock.release()
 		#print "[%.2f\t%.2f\t%.2f\t]" % (joint.position[0],joint.position[1],joint.position[2])
 		#self.plot()
