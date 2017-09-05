@@ -33,7 +33,7 @@
 */
 #define saidaC 4
 #define saidaB 3
-#define saidaA 2
+#define saidaA 2 // aqui esse esta assim e no outro trocado. mas ja deixei os dois iguais e fica dando o mesmo problema... entendi...
 #define MaxIt 10
 uint8_t indexCh = 0;
 
@@ -270,10 +270,58 @@ void calibration() {
   }
 }
 
-void select_sensor(uint8_t sensor) {
+/*
+  void select_sensor(uint8_t sensor) {
   digitalWrite(saidaA, sensor & 0x01);
   digitalWrite(saidaB, sensor & 0x02);
   digitalWrite(saidaC, sensor & 0x04);
   delayMicroseconds(5);
 }
+*/
 
+void select_sensor(int sensor) {
+  switch (sensor) {
+    case 0:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 0);
+      break;
+    case 1:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 1);
+      break;
+    case 2:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 0);
+      break;
+    case 3:
+      digitalWrite(saidaA, 0);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 1);
+      break;
+    case 4:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 0);
+      break;
+    case 5:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 0);
+      digitalWrite(saidaC, 1);
+      break;
+    case 6:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 0);
+      break;
+    case 7:
+      digitalWrite(saidaA, 1);
+      digitalWrite(saidaB, 1);
+      digitalWrite(saidaC, 1);
+      break;
+  }
+  delayMicroseconds(10);
+}
+ 
