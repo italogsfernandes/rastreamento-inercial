@@ -74,11 +74,11 @@
 MPU6050 mpu(0x68);
 HMC5883L mag;
 //---------------------------------------------------------------------------
-const int numSensors = 1;
+const int numSensors = 3;
 const int* offsets;
 const int offsets1[6] = { -1243, -30, 464, 87, -27, 25};
-const int offsets2[6] = { -2892, 359, 1616, -24, -7, 40};
-const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
+const int offsets2[6] = { -1243, -30, 464, 87, -27, 25};
+const int offsets3[6] = { -1243, -30, 464, 87, -27, 25};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 //---------------------------------------------------------------------------
@@ -225,12 +225,17 @@ void readSensor(int sensorId)
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
   mag.getHeading(&mx, &my, &mz);
+  //convert accel to g
   float fax = (float)(ax) / 16384.0f;
   float fay = (float)(ay) / 16384.0f;
   float faz = (float)(az) / 16384.0f;
+  //convert gyro to deg/s
+  float fgx = (float)gx * (250.0/32768.0);
+  float fgy = (float)gy * (250.0/32768.0);
+  float fgz = (float)gz * (250.0/32768.0);
   Serial.print("Sensor: " + String(sensorId) + " | ");
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " ");
-  Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " ");
+  Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " ");
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
 }
 //---------------------------------------------------------------------------
@@ -258,7 +263,7 @@ void initializeSensor(int sensorId)
       mpu.setZGyroOffset(offsets[id + 5]);
     }
   }
-  verificaSensor(sensorId);
+  //verificaSensor(sensorId);
 }
 //---------------------------------------------------------------------------
 void verificaSensor(int sensorId)
