@@ -22,6 +22,7 @@ import scipy as sp
 import os, sys
 sys.path.append('../')
 import quaternion as quat
+import realtimegui
 #------------------------------------------------------------------------------
 #MPU constants
 #Constants for handling serial communication
@@ -44,7 +45,7 @@ class MPUConsts():
 #------------------------------------------------------------------------------
 class SerialHandler():
 	def __init__(self,_port='ttyACM0',_baud=115200,_timeout=0.5):
-		self.port = _port
+		self.port =  str(_port)
 		self.baud = _baud
 		self.timeout = _timeout
 		self.waiting = False
@@ -52,8 +53,8 @@ class SerialHandler():
 
 	def open(self):
 		try:
-			#self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
-			self.serialPort = Serial('/dev/ttyUSB0',self.baud,timeout=self.timeout)
+			self.serialPort = Serial(self.port,self.baud,timeout=self.timeout)
+			#self.serialPort = Serial('/dev/ttyUSB0',self.baud,timeout=self.timeout)
 			if self.serialPort.is_open:
 				self.serialPort.flushInput()
 				self.serialPort.flushOutput()

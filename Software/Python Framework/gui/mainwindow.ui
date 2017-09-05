@@ -6,27 +6,139 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>570</height>
+    <width>422</width>
+    <height>639</height>
    </rect>
-  </property>
-  <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-    <horstretch>0</horstretch>
-    <verstretch>0</verstretch>
-   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <layout class="QHBoxLayout" name="mbly">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SetDefaultConstraint</enum>
+        </property>
+        <item>
+         <widget class="QGroupBox" name="groupMedidas">
+          <property name="title">
+           <string>Medidas:</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_7">
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Ombro-Ombro:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="editShoulderShoulder">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Ombro-Cotovelo:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="editShoulderElbow">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Cotovelo-Punho:</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="editElbowWrist">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnMedidas">
+             <property name="text">
+              <string>Confirma</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupDadosColeta">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="title">
+           <string>Marcas:</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QComboBox" name="cbMarcas"/>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item>
          <widget class="QGroupBox" name="groupColeta">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="title">
            <string>Coleta:</string>
           </property>
@@ -38,6 +150,13 @@
             <widget class="QPushButton" name="btnAnimation">
              <property name="text">
               <string>Iniciar Animação</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnSetOffset">
+             <property name="text">
+              <string>Setar OFfset</string>
              </property>
             </widget>
            </item>
@@ -73,6 +192,12 @@
         </item>
         <item>
          <widget class="QGroupBox" name="groupRotation">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="maximumSize">
            <size>
             <width>200</width>
@@ -187,6 +312,20 @@
         </item>
        </layout>
       </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3"/>
+        </item>
+        <item>
+         <widget class="QSlider" name="sliderColeta">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
      </layout>
     </item>
    </layout>
@@ -196,8 +335,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>280</width>
-     <height>25</height>
+     <width>422</width>
+     <height>28</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuArquivo">
@@ -207,6 +346,9 @@
     <addaction name="separator"/>
     <addaction name="actionAbrir_Postura"/>
     <addaction name="actionSalvar_Postura"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbrir_Coleta"/>
+    <addaction name="actionFechar_Coleta"/>
    </widget>
    <widget class="QMenu" name="menuVisualizar">
     <property name="title">
@@ -223,8 +365,22 @@
     <addaction name="actionMenu_de_Rota_o"/>
     <addaction name="menuGr_ficos"/>
    </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Sobre</string>
+    </property>
+    <addaction name="actionHelp"/>
+   </widget>
+   <widget class="QMenu" name="menuInserir">
+    <property name="title">
+     <string>Inserir Dados</string>
+    </property>
+    <addaction name="actionMedidas_da_Pessoa"/>
+   </widget>
    <addaction name="menuArquivo"/>
    <addaction name="menuVisualizar"/>
+   <addaction name="menuInserir"/>
+   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAbrir_Postura">
@@ -255,6 +411,26 @@
   <action name="actionQuaternion">
    <property name="text">
     <string>Quaternion</string>
+   </property>
+  </action>
+  <action name="actionAbrir_Coleta">
+   <property name="text">
+    <string>Abrir Dados de Coleta</string>
+   </property>
+  </action>
+  <action name="actionFechar_Coleta">
+   <property name="text">
+    <string>Fechar Dados de Coleta</string>
+   </property>
+  </action>
+  <action name="actionMedidas_da_Pessoa">
+   <property name="text">
+    <string>Medidas da Pessoa</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="text">
+    <string>Help</string>
    </property>
   </action>
  </widget>

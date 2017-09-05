@@ -48,6 +48,7 @@
 //---------------------------------------------------------------------------
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
+#include "HMC5883L.h"
 #include "Timer.h"
 #include "SoftwareSerial.h"
 //---------------------------------------------------------------------------
@@ -57,9 +58,9 @@
 #include "Wire.h"
 #endif
 //---------------------------------------------------------------------------
-#define saidaC 4
+#define saidaC 2
 #define saidaB 3
-#define saidaA 2
+#define saidaA 4
 #define LED_PIN 13
 #define sampFreq 100
 #define PSDMP 42
@@ -71,6 +72,7 @@
 #define PINS4 5
 //---------------------------------------------------------------------------
 MPU6050 mpu(0x68);
+HMC5883L mag;
 //---------------------------------------------------------------------------
 const int numSensors = 5;
 const int* offsets;
@@ -91,6 +93,7 @@ uint8_t fb2[42];
 uint8_t fb3[42];
 uint8_t fb4[42];
 uint8_t fb5[42];
+int16_t mx,my,mz;
 //---------------------------------------------------------------------------
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 int numbPackets;
@@ -104,7 +107,8 @@ void takereading();
 void setup() {
   pinMode(LED_PIN, OUTPUT);
   pinMode(saidaC, OUTPUT);  pinMode(saidaB, OUTPUT);  pinMode(saidaA, OUTPUT);
-  Serial.begin(115200);  
+  Serial.begin(115200);
+
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
   //Wire.setClock(400000);
@@ -120,16 +124,17 @@ void setup() {
   memcpy(offsets+24,offsets5,sizeof(int)*6);
   for(int i=0; i<numSensors; i++)
   {
-    initializeSensor(i+1);
+    initializeSensor(i);
   }
   for(int i=0; i<numSensors; i++)
   {
-    verificaSensor(i+1);
+    verificaSensor(i);
   }
   Serial.println("Pronto para iniciar, aguardando comando serial.");
   //while (!Serial.available());
   
   t.every(50,takereading); //chama a cada 10ms = 1000/20
+  
 }
 //---------------------------------------------------------------------------
 void loop() {
@@ -138,9 +143,9 @@ void loop() {
 //---------------------------------------------------------------------------
 void takereading(){
   Serial.write(0x7F);  
-  for(int i=0; i<numSensors; i++)
+  for(int i=0; i<2; i++)
   {
-    fifoBuffer = readSensor(i+1);        
+    fifoBuffer = readSensor(i);        
     send_serial_packet(fifoBuffer);
     //int t = (fifoBuffer[0]<<8) + fifoBuffer[1];
     //float w = float(t) / 16384.f;
@@ -199,22 +204,20 @@ void select_sensor(int sensor) {
 void send_serial_packet(uint8_t* _fifoBuffer)
 {
   //Assembling packet and sending
-  Serial.write(_fifoBuffer[0]); //qw_msb
+  /*Serial.write(_fifoBuffer[0]); //qw_msb
   Serial.write(_fifoBuffer[1]); //qw_lsb
   Serial.write(_fifoBuffer[4]); //qx_msb
   Serial.write(_fifoBuffer[5]); //qx_lsb
   Serial.write(_fifoBuffer[8]); //qy_msb
   Serial.write(_fifoBuffer[9]); //qy_lsb
   Serial.write(_fifoBuffer[12]); //qz_msb
-  Serial.write(_fifoBuffer[13]); //qz_lsb
-  
-  /*Serial.print((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00);
-  Serial.print(" ");
-  Serial.print((_fifoBuffer[4] << 8 | _fifoBuffer[5]) / 16384.00);
-  Serial.print(" ");
-  Serial.print((_fifoBuffer[8] << 8 | _fifoBuffer[9]) / 16384.00);
-  Serial.print(" ");
-  Serial.println((_fifoBuffer[12] << 8 | _fifoBuffer[13]) / 16384.00);*/
+  Serial.write(_fifoBuffer[13]); //qz_lsb*/
+  mag.getHeading(&mx,&my,&mz);
+  Serial.print("\n" + String((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00) + " ");
+  Serial.print(String((_fifoBuffer[4] << 8 | _fifoBuffer[5]) / 16384.00) + " ");
+  Serial.print(String((_fifoBuffer[8] << 8 | _fifoBuffer[9]) / 16384.00) + " ");
+  Serial.print(String((_fifoBuffer[12] << 8 | _fifoBuffer[13]) / 16384.00) + " ");
+  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
 }
 //---------------------------------------------------------------------------
 uint8_t* readSensor(int sensorId)
@@ -229,35 +232,35 @@ uint8_t* readSensor(int sensorId)
     mpu.resetFIFO();
   else
   {
-    if(sensorId==1)
+    if(sensorId==0)
     {   
       for (int i = 0; i < numbPackets; i++)  
         mpu.getFIFOBytes(fb1, PSDMP);    
         numbPackets=0;
         return fb1;        
     }
-    else if(sensorId==2)
+    else if(sensorId==1)
     {
       for (int i = 0; i < numbPackets; i++)  
         mpu.getFIFOBytes(fb2, PSDMP);    
         numbPackets=0;
         return fb2;        
     }
-    else if(sensorId==3)
+    else if(sensorId==2)
     {
       for (int i = 0; i < numbPackets; i++)  
         mpu.getFIFOBytes(fb3, PSDMP);    
         numbPackets=0;
         return fb3;        
     }
-    else if(sensorId==4)
+    else if(sensorId==3)
     {
       for (int i = 0; i < numbPackets; i++)  
         mpu.getFIFOBytes(fb4, PSDMP);    
         numbPackets=0;
         return fb4;        
     }
-    else if(sensorId==5)
+    else if(sensorId==4)
     {
       for (int i = 0; i < numbPackets; i++)  
         mpu.getFIFOBytes(fb5, PSDMP);    
@@ -269,12 +272,13 @@ uint8_t* readSensor(int sensorId)
 //---------------------------------------------------------------------------
 void initializeSensor(int sensorId)
 {
-  select_sensor(sensorId);
+  select_sensor(sensorId);  
   if(mpu.testConnection())
   {
     Serial.println("conn ok - Sensor: "+ String(sensorId));
     //Serial.println("Birl - " + String(sensorId));
     mpu.initialize();
+    mag.initialize();
     uint8_t ret = mpu.dmpInitialize();
     delay(50);
     if(ret == 0)
@@ -288,11 +292,7 @@ void initializeSensor(int sensorId)
       mpu.setXGyroOffset(offsets[id+3]);
       mpu.setYGyroOffset(offsets[id+4]);
       mpu.setZGyroOffset(offsets[id+5]);      
-    }   
-  }
-  else
-  {
-    Serial.println("bad conn - Sensor: "+ String(sensorId));
+    }
   }
 }
 //---------------------------------------------------------------------------

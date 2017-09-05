@@ -87,6 +87,7 @@ class Joint():
 		#Quaternion
 		self.quaternion = None
 		self.rotquaternion = [1.,0.,0.,0.]
+		self.quaternion_offset = [1.,0.,0.,0.]
 		#The joint does not have nodes when it is created. The nodes are assigned
 		#by the "Skeleton" class.
 		self.links = [None,None,None]
@@ -99,15 +100,33 @@ class Joint():
 	#when the new quaternion will be updated.
 	def setQuaternion(self,_quaternion):
 		newRot = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion))
-		self.quaternion = _quaternion
+		self.quaternion = quaternion.product(_quaternion,quaternion.conjugate(self.quaternion_offset))
 		self.rotquaternion = self.quaternion
-		'''
-		for i in range(len(self.rotquaternion)):
-			if self.rotquaternion[i] < -1.0:
-				self.rotquaternion[i] = -1.0
-			elif self.rotquaternion[i] > 1.0:
-				self.rotquaternion[i] = 1.0
-	 	'''
+
+	def setQuaternionOffset(self,_quaternion):
+		if self.name == 'left_elbow':
+			quat_desejado = [1.0,0.0,0.0,0.0]
+			print('Quat desejado do left_elbow = %.2f,%2.f,%.2f,%.2f' % (quat_desejado[0], quat_desejado[1],quat_desejado[2],quat_desejado[3]))
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate(quat_desejado))
+			print('Offset do left_elbow = %.2f,%2.f,%.2f,%.2f' % (self.quaternion_offset[0], self.quaternion_offset[1],self.quaternion_offset[2],self.quaternion_offset[3]))
+		elif self.name == 'left_wrist':
+			quat_desejado = [1.0,0.0,0.0,0.0]
+			print('Quat desejado do left_wrist = %.2f,%2.f,%.2f,%.2f' % (quat_desejado[0], quat_desejado[1],quat_desejado[2],quat_desejado[3]))
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate(quat_desejado))
+			print('Offset do left_wrist = %.2f,%2.f,%.2f,%.2f' % (self.quaternion_offset[0], self.quaternion_offset[1],self.quaternion_offset[2],self.quaternion_offset[3]))
+		elif self.name == 'right_elbow':
+			quat_desejado = [1.0,0.0,0.0,0.0]
+			print('Quat desejado do right_elbow = %.2f,%2.f,%.2f,%.2f' % (quat_desejado[0], quat_desejado[1],quat_desejado[2],quat_desejado[3]))
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate(quat_desejado))
+			print('Offset do right_elbow = %.2f,%2.f,%.2f,%.2f' % (self.quaternion_offset[0], self.quaternion_offset[1],self.quaternion_offset[2],self.quaternion_offset[3]))
+		elif self.name == 'right_wrist':
+			quat_desejado = [1.0,0.0,0.0,0.0]
+			print('Quat desejado do right_wrist = %.2f,%2.f,%.2f,%.2f' % (quat_desejado[0], quat_desejado[1],quat_desejado[2],quat_desejado[3]))
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate(quat_desejado))
+			print('Offset do right_wrist = %.2f,%2.f,%.2f,%.2f' % (self.quaternion_offset[0], self.quaternion_offset[1],self.quaternion_offset[2],self.quaternion_offset[3]))
+		else:
+			self.quaternion_offset = quaternion.product(_quaternion, quaternion.conjugate([1.0,0.0,0.0,0.0]))
+
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 '''
@@ -340,10 +359,10 @@ class Skeleton():
 	#Removes the specified joint from the set of body segments
 	def remove(self,_side,_joint):
 		if(self.exist(_side,_joint)):
-			self.segments.remove(_side.value+_joint.value)
 			joint = self.getJoint(_side,_joint)
 			joint.position = None
 			joint.origin = None
+			self.segments.remove(_side.value+_joint.value)
 		else:
 			return False
 
@@ -557,9 +576,6 @@ class Skeleton():
 						if node is not None and self.exist(None,None,node.name):
 							node.position = geometry.rotate(node.position,p0,rot)
 							node.rotquaternion = quaternion.product(node.rotquaternion,quaternion.conjugate(parent.rotquaternion))
-							if node.name == 'right_ankle':
-								print 'estou mudando o right ankle!'
-								print 'olha o valor', node.rotquaternion
 							if node.links[idx] is not None:
 								node = node.links[idx]
 							else:
