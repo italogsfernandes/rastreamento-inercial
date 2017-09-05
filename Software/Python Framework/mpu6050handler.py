@@ -223,13 +223,19 @@ class MPU6050(SerialHandler):
 						for cont in range(0,8,2):
 							dataVector.append(self.to_int16((data[cont]),(data[cont+1]))/16384.00)
 							#print dataVector[cont/2]
+						'''
+						for cont in range(0,6,2):
+							dataVector.append(self.to_int16((data[cont+8]),(data[cont+9	])))
+						for cont in range(0,6,2):
+							dataVector.append(self.to_int16((data[cont+14]),(data[cont+15])))
+						'''
 				ret = self.waitBytes(1)
 				if ret:
 					endByte = ord(self.serialPort.read())
 					if endByte == MPUConsts.UART_ET:
 						normq = []
 						cont = 0
-						for i in range(0,5):
+						for i in range(0,1):
 							normq.append(np.sqrt(dataVector[cont]**2+dataVector[cont+1]**2+dataVector[cont+2]**2+dataVector[cont+3]**2))
 							cont += 4
 						#Should check if every quaternion value is less than 1
