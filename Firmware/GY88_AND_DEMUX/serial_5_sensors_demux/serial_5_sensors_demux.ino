@@ -74,9 +74,9 @@
 MPU6050 mpu(0x68);
 HMC5883L mag;
 //---------------------------------------------------------------------------
-const int numSensors = 5;
+const int numSensors = 1;
 const int* offsets;
-const int offsets1[6] = { -2511, -599, 1185, 80, -25, -2};
+const int offsets1[6] = { -1243, -30, 464, 87, -27, 25};
 const int offsets2[6] = { -2892, 359, 1616, -24, -7, 40};
 const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
@@ -133,7 +133,7 @@ void setup() {
   digitalWrite(saidaC, LOW);
   //while (!Serial.available());
 
-  //t.every(50,takereading); //chama a cada 10ms = 1000/20
+  t.every(50,takereading); //chama a cada 10ms = 1000/20
 
 }
 //---------------------------------------------------------------------------
@@ -143,7 +143,7 @@ void loop() {
 //---------------------------------------------------------------------------
 void takereading() {
   //Serial.write(0x7F);
-  for (int i = 0; i < 2; i++)
+  for (int i = 0; i < numSensors; i++)
   {
     readSensor(i);
     //send_serial_packet(fifoBuffer);
@@ -225,8 +225,11 @@ void readSensor(int sensorId)
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
   mag.getHeading(&mx, &my, &mz);
+  float fax = (float)(ax) / 16384.0f;
+  float fay = (float)(ay) / 16384.0f;
+  float faz = (float)(az) / 16384.0f;
   Serial.print("Sensor: " + String(sensorId) + " | ");
-  Serial.print(String(ax) + " " + String(ay) + " " + String(az) + " ");
+  Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " ");
   Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " ");
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
 }
@@ -246,7 +249,7 @@ void initializeSensor(int sensorId)
     {
       mpu.setDMPEnabled(true);
 
-      int id = (sensorId - 1) * 6;
+      int id = (sensorId) * 6;
       mpu.setXAccelOffset(offsets[id]);
       mpu.setYAccelOffset(offsets[id + 1]);
       mpu.setZAccelOffset(offsets[id + 2]);
@@ -255,6 +258,7 @@ void initializeSensor(int sensorId)
       mpu.setZGyroOffset(offsets[id + 5]);
     }
   }
+  verificaSensor(sensorId);
 }
 //---------------------------------------------------------------------------
 void verificaSensor(int sensorId)
@@ -262,7 +266,8 @@ void verificaSensor(int sensorId)
   Serial.print("Verificando sensor ");
   Serial.print(sensorId);
   select_sensor(sensorId);
-  int id = (sensorId - 1) * 6;
+  int id = (sensorId) * 6;
+  Serial.print("\n" + String(id)); Serial.print("\t\n");
   Serial.print(mpu.getXAccelOffset() == offsets[id]); Serial.print("\t");
   Serial.print(mpu.getYAccelOffset() == offsets[id + 1]); Serial.print("\t");
   Serial.print(mpu.getZAccelOffset() == offsets[id + 2]); Serial.print("\t");
