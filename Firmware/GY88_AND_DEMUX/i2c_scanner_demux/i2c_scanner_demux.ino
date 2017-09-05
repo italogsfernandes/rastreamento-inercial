@@ -91,48 +91,9 @@ void loop()
   delay(5000);           // wait 5 seconds for next scan
 }
 
-void select_sensor(int sensor) {
-  switch (sensor) {
-    case 0:
-      digitalWrite(saidaA, 0);
-      digitalWrite(saidaB, 0);
-      digitalWrite(saidaC, 0);
-      break;
-    case 1:
-      digitalWrite(saidaA, 0);
-      digitalWrite(saidaB, 0);
-      digitalWrite(saidaC, 1);
-      break;
-    case 2:
-      digitalWrite(saidaA, 0);
-      digitalWrite(saidaB, 1);
-      digitalWrite(saidaC, 0);
-      break;
-    case 3:
-      digitalWrite(saidaA, 0);
-      digitalWrite(saidaB, 1);
-      digitalWrite(saidaC, 1);
-      break;
-    case 4:
-      digitalWrite(saidaA, 1);
-      digitalWrite(saidaB, 0);
-      digitalWrite(saidaC, 0);
-      break;
-    case 5:
-      digitalWrite(saidaA, 1);
-      digitalWrite(saidaB, 0);
-      digitalWrite(saidaC, 1);
-      break;
-    case 6:
-      digitalWrite(saidaA, 1);
-      digitalWrite(saidaB, 1);
-      digitalWrite(saidaC, 0);
-      break;
-    case 7:
-      digitalWrite(saidaA, 1);
-      digitalWrite(saidaB, 1);
-      digitalWrite(saidaC, 1);
-      break;
-  }
-  delayMicroseconds(10);
+void select_sensor(uint8_t sensor) {
+  digitalWrite(saidaA, sensor & 0x01);
+  digitalWrite(saidaB, sensor & 0x02);
+  digitalWrite(saidaC, sensor & 0x04);
+  delayMicroseconds(5);
 }
