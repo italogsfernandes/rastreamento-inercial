@@ -346,7 +346,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			print(str(joint_name) + '\t'+ str(joint_quaternion))
 			self.updateQuaternions(joint,joint_quaternion)
 			self.skeleton.rotate()
-			
+
 
 		print("Fim da leitura" + "*"*50)
 		self.updateSlideBars()
@@ -451,7 +451,7 @@ class Main(QMainWindow, Ui_MainWindow):
 	def cbSerialChanged(self, idx):
 		try:
 			self.imu = MPU6050(self.cbSerialPort.itemText(self.cbSerialPort.currentIndex()))
-			self.imu.open()
+			self.imu.open()			
 		except Exception as e:
 			show_error_msg("Erro ao abrir porta serial")
 
@@ -530,7 +530,7 @@ class Main(QMainWindow, Ui_MainWindow):
 			for i in range(n):
 				data = self.imu.dataQueue.get()
 				#print 'qntsensor: %d' % (len(data)/4)
-				
+
 				if self.statusColetaRunning:
 					for q_lido in data:
 						self.arqColeta.write("%f," % q_lido)
@@ -539,13 +539,13 @@ class Main(QMainWindow, Ui_MainWindow):
 					self.arqColeta.write("\n*******************MARCA %d****************\n\n" % self.marcanumero)
 					self.marcacaoPending = False
 
-				print "Pacote: "				
+				print "Pacote: "
 				print "%f\t%f\t%f\t%f" % (data[0], data[1], data[2], data[3])
 				print "%f\t%f\t%f\t%f" % (data[0+4], data[1+4], data[2+4], data[3+4])
 				print "%f\t%f\t%f\t%f" % (data[0+8], data[1+8], data[2+8], data[3+8])
 				print "%f\t%f\t%f\t%f" % (data[0+12], data[1+12], data[2+12], data[3+12])
 				print "%f\t%f\t%f\t%f" % (data[0+16], data[1+16], data[2+16], data[3+16])
-				print "Recalculado: "	
+				print "Recalculado: "
 				if len(data) >= 4:
 					quat = data[0:4]
 					aux_euler = quaternion.toEuler(quat)
@@ -589,7 +589,7 @@ class Main(QMainWindow, Ui_MainWindow):
 					quat = quaternion.fromEuler(aux_euler[0],aux_euler[1],aux_euler[2])
 					print "%f\t%f\t%f\t%f" % (quat[0], quat[1], quat[2], quat[3])
 					joint = self.skeleton.getJoint(BodyJoints.LEFT,BodyJoints.WRIST)
-					joint.setQuaternion(quat)					
+					joint.setQuaternion(quat)
 
 				#self.updateQuaternions(joint,quat)
 
