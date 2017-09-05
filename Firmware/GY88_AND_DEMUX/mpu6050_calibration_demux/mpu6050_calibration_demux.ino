@@ -34,6 +34,7 @@
 #define saidaC 4
 #define saidaB 3
 #define saidaA 2
+#define MaxIt 10
 uint8_t indexCh = 0;
 
 // I2Cdev and MPU6050 must be installed as libraries
@@ -58,6 +59,7 @@ int16_t ax, ay, az, gx, gy, gz;
 
 int mean_ax, mean_ay, mean_az, mean_gx, mean_gy, mean_gz, state = 0;
 int ax_offset, ay_offset, az_offset, gx_offset, gy_offset, gz_offset;
+int itCounter = 0;
 
 ///////////////////////////////////   SETUP   ////////////////////////////////////
 void setup() {
@@ -230,6 +232,7 @@ void calibration() {
   gz_offset = -mean_gz / 4;
   while (1) {
     int ready = 0;
+    Serial.println("Iteration: " + String(itCounter));
     accelgyro.setXAccelOffset(ax_offset);
     accelgyro.setYAccelOffset(ay_offset);
     accelgyro.setZAccelOffset(az_offset);
@@ -259,7 +262,11 @@ void calibration() {
     if (abs(mean_gz) <= giro_deadzone) ready++;
     else gz_offset = gz_offset - mean_gz / (giro_deadzone + 1);
 
-    if (ready == 6) break;
+    itCounter++;
+    
+    if (ready == 6 || itCounter == MaxIt) break;
+    
+    
   }
 }
 
