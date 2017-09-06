@@ -171,7 +171,7 @@ void select_sensor(int sensor) {
 //TODO: Soft-iron correction
 void calibration(int16_t* magOffsets)
 {
-  uint16_t ii = 0, sample_count = 500;
+  uint16_t ii = 0, sample_count = 1500; //de novo? uhum
   int32_t mag_bias[3] = {0, 0, 0}, mag_scale[3] = {0, 0, 0};
   int16_t mx,my,mz;
   int16_t mag_max[3] = {-32767, -32767, -32767}, mag_min[3] = {32767, 32767, 32767}, mag_temp[3] = {0, 0, 0};  
