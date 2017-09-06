@@ -44,10 +44,11 @@
 */
 //---------------------------------------------------------------------------
 #include "I2Cdev.h"
-#include "MPU6050_6Axis_MotionApps20.h"
+#include "MPU6050.h"
 #include "HMC5883L.h"
 #include "Timer.h"
 #include "SoftwareSerial.h"
+#include "madgwick.h"
 //---------------------------------------------------------------------------
 // Arduino Wire library is required if I2Cdev I2CDEV_ARDUINO_WIRE implementation
 // is used in I2Cdev.h
@@ -79,13 +80,26 @@ const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 */
-const int numSensors = 5;
+const int numSensors = 1;
 const int* offsets;
-const int offsets0[6] =   { -998, -883, 1276, 10, -48, -28};
-const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4}; 
-const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};  
+const int offsets0[6] = { -1275, -70, 495, 87, -33, 25}; // offsets para o sensor real --> { -998, -883, 1276, 10, -48, -28};
+const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4};
+const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};
 const int offsets3[6] = { 2086, 1218, 1306, -5, -36, 35};
 const int offsets4[6] = { -2276, 382, 1140, 31, -40, -29};
+//---------------------------------------------------------------------------
+//madgwick parameters
+//TODO: Beta should be different for each sensor
+float GyroMeasError = PI * (40.0f / 180.0f);
+float beta = sqrt(3.0f / 4.0f) * GyroMeasError;   // compute beta
+float* quat;
+float quat0[4] = {1.0f,0.0f,0.0f,0.0f};
+float quat1[4] = {1.0f,0.0f,0.0f,0.0f};
+float quat2[4] = {1.0f,0.0f,0.0f,0.0f};
+float quat3[4] = {1.0f,0.0f,0.0f,0.0f};
+float quat4[4] = {1.0f,0.0f,0.0f,0.0f};
+float eul[3] = {0,0,0};
+float deg[3] = {0,0,0};
 //---------------------------------------------------------------------------
 uint8_t* fifoBuffer; // FIFO storage fifoBuffer of mpu
 uint8_t fb1[42];
@@ -113,7 +127,7 @@ void setup() {
 
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
-  //Wire.setClock(400000);
+  Wire.setClock(400000);
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(400, true);
 #endif
@@ -138,7 +152,7 @@ void setup() {
   digitalWrite(saidaC, LOW);
   //while (!Serial.available());
 
-  t.every(50,takereading); //chama a cada 10ms = 1000/20
+  t.every(10,takereading); //chama a cada 10ms = 1000/20
 
 }
 //---------------------------------------------------------------------------
@@ -234,10 +248,35 @@ void readSensor(int sensorId)
   float fax = (float)(ax) / 16384.0f;
   float fay = (float)(ay) / 16384.0f;
   float faz = (float)(az) / 16384.0f;
+  switch(sensorId)
+  {
+    case 0:
+      QuaternionUpdate(quat0,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,50.0);
+      quat=quat0;
+      break;
+    case 1:
+      QuaternionUpdate(quat1,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
+      quat=quat1;
+      break;
+    case 2:
+      QuaternionUpdate(quat2,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
+      quat=quat2;
+      break;
+    case 3:
+      QuaternionUpdate(quat3,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
+      quat=quat3;
+      break;
+    case 4:
+      QuaternionUpdate(quat4,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
+      quat=quat4;
+      break;
+  }  
   Serial.print("Sensor: " + String(sensorId) + " | ");
-  Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " ");
-  Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " ");
-  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
+  Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + " | " );  
+  Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " | ");
+  Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " | ");
+  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");  
+  
 }
 //---------------------------------------------------------------------------
 void initializeSensor(int sensorId)
@@ -248,23 +287,16 @@ void initializeSensor(int sensorId)
     Serial.println("conn ok - Sensor: " + String(sensorId));
     //Serial.println("Birl - " + String(sensorId));
     mpu.initialize();
-    mag.initialize();
-    uint8_t ret = mpu.dmpInitialize();
+    mag.initialize();    
     delay(50);
-    if (ret == 0)
-    {
-      mpu.setDMPEnabled(true);
-
-      int id = (sensorId) * 6;
-      mpu.setXAccelOffset(offsets[id]);
-      mpu.setYAccelOffset(offsets[id + 1]);
-      mpu.setZAccelOffset(offsets[id + 2]);
-      mpu.setXGyroOffset(offsets[id + 3]);
-      mpu.setYGyroOffset(offsets[id + 4]);
-      mpu.setZGyroOffset(offsets[id + 5]);
-    }
-  }
-  verificaSensor(sensorId);
+    int id = (sensorId) * 6;
+    mpu.setXAccelOffset(offsets[id]);
+    mpu.setYAccelOffset(offsets[id + 1]);
+    mpu.setZAccelOffset(offsets[id + 2]);
+    mpu.setXGyroOffset(offsets[id + 3]);
+    mpu.setYGyroOffset(offsets[id + 4]);
+    mpu.setZGyroOffset(offsets[id + 5]);    
+  }  
 }
 //---------------------------------------------------------------------------
 void verificaSensor(int sensorId)
