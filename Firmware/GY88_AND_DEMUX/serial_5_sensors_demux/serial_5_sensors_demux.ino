@@ -80,13 +80,18 @@ const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 */
-const int numSensors = 1;
+const int numSensors = 2;
 const int* offsets;
-const int offsets0[6] = { -1275, -70, 495, 87, -33, 25}; // offsets para o sensor real --> { -998, -883, 1276, 10, -48, -28};
+const int offsets0[6] = { -998, -883, 1276, 10, -48, -28}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sensor real --> { -998, -883, 1276, 10, -48, -28};
 const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4};
 const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};
 const int offsets3[6] = { 2086, 1218, 1306, -5, -36, 35};
 const int offsets4[6] = { -2276, 382, 1140, 31, -40, -29};
+const int magOffsets0[3] = { 31, 89, -60 }; 
+const int magOffsets1[3] = { 51, -23, -95 }; 
+const int magOffsets2[3] = { 61, 35, -66 }; 
+const int magOffsets3[3] = { 32, -136, -71 }; 
+const int magOffsets4[3] = { 48, -14, -80 }; 
 //---------------------------------------------------------------------------
 //madgwick parameters
 //TODO: Beta should be different for each sensor
@@ -162,14 +167,20 @@ void loop() {
 //---------------------------------------------------------------------------
 void takereading() {
   //Serial.write(0x7F);
-  for (int i = 0; i < numSensors; i++)
+  /*for (int i = 0; i < numSensors; i++)
   {
-    readSensor(i);
+    //readSensor(i);
     //send_serial_packet(fifoBuffer);
     //int t = (fifoBuffer[0]<<8) + fifoBuffer[1];
     //float w = float(t) / 16384.f;
     //Serial.println(String(i+1) + " " + String(w));
-  }
+  }*/
+  readSensor(0,quat);
+  readSensor(1,quat);
+  readSensor(2,quat); 
+  readSensor(3,quat); // what else? acho que nada // talvez caia a energia aqui. to salvando as coisas...eita, beleza // ok ta ok lá né? parece que sim.. acho que pode calibrar o ultimo e vamos ver ok
+  readSensor(4,quat); 
+  
   //Serial.write(0x7E);
   digitalWrite(LED_PIN, led_state);
   led_state = !led_state;
@@ -240,7 +251,7 @@ void send_serial_packet(uint8_t* _fifoBuffer)
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
 }
 //---------------------------------------------------------------------------
-void readSensor(int sensorId)
+void readSensor(int sensorId, float* q)
 {
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
@@ -248,35 +259,43 @@ void readSensor(int sensorId)
   float fax = (float)(ax) / 16384.0f;
   float fay = (float)(ay) / 16384.0f;
   float faz = (float)(az) / 16384.0f;
+  float fgx = (float)(gx) * (250.0f/32768);
+  float fgy = (float)(gy) * (250.0f/32768);
+  float fgz = (float)(gz) * (250.0f/32768);
+  
   switch(sensorId)
   {
     case 0:
-      QuaternionUpdate(quat0,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,50.0);
-      quat=quat0;
+      mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets0);
+      QuaternionUpdate(quat0,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      q=quat0;
       break;
     case 1:
-      QuaternionUpdate(quat1,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
-      quat=quat1;
+      mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets1);
+      QuaternionUpdate(quat1,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      q=quat1;
       break;
     case 2:
-      QuaternionUpdate(quat2,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
-      quat=quat2;
+      mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets2);
+      QuaternionUpdate(quat2,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      q=quat2;
       break;
     case 3:
-      QuaternionUpdate(quat3,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
-      quat=quat3;
+      mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets3);
+      QuaternionUpdate(quat3,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      q=quat3;
       break;
     case 4:
-      QuaternionUpdate(quat4,ax,ay,az,gx*(PI/180.0f),gy*(PI/180.0f),gz*(PI/180.0f),mx,my,mz,beta,100.0);
-      quat=quat4;
+      mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets4);
+      QuaternionUpdate(quat4,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      q=quat4;
       break;
   }  
   Serial.print("Sensor: " + String(sensorId) + " | ");
-  Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + " | " );  
+  Serial.print(String(q[0]) + " " + String(q[1]) + " " + String(q[2]) + " " + String(q[3]) + " | " );  
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " | ");
-  Serial.print(String(gx) + " " + String(gy) + " " + String(gz) + " | ");
-  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");  
-  
+  Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " | ");
+  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");    
 }
 //---------------------------------------------------------------------------
 void initializeSensor(int sensorId)
@@ -314,3 +333,22 @@ void verificaSensor(int sensorId)
   Serial.print(mpu.getZGyroOffset() == offsets[id + 5]); Serial.print("\n");
 }
 //---------------------------------------------------------------------------
+//Precisamos de uma funcao que converte uma variavel float para int16
+uint16_t floatToUint16(float v)
+{
+  
+}
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+//O que vamos fazer agora:
+//1 - mudei a funcao de leitura dos sensores para ter uma variavel de retorno...aquela "q", pra poder ter acesso ao quaternion
+//calculado de fora da funcao
+//2 - o quaternion esta em "float", precisamos converter para uma variavel de 16 bits sem sinal (uint16_t)
+//3 - a comunicacao serial envia dados byte a byte, entao essa variavel de 16 bits precisa ser quebrada em duas de 8 bits
+//4 - depois de arrumar a variavel, podemos enviar pela serial o quaternion. Como o quaternion eh composto por quatro valores (w,x,y,z)
+//entao fica quatro variaveis que vao dar um total de 8 bytes. Cada variavel eh composta por 2 bytes.
+//Acho que eh isso...
+
+//Carol, to meio perdido aqui ainda. huahaua
+//pode comparar o print com a leitura de agora, veja se teve drift, por favor
