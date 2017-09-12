@@ -64,10 +64,6 @@
 #define PSDMP 42
 #define ST '$'
 #define ET '\n'
-#define PINS1 2
-#define PINS2 3
-#define PINS3 4
-#define PINS4 5
 //---------------------------------------------------------------------------
 MPU6050 mpu(0x68);
 HMC5883L mag;
@@ -80,18 +76,18 @@ const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 */
-const int numSensors = 2;
+const int numSensors = 1;
 const int* offsets;
-const int offsets0[6] = { -998, -883, 1276, 10, -48, -28}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sensor real --> { -998, -883, 1276, 10, -48, -28};
+const int offsets0[6] = { -1275, -70, 495, 87, -33, 25}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sistema final --> { -998, -883, 1276, 10, -48, -28};
 const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4};
 const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};
 const int offsets3[6] = { 2086, 1218, 1306, -5, -36, 35};
 const int offsets4[6] = { -2276, 382, 1140, 31, -40, -29};
-const int magOffsets0[3] = { 31, 89, -60 }; 
-const int magOffsets1[3] = { 51, -23, -95 }; 
-const int magOffsets2[3] = { 61, 35, -66 }; 
-const int magOffsets3[3] = { 32, -136, -71 }; 
-const int magOffsets4[3] = { 48, -14, -80 }; 
+const int magOffsets0[3] = { 45, -307, -83 };     //offsets com gy-521 ---> {46,-322,-69};   //offsets para o sistema final { 31, 89, -60 };
+const int magOffsets1[3] = { 51, -23, -95 };
+const int magOffsets2[3] = { 61, 35, -66 };
+const int magOffsets3[3] = { 32, -136, -71 };
+const int magOffsets4[3] = { 48, -14, -80 };
 //---------------------------------------------------------------------------
 //madgwick parameters
 //TODO: Beta should be different for each sensor
@@ -166,22 +162,21 @@ void loop() {
 }
 //---------------------------------------------------------------------------
 void takereading() {
-  //Serial.write(0x7F);
-  /*for (int i = 0; i < numSensors; i++)
+  Serial.write(0x7F);
+  for (int i = 0; i < numSensors; i++)
   {
-    //readSensor(i);
-    //send_serial_packet(fifoBuffer);
-    //int t = (fifoBuffer[0]<<8) + fifoBuffer[1];
-    //float w = float(t) / 16384.f;
-    //Serial.println(String(i+1) + " " + String(w));
-  }*/
-  readSensor(0,quat);
+    quat = readSensor(i);    
+    //send_serial_packet(quat);
+    //Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + "\n" );    
+  }
+
+  /*readSensor(0,quat);
   readSensor(1,quat);
-  readSensor(2,quat); 
-  readSensor(3,quat); // what else? acho que nada // talvez caia a energia aqui. to salvando as coisas...eita, beleza // ok ta ok lá né? parece que sim.. acho que pode calibrar o ultimo e vamos ver ok
-  readSensor(4,quat); 
-  
-  //Serial.write(0x7E);
+  readSensor(2,quat);
+  readSensor(3,quat);
+  readSensor(4,quat);*/
+
+  Serial.write(0x7E);
   digitalWrite(LED_PIN, led_state);
   led_state = !led_state;
 }
@@ -232,26 +227,21 @@ void select_sensor(int sensor) {
   delayMicroseconds(10);
 }
 //---------------------------------------------------------------------------
-void send_serial_packet(uint8_t* _fifoBuffer)
+void send_serial_packet(float* sensorQuaternion)
 {
-  //Assembling packet and sending
-  /*Serial.write(_fifoBuffer[0]); //qw_msb
-    Serial.write(_fifoBuffer[1]); //qw_lsb
-    Serial.write(_fifoBuffer[4]); //qx_msb
-    Serial.write(_fifoBuffer[5]); //qx_lsb
-    Serial.write(_fifoBuffer[8]); //qy_msb
-    Serial.write(_fifoBuffer[9]); //qy_lsb
-    Serial.write(_fifoBuffer[12]); //qz_msb
-    Serial.write(_fifoBuffer[13]); //qz_lsb*/
-  mag.getHeading(&mx, &my, &mz);
-  Serial.print("\n" + String((_fifoBuffer[0] << 8 | _fifoBuffer[1]) / 16384.00) + " ");
-  Serial.print(String((_fifoBuffer[4] << 8 | _fifoBuffer[5]) / 16384.00) + " ");
-  Serial.print(String((_fifoBuffer[8] << 8 | _fifoBuffer[9]) / 16384.00) + " ");
-  Serial.print(String((_fifoBuffer[12] << 8 | _fifoBuffer[13]) / 16384.00) + " ");
-  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
+  //Assembling packet and sending via serial
+  for(int i=0; i<4; i++)
+  {
+    uint16_t convQuat = float2uint16(sensorQuaternion[i]);    
+    Serial.write(convQuat>>8);
+    Serial.write(convQuat&0xFF);
+    //Serial.print(String(sensorQuaternion[i]) + " ");
+    //Serial.print(String(convQuat) + " ");
+  }    
+  //Serial.print("\n");
 }
 //---------------------------------------------------------------------------
-void readSensor(int sensorId, float* q)
+float* readSensor(int sensorId)
 {
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
@@ -262,40 +252,42 @@ void readSensor(int sensorId, float* q)
   float fgx = (float)(gx) * (250.0f/32768);
   float fgy = (float)(gy) * (250.0f/32768);
   float fgz = (float)(gz) * (250.0f/32768);
-  
+  float* calcQuat = (float*)(malloc(4*sizeof(float)));
+
   switch(sensorId)
   {
     case 0:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets0);
       QuaternionUpdate(quat0,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
-      q=quat0;
+      calcQuat=quat0;
       break;
     case 1:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets1);
       QuaternionUpdate(quat1,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
-      q=quat1;
+      calcQuat=quat1;
       break;
     case 2:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets2);
       QuaternionUpdate(quat2,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
-      q=quat2;
+      calcQuat=quat2;
       break;
     case 3:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets3);
       QuaternionUpdate(quat3,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
-      q=quat3;
+      calcQuat=quat3;
       break;
     case 4:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets4);
       QuaternionUpdate(quat4,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
-      q=quat4;
+      calcQuat=quat4;
       break;
   }  
   Serial.print("Sensor: " + String(sensorId) + " | ");
-  Serial.print(String(q[0]) + " " + String(q[1]) + " " + String(q[2]) + " " + String(q[3]) + " | " );  
+  Serial.print(String(calcQuat[0]) + " " + String(calcQuat[1]) + " " + String(calcQuat[2]) + " " + String(calcQuat[3]) + " | " );
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " | ");
   Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " | ");
-  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");    
+  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
+  return calcQuat;
 }
 //---------------------------------------------------------------------------
 void initializeSensor(int sensorId)
@@ -306,7 +298,7 @@ void initializeSensor(int sensorId)
     Serial.println("conn ok - Sensor: " + String(sensorId));
     //Serial.println("Birl - " + String(sensorId));
     mpu.initialize();
-    mag.initialize();    
+    mag.initialize();
     delay(50);
     int id = (sensorId) * 6;
     mpu.setXAccelOffset(offsets[id]);
@@ -314,8 +306,8 @@ void initializeSensor(int sensorId)
     mpu.setZAccelOffset(offsets[id + 2]);
     mpu.setXGyroOffset(offsets[id + 3]);
     mpu.setYGyroOffset(offsets[id + 4]);
-    mpu.setZGyroOffset(offsets[id + 5]);    
-  }  
+    mpu.setZGyroOffset(offsets[id + 5]);
+  }
 }
 //---------------------------------------------------------------------------
 void verificaSensor(int sensorId)
@@ -334,9 +326,11 @@ void verificaSensor(int sensorId)
 }
 //---------------------------------------------------------------------------
 //Precisamos de uma funcao que converte uma variavel float para int16
-uint16_t floatToUint16(float v)
+uint16_t float2uint16(float q)
 {
-  
+  uint16_t resp = 0;
+  resp = (uint16_t)(q*16384);
+  return resp;
 }
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
