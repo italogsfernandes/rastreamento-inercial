@@ -227,9 +227,9 @@ void calibration() {
   //ay_offset = -mean_ay / 8;
   //az_offset = (16384 - mean_az) / 8;
 
-  ax_offset = -mean_ax / 8;
+  ax_offset = (16384 - mean_ax) / 8;
   ay_offset = -mean_ay / 8;
-  az_offset = (16384 - mean_az) / 8;
+  az_offset = -mean_az / 8;
 
   gx_offset = -mean_gx / 4;
   gy_offset = -mean_gy / 4;
@@ -249,13 +249,13 @@ void calibration() {
     Serial.println("...");
 
     if (abs(mean_ax) <= acel_deadzone) ready++;
-    else ax_offset = ax_offset - mean_ax / acel_deadzone;
+    else ax_offset = ax_offset + (16384 - mean_ax) / acel_deadzone;
 
     if (abs(mean_ay) <= acel_deadzone) ready++;
     else ay_offset = ay_offset - mean_ay / acel_deadzone;
 
     if (abs(16384 - mean_az) <= acel_deadzone) ready++;
-    else az_offset = az_offset + (16384 - mean_az) / acel_deadzone;
+    else az_offset = az_offset - mean_az / acel_deadzone;
 
     if (abs(mean_gx) <= giro_deadzone) ready++;
     else gx_offset = gx_offset - mean_gx / (giro_deadzone + 1);
@@ -267,10 +267,10 @@ void calibration() {
     else gz_offset = gz_offset - mean_gz / (giro_deadzone + 1);
 
     itCounter++;
-    
+
     if (ready == 6 || itCounter == MaxIt) break;
-    
-    
+
+
   }
 }
 

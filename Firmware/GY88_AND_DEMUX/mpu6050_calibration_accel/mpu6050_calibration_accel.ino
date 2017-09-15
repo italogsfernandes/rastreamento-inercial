@@ -122,72 +122,26 @@ void setup() {
   accelgyro.setXGyroOffset(0);
   accelgyro.setYGyroOffset(0);
   accelgyro.setZGyroOffset(0);
+
+  calibrateAll();
 }
 
 ///////////////////////////////////   LOOP   ////////////////////////////////////
 void loop() {
-  if (state == 0) {
-    Serial.println("\nReading sensors for first time...");
-    meansensors();
-    state++;
-    delay(1000);
-  }
 
-  if (state == 1) {
-    Serial.println("\nCalculating offsets...");
-    calibration();
-    state++;
-    delay(1000);
-  }
-
-  if (state == 2) {
-    meansensors();
-    Serial.println("\nFINISHED!");
-    Serial.print("\nSensor readings with offsets:\t");
-    Serial.print(mean_ax);
-    Serial.print("\t");
-    Serial.print(mean_ay);
-    Serial.print("\t");
-    Serial.print(mean_az);
-    Serial.print("\t");
-    Serial.print(mean_gx);
-    Serial.print("\t");
-    Serial.print(mean_gy);
-    Serial.print("\t");
-    Serial.println(mean_gz);
-    Serial.print("Your offsets:\t");
-    Serial.print(ax_offset);
-    Serial.print("\t");
-    Serial.print(ay_offset);
-    Serial.print("\t");
-    Serial.print(az_offset);
-    Serial.print("\t");
-    Serial.print(gx_offset);
-    Serial.print("\t");
-    Serial.print(gy_offset);
-    Serial.print("\t");
-    Serial.println(gz_offset);
-    Serial.println("\nData is printed as: acelX acelY acelZ giroX giroY giroZ");
-    Serial.println("Check that your sensor readings are close to 0 0 16384 0 0 0");
-    Serial.println("If calibration was succesful write down your offsets so you can set them in your projects using something similar to mpu.setXAccelOffset(youroffset)");
-    Serial.print("\n\n");
-    Serial.print("mpu.setXAccelOffset(" + String(ax_offset) + ");\n");
-    Serial.print("mpu.setYAccelOffset(" + String(ay_offset) + ");\n");
-    Serial.print("mpu.setZAccelOffset(" + String(az_offset) + ");\n");
-    Serial.print("mpu.setXGyroOffset(" + String(gx_offset) + ");\n");
-    Serial.print("mpu.setYGyroOffset(" + String(gy_offset) + ");\n");
-    Serial.print("mpu.setZGyroOffset(" + String(gz_offset) + ");\n");
-    Serial.print("\n\n");
-    Serial.print("uint16_t offsets"+String(indexCh)+"[6] = { ");
-    Serial.print(String(ax_offset) + ", ");
-    Serial.print(String(ay_offset) + ", ");
-    Serial.print(String(az_offset) + ", ");
-    Serial.print(String(gx_offset) + ", ");
-    Serial.print(String(gy_offset) + ", ");
-    Serial.print(String(gz_offset) + "};");
-    Serial.print("\n");
-    while (1);
-  }
+  for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+      float fax = (float)(ax) / 16384.0f;
+      float fay = (float)(ay) / 16384.0f;
+      float faz = (float)(az) / 16384.0f;
+      Serial.print(String(k) + ": " + String(fax) + " " + String(fay) + " " + String(faz) + "\n");
+    }    
+    delay(500);
+  
 }
 
 
@@ -227,9 +181,9 @@ void calibration() {
   //ay_offset = -mean_ay / 8;
   //az_offset = (16384 - mean_az) / 8;
 
-  ax_offset = -mean_ax / 8;
+  ax_offset = (16384 - mean_ax) / 8;
   ay_offset = -mean_ay / 8;
-  az_offset = (16384 - mean_az) / 8;
+  az_offset = -mean_az / 8;
 
   gx_offset = -mean_gx / 4;
   gy_offset = -mean_gy / 4;
@@ -249,13 +203,13 @@ void calibration() {
     Serial.println("...");
 
     if (abs(mean_ax) <= acel_deadzone) ready++;
-    else ax_offset = ax_offset - mean_ax / acel_deadzone;
+    else ax_offset = ax_offset + (16384 - mean_ax) / acel_deadzone;
 
     if (abs(mean_ay) <= acel_deadzone) ready++;
     else ay_offset = ay_offset - mean_ay / acel_deadzone;
 
     if (abs(16384 - mean_az) <= acel_deadzone) ready++;
-    else az_offset = az_offset + (16384 - mean_az) / acel_deadzone;
+    else az_offset = az_offset - mean_az / acel_deadzone;
 
     if (abs(mean_gx) <= giro_deadzone) ready++;
     else gx_offset = gx_offset - mean_gx / (giro_deadzone + 1);
@@ -267,10 +221,10 @@ void calibration() {
     else gz_offset = gz_offset - mean_gz / (giro_deadzone + 1);
 
     itCounter++;
-    
+
     if (ready == 6 || itCounter == MaxIt) break;
-    
-    
+
+
   }
 }
 
@@ -328,4 +282,170 @@ void select_sensor(int sensor) {
   }
   delayMicroseconds(10);
 }
- 
+
+//Calibrate all accelerometers
+void calibrateAll()
+{
+  int numIt = 200;
+  int fs = 10;
+  //when axis is positive
+  int16_t amaxp[15] = {-32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767};
+  int16_t aminp[15] = {32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767};
+  //when axis is negative
+  int16_t amaxn[15] = {-32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767};
+  int16_t aminn[15] = {32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767, 32767};
+  int16_t temp[30] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+  int16_t accelOffsets[15] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    
+  //6 steps: Each axis should be placed to sense 1g
+
+  //1st step
+  Serial.println("Place sensor with Z up");
+  while(!Serial.available());
+  Serial.read();
+
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(az > amaxp[k*3 + 2]) amaxp[k*3 + 2] = az;
+      if(az < aminp[k*3 + 2]) aminp[k*3 + 2] = az;
+    }    
+    delay(fs);
+  }
+
+  Serial.println("Place sensor with Z down");
+  while(!Serial.available());
+  Serial.read();
+
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(az > amaxn[k*3 + 2]) amaxn[k*3 + 2] = az;
+      if(az < aminn[k*3 + 2]) aminn[k*3 + 2] = az;
+    }    
+    delay(fs);
+  }
+
+  //X
+  Serial.println("Place sensor with X up");
+  while(!Serial.available());
+  Serial.read();
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(ax > amaxp[k*3]) amaxp[k*3] = ax;
+      if(ax < aminp[k*3]) aminp[k*3] = ax;
+    }    
+    delay(fs);
+  }
+
+  Serial.println("Place sensor with X down");
+  while(!Serial.available());
+  Serial.read();
+
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(ax > amaxn[k*3]) amaxn[k*3] = ax;
+      if(ax < aminn[k*3]) aminn[k*3] = ax;
+    }    
+    delay(fs);
+  }
+
+  //Y
+  Serial.println("Place sensor with Y up");
+  while(!Serial.available());
+  Serial.read();
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(ay > amaxp[k*3 + 1]) amaxp[k*3 + 1] = ay;
+      if(ay < aminp[k*3 + 1]) aminp[k*3 + 1] = ay;
+    }    
+    delay(fs);
+  }
+
+  Serial.println("Place sensor with Y down");
+  while(!Serial.available());
+  Serial.read();
+
+  for(int i=0; i<numIt; i++)
+  {
+    for(int k=0; k<5; k++)
+    { 
+      //select a sensor    
+      select_sensor(k);      
+      //read raw accel/gyro measurements from device
+      accelgyro.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);      
+      //finds new maximum and minimum for each axis
+      if(ay > amaxn[k*3 + 1]) amaxn[k*3 + 1] = ay;
+      if(ay < aminn[k*3 + 1]) aminn[k*3 + 1] = ay;
+    }    
+    delay(fs);
+  }
+
+  Serial.println("Calibration finished!");
+  Serial.println("Offsets");    
+      
+  //mean of the minimum and maximum values when axis is positive and negative
+  for(int k=0; k<5; k++)
+  {
+    //X
+    temp[k*2 + 0] = (amaxp[k*3 + 0] + aminp[k*3 + 0]) / 2;
+    temp[k*2 + 1] = (amaxn[k*3 + 0] + aminn[k*3 + 0]) / 2;
+    accelOffsets[k*2 + 0] = (temp[k*2 + 0] + temp[k*2 + 1]) / 2;
+    accelOffsets[k*2 + 0] = (16384 - accelOffsets[k*2 + 0]) / 8;
+
+    //Y
+    temp[k*2 + 2] = (amaxp[k*3 + 1] + aminp[k*3 + 1]) / 2;
+    temp[k*2 + 3] = (amaxn[k*3 + 1] + aminn[k*3 + 1]) / 2;
+    accelOffsets[k*2 + 1] = (temp[k*2 + 2] + temp[k*2 + 3]) / 2;
+    accelOffsets[k*2 + 1] = (16384 - accelOffsets[k*2 + 1]) / 8;
+
+    //Z
+    temp[k*2 + 4] = (amaxp[k*3 + 2] + aminp[k*3 + 2]) / 2;
+    temp[k*2 + 5] = (amaxn[k*3 + 2] + aminn[k*3 + 2]) / 2;
+    accelOffsets[k*2 + 2] = (temp[k*2 + 4] + temp[k*2 + 5]) / 2;
+    accelOffsets[k*2 + 2] = (16384 - accelOffsets[k*2 + 2]) / 8;
+
+    accelgyro.setXAccelOffset(accelOffsets[k*2 + 0]);
+    accelgyro.setYAccelOffset(accelOffsets[k*2 + 1]);
+    accelgyro.setZAccelOffset(accelOffsets[k*2 + 2]);
+
+    Serial.print(String(k) + ": " + String(accelOffsets[k*2 + 0]) + " " + String(accelOffsets[k*2 + 1]) + " " + String(accelOffsets[k*2 + 2]) + "\n");
+    
+  }  
+
+  while(!Serial.available());
+  Serial.read();
+}

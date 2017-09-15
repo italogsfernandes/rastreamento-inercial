@@ -76,18 +76,24 @@ const int offsets3[6] = { -231, 722, 906, 16, -19, 26};
 const int offsets4[6] = { -588, 489, 1691, 144, 49, 35};
 const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 */
-const int numSensors = 1;
+const int numSensors = 5;
 const int* offsets;
-const int offsets0[6] = { -1275, -70, 495, 87, -33, 25}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sistema final --> { -998, -883, 1276, 10, -48, -28};
-const int offsets1[6] = { 3217, -1849, 1713, 47, -18, -4};
-const int offsets2[6] = { -672, -1492, 1116, -81, -58, -19};
-const int offsets3[6] = { 2086, 1218, 1306, -5, -36, 35};
-const int offsets4[6] = { -2276, 382, 1140, 31, -40, -29};
-const int magOffsets0[3] = { 45, -307, -83 };     //offsets com gy-521 ---> {46,-322,-69};   //offsets para o sistema final { 31, 89, -60 };
-const int magOffsets1[3] = { 51, -23, -95 };
-const int magOffsets2[3] = { 61, 35, -66 };
-const int magOffsets3[3] = { 32, -136, -71 };
-const int magOffsets4[3] = { 48, -14, -80 };
+const int offsets0[6] = { -1212, -892, 1250, 10, -45, -27}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sistema final --> { -998, -883, 1276, 10, -48, -28};
+const int offsets1[6] = { 2233, -1584, 1552, 46, -15, 0}; // { 3217, -1849, 1713, 47, -18, -4};
+const int offsets2[6] = { -1050, -1182, 1145, -79, -56, -16};
+const int offsets3[6] = { 1206, 764, 1184, -3, -35, 30}; //{ -133, 1107, 3469, -3, -35, 35}; //{ 996, 920, 1222, -3, -34, 35}; // { 2086, 1218, 1306, -5, -36, 35};
+const int offsets4[6] = { -1946, 402, 1082, 32, -39, -24}; // { -2276, 382, 1140, 31, -40, -29};
+const int magOffsets0[3] = {44, 63, -56};
+const int magOffsets1[3] = {56, -33, -86};
+const int magOffsets2[3] = {52, 14, -58};
+const int magOffsets3[3] = {34, -141, -42};
+const int magOffsets4[3] = {58, -33, -63};
+//ficaram bons!
+/*const int magOffsets0[3] = {51, 122, -17};
+const int magOffsets1[3] = {63, 24, -49};
+const int magOffsets2[3] = {57, 67, -20};
+const int magOffsets3[3] = {65, -92, -25};
+const int magOffsets4[3] = {78, 15, -41};*/
 //---------------------------------------------------------------------------
 //madgwick parameters
 //TODO: Beta should be different for each sensor
@@ -166,10 +172,10 @@ void takereading() {
   for (int i = 0; i < numSensors; i++)
   {
     quat = readSensor(i);    
-    //send_serial_packet(quat);
+    send_serial_packet(quat);
     //Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + "\n" );    
   }
-
+  //quat = readSensor(2);
   /*readSensor(0,quat);
   readSensor(1,quat);
   readSensor(2,quat);
@@ -258,35 +264,40 @@ float* readSensor(int sensorId)
   {
     case 0:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets0);
-      QuaternionUpdate(quat0,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      for(int i=0; i<5; i++)
+        QuaternionUpdate(quat0,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
       calcQuat=quat0;
       break;
     case 1:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets1);
-      QuaternionUpdate(quat1,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      for(int i=0; i<5; i++)
+        QuaternionUpdate(quat1,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
       calcQuat=quat1;
       break;
     case 2:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets2);
-      QuaternionUpdate(quat2,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      for(int i=0; i<5; i++)      
+        QuaternionUpdate(quat2,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
       calcQuat=quat2;
       break;
     case 3:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets3);
-      QuaternionUpdate(quat3,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      for(int i=0; i<5; i++)
+        QuaternionUpdate(quat3,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
       calcQuat=quat3;
       break;
     case 4:
       mag.getHeadingWithOffset(&mx,&my,&mz,magOffsets4);
-      QuaternionUpdate(quat4,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
+      for(int i=0; i<5; i++)
+        QuaternionUpdate(quat4,ax,ay,az,fgx*(PI/180.0f),fgy*(PI/180.0f),fgz*(PI/180.0f),mx,my,mz,beta,50.0);
       calcQuat=quat4;
       break;
   }  
-  Serial.print("Sensor: " + String(sensorId) + " | ");
+  /*Serial.print("Sensor: " + String(sensorId) + " | ");
   Serial.print(String(calcQuat[0]) + " " + String(calcQuat[1]) + " " + String(calcQuat[2]) + " " + String(calcQuat[3]) + " | " );
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " | ");
   Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " | ");
-  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");
+  Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");*/
   return calcQuat;
 }
 //---------------------------------------------------------------------------
