@@ -60,6 +60,7 @@
 #define saidaA 2 // SEL0
 #define LED_PIN 13
 #define sampFreq 100
+#define mpuInterval 10
 #define PSDMP 42
 #define ST '$'
 #define ET '\n'
@@ -151,14 +152,15 @@ int16_t accel[3] = {0,0,0};
 int16_t gx, gy, gz; //gyro
 int16_t mx, my, mz; //mag
 //---------------------------------------------------------------------------
-uint16_t fifoCount;     // count of all bytes currently in FIFO
-int numbPackets;
 bool is_alive = false;
 bool running_coleta = false;
 bool led_state = LOW;
+char serialOp;
 //---------------------------------------------------------------------------
 Timer t;
+uint8_t timer_id;
 void takereading();
+bool acqRunning = false;
 //---------------------------------------------------------------------------
 void setup() {
   pinMode(LED_PIN, OUTPUT);
@@ -192,8 +194,6 @@ void setup() {
   digitalWrite(saidaC, LOW);
   //while (!Serial.available());
 
-  t.every(10,takereading); //chama a cada 10ms = 1000/20
-
   //calibGyro();
   //calibAccel();
   /*calibMag(magOffsets);
@@ -204,7 +204,45 @@ void setup() {
 }
 //---------------------------------------------------------------------------
 void loop() {
-  t.update();
+  
+  if(acqRunning)
+    t.update();
+    
+  if(Serial.available() > 0)
+  {
+    serialOp = Serial.read();
+    if(serialOp == '1')
+    {
+      t.every(mpuInterval,takereading); //chama a cada 10ms = 1000/20
+      acqRunning = true;
+    }
+    else if(serialOp == '2')
+    {
+      t.stop(timer_id);
+      acqRunning = false;
+    }
+    else if(serialOp == '3')
+    {
+      if(!acqRunning)
+      {
+         calibGyro();
+      }
+    }
+    else if(serialOp == '4')
+    {
+      if(!acqRunning)
+      {
+         calibAccel();
+      }
+    }
+    else if(serialOp == '5')
+    {
+      if(!acqRunning)
+      {
+         calibMag(magOffsets);
+      }
+    }
+  }
 }
 //---------------------------------------------------------------------------
 void takereading() {
@@ -461,8 +499,7 @@ void calibGyro()
     gz_offset = -mean_gz / 4;
 
     for(int k=0; k<maxIt; k++)
-    {
-      Serial.print(String(k) + " ");
+    {      
       int ready = 0;
       
       //set new offsets
@@ -494,10 +531,10 @@ void calibGyro()
       if(ready == 3)
         break;
     }
-    Serial.print("\nSensor " + String(i) + " calibrated - Offsets: "); 
-    Serial.println(String(gx_offset) + " " + String(gy_offset) + " " + String(gz_offset)); 
+    //Serial.print("\nSensor " + String(i) + " calibrated - Offsets: "); 
+    //Serial.println(String(gx_offset) + " " + String(gy_offset) + " " + String(gz_offset)); 
   }  
-  Serial.println("\n");
+  //Serial.println("\n");
   for(int k=0; k<numSensors; k++)
   {
     select_sensor(k);
@@ -539,8 +576,8 @@ void calibAccel()
 }
 //---------------------------------------------------------------------------
 void calibMag(int16_t* magOffsets)
-{
-  uint16_t ii = 0, sample_count = 3000; //de novo? uhum by Carol
+{  
+  uint16_t ii = 0, sample_count = 3000;
   int32_t mag_bias[3] = {0, 0, 0}, mag_scale[3] = {0, 0, 0};
   int16_t mx,my,mz;
   int16_t mag_max[15] = {-32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767, -32767};
@@ -574,8 +611,13 @@ void calibMag(int16_t* magOffsets)
   {
     magOffsets[j*3 + 0] = (mag_max[j*3] + mag_min[j*3])/2;  // get average x mag bias in counts
     magOffsets[j*3 + 1] = (mag_max[j*3 + 1] + mag_min[j*3 + 1])/2;  // get average x mag bias in counts
-    magOffsets[j*3 + 2] = (mag_max[j*3 + 2] + mag_min[j*3 + 2])/2;  // get average x mag bias in counts
+    magOffsets[j*3 + 2] = (mag_max[j*3 + 2] + mag_min[j*3 + 2])/2;  // get average x mag bias in counts    
   }  
+   
+  for(int i=0; i<5; i++)
+  {    
+    Serial.print("const int magOffsets" + String(i) + "[3] = {" + String(magOffsets[i*3]) + ", " + String(magOffsets[i*3+1]) + ", " + String(magOffsets[i*3+2]) + "};\n");
+  }
 }
 //---------------------------------------------------------------------------
 //0.34 0.35 -0.12 0.87|1.96 -43.12 136.52|0.04 -0.04 1.02|-167.00 -218.00 173.00|
