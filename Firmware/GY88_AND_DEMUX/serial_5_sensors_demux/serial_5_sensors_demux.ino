@@ -78,22 +78,32 @@ const int offsets5[6] = { -814, 2909, 1258, 16, 110, 34};
 */
 const int numSensors = 5;
 const int* offsets;
-const int offsets0[6] = { -1212, -892, 1250, 10, -45, -27}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sistema final --> { -998, -883, 1276, 10, -48, -28};
-const int offsets1[6] = { 2233, -1584, 1552, 46, -15, 0}; // { 3217, -1849, 1713, 47, -18, -4};
-const int offsets2[6] = { -1050, -1182, 1145, -79, -56, -16};
-const int offsets3[6] = { 1206, 764, 1184, -3, -35, 30}; //{ -133, 1107, 3469, -3, -35, 35}; //{ 996, 920, 1222, -3, -34, 35}; // { 2086, 1218, 1306, -5, -36, 35};
-const int offsets4[6] = { -1946, 402, 1082, 32, -39, -24}; // { -2276, 382, 1140, 31, -40, -29};
-const int magOffsets0[3] = {44, 63, -56};
+const int offsets0[6] = { -1042, -881, 1211, 12, -45, -27}; // offsets para teste com gy-521 ---> { -1275, -70, 495, 87, -33, 25}; // offsets para o sistema final --> { -998, -883, 1276, 10, -48, -28};
+const int offsets1[6] = { 2538, -1807, 1525, 48, -15, -8}; // { 3217, -1849, 1713, 47, -18, -4};
+const int offsets2[6] = { -615, -1181, 1134, -78, -55, -17};
+const int offsets3[6] = { 1329, 902, 1159, -3, -36, 32}; //{ -133, 1107, 3469, -3, -35, 35}; //{ 996, 920, 1222, -3, -34, 35}; // { 2086, 1218, 1306, -5, -36, 35};
+const int offsets4[6] = { -1704, 257, 1061, 28, -41, -14}; // { -2276, 382, 1140, 31, -40, -29};
+const int magOffsets0[3] = {43, 73, -48};
+const int magOffsets1[3] = {48, -19, -82};
+const int magOffsets2[3] = {17, 23, -84};
+const int magOffsets3[3] = {38, -116, -10};
+const int magOffsets4[3] = {51, -10, -8};
+/*const int magOffsets0[3] = {44, 63, -56};
 const int magOffsets1[3] = {56, -33, -86};
 const int magOffsets2[3] = {52, 14, -58};
 const int magOffsets3[3] = {34, -141, -42};
 const int magOffsets4[3] = {58, -33, -63};
+*/
 //ficaram bons!
 /*const int magOffsets0[3] = {51, 122, -17};
 const int magOffsets1[3] = {63, 24, -49};
 const int magOffsets2[3] = {57, 67, -20};
 const int magOffsets3[3] = {65, -92, -25};
 const int magOffsets4[3] = {78, 15, -41};*/
+//---------------------------------------------------------------------------
+//calibration matrix for accelerometer
+float calibMatrix[12] = {0.998, -0.032, 0.037, -0.013, -0.995, -0.043, -0.035, -0.035, 0.993, -10744.59, 583.77, 3740.22};
+float cAcc[3] = {0,0,0};
 //---------------------------------------------------------------------------
 //madgwick parameters
 //TODO: Beta should be different for each sensor
@@ -115,6 +125,7 @@ uint8_t fb3[42];
 uint8_t fb4[42];
 uint8_t fb5[42];
 int16_t ax, ay, az; //accel
+int16_t accel[3] = {0,0,0};
 int16_t gx, gy, gz; //gyro
 int16_t mx, my, mz; //mag
 //---------------------------------------------------------------------------
@@ -175,12 +186,6 @@ void takereading() {
     send_serial_packet(quat);
     //Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + "\n" );    
   }
-  //quat = readSensor(2);
-  /*readSensor(0,quat);
-  readSensor(1,quat);
-  readSensor(2,quat);
-  readSensor(3,quat);
-  readSensor(4,quat);*/
 
   Serial.write(0x7E);
   digitalWrite(LED_PIN, led_state);
@@ -251,10 +256,16 @@ float* readSensor(int sensorId)
 {
   select_sensor(sensorId);
   mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
-  mag.getHeading(&mx, &my, &mz);
-  float fax = (float)(ax) / 16384.0f;
-  float fay = (float)(ay) / 16384.0f;
-  float faz = (float)(az) / 16384.0f;
+  //select_sensor(2);
+  mag.getHeading(&mx, &my, &mz);  
+
+  //Compensate accelerometer readings with the calibration matrix
+  accel[0]=ax; accel[1]=ay; accel[2]=az;
+  compAcc(accel,cAcc);
+  
+  float fax = (float)(cAcc[0]) / 16384.0f;
+  float fay = (float)(cAcc[1]) / 16384.0f;
+  float faz = (float)(cAcc[2]) / 16384.0f;
   float fgx = (float)(gx) * (250.0f/32768);
   float fgy = (float)(gy) * (250.0f/32768);
   float fgz = (float)(gz) * (250.0f/32768);
@@ -298,6 +309,7 @@ float* readSensor(int sensorId)
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + " | ");
   Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + " | ");
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "\n");*/
+  
   return calcQuat;
 }
 //---------------------------------------------------------------------------
@@ -318,6 +330,10 @@ void initializeSensor(int sensorId)
     mpu.setXGyroOffset(offsets[id + 3]);
     mpu.setYGyroOffset(offsets[id + 4]);
     mpu.setZGyroOffset(offsets[id + 5]);
+    //necessary if using the calibrationa matrix
+    mpu.setXAccelOffset(0);
+    mpu.setYAccelOffset(0);
+    mpu.setZAccelOffset(0);
   }
 }
 //---------------------------------------------------------------------------
@@ -344,16 +360,11 @@ uint16_t float2uint16(float q)
   return resp;
 }
 //---------------------------------------------------------------------------
+void compAcc(int16_t* acc, float* a)
+{
+  a[0] = acc[0]*calibMatrix[0] + acc[1]*calibMatrix[3] + acc[2]*calibMatrix[6] + calibMatrix[9];
+  a[1] = acc[0]*calibMatrix[1] + acc[1]*calibMatrix[4] + acc[2]*calibMatrix[7] + calibMatrix[10];
+  a[2] = acc[0]*calibMatrix[2] + acc[1]*calibMatrix[5] + acc[2]*calibMatrix[8] + calibMatrix[11];
+}
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
-//O que vamos fazer agora:
-//1 - mudei a funcao de leitura dos sensores para ter uma variavel de retorno...aquela "q", pra poder ter acesso ao quaternion
-//calculado de fora da funcao
-//2 - o quaternion esta em "float", precisamos converter para uma variavel de 16 bits sem sinal (uint16_t)
-//3 - a comunicacao serial envia dados byte a byte, entao essa variavel de 16 bits precisa ser quebrada em duas de 8 bits
-//4 - depois de arrumar a variavel, podemos enviar pela serial o quaternion. Como o quaternion eh composto por quatro valores (w,x,y,z)
-//entao fica quatro variaveis que vao dar um total de 8 bytes. Cada variavel eh composta por 2 bytes.
-//Acho que eh isso...
-
-//Carol, to meio perdido aqui ainda. huahaua
-//pode comparar o print com a leitura de agora, veja se teve drift, por favor

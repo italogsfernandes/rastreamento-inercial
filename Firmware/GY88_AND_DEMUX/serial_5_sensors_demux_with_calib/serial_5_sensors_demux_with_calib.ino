@@ -201,10 +201,14 @@ void setup() {
   {    
     Serial.print("const int magOffsets" + String(i) + "[3] = {" + String(magOffsets[i*3]) + ", " + String(magOffsets[i*3+1]) + ", " + String(magOffsets[i*3+2]) + "};\n");
   }*/
+  String teste = "3.14";
+  //float val = float(teste);
+  
+  t.every(mpuInterval,takereading); //chama a cada 10ms = 1000/20
+  acqRunning=true;
 }
 //---------------------------------------------------------------------------
-void loop() {
-  
+void loop() {  
   if(acqRunning)
     t.update();
     
@@ -246,15 +250,14 @@ void loop() {
 }
 //---------------------------------------------------------------------------
 void takereading() {
-  //Serial.write(0x7F);
+  Serial.write(0x7F);
   for (int i = 0; i < numSensors; i++)
   {
     quat = readSensor(i);    
-    //send_serial_packet(quat);
+    send_serial_packet(quat);
     //Serial.print(String(quat[0]) + " " + String(quat[1]) + " " + String(quat[2]) + " " + String(quat[3]) + "\n" );    
   }
-
-  //Serial.write(0x7E);
+  Serial.write(0x7E);
   digitalWrite(LED_PIN, led_state);
   led_state = !led_state;
 }
@@ -389,12 +392,12 @@ float* readSensor(int sensorId)
       calcQuat=quat4;
       break;
   }  
-  Serial.print("Sensor: " + String(sensorId) + " | ");
+  /*Serial.print("Sensor: " + String(sensorId) + " | ");
   Serial.print(String(calcQuat[0]) + " " + String(calcQuat[1]) + " " + String(calcQuat[2]) + " " + String(calcQuat[3]) + "|" );
   Serial.print(String(fax) + " " + String(fay) + " " + String(faz) + "|");
   Serial.print(String(fgx) + " " + String(fgy) + " " + String(fgz) + "|");
   Serial.print(String(mx) + " " + String(my) + " " + String(mz) + "|");
-  Serial.print("\n");
+  Serial.print("\n");*/
   //if(sensorId == 4)
   //  Serial.print("\n");
   

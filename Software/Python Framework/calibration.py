@@ -39,8 +39,6 @@ arduinoData.flushOutput()
 numSensors = 5
 sensorData = np.zeros([6000,15])
 
-arqGyro = open("gyroOffsets.txt", 'w')
-
 while(True):
     print '-------------------------------'
     print 'Biomedical Engineering Lab'
@@ -63,14 +61,29 @@ while(True):
         arduinoData.write('2')
 
     elif strkey == '3':
+        print('\nCalibração dos giroscópios')
+        print('Posicione o equipamento de calibração com eixo Z+ para cima e mantenha-o parado até receber um aviso de que a calibração foi encerrada')
+        print('Pressione ENTER para começar')
+        skey = raw_input()
         arduinoData.write('3')
         while(arduinoData.inWaiting() == 0):
             continue
+        arqGyro = open("gyroOffsets.txt", 'w')
         while(arduinoData.inWaiting() > 0):
             arduinoString = arduinoData.readline()
-            print(arduinoString)
+            data = arduinoString.split('{')
+            data = data[1].split('}')
+            data = data[0].split(',')
+            print('\n')
+            print(data)
+            arqGyro.write(str(data[3]) + "\t" + str(data[4]) + "\t" + str(data[5]) + "\t\n")
+        arqGyro.close()
 
     elif strkey == '4':
+        print('\nCalibração dos acelerômetros')
+        print('Será solicitado que você posicione o equipamento de calibração em 6 diferentes posições. Siga as instruções até receber um aviso de que a calibração foi encerrada')
+        print('Pressione ENTER para começar')
+        skey = raw_input()
         print('\nPosicione o equipamento de calibração com o eixo Z+ para cima e pressione ENTER quando estiver preparado')
         strkey = raw_input()
         arduinoData.write('4')
@@ -118,10 +131,10 @@ while(True):
             X = np.linalg.inv(np.dot(np.transpose(acc),acc))
             XX = np.dot(X,np.transpose(acc))
             XXX = np.dot(XX,expectedAccel)
-            arqAccel.write(str(XXX[0,0])+ "\t" + str(XXX[0,1]) + "\t" + str(XXX[0,2]) + "\n")
-            arqAccel.write(str(XXX[1,0])+ "\t" + str(XXX[1,1]) + "\t" + str(XXX[1,2]) + "\n")
-            arqAccel.write(str(XXX[2,0])+ "\t" + str(XXX[2,1]) + "\t" + str(XXX[2,2]) + "\n")
-            arqAccel.write(str(XXX[3,0])+ "\t" + str(XXX[3,1]) + "\t" + str(XXX[3,2]) + "\n\n")
+            arqAccel.write(str(XXX[0,0])+ "\t" + str(XXX[0,1]) + "\t" + str(XXX[0,2]) + "\t\n")
+            arqAccel.write(str(XXX[1,0])+ "\t" + str(XXX[1,1]) + "\t" + str(XXX[1,2]) + "\t\n")
+            arqAccel.write(str(XXX[2,0])+ "\t" + str(XXX[2,1]) + "\t" + str(XXX[2,2]) + "\t\n")
+            arqAccel.write(str(XXX[3,0])+ "\t" + str(XXX[3,1]) + "\t" + str(XXX[3,2]) + "\t\n")
         arqAccel.close()
 
         print 'Calibração encerrada!'
@@ -142,7 +155,7 @@ while(True):
             data = arduinoString.split('{')
             data = data[1].split('}')
             data = data[0].split(',')
-            arqMagn.write(data[0] + "\t" + data[1] + "\t" + data[2] + "\n")
+            arqMagn.write(data[0] + "\t" + data[1] + "\t" + data[2] + "\t\n")
         arqMagn.close()
 
     elif strkey == '6':
