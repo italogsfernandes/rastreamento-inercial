@@ -32,7 +32,7 @@ from sets import Set
 import numpy as np
 from skeleton import *
 import geometry
-import quaternion as quat
+import quaternion as quatern
 from threadhandler import ThreadHandler
 from mpu6050handler import *
 import math
@@ -374,7 +374,6 @@ class Main(QMainWindow, Ui_MainWindow):
 
 		_joint.setQuaternion(_quat)
 		if(_joint.name == 'right_ankle'):
-			print 'entrei malandro'
 			print _joint.rotquaternion
 		print _joint.name, _joint.quaternion
 
@@ -565,7 +564,7 @@ class Main(QMainWindow, Ui_MainWindow):
 	def doOpenColeta(self):
 		self.doReset()
 		dlg = QtGui.QFileDialog( self )
-		dlg.setWindowTitle( 'Secione a coleta que deseja abrir.' )
+		dlg.setWindowTitle( 'Selecione a coleta que deseja abrir.' )
 		dlg.setViewMode( QtGui.QFileDialog.Detail )
 		dlg.setNameFilters( [self.tr('Arquivos de Posição (*.coleta)'), self.tr('All Files (*)')] )
 		dlg.setDefaultSuffix( '.coleta' )
@@ -637,7 +636,7 @@ class Main(QMainWindow, Ui_MainWindow):
 		mao_esquerda[0] = -mao_esquerda[0]
 		vector_maos = mao_direita - mao_esquerda
 		dist_maos = np.sqrt(vector_maos[0]**2+vector_maos[1]**2+vector_maos[2]**2)
-		file_to_save.write("Diferença da Posicao Final das 2 Mãos%.4f\n" % dist_maos)
+		file_to_save.write("Diferença da Posicao Final das 2 Mãos\t%.4f\n" % dist_maos)
 		#file_to_save.write("Area do triangulo Mao-Cotovelo-Ombro")
 		#file_to_save.write("Direito\tEsquerdo\n")
 		#file_to_save.write("%.4f\t%.4f\n")
@@ -747,12 +746,18 @@ class Main(QMainWindow, Ui_MainWindow):
 			self.slPhi.setValue(int(np.round(intersegAngulos[0])))
 			self.slTheta.setValue(int(np.round(intersegAngulos[1])))
 			self.slPsi.setValue(int(np.round(intersegAngulos[2])))
+			self.lbPhi.setText('Inclinacao do Torso: ' +  '{:.2f}'.format((intersegAngulos[0])) + 'º')
+			self.lbTheta.setText('Ombro-Braco: ' +  '{:.2f}'.format((intersegAngulos[1])) + 'º')
+			self.lbPsi.setText('Braco-Antebraco: ' +  '{:.2f}'.format((intersegAngulos[2])) + 'º')
 		elif jointName == 'InterSegmentos-Left':
 			self.interseginuse = True
 			intersegAngulos = self.calculateInterSegAngles('left')
 			self.slPhi.setValue(int(np.round(intersegAngulos[0])))
 			self.slTheta.setValue(int(np.round(intersegAngulos[1])))
 			self.slPsi.setValue(int(np.round(intersegAngulos[2])))
+			self.lbPhi.setText('Inclinacao do Torso: ' +  '{:.2f}'.format((intersegAngulos[0])) + 'º')
+			self.lbTheta.setText('Ombro-Braco: ' +  '{:.2f}'.format((intersegAngulos[1])) + 'º')
+			self.lbPsi.setText('Braco-Antebraco: ' +  '{:.2f}'.format((intersegAngulos[2])) + 'º')
 		else:
 			self.interseginuse = False
 			joint = self.skeleton.getJoint(None,None,str(jointName))
@@ -924,8 +929,12 @@ class Main(QMainWindow, Ui_MainWindow):
 				modim = np.sqrt(quat[1]*quat[1]+quat[2]*quat[2]+quat[3]*quat[3])
 				#quat[0] = np.cos(np.arcsin(modim))
 				joint = self.skeleton.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST)
+				aux = quat[1]
+				quat[1] = -quat[1]
+				quat[2] = -quat[2]
 				joint.setQuaternion(quat)
 				print '0: ', quat
+				#print '0: ' + ' ' + str(quat) + ' ' + str(joint.quaternion) + ' ' + str(joint.quaternion_offset)
 			if len(data) >= 8:
 				quat = data[4:8]
 				estz = self.linereg[1]*self.time + self.biasreg[1]
