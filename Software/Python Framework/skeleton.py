@@ -617,5 +617,5 @@ if __name__ == '__main__':
 	#print 'Elbow:', s.getJoint(BodyJoints.RIGHT,BodyJoints.ELBOW).position
 	#print 'Wrist:', s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST).position
 	#print 'Hand:', s.getJoint(BodyJoints.RIGHT,BodyJoints.HAND).position
-	s.rotateJoint(s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST),s.sideId[BodyJoints.RIGHT])
+	#s.rotateJoint(s.getJoint(BodyJoints.RIGHT,BodyJoints.WRIST),s.sideId[BodyJoints.RIGHT])
 #------------------------------------------------------------------------------
